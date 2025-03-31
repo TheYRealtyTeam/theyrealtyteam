@@ -9,7 +9,7 @@ const Logo = ({ className = "" }: { className?: string }) => {
         alt="Y Realty Team Logo" 
         className="h-12 w-auto" 
       />
-      <span className="font-heading font-bold text-xl text-yrealty-navy">Y REALTY TEAM</span>
+      <span className="font-heading font-bold text-xl text-black tracking-wider">Y REALTY TEAM</span>
     </div>
   );
 };

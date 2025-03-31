@@ -57,20 +57,20 @@ const Navbar = () => {
               <a
                 key={link.name}
                 href={link.href}
-                className={`nav-link ${activeSection === link.href.substring(1) ? 'active' : ''}`}
+                className={`nav-link text-black font-medium ${activeSection === link.href.substring(1) ? 'active' : ''}`}
                 onClick={closeMenu}
               >
                 {link.name}
               </a>
             ))}
-            <a href="#contact" className="ml-4 btn-primary">
+            <a href="#contact" className="ml-4 btn-primary font-bold">
               Get Started
             </a>
           </nav>
           
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-yrealty-navy"
+            className="md:hidden text-black"
             onClick={toggleMenu}
             aria-label="Toggle Menu"
           >
@@ -86,13 +86,13 @@ const Navbar = () => {
                 <a
                   key={link.name}
                   href={link.href}
-                  className={`px-4 py-2 text-yrealty-navy hover:bg-yrealty-blue ${activeSection === link.href.substring(1) ? 'font-medium' : ''}`}
+                  className={`px-4 py-2 text-black hover:bg-yrealty-blue ${activeSection === link.href.substring(1) ? 'font-bold' : 'font-medium'}`}
                   onClick={closeMenu}
                 >
                   {link.name}
                 </a>
               ))}
-              <a href="#contact" className="mx-4 btn-primary text-center">
+              <a href="#contact" className="mx-4 btn-primary text-center font-bold">
                 Get Started
               </a>
             </div>

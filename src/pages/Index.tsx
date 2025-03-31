@@ -14,7 +14,7 @@ import AnimationObserver from '@/utils/AnimationObserver';
 const Index = () => {
   // Set page title
   useEffect(() => {
-    document.title = "Y Realty Team | Premium Property Management in New York";
+    document.title = "Y Realty Team | Premium Property Management in New York & New Jersey";
   }, []);
 
   return (

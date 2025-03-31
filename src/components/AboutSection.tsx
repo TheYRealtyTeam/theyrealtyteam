@@ -95,10 +95,10 @@ const AboutSection = () => {
           </div>
 
           <div>
-            <h3 className="text-2xl font-bold mb-4 text-yrealty-navy reveal">New York's Premier Property Management Company</h3>
+            <h3 className="text-2xl font-bold mb-4 text-yrealty-navy reveal">New York & New Jersey's Premier Property Management Company</h3>
             <p className="mb-6 text-gray-700 reveal">
-              Y Realty Team is committed to providing exceptional property management services in New York City. 
-              Our experienced team understands the unique challenges of the New York real estate market and offers 
+              Y Realty Team is committed to providing exceptional property management services in the New York and New Jersey metropolitan area. 
+              Our experienced team understands the unique challenges of these dynamic real estate markets and offers 
               tailored solutions to property owners, investors, and tenants.
             </p>
             <p className="mb-6 text-gray-700 reveal stagger-1">

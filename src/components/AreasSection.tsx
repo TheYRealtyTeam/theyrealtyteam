@@ -5,20 +5,20 @@ import { MapPin, Globe } from 'lucide-react';
 const AreasSection = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   
-  // Areas we serve - now expanded to cover the United States
+  // Areas we serve - featuring NY & NJ as premier markets
   const areas = [
-    { name: "Northeast", description: "Full-service property management throughout New York, Boston, Philadelphia, and other major Northeastern cities." },
-    { name: "Southeast", description: "Specialized services in Miami, Atlanta, Charlotte, and across the growing Southeastern real estate markets." },
-    { name: "Midwest", description: "Supporting property owners in Chicago, Detroit, Minneapolis, and other Midwestern metropolitan areas." },
-    { name: "Southwest", description: "Dedicated management for residential and commercial properties in Dallas, Houston, Phoenix, and surrounding regions." },
-    { name: "West Coast", description: "Comprehensive property management across Los Angeles, San Francisco, Seattle, and other West Coast communities." },
+    { name: "New York", description: "Full-service property management throughout Manhattan, Brooklyn, Queens, The Bronx, and Staten Island." },
+    { name: "New Jersey", description: "Specialized services across Jersey City, Newark, Hoboken, Princeton, and other growing New Jersey markets." },
+    { name: "Northeast", description: "Supporting property owners in Boston, Philadelphia, and other Northeastern metropolitan areas." },
+    { name: "Southeast", description: "Dedicated management for residential and commercial properties in Miami, Atlanta, Charlotte, and surrounding regions." },
+    { name: "Greater United States", description: "Comprehensive property management across key metropolitan areas throughout the country." },
   ];
 
   // Map initialization would go here in a real implementation
   useEffect(() => {
-    // For this example, we'll just use a static map image of the USA
+    // For this example, we'll show a map focusing on NY & NJ while showing the US
     if (mapRef.current) {
-      mapRef.current.innerHTML = `<img src="https://maps.googleapis.com/maps/api/staticmap?center=United+States&zoom=3&size=600x400&maptype=roadmap&key=DEMO_KEY" alt="Map of United States" class="w-full h-full object-cover rounded-lg shadow-lg" />`;
+      mapRef.current.innerHTML = `<img src="https://maps.googleapis.com/maps/api/staticmap?center=New+York+New+Jersey&zoom=7&size=600x400&maptype=roadmap&key=DEMO_KEY" alt="Map of New York and New Jersey" class="w-full h-full object-cover rounded-lg shadow-lg" />`;
     }
   }, []);
 
@@ -28,7 +28,7 @@ const AreasSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">Areas We Serve</h2>
           <p className="section-subtitle reveal">
-            Delivering exceptional property management services across the United States
+            New York & New Jersey's premier property management service, with nationwide coverage
           </p>
         </div>
 
@@ -39,9 +39,9 @@ const AreasSection = () => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8 bg-white/80 rounded-lg">
                   <Globe className="h-10 w-10 text-yrealty-accent mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">Nationwide Coverage</h3>
+                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">NY & NJ Specialists</h3>
                   <p className="text-gray-700">
-                    Managing properties across all 50 states
+                    With nationwide coverage in all 50 states
                   </p>
                 </div>
               </div>
@@ -50,7 +50,7 @@ const AreasSection = () => {
 
           <div>
             <h3 className="text-2xl font-bold mb-6 text-yrealty-navy reveal">
-              Expert Property Management Throughout the United States
+              Expert Property Management in New York & New Jersey
             </h3>
             
             <div className="space-y-6">

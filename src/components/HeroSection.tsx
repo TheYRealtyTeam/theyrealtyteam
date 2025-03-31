@@ -30,7 +30,7 @@ const HeroSection = () => {
       <div className="container-custom relative z-10">
         <div className="max-w-3xl text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
-            Premier Property Management in New York
+            Premier Property Management in New York & New Jersey
           </h1>
           <p className="text-lg md:text-xl mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             Elevating property management to new heights with exceptional service, 

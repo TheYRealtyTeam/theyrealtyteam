@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
 import Logo from './Logo';
@@ -21,16 +20,16 @@ const Footer = () => {
               New York's premier property management company dedicated to maximizing your property's potential through exceptional service and innovative solutions.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Facebook">
+              <a href="https://facebook.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="#" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Instagram">
+              <a href="https://instagram.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Twitter">
+              <a href="https://twitter.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Twitter">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="#" className="text-white hover:text-yrealty-accent transition-colors" aria-label="LinkedIn">
+              <a href="https://linkedin.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -77,7 +76,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-yrealty-accent mr-3 flex-shrink-0" />
-                <span className="text-gray-300">info@yrealtyteam.com</span>
+                <a href="mailto:info@theYteam.co" className="text-gray-300 hover:text-white transition-colors">info@theYteam.co</a>
               </li>
             </ul>
             <a href="#contact" className="mt-6 inline-block px-5 py-2 bg-yrealty-accent text-white rounded-md hover:bg-opacity-90 transition-all">
@@ -88,7 +87,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-700 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Y Realty Team. All rights reserved.
+            &copy; {new Date().getFullYear()} Y Realty Team. All rights reserved. <a href="https://theYteam.co" className="hover:text-white transition-colors">theYteam.co</a>
           </p>
           <div className="flex space-x-6 text-sm text-gray-400">
             <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

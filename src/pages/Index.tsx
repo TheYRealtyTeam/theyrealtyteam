@@ -15,6 +15,20 @@ const Index = () => {
   // Set page title
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management in New York & New Jersey";
+    
+    // Add canonical link
+    const canonicalLink = document.createElement('link');
+    canonicalLink.rel = 'canonical';
+    canonicalLink.href = 'https://theYteam.co';
+    document.head.appendChild(canonicalLink);
+    
+    return () => {
+      // Clean up the canonical link when component unmounts
+      const existingCanonical = document.querySelector('link[rel="canonical"]');
+      if (existingCanonical) {
+        document.head.removeChild(existingCanonical);
+      }
+    };
   }, []);
 
   return (

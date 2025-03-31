@@ -1,24 +1,24 @@
 
 import React, { useEffect, useRef } from 'react';
-import { MapPin } from 'lucide-react';
+import { MapPin, Globe } from 'lucide-react';
 
 const AreasSection = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   
-  // Areas we serve
+  // Areas we serve - now expanded to cover the United States
   const areas = [
-    { name: "Manhattan", description: "Full-service property management throughout Manhattan's diverse neighborhoods." },
-    { name: "Brooklyn", description: "Specialized services for Brooklyn's rapidly evolving real estate market." },
-    { name: "Queens", description: "Supporting property owners in Queens with tailored management solutions." },
-    { name: "The Bronx", description: "Dedicated management for residential and commercial properties in The Bronx." },
-    { name: "Staten Island", description: "Comprehensive property management across Staten Island communities." },
+    { name: "Northeast", description: "Full-service property management throughout New York, Boston, Philadelphia, and other major Northeastern cities." },
+    { name: "Southeast", description: "Specialized services in Miami, Atlanta, Charlotte, and across the growing Southeastern real estate markets." },
+    { name: "Midwest", description: "Supporting property owners in Chicago, Detroit, Minneapolis, and other Midwestern metropolitan areas." },
+    { name: "Southwest", description: "Dedicated management for residential and commercial properties in Dallas, Houston, Phoenix, and surrounding regions." },
+    { name: "West Coast", description: "Comprehensive property management across Los Angeles, San Francisco, Seattle, and other West Coast communities." },
   ];
 
   // Map initialization would go here in a real implementation
   useEffect(() => {
-    // For this example, we'll just use a static map image
+    // For this example, we'll just use a static map image of the USA
     if (mapRef.current) {
-      mapRef.current.innerHTML = `<img src="https://maps.googleapis.com/maps/api/staticmap?center=New+York,NY&zoom=11&size=600x400&maptype=roadmap&key=DEMO_KEY" alt="Map of New York City" class="w-full h-full object-cover rounded-lg shadow-lg" />`;
+      mapRef.current.innerHTML = `<img src="https://maps.googleapis.com/maps/api/staticmap?center=United+States&zoom=3&size=600x400&maptype=roadmap&key=DEMO_KEY" alt="Map of United States" class="w-full h-full object-cover rounded-lg shadow-lg" />`;
     }
   }, []);
 
@@ -28,7 +28,7 @@ const AreasSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">Areas We Serve</h2>
           <p className="section-subtitle reveal">
-            Delivering exceptional property management services across all five boroughs of New York City
+            Delivering exceptional property management services across the United States
           </p>
         </div>
 
@@ -38,10 +38,10 @@ const AreasSection = () => {
               {/* Map will be inserted here */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center p-8 bg-white/80 rounded-lg">
-                  <MapPin className="h-10 w-10 text-yrealty-accent mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">New York City</h3>
+                  <Globe className="h-10 w-10 text-yrealty-accent mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">Nationwide Coverage</h3>
                   <p className="text-gray-700">
-                    Interactive map would appear here in the production version.
+                    Managing properties across all 50 states
                   </p>
                 </div>
               </div>
@@ -50,7 +50,7 @@ const AreasSection = () => {
 
           <div>
             <h3 className="text-2xl font-bold mb-6 text-yrealty-navy reveal">
-              Expert Property Management Throughout NYC
+              Expert Property Management Throughout the United States
             </h3>
             
             <div className="space-y-6">
@@ -75,7 +75,7 @@ const AreasSection = () => {
             
             <div className="mt-8 reveal" style={{ transitionDelay: '0.6s' }}>
               <p className="text-gray-700 mb-4">
-                Don't see your specific neighborhood? We likely serve it too! Contact us to discuss your property's location.
+                Don't see your specific location? We likely serve it too! Our nationwide presence ensures we can manage properties wherever you need us.
               </p>
               <a href="#contact" className="btn-primary">Contact Our Team</a>
             </div>

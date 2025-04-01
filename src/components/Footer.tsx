@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
 import Logo from './Logo';
@@ -68,11 +69,11 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-yrealty-accent mr-3 mt-1 flex-shrink-0" />
-                <span className="text-gray-300">123 Park Avenue, New York, NY 10016</span>
+                <span className="text-gray-300">9 Ellen St, New City, NY 10956</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-yrealty-accent mr-3 flex-shrink-0" />
-                <span className="text-gray-300">(212) 555-8765</span>
+                <span className="text-gray-300">(845) 734-3331</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-yrealty-accent mr-3 flex-shrink-0" />

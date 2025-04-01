@@ -63,7 +63,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-yrealty-navy">Our Location</h4>
-                    <p className="text-gray-700">123 Park Avenue, New York, NY 10016</p>
+                    <p className="text-gray-700">9 Ellen St, New City, NY 10956</p>
                   </div>
                 </div>
                 
@@ -73,7 +73,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-yrealty-navy">Call Us</h4>
-                    <p className="text-gray-700">(212) 555-8765</p>
+                    <p className="text-gray-700">(845) 734-3331</p>
                   </div>
                 </div>
                 
@@ -83,7 +83,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <h4 className="font-bold text-yrealty-navy">Email Us</h4>
-                    <p className="text-gray-700">info@yrealtyteam.com</p>
+                    <p className="text-gray-700">info@theYteam.co</p>
                   </div>
                 </div>
               </div>
@@ -222,7 +222,7 @@ const ContactSection = () => {
         <div className="mt-16 reveal">
           <div className="bg-gray-200 rounded-xl h-80 overflow-hidden shadow-md">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d48371.8532391521!2d-73.99018985280326!3d40.74880029459232!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259041d6a0b5d%3A0xfa7c23811b0fe5d9!2sMidtown%2C%20New%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1697576824500!5m2!1sen!2sus"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001.003326600233!2d-73.98932062326312!3d41.15735137132079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2e5d0a6c59c79%3A0xd0ec91d1a6c59c79!2s9%20Ellen%20St%2C%20New%20City%2C%20NY%2010956!5e0!3m2!1sen!2sus!4v1697576824500!5m2!1sen!2sus"
               width="100%"
               height="100%"
               style={{ border: 0 }}

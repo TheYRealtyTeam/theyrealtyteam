@@ -1,42 +1,42 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, ArrowRight, Building, Home, MapPin } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Building, Home, MapPin, Store } from 'lucide-react';
 
 const PropertiesSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const properties = [
     {
-      title: "Luxury Apartment Building",
-      location: "Upper East Side, Manhattan",
-      description: "A stunning 20-story luxury building featuring 75 premium apartments with state-of-the-art amenities.",
-      image: "https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80&w=800",
+      title: "Historic Brownstone Building",
+      location: "Brooklyn Heights, Brooklyn",
+      description: "A beautifully maintained 5-unit brownstone with original details, renovated interiors, and a private garden.",
+      image: "https://images.unsplash.com/photo-1485996463739-9cb09adbe6c7?auto=format&fit=crop&q=80&w=800",
       type: "Residential",
-      units: 75,
+      units: 5,
     },
     {
-      title: "Commercial Office Complex",
-      location: "Financial District, Manhattan",
-      description: "Premium office space spanning 15 floors with modern design and eco-friendly features.",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800",
+      title: "Riverside Condominium",
+      location: "Hoboken, New Jersey",
+      description: "Modern 42-unit luxury condominium building with waterfront views, gym, doorman, and rooftop lounge.",
+      image: "https://images.unsplash.com/photo-1518005068251-37900150dfca?auto=format&fit=crop&q=80&w=800",
+      type: "Residential",
+      units: 42,
+    },
+    {
+      title: "Retail Plaza",
+      location: "Midtown, Manhattan",
+      description: "A 12-store retail plaza with high foot traffic, dedicated parking, and recently renovated common areas.",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800",
       type: "Commercial",
-      units: 50,
-    },
-    {
-      title: "Boutique Residential Building",
-      location: "Williamsburg, Brooklyn",
-      description: "A modern 12-unit boutique residential building with designer finishes and rooftop garden.",
-      image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&q=80&w=800",
-      type: "Residential",
       units: 12,
     },
     {
-      title: "Mixed-Use Development",
-      location: "Long Island City, Queens",
-      description: "Contemporary mixed-use property with retail spaces and luxury apartments in a prime location.",
-      image: "https://images.unsplash.com/photo-1496307653780-42ee777d4833?auto=format&fit=crop&q=80&w=800",
-      type: "Mixed-Use",
-      units: 40,
+      title: "Garden Apartments Complex",
+      location: "Astoria, Queens",
+      description: "A 28-unit garden apartment complex with landscaped courtyard, on-site laundry, and renovated units.",
+      image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800",
+      type: "Residential",
+      units: 28,
     },
   ];
 
@@ -54,7 +54,7 @@ const PropertiesSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">Featured Properties</h2>
           <p className="section-subtitle reveal">
-            A showcase of premium properties we proudly manage throughout New York City
+            A showcase of real properties we currently manage in New York & New Jersey
           </p>
         </div>
 
@@ -75,7 +75,7 @@ const PropertiesSection = () => {
                   ) : properties[activeIndex].type === "Commercial" ? (
                     <Building className="h-5 w-5 mr-2" />
                   ) : (
-                    <Building className="h-5 w-5 mr-2" />
+                    <Store className="h-5 w-5 mr-2" />
                   )}
                   <span className="text-sm font-semibold">{properties[activeIndex].type}</span>
                 </div>

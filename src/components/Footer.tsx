@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Mail, Phone, MapPin, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
+import { Mail, Phone, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
 import Logo from './Logo';
 
 const Footer = () => {
@@ -18,7 +18,7 @@ const Footer = () => {
           <div>
             <Logo className="mb-6 text-white" />
             <p className="text-gray-300 mb-6">
-              New York's premier property management company dedicated to maximizing your property's potential through exceptional service and innovative solutions.
+              Premier property management company dedicated to maximizing your property's potential through exceptional service and innovative solutions.
             </p>
             <div className="flex space-x-4">
               <a href="https://facebook.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Facebook">
@@ -67,10 +67,6 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Contact Information</h3>
             <ul className="space-y-4">
-              <li className="flex items-start">
-                <MapPin className="h-5 w-5 text-yrealty-accent mr-3 mt-1 flex-shrink-0" />
-                <span className="text-gray-300">9 Ellen St, New City, NY 10956</span>
-              </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-yrealty-accent mr-3 flex-shrink-0" />
                 <span className="text-gray-300">(845) 734-3331</span>

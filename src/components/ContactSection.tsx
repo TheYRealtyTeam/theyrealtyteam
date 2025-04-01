@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Send, ArrowRight } from 'lucide-react';
+import { Phone, Mail, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const ContactSection = () => {
@@ -57,16 +57,6 @@ const ContactSection = () => {
               <h3 className="text-2xl font-bold mb-6 text-yrealty-navy">Get In Touch</h3>
               
               <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="mt-1 mr-4 bg-white/80 p-2 rounded-full">
-                    <MapPin className="h-5 w-5 text-yrealty-accent" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-yrealty-navy">Our Location</h4>
-                    <p className="text-gray-700">9 Ellen St, New City, NY 10956</p>
-                  </div>
-                </div>
-                
                 <div className="flex items-start">
                   <div className="mt-1 mr-4 bg-white/80 p-2 rounded-full">
                     <Phone className="h-5 w-5 text-yrealty-accent" />
@@ -216,21 +206,6 @@ const ContactSection = () => {
                 </div>
               </div>
             </form>
-          </div>
-        </div>
-        
-        <div className="mt-16 reveal">
-          <div className="bg-gray-200 rounded-xl h-80 overflow-hidden shadow-md">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3001.003326600233!2d-73.98932062326312!3d41.15735137132079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2e5d0a6c59c79%3A0xd0ec91d1a6c59c79!2s9%20Ellen%20St%2C%20New%20City%2C%20NY%2010956!5e0!3m2!1sen!2sus!4v1697576824500!5m2!1sen!2sus"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Y Realty Team Office Location"
-            ></iframe>
           </div>
         </div>
       </div>

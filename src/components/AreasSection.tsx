@@ -17,7 +17,7 @@ const AreasSection = () => {
   // Map initialization with more reliable approach
   useEffect(() => {
     if (mapRef.current) {
-      // Create an iframe with Google Maps embed
+      // Create an iframe with Google Maps embed showing wider regional view
       const iframe = document.createElement('iframe');
       iframe.style.width = '100%';
       iframe.style.height = '100%';
@@ -25,7 +25,7 @@ const AreasSection = () => {
       iframe.style.borderRadius = '8px';
       iframe.allowFullscreen = true;
       iframe.referrerPolicy = 'no-referrer-when-downgrade';
-      iframe.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.305935303!2d-74.25986548555644!3d40.69767006766623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sph!4v1654204498049!5m2!1sen!2sph';
+      iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6097581.775365128!2d-79.41513!3d40.05317!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c0fb959e00409f%3A0x2cd27b07f83f6d8d!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698429602019!5m2!1sen!2sus';
       
       // Clear any existing content
       mapRef.current.innerHTML = '';

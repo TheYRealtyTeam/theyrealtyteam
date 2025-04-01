@@ -1,9 +1,10 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MapPin, Globe } from 'lucide-react';
 
 const AreasSection = () => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [mapApiKey, setMapApiKey] = useState<string>('');
   
   // Areas we serve - featuring NY & NJ as premier markets
   const areas = [
@@ -14,11 +15,22 @@ const AreasSection = () => {
     { name: "Greater United States", description: "Comprehensive property management across key metropolitan areas throughout the country." },
   ];
 
-  // Map initialization would go here in a real implementation
+  // Map initialization with more reliable approach
   useEffect(() => {
-    // For this example, we'll show a map focusing on NY & NJ while showing the US
     if (mapRef.current) {
-      mapRef.current.innerHTML = `<img src="https://maps.googleapis.com/maps/api/staticmap?center=New+York+New+Jersey&zoom=7&size=600x400&maptype=roadmap&key=DEMO_KEY" alt="Map of New York and New Jersey" class="w-full h-full object-cover rounded-lg shadow-lg" />`;
+      // Create an iframe with Google Maps embed
+      const iframe = document.createElement('iframe');
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      iframe.style.borderRadius = '8px';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.305935303!2d-74.25986548555644!3d40.69767006766623!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sph!4v1654204498049!5m2!1sen!2sph';
+      
+      // Clear any existing content
+      mapRef.current.innerHTML = '';
+      mapRef.current.appendChild(iframe);
     }
   }, []);
 
@@ -35,9 +47,9 @@ const AreasSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="reveal">
             <div ref={mapRef} className="h-96 bg-gray-200 rounded-lg shadow-lg relative overflow-hidden">
-              {/* Map will be inserted here */}
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center p-8 bg-white/80 rounded-lg">
+              {/* Map will be inserted here via the useEffect */}
+              <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                <div className="text-center p-6 bg-white/80 rounded-lg max-w-xs">
                   <Globe className="h-10 w-10 text-yrealty-accent mx-auto mb-4" />
                   <h3 className="text-xl font-bold text-yrealty-navy mb-2">NY & NJ Specialists</h3>
                   <p className="text-gray-700">

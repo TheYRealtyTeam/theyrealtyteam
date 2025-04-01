@@ -7,36 +7,36 @@ const PropertiesSection = () => {
 
   const properties = [
     {
-      title: "Historic Brownstone Building",
-      location: "Brooklyn Heights, Brooklyn",
-      description: "A beautifully maintained 5-unit brownstone with original details, renovated interiors, and a private garden.",
-      image: "https://images.unsplash.com/photo-1485996463739-9cb09adbe6c7?auto=format&fit=crop&q=80&w=800",
-      type: "Residential",
-      units: 5,
-    },
-    {
-      title: "Riverside Condominium",
-      location: "Hoboken, New Jersey",
-      description: "Modern 42-unit luxury condominium building with waterfront views, gym, doorman, and rooftop lounge.",
-      image: "https://images.unsplash.com/photo-1518005068251-37900150dfca?auto=format&fit=crop&q=80&w=800",
-      type: "Residential",
-      units: 42,
-    },
-    {
-      title: "Retail Plaza",
-      location: "Midtown, Manhattan",
-      description: "A 12-store retail plaza with high foot traffic, dedicated parking, and recently renovated common areas.",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800",
-      type: "Commercial",
-      units: 12,
-    },
-    {
-      title: "Garden Apartments Complex",
-      location: "Astoria, Queens",
-      description: "A 28-unit garden apartment complex with landscaped courtyard, on-site laundry, and renovated units.",
+      title: "Oakwood Garden Apartments",
+      location: "Montgomery, Alabama",
+      description: "A well-maintained 18-unit garden style apartment complex with two-bedroom units, community pool, and on-site laundry facilities.",
       image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&q=80&w=800",
       type: "Residential",
-      units: 28,
+      units: 18,
+    },
+    {
+      title: "Pine Hills Townhomes",
+      location: "Eastchase, Montgomery, Alabama",
+      description: "Modern 24-unit townhome community featuring 3-bedroom units with attached garages and private backyards.",
+      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=800",
+      type: "Residential",
+      units: 24,
+    },
+    {
+      title: "Chestnut Court Apartments",
+      location: "West Philadelphia, Pennsylvania",
+      description: "Historic 16-unit brick apartment building with renovated one and two-bedroom apartments and beautiful courtyard.",
+      image: "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&q=80&w=800",
+      type: "Residential",
+      units: 16,
+    },
+    {
+      title: "Keystone Residences",
+      location: "Pittsburgh, Pennsylvania",
+      description: "A 32-unit modern apartment complex with studio to 2-bedroom layouts, fitness center, and rooftop community space.",
+      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=800",
+      type: "Residential",
+      units: 32,
     },
   ];
 
@@ -54,7 +54,7 @@ const PropertiesSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">Featured Properties</h2>
           <p className="section-subtitle reveal">
-            A showcase of real properties we currently manage in New York & New Jersey
+            A showcase of multi-family properties we currently manage in Alabama and Pennsylvania
           </p>
         </div>
 

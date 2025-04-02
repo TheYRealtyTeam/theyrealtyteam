@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { ToggleLeft, ToggleRight } from 'lucide-react';
 
 const RentalPropertyCalculator = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const RentalPropertyCalculator = () => {
     otherExpenses: 100
   });
   
+  const [isFlatFee, setIsFlatFee] = useState(false);
   const [results, setResults] = useState({
     monthlyIncome: 0,
     monthlyExpenses: 0,
@@ -42,7 +45,15 @@ const RentalPropertyCalculator = () => {
     const insuranceMonthly = formData.insurance / 12;
     const maintenanceCost = (formData.monthlyRent * formData.maintenancePercent) / 100;
     const vacancyCost = (formData.monthlyRent * formData.vacancyRate) / 100;
-    const managementCost = (formData.monthlyRent * formData.managementFee) / 100;
+    
+    // Calculate management fee based on type (percentage or flat)
+    let managementCost = 0;
+    if (isFlatFee) {
+      managementCost = formData.managementFee; // Flat fee is already a monthly amount
+    } else {
+      managementCost = (formData.monthlyRent * formData.managementFee) / 100; // Percentage of rent
+    }
+    
     const otherExpenses = formData.otherExpenses;
     
     const monthlyExpenses = propertyTaxMonthly + 
@@ -151,13 +162,27 @@ const RentalPropertyCalculator = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Management Fee</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Management Fee {isFlatFee ? '($)' : '(%)'}
+                </label>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">Percentage</span>
+                  <Switch 
+                    checked={isFlatFee}
+                    onCheckedChange={setIsFlatFee}
+                    className="data-[state=checked]:bg-yrealty-navy"
+                  />
+                  <span className="text-xs text-gray-500">Flat Fee</span>
+                </div>
+              </div>
               <input
                 type="number"
                 name="managementFee"
                 value={formData.managementFee}
                 onChange={handleChange}
                 className="input-field"
+                placeholder={isFlatFee ? "Enter flat fee amount" : "Enter percentage"}
               />
             </div>
             

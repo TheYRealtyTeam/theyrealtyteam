@@ -36,7 +36,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     {
       id: '2',
       title: 'The Complete Guide to Tenant Screening',
-      excerpt: 'Effective tenant screening is the foundation of successful property management. Here's how to do it right and avoid costly mistakes.',
+      excerpt: "Effective tenant screening is the foundation of successful property management. Here's how to do it right and avoid costly mistakes.",
       date: 'May 22, 2023',
       author: 'Michael Chen',
       authorRole: 'Property Manager',
@@ -69,7 +69,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     {
       id: '5',
       title: 'Top Tax Deductions for Rental Property Owners',
-      excerpt: 'Don't miss out on these often-overlooked tax deductions that can save rental property owners thousands each year.',
+      excerpt: "Don't miss out on these often-overlooked tax deductions that can save rental property owners thousands each year.",
       date: 'February 5, 2023',
       author: 'Lisa Garcia',
       authorRole: 'Financial Advisor',

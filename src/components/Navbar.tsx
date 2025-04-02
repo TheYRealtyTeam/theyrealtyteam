@@ -77,6 +77,31 @@ const Navbar = () => {
     }
   };
 
+  // Handle navigation for both anchor links and regular routes
+  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string, isAnchorLink: boolean }) => {
+    closeMenu();
+    
+    if (link.isAnchorLink) {
+      e.preventDefault();
+      const sectionId = link.href.split('#')[1];
+      const element = document.getElementById(sectionId);
+      
+      if (element) {
+        const yOffset = -80; // Adjust based on navbar height
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      } else if (window.location.pathname !== '/') {
+        // If we're not on the homepage, navigate to homepage first then scroll
+        window.location.href = link.href;
+      }
+    }
+    // For non-anchor links, the default Link behavior will handle navigation
+  };
+
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
       <div className="container-custom">
@@ -86,14 +111,25 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
             {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                className={`nav-link text-black font-medium ${isLinkActive(link) ? 'active' : ''}`}
-                onClick={closeMenu}
-              >
-                {link.name}
-              </Link>
+              link.isAnchorLink ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className={`nav-link text-black font-medium ${isLinkActive(link) ? 'active' : ''}`}
+                  onClick={(e) => handleNavigation(e, link)}
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  className={`nav-link text-black font-medium ${isLinkActive(link) ? 'active' : ''}`}
+                  onClick={closeMenu}
+                >
+                  {link.name}
+                </Link>
+              )
             ))}
             <Link to="/appointment" className="ml-4 btn-primary font-bold">
               Get Started
@@ -115,14 +151,25 @@ const Navbar = () => {
           <nav className="md:hidden mt-4 py-4 bg-white rounded-lg shadow-lg animate-fade-in">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className={`px-4 py-2 text-black hover:bg-yrealty-blue ${isLinkActive(link) ? 'font-bold' : 'font-medium'}`}
-                  onClick={closeMenu}
-                >
-                  {link.name}
-                </Link>
+                link.isAnchorLink ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className={`px-4 py-2 text-black hover:bg-yrealty-blue ${isLinkActive(link) ? 'font-bold' : 'font-medium'}`}
+                    onClick={(e) => handleNavigation(e, link)}
+                  >
+                    {link.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.name}
+                    to={link.href}
+                    className={`px-4 py-2 text-black hover:bg-yrealty-blue ${isLinkActive(link) ? 'font-bold' : 'font-medium'}`}
+                    onClick={closeMenu}
+                  >
+                    {link.name}
+                  </Link>
+                )
               ))}
               <Link to="/appointment" className="mx-4 btn-primary text-center font-bold" onClick={closeMenu}>
                 Get Started

@@ -52,7 +52,6 @@ const Navbar = () => {
     { name: 'Home', href: '/', isAnchorLink: false },
     { name: 'About', href: '/#about', isAnchorLink: true },
     { name: 'Services', href: '/#services', isAnchorLink: true },
-    { name: 'Properties', href: '/#properties', isAnchorLink: true },
     { name: 'Areas', href: '/#areas', isAnchorLink: true },
     { name: 'FAQ', href: '/faq', isAnchorLink: false },
     { name: 'Blog', href: '/blog', isAnchorLink: false },

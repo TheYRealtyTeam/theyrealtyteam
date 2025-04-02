@@ -26,10 +26,6 @@ const FAQSection = () => {
           answer: "We have a network of licensed, insured, and vetted contractors who provide quality service at competitive rates. For routine maintenance, we handle everything without bothering you. For larger repairs, we seek your approval before proceeding, unless it's an emergency situation."
         },
         {
-          question: "What are your management fees?",
-          answer: "Our fee structure is transparent and competitive. We typically charge a percentage of the monthly rent collected, plus leasing fees for new tenant placement. Please contact us for a customized quote based on your specific property and needs."
-        },
-        {
           question: "How often will I receive statements and payments?",
           answer: "Property owners receive detailed monthly statements showing all income and expenses. Payments are typically disbursed by the 15th of each month via direct deposit to your designated account."
         }

@@ -23,7 +23,7 @@ const HeroSection = () => {
       id="home" 
       ref={heroRef}
       className="relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?auto=format&fit=crop&q=80&w=1920')" }}
+      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1493397212122-2b85dda8106b?auto=format&fit=crop&q=80&w=1920')" }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>
       

@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 const Navbar = () => {
@@ -13,37 +14,69 @@ const Navbar = () => {
       // Check if page is scrolled
       setIsScrolled(window.scrollY > 10);
       
-      // Determine which section is currently in view
-      const sections = document.querySelectorAll('section[id]');
-      const scrollPosition = window.scrollY + 100;
+      // Determine which section is currently in view for homepage
+      const pathname = window.location.pathname;
+      if (pathname === '/') {
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPosition = window.scrollY + 100;
 
-      sections.forEach(section => {
-        const sectionTop = (section as HTMLElement).offsetTop;
-        const sectionHeight = (section as HTMLElement).offsetHeight;
-        const sectionId = section.getAttribute('id') || '';
-        
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          setActiveSection(sectionId);
-        }
-      });
+        sections.forEach(section => {
+          const sectionTop = (section as HTMLElement).offsetTop;
+          const sectionHeight = (section as HTMLElement).offsetHeight;
+          const sectionId = section.getAttribute('id') || '';
+          
+          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+            setActiveSection(sectionId);
+          }
+        });
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Check current path to determine active link
+  useEffect(() => {
+    const pathname = window.location.pathname;
+    if (pathname === '/') {
+      setActiveSection('home');
+    } else {
+      // Extract the main path without slashes or params
+      const mainPath = pathname.split('/')[1];
+      setActiveSection(mainPath || 'home');
+    }
+  }, [window.location.pathname]);
+
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Properties', href: '#properties' },
-    { name: 'Areas', href: '#areas' },
-    { name: 'Testimonials', href: '#testimonials' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/', isAnchorLink: false },
+    { name: 'About', href: '/#about', isAnchorLink: true },
+    { name: 'Services', href: '/#services', isAnchorLink: true },
+    { name: 'Properties', href: '/#properties', isAnchorLink: true },
+    { name: 'Areas', href: '/#areas', isAnchorLink: true },
+    { name: 'FAQ', href: '/faq', isAnchorLink: false },
+    { name: 'Blog', href: '/blog', isAnchorLink: false },
+    { name: 'Tools', href: '/tools', isAnchorLink: false },
+    { name: 'Contact', href: '/#contact', isAnchorLink: true },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+
+  // Helper function to determine if a link is active
+  const isLinkActive = (link: { href: string, isAnchorLink: boolean }) => {
+    if (link.isAnchorLink) {
+      const anchorId = link.href.split('#')[1];
+      return activeSection === anchorId;
+    } else {
+      const pathname = window.location.pathname;
+      if (link.href === '/') {
+        return pathname === '/';
+      } else {
+        return pathname.startsWith(link.href);
+      }
+    }
+  };
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
@@ -54,18 +87,18 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
-                className={`nav-link text-black font-medium ${activeSection === link.href.substring(1) ? 'active' : ''}`}
+                to={link.href}
+                className={`nav-link text-black font-medium ${isLinkActive(link) ? 'active' : ''}`}
                 onClick={closeMenu}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
-            <a href="#contact" className="ml-4 btn-primary font-bold">
+            <Link to="/appointment" className="ml-4 btn-primary font-bold">
               Get Started
-            </a>
+            </Link>
           </nav>
           
           {/* Mobile Menu Button */}
@@ -83,18 +116,18 @@ const Navbar = () => {
           <nav className="md:hidden mt-4 py-4 bg-white rounded-lg shadow-lg animate-fade-in">
             <div className="flex flex-col space-y-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
-                  className={`px-4 py-2 text-black hover:bg-yrealty-blue ${activeSection === link.href.substring(1) ? 'font-bold' : 'font-medium'}`}
+                  to={link.href}
+                  className={`px-4 py-2 text-black hover:bg-yrealty-blue ${isLinkActive(link) ? 'font-bold' : 'font-medium'}`}
                   onClick={closeMenu}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
-              <a href="#contact" className="mx-4 btn-primary text-center font-bold">
+              <Link to="/appointment" className="mx-4 btn-primary text-center font-bold" onClick={closeMenu}>
                 Get Started
-              </a>
+              </Link>
             </div>
           </nav>
         )}

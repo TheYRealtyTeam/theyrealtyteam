@@ -39,7 +39,7 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              {['Home', 'About', 'Services', 'Properties', 'Areas', 'Testimonials', 'Contact'].map((item) => (
+              {['Home', 'About', 'Services', 'Areas', 'Testimonials', 'Contact'].map((item) => (
                 <li key={item}>
                   <a href={`#${item.toLowerCase()}`} className="text-gray-300 hover:text-white transition-colors flex items-center">
                     <ArrowUp className="h-3 w-3 rotate-45 mr-2" />

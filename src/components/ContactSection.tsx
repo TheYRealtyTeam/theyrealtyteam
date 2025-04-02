@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
 import { Phone, Mail, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import emailjs from 'emailjs-com';
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -19,17 +19,37 @@ const ContactSection = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    // Prepare template parameters for EmailJS
+    const templateParams = {
+      to_email: 'info@theYteam.co',
+      from_name: formData.name,
+      from_email: formData.email,
+      phone: formData.phone,
+      property_type: formData.propertyType,
+      message: formData.message
+    };
+    
+    try {
+      // Use EmailJS to send the email
+      // Note: You'll need to replace these IDs with your actual EmailJS account IDs
+      await emailjs.send(
+        'default_service',         // Replace with your EmailJS service ID
+        'template_default',        // Replace with your EmailJS template ID
+        templateParams,
+        'your_user_id'             // Replace with your EmailJS user ID (public key)
+      );
+      
       toast({
         title: "Message Sent!",
         description: "We'll get back to you as soon as possible.",
         duration: 5000,
       });
+      
+      // Reset form data after successful submission
       setFormData({
         name: '',
         email: '',
@@ -37,8 +57,17 @@ const ContactSection = () => {
         propertyType: '',
         message: ''
       });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

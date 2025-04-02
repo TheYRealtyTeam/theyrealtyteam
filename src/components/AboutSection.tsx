@@ -29,10 +29,10 @@ const AboutSection = () => {
           </div>
 
           <div>
-            <h3 className="text-2xl font-bold mb-4 text-yrealty-navy reveal">New York & New Jersey's Premier Property Management Company</h3>
+            <h3 className="text-2xl font-bold mb-4 text-yrealty-navy reveal">America's Premier Property Management Company</h3>
             <p className="mb-6 text-gray-700 reveal">
-              Y Realty Team is committed to providing exceptional property management services in the New York and New Jersey metropolitan area. 
-              Our team understands the unique challenges of these dynamic real estate markets and offers 
+              Y Realty Team is committed to providing exceptional property management services across all 50 states. 
+              Our team understands the unique challenges of diverse real estate markets nationwide and offers 
               tailored solutions to property owners, investors, and tenants.
             </p>
             <p className="mb-6 text-gray-700 reveal stagger-1">
@@ -41,7 +41,7 @@ const AboutSection = () => {
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {['Transparent Management', 'Expert Local Knowledge', 'Dedicated Support', 'Market-Leading Results'].map((item, index) => (
+              {['Transparent Management', 'Nationwide Coverage', 'Dedicated Support', 'Market-Leading Results'].map((item, index) => (
                 <div key={index} className="flex items-center reveal" style={{ transitionDelay: `${0.3 + index * 0.1}s` }}>
                   <CheckCircle className="h-5 w-5 text-yrealty-accent mr-2" />
                   <span>{item}</span>

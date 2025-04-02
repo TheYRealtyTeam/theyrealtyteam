@@ -5,19 +5,19 @@ import { MapPin, Globe } from 'lucide-react';
 const AreasSection = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   
-  // Areas we serve - all presented as current markets
+  // Areas we serve - representing nationwide coverage
   const areas = [
-    { name: "New York", description: "Full-service property management throughout Manhattan, Brooklyn, Queens, The Bronx, and Staten Island." },
-    { name: "New Jersey", description: "Specialized services across Jersey City, Newark, Hoboken, Princeton, and other growing New Jersey markets." },
-    { name: "Boston", description: "Complete management services throughout Boston and surrounding Massachusetts communities." },
-    { name: "Philadelphia", description: "Dedicated management solutions for Philadelphia and surrounding Pennsylvania regions." },
-    { name: "Montgomery", description: "Specialized multi-family property management across Montgomery and central Alabama." },
+    { name: "East Coast", description: "Full-service property management throughout all East Coast states including New York, New Jersey, Massachusetts, and more." },
+    { name: "West Coast", description: "Comprehensive management services across California, Oregon, Washington, and all West Coast markets." },
+    { name: "Midwest", description: "Complete property management throughout Illinois, Michigan, Ohio, and all Midwest states." },
+    { name: "South", description: "Dedicated management solutions for Texas, Florida, Georgia, and all southern regions." },
+    { name: "Southwest", description: "Specialized management across Arizona, New Mexico, Nevada, and throughout the Southwest." },
   ];
 
   // Map initialization with more reliable approach
   useEffect(() => {
     if (mapRef.current) {
-      // Create an iframe with Google Maps embed showing wider regional view
+      // Create an iframe with Google Maps embed showing wider national view
       const iframe = document.createElement('iframe');
       iframe.style.width = '100%';
       iframe.style.height = '100%';
@@ -25,7 +25,7 @@ const AreasSection = () => {
       iframe.style.borderRadius = '8px';
       iframe.allowFullscreen = true;
       iframe.referrerPolicy = 'no-referrer-when-downgrade';
-      iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d6097581.775365128!2d-79.41513!3d40.05317!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c0fb959e00409f%3A0x2cd27b07f83f6d8d!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698429602019!5m2!1sen!2sus';
+      iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12470187.461098605!2d-95.665!3d39.7837!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698429602019!5m2!1sen!2sus';
       
       // Clear any existing content
       mapRef.current.innerHTML = '';
@@ -39,7 +39,7 @@ const AreasSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">Service Areas</h2>
           <p className="section-subtitle reveal">
-            Comprehensive property management across the Northeast and Alabama
+            Comprehensive property management across all 50 states
           </p>
         </div>
 
@@ -50,9 +50,9 @@ const AreasSection = () => {
               <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                 <div className="text-center p-6 bg-white/80 rounded-lg max-w-xs">
                   <Globe className="h-10 w-10 text-yrealty-accent mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">Multi-Region Coverage</h3>
+                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">Nationwide Coverage</h3>
                   <p className="text-gray-700">
-                    Serving properties across multiple states
+                    Serving properties in all 50 states
                   </p>
                 </div>
               </div>
@@ -61,7 +61,7 @@ const AreasSection = () => {
 
           <div>
             <h3 className="text-2xl font-bold mb-6 text-yrealty-navy reveal">
-              Established Presence in Key Markets
+              Established Presence Across America
             </h3>
             
             <div className="space-y-6">
@@ -88,7 +88,7 @@ const AreasSection = () => {
             
             <div className="mt-8 reveal" style={{ transitionDelay: '0.6s' }}>
               <p className="text-gray-700 mb-4">
-                Looking for property management in a specific location? Contact our team to discuss how we can serve your needs.
+                Looking for property management in a specific location? Our nationwide team is ready to assist you.
               </p>
               <a href="#contact" className="btn-primary">Contact Our Team</a>
             </div>

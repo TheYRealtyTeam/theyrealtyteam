@@ -151,7 +151,7 @@ const RentalPropertyCalculator = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Management Fee (% of rent)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Management Fee</label>
               <input
                 type="number"
                 name="managementFee"

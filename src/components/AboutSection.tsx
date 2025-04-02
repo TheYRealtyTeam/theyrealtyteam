@@ -17,8 +17,8 @@ const AboutSection = () => {
           <div className="reveal">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80&w=800" 
-                alt="Y Realty class A apartment building" 
+                src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80&w=800" 
+                alt="Y Realty classic apartment building" 
                 className="rounded-lg shadow-lg w-full" 
               />
               <div className="absolute -bottom-8 -right-8 bg-white p-6 rounded-lg shadow-lg hidden md:block">

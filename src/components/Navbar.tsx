@@ -1,13 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,8 +15,7 @@ const Navbar = () => {
       setIsScrolled(window.scrollY > 10);
       
       // Determine which section is currently in view for homepage
-      const pathname = window.location.pathname;
-      if (pathname === '/') {
+      if (location.pathname === '/') {
         const sections = document.querySelectorAll('section[id]');
         const scrollPosition = window.scrollY + 100;
 
@@ -34,11 +33,11 @@ const Navbar = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location]);
 
   // Check current path to determine active link
   useEffect(() => {
-    const pathname = window.location.pathname;
+    const pathname = location.pathname;
     if (pathname === '/') {
       setActiveSection('home');
     } else {
@@ -46,7 +45,7 @@ const Navbar = () => {
       const mainPath = pathname.split('/')[1];
       setActiveSection(mainPath || 'home');
     }
-  }, [window.location.pathname]);
+  }, [location.pathname]);
 
   const navLinks = [
     { name: 'Home', href: '/', isAnchorLink: false },
@@ -56,7 +55,7 @@ const Navbar = () => {
     { name: 'FAQ', href: '/faq', isAnchorLink: false },
     { name: 'Blog', href: '/blog', isAnchorLink: false },
     { name: 'Tools', href: '/tools', isAnchorLink: false },
-    { name: 'Contact', href: '/#contact', isAnchorLink: true },
+    { name: 'Contact', href: '/contact', isAnchorLink: false },
   ];
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -68,11 +67,10 @@ const Navbar = () => {
       const anchorId = link.href.split('#')[1];
       return activeSection === anchorId;
     } else {
-      const pathname = window.location.pathname;
       if (link.href === '/') {
-        return pathname === '/';
+        return location.pathname === '/';
       } else {
-        return pathname.startsWith(link.href);
+        return location.pathname.startsWith(link.href);
       }
     }
   };
@@ -94,7 +92,7 @@ const Navbar = () => {
           top: y,
           behavior: 'smooth'
         });
-      } else if (window.location.pathname !== '/') {
+      } else if (location.pathname !== '/') {
         // If we're not on the homepage, navigate to homepage first then scroll
         window.location.href = link.href;
       }

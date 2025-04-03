@@ -18,6 +18,7 @@ const RentalPropertyCalculator = () => {
   });
   
   const [isFlatFee, setIsFlatFee] = useState(false);
+  const [isYearly, setIsYearly] = useState(false);
   const [results, setResults] = useState({
     monthlyIncome: 0,
     monthlyExpenses: 0,
@@ -38,20 +39,20 @@ const RentalPropertyCalculator = () => {
   
   const calculateResults = () => {
     // Calculate monthly income
-    const monthlyIncome = formData.monthlyRent;
+    const monthlyIncome = isYearly ? formData.monthlyRent / 12 : formData.monthlyRent;
     
     // Calculate monthly expenses
     const propertyTaxMonthly = formData.propertyTax / 12;
     const insuranceMonthly = formData.insurance / 12;
-    const maintenanceCost = (formData.monthlyRent * formData.maintenancePercent) / 100;
-    const vacancyCost = (formData.monthlyRent * formData.vacancyRate) / 100;
+    const maintenanceCost = (monthlyIncome * formData.maintenancePercent) / 100;
+    const vacancyCost = (monthlyIncome * formData.vacancyRate) / 100;
     
     // Calculate management fee based on type (percentage or flat)
     let managementCost = 0;
     if (isFlatFee) {
       managementCost = formData.managementFee; // Flat fee is already a monthly amount
     } else {
-      managementCost = (formData.monthlyRent * formData.managementFee) / 100; // Percentage of rent
+      managementCost = (monthlyIncome * formData.managementFee) / 100; // Percentage of rent
     }
     
     const otherExpenses = formData.otherExpenses;
@@ -92,13 +93,27 @@ const RentalPropertyCalculator = () => {
         <div>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Rent ($)</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  {isYearly ? 'Yearly' : 'Monthly'} Rent ($)
+                </label>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">Monthly</span>
+                  <Switch 
+                    checked={isYearly}
+                    onCheckedChange={setIsYearly}
+                    className="data-[state=checked]:bg-yrealty-navy"
+                  />
+                  <span className="text-xs text-gray-500">Yearly</span>
+                </div>
+              </div>
               <input
                 type="number"
                 name="monthlyRent"
                 value={formData.monthlyRent}
                 onChange={handleChange}
                 className="input-field"
+                placeholder={isYearly ? "Enter yearly rent" : "Enter monthly rent"}
               />
             </div>
             

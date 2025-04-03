@@ -13,7 +13,7 @@ interface MortgageCalculatorProps {
     insurance: number;
     mortgagePayment: number;
   };
-  updateSharedState: (updates: Partial<typeof sharedState>) => void;
+  updateSharedState: (updates: Partial<MortgageCalculatorProps['sharedState']>) => void;
 }
 
 const MortgageCalculator = ({ sharedState, updateSharedState }: MortgageCalculatorProps) => {

@@ -22,7 +22,7 @@ interface ROICalculatorProps {
     annualAppreciation: number;
     holdingPeriod: number;
   };
-  updateSharedState: (updates: Partial<typeof sharedState>) => void;
+  updateSharedState: (updates: Partial<ROICalculatorProps['sharedState']>) => void;
 }
 
 const ROICalculator = ({ sharedState, updateSharedState }: ROICalculatorProps) => {

@@ -22,7 +22,7 @@ interface RentalPropertyCalculatorProps {
     isFlatFee: boolean;
     isYearly: boolean;
   };
-  updateSharedState: (updates: Partial<typeof sharedState>) => void;
+  updateSharedState: (updates: Partial<RentalPropertyCalculatorProps['sharedState']>) => void;
 }
 
 const RentalPropertyCalculator = ({ sharedState, updateSharedState }: RentalPropertyCalculatorProps) => {

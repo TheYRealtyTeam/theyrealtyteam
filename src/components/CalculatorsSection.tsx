@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Tabs, 
   TabsContent, 
@@ -7,20 +7,23 @@ import {
   TabsTrigger 
 } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 import RentalPropertyCalculator from './calculators/RentalPropertyCalculator';
 import MortgageCalculator from './calculators/MortgageCalculator';
 import ROICalculator from './calculators/ROICalculator';
 
 const CalculatorsSection = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <section className="section-padding bg-white">
       <div className="container-custom">
         <Tabs defaultValue="rental" className="w-full">
           <div className="flex justify-center mb-8">
-            <TabsList className="grid grid-cols-1 md:grid-cols-3 w-full max-w-2xl">
-              <TabsTrigger value="rental">Rental Income</TabsTrigger>
-              <TabsTrigger value="mortgage">Mortgage</TabsTrigger>
-              <TabsTrigger value="roi">ROI</TabsTrigger>
+            <TabsList className={`flex flex-wrap ${isMobile ? 'flex-col w-full' : 'grid-cols-3'} max-w-2xl w-full`}>
+              <TabsTrigger value="rental" className="flex-1">Rental Income</TabsTrigger>
+              <TabsTrigger value="mortgage" className="flex-1">Mortgage</TabsTrigger>
+              <TabsTrigger value="roi" className="flex-1">ROI</TabsTrigger>
             </TabsList>
           </div>
           

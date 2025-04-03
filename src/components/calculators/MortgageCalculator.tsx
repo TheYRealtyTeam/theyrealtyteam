@@ -1,17 +1,22 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
-const MortgageCalculator = () => {
-  const [formData, setFormData] = useState({
-    homePrice: 300000,
-    downPayment: 60000,
-    interestRate: 4.5,
-    loanTerm: 30,
-    propertyTax: 3000,
-    insurance: 1200
-  });
-  
+interface MortgageCalculatorProps {
+  sharedState: {
+    propertyValue: number;
+    downPaymentAmount: number;
+    downPaymentPercent: number;
+    interestRate: number;
+    loanTerm: number;
+    propertyTax: number;
+    insurance: number;
+    mortgagePayment: number;
+  };
+  updateSharedState: (updates: Partial<typeof sharedState>) => void;
+}
+
+const MortgageCalculator = ({ sharedState, updateSharedState }: MortgageCalculatorProps) => {
   const [results, setResults] = useState({
     monthlyPrincipalInterest: 0,
     monthlyPropertyTax: 0,
@@ -25,21 +30,18 @@ const MortgageCalculator = () => {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: parseFloat(value) || 0
-    }));
+    updateSharedState({ [name]: parseFloat(value) || 0 });
   };
   
   const calculateResults = () => {
     // Calculate loan amount
-    const loanAmount = formData.homePrice - formData.downPayment;
+    const loanAmount = sharedState.propertyValue - sharedState.downPaymentAmount;
     
     // Calculate monthly interest rate (annual rate divided by 12)
-    const monthlyRate = (formData.interestRate / 100) / 12;
+    const monthlyRate = (sharedState.interestRate / 100) / 12;
     
     // Calculate number of payments (years * 12)
-    const numberOfPayments = formData.loanTerm * 12;
+    const numberOfPayments = sharedState.loanTerm * 12;
     
     // Calculate monthly principal and interest payment
     const monthlyPrincipalInterest = loanAmount * 
@@ -47,8 +49,8 @@ const MortgageCalculator = () => {
                                   (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
     
     // Calculate monthly property tax and insurance
-    const monthlyPropertyTax = formData.propertyTax / 12;
-    const monthlyInsurance = formData.insurance / 12;
+    const monthlyPropertyTax = sharedState.propertyTax / 12;
+    const monthlyInsurance = sharedState.insurance / 12;
     
     // Calculate total monthly payment
     const totalMonthlyPayment = monthlyPrincipalInterest + monthlyPropertyTax + monthlyInsurance;
@@ -68,6 +70,9 @@ const MortgageCalculator = () => {
       totalInterestPaid
     });
     
+    // Update shared mortgage payment
+    updateSharedState({ mortgagePayment: monthlyPrincipalInterest });
+    
     setShowResults(true);
   };
   
@@ -80,8 +85,8 @@ const MortgageCalculator = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Home Price ($)</label>
               <input
                 type="number"
-                name="homePrice"
-                value={formData.homePrice}
+                name="propertyValue"
+                value={sharedState.propertyValue}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -91,9 +96,16 @@ const MortgageCalculator = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Down Payment ($)</label>
               <input
                 type="number"
-                name="downPayment"
-                value={formData.downPayment}
-                onChange={handleChange}
+                name="downPaymentAmount"
+                value={sharedState.downPaymentAmount}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0;
+                  const percent = (value / sharedState.propertyValue) * 100;
+                  updateSharedState({ 
+                    downPaymentAmount: value,
+                    downPaymentPercent: percent
+                  });
+                }}
                 className="input-field"
               />
             </div>
@@ -101,7 +113,7 @@ const MortgageCalculator = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Down Payment Percentage</label>
               <div className="input-field bg-gray-100 flex items-center justify-between">
-                <span>{((formData.downPayment / formData.homePrice) * 100).toFixed(1)}%</span>
+                <span>{sharedState.downPaymentPercent.toFixed(1)}%</span>
               </div>
             </div>
           </div>
@@ -114,7 +126,7 @@ const MortgageCalculator = () => {
               <input
                 type="number"
                 name="interestRate"
-                value={formData.interestRate}
+                value={sharedState.interestRate}
                 onChange={handleChange}
                 step="0.1"
                 className="input-field"
@@ -125,7 +137,7 @@ const MortgageCalculator = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Loan Term (years)</label>
               <select
                 name="loanTerm"
-                value={formData.loanTerm}
+                value={sharedState.loanTerm}
                 onChange={handleChange}
                 className="input-field"
               >
@@ -140,7 +152,7 @@ const MortgageCalculator = () => {
               <input
                 type="number"
                 name="propertyTax"
-                value={formData.propertyTax}
+                value={sharedState.propertyTax}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -151,7 +163,7 @@ const MortgageCalculator = () => {
               <input
                 type="number"
                 name="insurance"
-                value={formData.insurance}
+                value={sharedState.insurance}
                 onChange={handleChange}
                 className="input-field"
               />

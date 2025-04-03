@@ -6,22 +6,26 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ToggleLeft, ToggleRight } from 'lucide-react';
 
-const RentalPropertyCalculator = () => {
-  const [formData, setFormData] = useState({
-    monthlyRent: 2000,
-    propertyValue: 300000,
-    propertyTax: 3000,
-    insurance: 1200,
-    maintenanceCost: 100, // Changed from percentage to dollar amount
-    vacancyRate: 5,
-    managementFee: 8,
-    mortgagePayment: 1500,
-    otherExpenses: 100,
-    downPaymentPercent: 20
-  });
-  
-  const [isFlatFee, setIsFlatFee] = useState(false);
-  const [isYearly, setIsYearly] = useState(false);
+interface RentalPropertyCalculatorProps {
+  sharedState: {
+    propertyValue: number;
+    downPaymentPercent: number;
+    downPaymentAmount: number;
+    monthlyRent: number;
+    propertyTax: number;
+    insurance: number;
+    maintenanceCost: number;
+    vacancyRate: number;
+    managementFee: number;
+    mortgagePayment: number;
+    otherExpenses: number;
+    isFlatFee: boolean;
+    isYearly: boolean;
+  };
+  updateSharedState: (updates: Partial<typeof sharedState>) => void;
+}
+
+const RentalPropertyCalculator = ({ sharedState, updateSharedState }: RentalPropertyCalculatorProps) => {
   const [results, setResults] = useState({
     monthlyIncome: 0,
     monthlyExpenses: 0,
@@ -34,41 +38,35 @@ const RentalPropertyCalculator = () => {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: parseFloat(value) || 0
-    }));
+    updateSharedState({ [name]: parseFloat(value) || 0 });
   };
-  
-  // Calculate down payment amount based on percentage
-  const downPaymentAmount = (formData.propertyValue * formData.downPaymentPercent) / 100;
   
   const calculateResults = () => {
     // Calculate monthly income
-    const monthlyIncome = isYearly ? formData.monthlyRent / 12 : formData.monthlyRent;
+    const monthlyIncome = sharedState.isYearly ? sharedState.monthlyRent / 12 : sharedState.monthlyRent;
     
     // Calculate monthly expenses
-    const propertyTaxMonthly = formData.propertyTax / 12;
-    const insuranceMonthly = formData.insurance / 12;
-    const maintenanceCost = formData.maintenanceCost; // Now using direct dollar amount
-    const vacancyCost = (monthlyIncome * formData.vacancyRate) / 100;
+    const propertyTaxMonthly = sharedState.propertyTax / 12;
+    const insuranceMonthly = sharedState.insurance / 12;
+    const maintenanceCost = sharedState.maintenanceCost; // Now using direct dollar amount
+    const vacancyCost = (monthlyIncome * sharedState.vacancyRate) / 100;
     
     // Calculate management fee based on type (percentage or flat)
     let managementCost = 0;
-    if (isFlatFee) {
-      managementCost = formData.managementFee; // Flat fee is already a monthly amount
+    if (sharedState.isFlatFee) {
+      managementCost = sharedState.managementFee; // Flat fee is already a monthly amount
     } else {
-      managementCost = (monthlyIncome * formData.managementFee) / 100; // Percentage of rent
+      managementCost = (monthlyIncome * sharedState.managementFee) / 100; // Percentage of rent
     }
     
-    const otherExpenses = formData.otherExpenses;
+    const otherExpenses = sharedState.otherExpenses;
     
     const monthlyExpenses = propertyTaxMonthly + 
                            insuranceMonthly + 
                            maintenanceCost + 
                            vacancyCost + 
                            managementCost + 
-                           formData.mortgagePayment + 
+                           sharedState.mortgagePayment + 
                            otherExpenses;
     
     // Calculate cash flow
@@ -76,8 +74,8 @@ const RentalPropertyCalculator = () => {
     const annualCashFlow = monthlyCashFlow * 12;
     
     // Using the calculated down payment for cash on cash return calculation
-    const closingCosts = formData.propertyValue * 0.03;
-    const initialInvestment = downPaymentAmount + closingCosts;
+    const closingCosts = sharedState.propertyValue * 0.03;
+    const initialInvestment = sharedState.downPaymentAmount + closingCosts;
     
     const cashOnCashReturn = initialInvestment > 0 ? (annualCashFlow / initialInvestment) * 100 : 0;
     
@@ -100,13 +98,13 @@ const RentalPropertyCalculator = () => {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-sm font-medium text-gray-700">
-                  {isYearly ? 'Yearly' : 'Monthly'} Rent ($)
+                  {sharedState.isYearly ? 'Yearly' : 'Monthly'} Rent ($)
                 </label>
                 <div className="flex items-center space-x-2">
                   <span className="text-xs text-gray-500">Monthly</span>
                   <Switch 
-                    checked={isYearly}
-                    onCheckedChange={setIsYearly}
+                    checked={sharedState.isYearly}
+                    onCheckedChange={(checked) => updateSharedState({ isYearly: checked })}
                     className="data-[state=checked]:bg-yrealty-navy"
                   />
                   <span className="text-xs text-gray-500">Yearly</span>
@@ -115,10 +113,10 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="monthlyRent"
-                value={formData.monthlyRent}
+                value={sharedState.monthlyRent}
                 onChange={handleChange}
                 className="input-field"
-                placeholder={isYearly ? "Enter yearly rent" : "Enter monthly rent"}
+                placeholder={sharedState.isYearly ? "Enter yearly rent" : "Enter monthly rent"}
               />
             </div>
             
@@ -127,7 +125,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="propertyValue"
-                value={formData.propertyValue}
+                value={sharedState.propertyValue}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -136,12 +134,12 @@ const RentalPropertyCalculator = () => {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="block text-sm font-medium text-gray-700">Down Payment (%)</label>
-                <span className="text-sm text-gray-500">${downPaymentAmount.toLocaleString()}</span>
+                <span className="text-sm text-gray-500">${sharedState.downPaymentAmount.toLocaleString()}</span>
               </div>
               <Input
                 type="number"
                 name="downPaymentPercent"
-                value={formData.downPaymentPercent}
+                value={sharedState.downPaymentPercent}
                 onChange={handleChange}
                 className="input-field"
                 min="0"
@@ -154,7 +152,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="propertyTax"
-                value={formData.propertyTax}
+                value={sharedState.propertyTax}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -165,7 +163,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="insurance"
-                value={formData.insurance}
+                value={sharedState.insurance}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -180,7 +178,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="maintenanceCost"
-                value={formData.maintenanceCost}
+                value={sharedState.maintenanceCost}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -191,7 +189,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="vacancyRate"
-                value={formData.vacancyRate}
+                value={sharedState.vacancyRate}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -200,13 +198,13 @@ const RentalPropertyCalculator = () => {
             <div>
               <div className="flex items-center justify-between mb-1">
                 <label className="block text-sm font-medium text-gray-700">
-                  Management Fee {isFlatFee ? '($)' : '(%)'}
+                  Management Fee {sharedState.isFlatFee ? '($)' : '(%)'}
                 </label>
                 <div className="flex items-center space-x-2">
                   <span className="text-xs text-gray-500">Percentage</span>
                   <Switch 
-                    checked={isFlatFee}
-                    onCheckedChange={setIsFlatFee}
+                    checked={sharedState.isFlatFee}
+                    onCheckedChange={(checked) => updateSharedState({ isFlatFee: checked })}
                     className="data-[state=checked]:bg-yrealty-navy"
                   />
                   <span className="text-xs text-gray-500">Flat Fee</span>
@@ -215,10 +213,10 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="managementFee"
-                value={formData.managementFee}
+                value={sharedState.managementFee}
                 onChange={handleChange}
                 className="input-field"
-                placeholder={isFlatFee ? "Enter flat fee amount" : "Enter percentage"}
+                placeholder={sharedState.isFlatFee ? "Enter flat fee amount" : "Enter percentage"}
               />
             </div>
             
@@ -227,7 +225,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="mortgagePayment"
-                value={formData.mortgagePayment}
+                value={sharedState.mortgagePayment}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -238,7 +236,7 @@ const RentalPropertyCalculator = () => {
               <input
                 type="number"
                 name="otherExpenses"
-                value={formData.otherExpenses}
+                value={sharedState.otherExpenses}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -294,7 +292,7 @@ const RentalPropertyCalculator = () => {
           </div>
           
           <div className="mt-4 text-sm text-gray-500">
-            <p>* Cash on Cash Return is based on your {formData.downPaymentPercent}% down payment (${downPaymentAmount.toLocaleString()}) and 3% closing costs.</p>
+            <p>* Cash on Cash Return is based on your {sharedState.downPaymentPercent}% down payment (${sharedState.downPaymentAmount.toLocaleString()}) and 3% closing costs.</p>
             <p>* Consult with a financial advisor for personalized investment advice.</p>
           </div>
         </div>
@@ -304,4 +302,3 @@ const RentalPropertyCalculator = () => {
 };
 
 export default RentalPropertyCalculator;
-

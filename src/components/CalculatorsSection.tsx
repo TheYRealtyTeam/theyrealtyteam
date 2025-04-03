@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Tabs, 
   TabsContent, 
@@ -12,8 +12,76 @@ import RentalPropertyCalculator from './calculators/RentalPropertyCalculator';
 import MortgageCalculator from './calculators/MortgageCalculator';
 import ROICalculator from './calculators/ROICalculator';
 
+// Define shared state interface
+interface SharedCalculatorState {
+  // Property details
+  propertyValue: number;
+  downPaymentPercent: number;
+  downPaymentAmount: number;
+  
+  // Mortgage details
+  interestRate: number;
+  loanTerm: number;
+  mortgagePayment: number;
+  
+  // Rental details
+  monthlyRent: number;
+  propertyTax: number;
+  insurance: number;
+  maintenanceCost: number;
+  vacancyRate: number;
+  managementFee: number;
+  isFlatFee: boolean;
+  isYearly: boolean;
+  otherExpenses: number;
+
+  // ROI details
+  closingCosts: number;
+  renovationCosts: number;
+  annualAppreciation: number;
+  holdingPeriod: number;
+}
+
 const CalculatorsSection = () => {
   const isMobile = useIsMobile();
+
+  // Initialize shared state with default values
+  const [sharedState, setSharedState] = useState<SharedCalculatorState>({
+    propertyValue: 300000,
+    downPaymentPercent: 20,
+    downPaymentAmount: 60000,
+    
+    interestRate: 4.5,
+    loanTerm: 30,
+    mortgagePayment: 1500,
+    
+    monthlyRent: 2000,
+    propertyTax: 3000,
+    insurance: 1200,
+    maintenanceCost: 100,
+    vacancyRate: 5,
+    managementFee: 8,
+    isFlatFee: false,
+    isYearly: false,
+    otherExpenses: 100,
+
+    closingCosts: 5000,
+    renovationCosts: 10000,
+    annualAppreciation: 3,
+    holdingPeriod: 5
+  });
+
+  // Function to update shared state
+  const updateSharedState = (updates: Partial<SharedCalculatorState>) => {
+    setSharedState(prevState => ({
+      ...prevState,
+      ...updates,
+      // Auto-calculate downPaymentAmount whenever propertyValue or downPaymentPercent changes
+      downPaymentAmount: updates.downPaymentPercent !== undefined || updates.propertyValue !== undefined
+        ? ((updates.propertyValue || prevState.propertyValue) * (updates.downPaymentPercent || prevState.downPaymentPercent)) / 100
+        : prevState.downPaymentAmount
+    }));
+  };
   
   return (
     <section className="section-padding bg-white">
@@ -33,7 +101,10 @@ const CalculatorsSection = () => {
               <p className="text-gray-600 mb-6">
                 Estimate your monthly and annual rental income after expenses to better understand the cash flow from your property investment.
               </p>
-              <RentalPropertyCalculator />
+              <RentalPropertyCalculator 
+                sharedState={sharedState} 
+                updateSharedState={updateSharedState} 
+              />
             </div>
           </TabsContent>
           
@@ -43,7 +114,10 @@ const CalculatorsSection = () => {
               <p className="text-gray-600 mb-6">
                 Calculate your monthly mortgage payments based on property price, down payment, interest rate, and loan term.
               </p>
-              <MortgageCalculator />
+              <MortgageCalculator 
+                sharedState={sharedState} 
+                updateSharedState={updateSharedState} 
+              />
             </div>
           </TabsContent>
           
@@ -53,7 +127,10 @@ const CalculatorsSection = () => {
               <p className="text-gray-600 mb-6">
                 Analyze the potential return on investment for a property, considering purchase price, rental income, expenses, and appreciation.
               </p>
-              <ROICalculator />
+              <ROICalculator 
+                sharedState={sharedState} 
+                updateSharedState={updateSharedState}
+              />
             </div>
           </TabsContent>
         </Tabs>

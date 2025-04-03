@@ -2,18 +2,30 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-const ROICalculator = () => {
-  const [formData, setFormData] = useState({
-    purchasePrice: 300000,
-    downPayment: 60000,
-    closingCosts: 5000,
-    renovationCosts: 10000,
-    monthlyRent: 2000,
-    monthlyExpenses: 750,
-    annualAppreciation: 3,
-    holdingPeriod: 5
-  });
-  
+interface ROICalculatorProps {
+  sharedState: {
+    propertyValue: number;
+    downPaymentAmount: number;
+    downPaymentPercent: number;
+    closingCosts: number;
+    renovationCosts: number;
+    monthlyRent: number;
+    mortgagePayment: number;
+    propertyTax: number;
+    insurance: number;
+    maintenanceCost: number;
+    vacancyRate: number;
+    managementFee: number;
+    isFlatFee: boolean;
+    otherExpenses: number;
+    interestRate: number;
+    annualAppreciation: number;
+    holdingPeriod: number;
+  };
+  updateSharedState: (updates: Partial<typeof sharedState>) => void;
+}
+
+const ROICalculator = ({ sharedState, updateSharedState }: ROICalculatorProps) => {
   const [results, setResults] = useState({
     totalInvestment: 0,
     monthlyCashFlow: 0,
@@ -29,33 +41,53 @@ const ROICalculator = () => {
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: parseFloat(value) || 0
-    }));
+    updateSharedState({ [name]: parseFloat(value) || 0 });
   };
   
   const calculateResults = () => {
     // Calculate total initial investment
-    const totalInvestment = formData.downPayment + formData.closingCosts + formData.renovationCosts;
+    const totalInvestment = sharedState.downPaymentAmount + sharedState.closingCosts + sharedState.renovationCosts;
+    
+    // Calculate monthly expenses for cash flow
+    const monthlyRent = sharedState.monthlyRent;
+    const propertyTaxMonthly = sharedState.propertyTax / 12;
+    const insuranceMonthly = sharedState.insurance / 12;
+    const maintenanceCost = sharedState.maintenanceCost;
+    const vacancyCost = (monthlyRent * sharedState.vacancyRate) / 100;
+    
+    // Calculate management fee based on type (percentage or flat)
+    let managementCost = 0;
+    if (sharedState.isFlatFee) {
+      managementCost = sharedState.managementFee; // Flat fee is already a monthly amount
+    } else {
+      managementCost = (monthlyRent * sharedState.managementFee) / 100; // Percentage of rent
+    }
+    
+    const totalMonthlyExpenses = propertyTaxMonthly + 
+                              insuranceMonthly + 
+                              maintenanceCost + 
+                              vacancyCost + 
+                              managementCost + 
+                              sharedState.mortgagePayment + 
+                              sharedState.otherExpenses;
     
     // Calculate monthly and annual cash flow
-    const monthlyCashFlow = formData.monthlyRent - formData.monthlyExpenses;
+    const monthlyCashFlow = monthlyRent - totalMonthlyExpenses;
     const annualCashFlow = monthlyCashFlow * 12;
     
     // Calculate total cash flow over holding period
-    const totalCashFlow = annualCashFlow * formData.holdingPeriod;
+    const totalCashFlow = annualCashFlow * sharedState.holdingPeriod;
     
     // Calculate property value after appreciation
-    const propertyValueAtSale = formData.purchasePrice * Math.pow(1 + (formData.annualAppreciation / 100), formData.holdingPeriod);
+    const propertyValueAtSale = sharedState.propertyValue * Math.pow(1 + (sharedState.annualAppreciation / 100), sharedState.holdingPeriod);
     
     // Calculate equity at sale
     // Loan amount = purchase price - down payment
-    const loanAmount = formData.purchasePrice - formData.downPayment;
+    const loanAmount = sharedState.propertyValue - sharedState.downPaymentAmount;
     
-    // Assume a 30-year loan at 4.5% interest for this simple calculator
-    const monthlyRate = 0.045 / 12;
-    const numberOfPayments = 30 * 12;
+    // Calculate monthly rate from annual rate
+    const monthlyRate = (sharedState.interestRate / 100) / 12;
+    const numberOfPayments = 30 * 12; // Assuming 30-year loan
     
     // Calculate monthly payment
     const monthlyPayment = loanAmount * 
@@ -64,7 +96,7 @@ const ROICalculator = () => {
     
     // Calculate remaining loan balance after holding period
     let remainingBalance = loanAmount;
-    for (let i = 0; i < formData.holdingPeriod * 12; i++) {
+    for (let i = 0; i < sharedState.holdingPeriod * 12; i++) {
       const interestPayment = remainingBalance * monthlyRate;
       const principalPayment = monthlyPayment - interestPayment;
       remainingBalance -= principalPayment;
@@ -74,13 +106,13 @@ const ROICalculator = () => {
     const equityAtSale = propertyValueAtSale - remainingBalance;
     
     // Calculate total profit
-    const totalProfit = equityAtSale - formData.downPayment + totalCashFlow;
+    const totalProfit = equityAtSale - sharedState.downPaymentAmount + totalCashFlow;
     
     // Calculate total ROI percentage
     const totalROI = (totalProfit / totalInvestment) * 100;
     
     // Calculate annualized ROI
-    const annualizedROI = Math.pow(1 + (totalROI / 100), 1 / formData.holdingPeriod) - 1;
+    const annualizedROI = Math.pow(1 + (totalROI / 100), 1 / sharedState.holdingPeriod) - 1;
     
     setResults({
       totalInvestment,
@@ -105,8 +137,8 @@ const ROICalculator = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Purchase Price ($)</label>
               <input
                 type="number"
-                name="purchasePrice"
-                value={formData.purchasePrice}
+                name="propertyValue"
+                value={sharedState.propertyValue}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -116,9 +148,16 @@ const ROICalculator = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Down Payment ($)</label>
               <input
                 type="number"
-                name="downPayment"
-                value={formData.downPayment}
-                onChange={handleChange}
+                name="downPaymentAmount"
+                value={sharedState.downPaymentAmount}
+                onChange={(e) => {
+                  const value = parseFloat(e.target.value) || 0;
+                  const percent = (value / sharedState.propertyValue) * 100;
+                  updateSharedState({ 
+                    downPaymentAmount: value,
+                    downPaymentPercent: percent
+                  });
+                }}
                 className="input-field"
               />
             </div>
@@ -128,7 +167,7 @@ const ROICalculator = () => {
               <input
                 type="number"
                 name="closingCosts"
-                value={formData.closingCosts}
+                value={sharedState.closingCosts}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -139,7 +178,7 @@ const ROICalculator = () => {
               <input
                 type="number"
                 name="renovationCosts"
-                value={formData.renovationCosts}
+                value={sharedState.renovationCosts}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -154,7 +193,7 @@ const ROICalculator = () => {
               <input
                 type="number"
                 name="monthlyRent"
-                value={formData.monthlyRent}
+                value={sharedState.monthlyRent}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -162,13 +201,18 @@ const ROICalculator = () => {
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Expenses ($)</label>
-              <input
-                type="number"
-                name="monthlyExpenses"
-                value={formData.monthlyExpenses}
-                onChange={handleChange}
-                className="input-field"
-              />
+              <div className="input-field bg-gray-100 flex items-center justify-between">
+                <span>
+                  {(
+                    sharedState.propertyTax / 12 +
+                    sharedState.insurance / 12 +
+                    sharedState.maintenanceCost +
+                    (sharedState.monthlyRent * sharedState.vacancyRate) / 100 +
+                    (sharedState.isFlatFee ? sharedState.managementFee : (sharedState.monthlyRent * sharedState.managementFee) / 100) +
+                    sharedState.otherExpenses
+                  ).toFixed(2)}
+                </span>
+              </div>
             </div>
             
             <div>
@@ -176,7 +220,7 @@ const ROICalculator = () => {
               <input
                 type="number"
                 name="annualAppreciation"
-                value={formData.annualAppreciation}
+                value={sharedState.annualAppreciation}
                 onChange={handleChange}
                 step="0.1"
                 className="input-field"
@@ -187,7 +231,7 @@ const ROICalculator = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">Holding Period (years)</label>
               <select
                 name="holdingPeriod"
-                value={formData.holdingPeriod}
+                value={sharedState.holdingPeriod}
                 onChange={handleChange}
                 className="input-field"
               >

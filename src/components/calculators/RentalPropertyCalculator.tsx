@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { ToggleLeft, ToggleRight } from 'lucide-react';
 
 const RentalPropertyCalculator = () => {
@@ -14,7 +16,8 @@ const RentalPropertyCalculator = () => {
     vacancyRate: 5,
     managementFee: 8,
     mortgagePayment: 1500,
-    otherExpenses: 100
+    otherExpenses: 100,
+    downPaymentPercent: 20
   });
   
   const [isFlatFee, setIsFlatFee] = useState(false);
@@ -36,6 +39,9 @@ const RentalPropertyCalculator = () => {
       [name]: parseFloat(value) || 0
     }));
   };
+  
+  // Calculate down payment amount based on percentage
+  const downPaymentAmount = (formData.propertyValue * formData.downPaymentPercent) / 100;
   
   const calculateResults = () => {
     // Calculate monthly income
@@ -69,10 +75,9 @@ const RentalPropertyCalculator = () => {
     const monthlyCashFlow = monthlyIncome - monthlyExpenses;
     const annualCashFlow = monthlyCashFlow * 12;
     
-    // Assuming 20% down payment for cash on cash return calculation
-    const downPayment = formData.propertyValue * 0.2;
+    // Using the calculated down payment for cash on cash return calculation
     const closingCosts = formData.propertyValue * 0.03;
-    const initialInvestment = downPayment + closingCosts;
+    const initialInvestment = downPaymentAmount + closingCosts;
     
     const cashOnCashReturn = initialInvestment > 0 ? (annualCashFlow / initialInvestment) * 100 : 0;
     
@@ -125,6 +130,22 @@ const RentalPropertyCalculator = () => {
                 value={formData.propertyValue}
                 onChange={handleChange}
                 className="input-field"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="block text-sm font-medium text-gray-700">Down Payment (%)</label>
+                <span className="text-sm text-gray-500">${downPaymentAmount.toLocaleString()}</span>
+              </div>
+              <Input
+                type="number"
+                name="downPaymentPercent"
+                value={formData.downPaymentPercent}
+                onChange={handleChange}
+                className="input-field"
+                min="0"
+                max="100"
               />
             </div>
             
@@ -273,7 +294,7 @@ const RentalPropertyCalculator = () => {
           </div>
           
           <div className="mt-4 text-sm text-gray-500">
-            <p>* Cash on Cash Return is based on assumed 20% down payment and 3% closing costs.</p>
+            <p>* Cash on Cash Return is based on your {formData.downPaymentPercent}% down payment (${downPaymentAmount.toLocaleString()}) and 3% closing costs.</p>
             <p>* Consult with a financial advisor for personalized investment advice.</p>
           </div>
         </div>

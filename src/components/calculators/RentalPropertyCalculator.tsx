@@ -12,7 +12,7 @@ const RentalPropertyCalculator = () => {
     propertyValue: 300000,
     propertyTax: 3000,
     insurance: 1200,
-    maintenancePercent: 5,
+    maintenanceCost: 100, // Changed from percentage to dollar amount
     vacancyRate: 5,
     managementFee: 8,
     mortgagePayment: 1500,
@@ -50,7 +50,7 @@ const RentalPropertyCalculator = () => {
     // Calculate monthly expenses
     const propertyTaxMonthly = formData.propertyTax / 12;
     const insuranceMonthly = formData.insurance / 12;
-    const maintenanceCost = (monthlyIncome * formData.maintenancePercent) / 100;
+    const maintenanceCost = formData.maintenanceCost; // Now using direct dollar amount
     const vacancyCost = (monthlyIncome * formData.vacancyRate) / 100;
     
     // Calculate management fee based on type (percentage or flat)
@@ -176,11 +176,11 @@ const RentalPropertyCalculator = () => {
         <div>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Maintenance (% of rent)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Maintenance ($)</label>
               <input
                 type="number"
-                name="maintenancePercent"
-                value={formData.maintenancePercent}
+                name="maintenanceCost"
+                value={formData.maintenanceCost}
                 onChange={handleChange}
                 className="input-field"
               />
@@ -304,3 +304,4 @@ const RentalPropertyCalculator = () => {
 };
 
 export default RentalPropertyCalculator;
+

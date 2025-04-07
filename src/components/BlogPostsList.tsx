@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -55,17 +54,6 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
       category: 'maintenance',
       image: 'https://images.unsplash.com/photo-1572204292164-b35ba943fca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2xpbWF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
       slug: 'climate-resilience-rental-properties-2025'
-    },
-    {
-      id: '4',
-      title: 'The Remote Landlord: Managing Properties From Anywhere in 2025',
-      excerpt: 'The latest digital tools and strategies that make it possible to effectively manage rental properties from anywhere in the world.',
-      date: 'March 2, 2025',
-      author: 'Robert Thompson',
-      authorRole: 'Digital Nomad & Property Investor',
-      category: 'property-management',
-      image: 'https://images.unsplash.com/photo-1598986646512-9330bcc4c0dc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHJlbW90ZSUyMHdvcmt8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-      slug: 'remote-landlord-managing-properties-anywhere-2025'
     },
     {
       id: '5',

@@ -21,13 +21,13 @@ interface BlogPostsListProps {
 }
 
 const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategory }) => {
-  // Sample blog posts data
+  // Updated blog posts data with current dates
   const blogPosts: BlogPost[] = [
     {
       id: '1',
-      title: '5 Ways to Maximize Your Rental Property ROI',
-      excerpt: 'Learn proven strategies to increase the return on investment for your rental properties with these effective management techniques.',
-      date: 'June 15, 2023',
+      title: '5 Ways to Maximize Your Rental Property ROI in 2025',
+      excerpt: 'Learn proven strategies to increase the return on investment for your rental properties with these effective management techniques updated for the current market.',
+      date: 'April 2, 2025',
       author: 'Sarah Johnson',
       authorRole: 'Investment Specialist',
       category: 'investment',
@@ -36,9 +36,9 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     },
     {
       id: '2',
-      title: 'The Complete Guide to Tenant Screening',
-      excerpt: "Effective tenant screening is the foundation of successful property management. Here's how to do it right and avoid costly mistakes.",
-      date: 'May 22, 2023',
+      title: 'The Complete Guide to Tenant Screening: 2025 Edition',
+      excerpt: "Effective tenant screening is the foundation of successful property management. Here's how to do it right and avoid costly mistakes in today's market.",
+      date: 'March 18, 2025',
       author: 'Michael Chen',
       authorRole: 'Property Manager',
       category: 'property-management',
@@ -47,47 +47,47 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     },
     {
       id: '3',
-      title: 'Market Trends: What to Expect in Real Estate for 2023',
-      excerpt: 'Our experts analyze current market conditions and make predictions for the real estate market in the coming year.',
-      date: 'April 10, 2023',
+      title: 'Market Trends: Real Estate Forecast for 2025-2026',
+      excerpt: 'Our experts analyze current market conditions and make predictions for the real estate market in the coming year based on emerging economic factors.',
+      date: 'March 5, 2025',
       author: 'Jennifer Williams',
       authorRole: 'Market Analyst',
       category: 'market-trends',
       image: 'https://images.unsplash.com/photo-1555642915-ef05731a926c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-      slug: 'market-trends-real-estate-2023'
+      slug: 'market-trends-real-estate-2025'
     },
     {
       id: '4',
-      title: 'Seasonal Maintenance Checklist for Landlords',
-      excerpt: 'Stay ahead of property maintenance with this comprehensive seasonal checklist designed specifically for rental property owners.',
-      date: 'March 18, 2023',
+      title: 'Spring 2025 Maintenance Checklist for Landlords',
+      excerpt: 'Stay ahead of property maintenance with this comprehensive seasonal checklist designed specifically for rental property owners this spring.',
+      date: 'February 28, 2025',
       author: 'Robert Thompson',
       authorRole: 'Maintenance Director',
       category: 'maintenance',
       image: 'https://images.unsplash.com/photo-1621551711550-c73f9fb4d76d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fG1haW50ZW5hbmNlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-      slug: 'seasonal-maintenance-checklist-landlords'
+      slug: 'spring-maintenance-checklist-landlords'
     },
     {
       id: '5',
-      title: 'Top Tax Deductions for Rental Property Owners',
-      excerpt: "Don't miss out on these often-overlooked tax deductions that can save rental property owners thousands each year.",
-      date: 'February 5, 2023',
+      title: 'Tax Updates for 2025: Critical Deductions for Rental Property Owners',
+      excerpt: "Don't miss out on these often-overlooked tax deductions and recent tax code changes that can save rental property owners thousands each year.",
+      date: 'February 12, 2025',
       author: 'Lisa Garcia',
       authorRole: 'Financial Advisor',
       category: 'landlord-tips',
       image: 'https://images.unsplash.com/photo-1554224155-1696413565d3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8dGF4fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60',
-      slug: 'top-tax-deductions-rental-property-owners'
+      slug: 'tax-updates-rental-property-owners'
     },
     {
       id: '6',
-      title: 'How to Handle Difficult Tenant Situations',
-      excerpt: 'Learn professional strategies for managing challenging tenant interactions while staying within legal boundaries.',
-      date: 'January 20, 2023',
+      title: 'Managing Short-Term Rentals in 2025: New Regulations and Best Practices',
+      excerpt: 'Navigate the changing landscape of short-term rental management with our guide to new regulations, technologies, and tenant relations strategies.',
+      date: 'January 30, 2025',
       author: 'David Martinez',
       authorRole: 'Senior Property Manager',
       category: 'property-management',
       image: 'https://images.unsplash.com/photo-1573497161079-f3fd25cc6b90?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fGNvbnZlcnNhdGlvbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-      slug: 'handle-difficult-tenant-situations'
+      slug: 'short-term-rental-management-2025'
     }
   ];
 

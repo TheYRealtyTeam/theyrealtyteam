@@ -30,9 +30,9 @@ const Blog = () => {
       <main className="flex-grow">
         <div className="pt-24 pb-12 bg-yrealty-blue">
           <div className="container-custom">
-            <h1 className="text-4xl md:text-5xl font-bold text-yrealty-navy text-center">Property Management Insights</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-yrealty-navy text-center">2025 Property Management Insights</h1>
             <p className="text-center text-gray-600 mt-4 max-w-3xl mx-auto">
-              Stay updated with the latest property management trends, tips, and market insights
+              Stay ahead of the curve with our latest property management trends, strategies, and market forecasts
             </p>
             
             <div className="mt-8 max-w-2xl mx-auto">

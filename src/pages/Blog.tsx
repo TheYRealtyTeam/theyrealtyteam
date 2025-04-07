@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BlogPostsList from '@/components/BlogPostsList';
 import AnimationObserver from '@/utils/AnimationObserver';
+import { Search } from 'lucide-react';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +14,15 @@ const Blog = () => {
     document.title = "Blog | Y Realty Team";
     window.scrollTo(0, 0);
   }, []);
+
+  const categories = [
+    { id: 'all', label: 'All Posts' },
+    { id: 'property-management', label: 'Property Management' },
+    { id: 'market-trends', label: 'Market Trends' },
+    { id: 'landlord-tips', label: 'Landlord Tips' },
+    { id: 'investment', label: 'Investment' },
+    { id: 'maintenance', label: 'Maintenance' }
+  ];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -32,28 +42,24 @@ const Blog = () => {
                   placeholder="Search articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yrealty-accent focus:border-transparent"
+                  className="w-full px-4 py-3 pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yrealty-accent focus:border-transparent"
                 />
-                <button className="absolute right-3 top-3 text-gray-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                  </svg>
-                </button>
+                <Search className="absolute left-3 top-3 text-gray-500 w-5 h-5" />
               </div>
             </div>
             
             <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {['all', 'property-management', 'market-trends', 'landlord-tips', 'investment', 'maintenance'].map((category) => (
+              {categories.map((category) => (
                 <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === category 
+                    activeCategory === category.id 
                       ? 'bg-yrealty-navy text-white' 
                       : 'bg-white text-gray-700 hover:bg-gray-100'
                   }`}
                 >
-                  {category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  {category.label}
                 </button>
               ))}
             </div>

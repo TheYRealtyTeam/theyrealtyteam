@@ -1,12 +1,23 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
 
+interface BlogPostData {
+  title: string;
+  date: string;
+  author: string;
+  authorRole: string;
+  category: string;
+  image: string;
+  content: string;
+}
+
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
+  const [isImageError, setIsImageError] = useState(false);
   
   useEffect(() => {
     document.title = "Blog Post | Y Realty Team";
@@ -14,13 +25,13 @@ const BlogPost = () => {
   }, []);
 
   // This would normally come from a database or API
-  const blogPost = {
+  const blogPost: BlogPostData = {
     title: '5 Ways to Maximize Your Rental Property ROI',
     date: 'June 15, 2023',
     author: 'Sarah Johnson',
     authorRole: 'Investment Specialist',
     category: 'Investment',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1200&q=80',
+    image: '/lovable-uploads/fa060ee1-c950-4da6-967a-e96386839d05.png',
     content: `
       <p>Real estate has long been considered one of the most reliable investment vehicles, and rental properties in particular offer a unique combination of steady cash flow and long-term appreciation potential. However, simply owning a rental property doesn't guarantee strong returns. To truly maximize your rental property ROI (Return on Investment), strategic management and informed decision-making are essential.</p>
       
@@ -81,6 +92,8 @@ const BlogPost = () => {
     `
   };
 
+  const fallbackImage = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=1200&q=80';
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -98,11 +111,14 @@ const BlogPost = () => {
         
         <article className="bg-white pb-16">
           <div className="container-custom max-w-4xl">
-            <img 
-              src={blogPost.image} 
-              alt={blogPost.title} 
-              className="w-full h-64 md:h-96 object-cover rounded-xl shadow-md mb-8" 
-            />
+            <div className="w-full h-64 md:h-96 overflow-hidden rounded-xl shadow-md mb-8 relative">
+              <img 
+                src={isImageError ? fallbackImage : blogPost.image}
+                alt={blogPost.title} 
+                className="w-full h-full object-cover" 
+                onError={() => setIsImageError(true)}
+              />
+            </div>
             
             <div className="mb-8">
               <div className="text-sm text-gray-500 mb-2">{blogPost.date} | {blogPost.category}</div>

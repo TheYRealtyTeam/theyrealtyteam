@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 interface BlogPost {
   id: string;
@@ -30,7 +31,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
       author: 'Sarah Johnson',
       authorRole: 'Investment Specialist',
       category: 'investment',
-      image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
+      image: '/lovable-uploads/fa060ee1-c950-4da6-967a-e96386839d05.png',
       slug: '5-ways-to-maximize-rental-property-roi'
     },
     {
@@ -105,14 +106,22 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
         {filteredPosts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => (
-              <div key={post.id} className="reveal bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <img 
-                  src={post.image} 
-                  alt={post.title} 
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <div className="text-sm text-gray-500 mb-2">{post.date} | {post.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</div>
+              <Card key={post.id} className="reveal overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div className="h-48 w-full overflow-hidden relative">
+                  <img 
+                    src={post.image} 
+                    alt={post.title} 
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback image if the original fails to load
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
+                    }}
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <div className="text-sm text-gray-500 mb-2">
+                    {post.date} | {post.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                  </div>
                   <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{post.title}</h3>
                   <p className="text-gray-600 mb-4">{post.excerpt}</p>
                   <div className="flex items-center mb-4">
@@ -127,8 +136,8 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
                   <Link to={`/blog/${post.slug}`} className="text-yrealty-accent font-medium hover:underline">
                     Read More →
                   </Link>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         ) : (

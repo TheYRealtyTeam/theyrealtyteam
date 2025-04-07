@@ -21,7 +21,9 @@ const Blog = () => {
     { id: 'market-trends', label: 'Market Trends' },
     { id: 'landlord-tips', label: 'Landlord Tips' },
     { id: 'investment', label: 'Investment' },
-    { id: 'maintenance', label: 'Maintenance' }
+    { id: 'maintenance', label: 'Maintenance' },
+    { id: 'technology', label: 'PropTech' },
+    { id: 'sustainability', label: 'Sustainability' }
   ];
 
   return (
@@ -32,7 +34,7 @@ const Blog = () => {
           <div className="container-custom">
             <h1 className="text-4xl md:text-5xl font-bold text-yrealty-navy text-center">2025 Property Management Insights</h1>
             <p className="text-center text-gray-600 mt-4 max-w-3xl mx-auto">
-              Stay ahead of the curve with our latest property management trends, strategies, and market forecasts
+              Stay ahead of the curve with our latest property management trends, AI-driven strategies, and market forecasts
             </p>
             
             <div className="mt-8 max-w-2xl mx-auto">

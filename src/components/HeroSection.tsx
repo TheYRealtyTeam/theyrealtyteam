@@ -1,11 +1,20 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  // Using a placeholder image from Unsplash since the original image is causing errors
+  const imagePath = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.0&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80';
 
   useEffect(() => {
+    // Preload the image
+    const img = new Image();
+    img.src = imagePath;
+    img.onload = () => setImageLoaded(true);
+    img.onerror = (e) => console.error("Error loading image:", e);
+
     const handleScroll = () => {
       if (!heroRef.current) return;
       const scrollTop = window.scrollY;
@@ -23,7 +32,10 @@ const HeroSection = () => {
       id="home" 
       ref={heroRef}
       className="relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16"
-      style={{ backgroundImage: "url('/lovable-uploads/c5947871-f12a-4736-8926-dd4b91113f6c.png')" }}
+      style={{ 
+        backgroundImage: `url(${imagePath})`,
+        backgroundColor: '#1a365d' // Fallback color if image fails to load
+      }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>
       

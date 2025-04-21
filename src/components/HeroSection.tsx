@@ -23,7 +23,7 @@ const HeroSection = () => {
       id="home" 
       ref={heroRef}
       className="relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16"
-      style={{ backgroundImage: "url('/lovable-uploads/c5947871-f12a-4736-8926-dd4b91113f6c.png')" }}
+      style={{ backgroundImage: "url('/lovable-uploads/774a93af-fa8d-4266-8424-c9b958d3f1ec.png')" }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>
       

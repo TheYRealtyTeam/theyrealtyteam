@@ -5,7 +5,8 @@ import { ArrowDown } from 'lucide-react';
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
-  const imagePath = '/lovable-uploads/774a93af-fa8d-4266-8424-c9b958d3f1ec.png';
+  // Using a placeholder image from Unsplash since the original image is causing errors
+  const imagePath = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.0&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80';
 
   useEffect(() => {
     // Preload the image

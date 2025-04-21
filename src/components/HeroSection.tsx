@@ -1,11 +1,19 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const imagePath = '/lovable-uploads/774a93af-fa8d-4266-8424-c9b958d3f1ec.png';
 
   useEffect(() => {
+    // Preload the image
+    const img = new Image();
+    img.src = imagePath;
+    img.onload = () => setImageLoaded(true);
+    img.onerror = (e) => console.error("Error loading image:", e);
+
     const handleScroll = () => {
       if (!heroRef.current) return;
       const scrollTop = window.scrollY;
@@ -23,7 +31,10 @@ const HeroSection = () => {
       id="home" 
       ref={heroRef}
       className="relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16"
-      style={{ backgroundImage: "url('/lovable-uploads/774a93af-fa8d-4266-8424-c9b958d3f1ec.png')" }}
+      style={{ 
+        backgroundImage: `url(${imagePath})`,
+        backgroundColor: '#1a365d' // Fallback color if image fails to load
+      }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>
       

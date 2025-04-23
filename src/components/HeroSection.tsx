@@ -38,10 +38,12 @@ const HeroSection = () => {
     <section 
       id="home" 
       ref={heroRef}
-      className="relative h-screen bg-cover bg-center flex items-center pt-16"
+      className="relative h-screen flex items-center pt-16"
       style={{ 
         backgroundImage: `url(${backgroundImage})`,
-        backgroundColor: '#2e3440', // Darker fallback color to match the image
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundColor: '#2e3440', // Fallback color
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>

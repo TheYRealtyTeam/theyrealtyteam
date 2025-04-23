@@ -1,21 +1,35 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [imageError, setImageError] = useState(false);
   const backgroundImage = '/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png';
+  const fallbackImage = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80';
+
+  // Preload the image to handle potential loading errors
+  useEffect(() => {
+    const img = new Image();
+    img.src = backgroundImage;
+    img.onerror = () => {
+      console.warn('Hero background image failed to load, using fallback');
+      setImageError(true);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!heroRef.current) return;
       const scrollTop = window.scrollY;
-      // Apply parallax effect to background
-      const parallaxOffset = scrollTop * 0.4;
-      heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
+      // Apply parallax effect to background, with safeguards for performance
+      if (scrollTop < window.innerHeight * 1.5) { // Only apply when near viewport
+        const parallaxOffset = scrollTop * 0.4;
+        heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true }); // Performance optimization
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -25,7 +39,7 @@ const HeroSection = () => {
       ref={heroRef}
       className="relative h-screen bg-cover bg-center flex items-center pt-16"
       style={{ 
-        backgroundImage: `url(${backgroundImage})`,
+        backgroundImage: `url(${imageError ? fallbackImage : backgroundImage})`,
         backgroundColor: '#4a5568', // Fallback color
       }}
     >

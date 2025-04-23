@@ -1,36 +1,36 @@
 
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const backgroundImage = '/lovable-uploads/a5037dad-b649-4bbb-8c0c-55b142bb5ecb.png';
+  const [imageError, setImageError] = useState(false);
+  const backgroundImage = 'https://images.unsplash.com/photo-1460574283810-2aab119d8511';
+  const fallbackImage = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80';
 
+  // Preload the image to handle potential loading errors
   useEffect(() => {
     const img = new Image();
     img.src = backgroundImage;
-    img.onload = () => {
-      console.log('Hero background image loaded successfully:', backgroundImage);
+    img.onerror = () => {
+      console.warn('Hero background image failed to load, using fallback');
+      setImageError(true);
     };
-    img.onerror = (error) => {
-      console.error('Hero background image failed to load:', {
-        src: backgroundImage,
-        error: error
-      });
-    };
-  }, [backgroundImage]);
+  }, []);
 
+  // Memoize scroll handler for better performance
   const handleScroll = useCallback(() => {
     if (!heroRef.current) return;
     const scrollTop = window.scrollY;
-    if (scrollTop < window.innerHeight * 1.5) {
+    // Apply parallax effect to background, with safeguards for performance
+    if (scrollTop < window.innerHeight * 1.5) { // Only apply when near viewport
       const parallaxOffset = scrollTop * 0.4;
       heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
     }
   }, []);
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true }); // Performance optimization
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
@@ -38,12 +38,10 @@ const HeroSection = () => {
     <section 
       id="home" 
       ref={heroRef}
-      className="relative h-screen flex items-center pt-16"
+      className="relative h-screen bg-cover bg-center flex items-center pt-16"
       style={{ 
-        backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundColor: '#2e3440', // Fallback color
+        backgroundImage: `url(${imageError ? fallbackImage : backgroundImage})`,
+        backgroundColor: '#4a5568', // Fallback color
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>

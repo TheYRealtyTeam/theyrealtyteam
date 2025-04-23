@@ -260,14 +260,12 @@ const RentalPropertyCalculator = ({ sharedState, updateSharedState }: RentalProp
             
             <div className="bg-white p-4 rounded-lg shadow-sm">
               <p className="text-gray-500 text-sm">Monthly Expenses</p>
-              
-              <div className="bg-blue-50 border border-blue-200 rounded p-2 mb-2 flex items-center space-x-2">
+              <div className="flex items-center space-x-2 mb-1">
                 <Info className="h-4 w-4 text-blue-500" />
-                <p className="text-xs text-blue-700">
-                  This field is automatically calculated based on your input expenses and cannot be manually edited.
-                </p>
+                <span className="text-xs text-gray-500">
+                  Calculated automatically based on your input fields
+                </span>
               </div>
-
               <input
                 type="number"
                 value={results.monthlyExpenses.toFixed(2)}

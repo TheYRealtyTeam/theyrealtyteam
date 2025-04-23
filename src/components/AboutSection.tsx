@@ -1,9 +1,16 @@
 
-import React, { useRef } from 'react';
+import React, { useRef, memo } from 'react';
 import { CheckCircle } from 'lucide-react';
 
-const AboutSection = () => {
+const AboutSection = memo(() => {
   const sectionRef = useRef<HTMLElement>(null);
+  
+  const benefits = [
+    'Transparent Management', 
+    'Nationwide Coverage', 
+    'Dedicated Support', 
+    'Market-Leading Results'
+  ];
 
   return (
     <section id="about" className="section-padding bg-gradient-to-b from-yrealty-blue to-white" ref={sectionRef}>
@@ -20,6 +27,7 @@ const AboutSection = () => {
                 src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&q=80&w=800" 
                 alt="Y Realty classic apartment building" 
                 className="rounded-lg shadow-lg w-full" 
+                loading="lazy" // Adding lazy loading for better performance
               />
               <div className="absolute -bottom-8 -right-8 bg-white p-6 rounded-lg shadow-lg hidden md:block">
                 <p className="text-yrealty-navy font-heading font-bold">Driven By</p>
@@ -41,7 +49,7 @@ const AboutSection = () => {
             </p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-              {['Transparent Management', 'Nationwide Coverage', 'Dedicated Support', 'Market-Leading Results'].map((item, index) => (
+              {benefits.map((item, index) => (
                 <div key={index} className="flex items-center reveal" style={{ transitionDelay: `${0.3 + index * 0.1}s` }}>
                   <CheckCircle className="h-5 w-5 text-yrealty-accent mr-2" />
                   <span>{item}</span>
@@ -55,6 +63,8 @@ const AboutSection = () => {
       </div>
     </section>
   );
-};
+});
+
+AboutSection.displayName = 'AboutSection';
 
 export default AboutSection;

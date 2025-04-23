@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
@@ -18,20 +18,21 @@ const HeroSection = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroRef.current) return;
-      const scrollTop = window.scrollY;
-      // Apply parallax effect to background, with safeguards for performance
-      if (scrollTop < window.innerHeight * 1.5) { // Only apply when near viewport
-        const parallaxOffset = scrollTop * 0.4;
-        heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
-      }
-    };
+  // Memoize scroll handler for better performance
+  const handleScroll = useCallback(() => {
+    if (!heroRef.current) return;
+    const scrollTop = window.scrollY;
+    // Apply parallax effect to background, with safeguards for performance
+    if (scrollTop < window.innerHeight * 1.5) { // Only apply when near viewport
+      const parallaxOffset = scrollTop * 0.4;
+      heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
+    }
+  }, []);
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true }); // Performance optimization
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   return (
     <section 

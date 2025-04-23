@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+
+import React, { useEffect, useRef, useCallback } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const backgroundImage = '/lovable-uploads/6e44935a-aac0-4643-a65e-b7acc6747d63.png';
+  const backgroundImage = '/lovable-uploads/e9e9f4f5-6b55-4991-b9c9-683b4dd9b906.png';
 
   useEffect(() => {
     const img = new Image();
@@ -40,7 +41,7 @@ const HeroSection = () => {
       className="relative h-screen bg-cover bg-center flex items-center pt-16"
       style={{ 
         backgroundImage: `url(${backgroundImage})`,
-        backgroundColor: '#4a5568',
+        backgroundColor: '#2e3440', // Darker fallback color to match the image
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>

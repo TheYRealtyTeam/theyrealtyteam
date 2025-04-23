@@ -5,8 +5,8 @@ import { ArrowDown } from 'lucide-react';
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [imageError, setImageError] = useState(false);
-  // Fix the image path - make sure it's using a reliable image source
-  const backgroundImage = 'https://images.unsplash.com/photo-1487958449943-2429e8be8625';
+  // Use the uploaded image path
+  const backgroundImage = '/lovable-uploads/6e44935a-aac0-4643-a65e-b7acc6747d63.png';
   const fallbackImage = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1973&q=80';
 
   // Improved image preloading with better error handling

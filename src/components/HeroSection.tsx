@@ -4,7 +4,7 @@ import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const backgroundImage = '/lovable-uploads/e9e9f4f5-6b55-4991-b9c9-683b4dd9b906.png';
+  const backgroundImage = '/lovable-uploads/a5037dad-b649-4bbb-8c0c-55b142bb5ecb.png';
 
   useEffect(() => {
     const img = new Image();

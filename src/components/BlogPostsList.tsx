@@ -7,22 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// Define BlogPostData interface for easier access
-interface BlogPostData {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  author: string;
-  author_role: string;
-  category: string;
-  image_url: string;
-  slug: string;
-  created_at?: string;
-  updated_at?: string;
-}
+import { BlogPostData } from '@/integrations/supabase/client';
 
 interface BlogPostsListProps {
   searchTerm: string;
@@ -41,12 +26,16 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         
         console.log("Starting to fetch blog posts...");
         
-        // Perform the fetch from Supabase
+        // Perform the fetch from Supabase with simplified query
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*');
         
-        console.log("Blog posts fetch response:", { data, error });
+        console.log("Blog posts fetch complete:", { 
+          success: !error, 
+          count: data?.length || 0,
+          error: error?.message
+        });
         
         if (error) {
           console.error('Error fetching blog posts:', error);
@@ -66,7 +55,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
           return;
         }
         
-        console.log("Blog posts fetched successfully:", data);
+        console.log("Blog posts fetched successfully. First post:", data[0]?.title);
         setBlogPosts(data as BlogPostData[]);
       } catch (error: any) {
         console.error('Unexpected error in blog posts fetch:', error);
@@ -84,15 +73,22 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
     fetchBlogPosts();
   }, []);
 
+  // Filter posts based on search term
   const filteredPosts = blogPosts.filter(post => {
     if (!searchTerm) return true;
-    return post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-           post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return (
+      post.title.toLowerCase().includes(lowerSearchTerm) || 
+      post.excerpt.toLowerCase().includes(lowerSearchTerm) ||
+      post.content.toLowerCase().includes(lowerSearchTerm)
+    );
   });
 
-  console.log("Filtered posts:", filteredPosts);
+  console.log("Filtered posts count:", filteredPosts.length, "Total posts:", blogPosts.length);
 
   const getCategoryLabel = (categoryId: string) => {
+    if (!categoryId) return 'General';
     return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
 
@@ -124,23 +120,22 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
 
   if (error) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12 bg-red-50 rounded-lg">
         <p className="text-xl font-medium text-gray-700">Error loading blog posts</p>
         <p className="text-gray-500 mt-2">{error}</p>
+        <p className="text-sm mt-4 text-gray-500">Please check your database connection or try refreshing the page</p>
       </div>
     );
   }
 
   if (blogPosts.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12 bg-gray-50 rounded-lg">
         <p className="text-xl font-medium text-gray-700">No blog posts found</p>
-        <p className="text-gray-500 mt-2">Please check your database connection</p>
+        <p className="text-gray-500 mt-2">Please check your database or add some content</p>
       </div>
     );
   }
-
-  console.log("Rendering blog posts list, posts count:", filteredPosts.length);
   
   return (
     <section className="bg-white">
@@ -155,6 +150,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
                     alt={post.title} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
+                      console.log("Image load error, using fallback");
                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
                     }}
                   />
@@ -171,7 +167,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
                   <p className="text-gray-600 mb-4 flex-grow">{post.excerpt}</p>
                   <div className="flex items-center mb-4">
                     <div className="bg-gray-200 rounded-full h-10 w-10 flex items-center justify-center text-gray-700 font-bold mr-3">
-                      {post.author.split(' ').map(n => n[0]).join('')}
+                      {post.author ? post.author.split(' ').map(n => n[0]).join('') : 'AA'}
                     </div>
                     <div>
                       <div className="text-sm font-medium">{post.author}</div>

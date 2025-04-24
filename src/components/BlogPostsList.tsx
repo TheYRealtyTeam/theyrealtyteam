@@ -1,8 +1,11 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/use-toast';
 
 interface BlogPost {
   id: string;
@@ -10,9 +13,9 @@ interface BlogPost {
   excerpt: string;
   date: string;
   author: string;
-  authorRole: string;
+  author_role: string;
   category: string;
-  image: string;
+  image_url: string;
   slug: string;
 }
 
@@ -20,110 +23,37 @@ interface BlogPostsListProps {
   searchTerm: string;
 }
 
-// Export the blogPosts array so it can be used in BlogPost component
-export const blogPosts: BlogPost[] = [
-  {
-    id: '1',
-    title: 'AI-Driven Property Management: The 2025 Revolution',
-    excerpt: 'Discover how artificial intelligence is transforming property management through predictive maintenance, tenant matching, and automated operations.',
-    date: 'April 5, 2025',
-    author: 'Sarah Johnson',
-    authorRole: 'Technology Integration Specialist',
-    category: 'property-management',
-    image: '/lovable-uploads/fa060ee1-c950-4da6-967a-e96386839d05.png',
-    slug: 'ai-driven-property-management-2025'
-  },
-  {
-    id: '2',
-    title: 'Smart Home Features That Increase Rental Value in 2025',
-    excerpt: "The latest smart home technologies that tenants are willing to pay premium rents for, and the ROI landlords can expect from these investments.",
-    date: 'March 28, 2025',
-    author: 'Michael Chen',
-    authorRole: 'Property Tech Advisor',
-    category: 'landlord-tips',
-    image: 'https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHNtYXJ0JTIwaG9tZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-    slug: 'smart-home-features-increase-rental-value-2025'
-  },
-  {
-    id: '3',
-    title: 'Climate Resilience: Preparing Rental Properties for Extreme Weather',
-    excerpt: 'How property owners can retrofit and prepare their investments to withstand increasingly frequent extreme weather events while maintaining property value.',
-    date: 'March 15, 2025',
-    author: 'Jennifer Williams',
-    authorRole: 'Sustainability Consultant',
-    category: 'sustainability',
-    image: 'https://images.unsplash.com/photo-1572204292164-b35ba943fca7?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8Y2xpbWF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-    slug: 'climate-resilience-rental-properties-2025'
-  },
-  {
-    id: '5',
-    title: '2025 Real Estate Investment Hotspots: Data-Driven Analysis',
-    excerpt: "Our comprehensive analysis of emerging markets with the highest growth potential for real estate investors in the coming year.",
-    date: 'February 18, 2025',
-    author: 'Lisa Garcia',
-    authorRole: 'Investment Analyst',
-    category: 'investment',
-    image: 'https://images.unsplash.com/photo-1460317442991-0ec209397118?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW52ZXN0bWVudHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-    slug: 'real-estate-investment-hotspots-2025'
-  },
-  {
-    id: '6',
-    title: 'Rental Market Forecast: Supply, Demand, and Pricing Trends for 2025-2026',
-    excerpt: 'An in-depth look at the factors driving the rental market in 2025 and what property owners should expect in the year ahead.',
-    date: 'February 5, 2025',
-    author: 'David Martinez',
-    authorRole: 'Market Research Director',
-    category: 'market-trends',
-    image: 'https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cmVhbCUyMGVzdGF0ZSUyMG1hcmtldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-    slug: 'rental-market-forecast-2025-2026'
-  },
-  {
-    id: '7',
-    title: 'ESG Compliance in Property Management: The 2025 Standards',
-    excerpt: 'How new Environmental, Social, and Governance standards are reshaping property management practices and what you need to know to stay compliant.',
-    date: 'January 22, 2025',
-    author: 'Amara Patel',
-    authorRole: 'Compliance Officer',
-    category: 'landlord-tips',
-    image: 'https://images.unsplash.com/photo-1587929501535-1e2d559f2385?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8ZW52aXJvbm1lbnRhbHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60',
-    slug: 'esg-compliance-property-management-2025'
-  },
-  {
-    id: '8',
-    title: 'The Rise of Co-living Spaces: Management Strategies for 2025',
-    excerpt: 'Exploring the growing trend of co-living arrangements and how property managers can capitalize on this market shift.',
-    date: 'January 10, 2025',
-    author: 'Thomas Wright',
-    authorRole: 'Urban Housing Specialist',
-    category: 'market-trends',
-    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8Y28lMjBsaXZpbmd8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-    slug: 'coliving-spaces-management-strategies-2025'
-  },
-  {
-    id: '9',
-    title: 'The Impact of AI in Automated Property Maintenance',
-    excerpt: 'How artificial intelligence is revolutionizing maintenance scheduling and predictive repairs in modern property management.',
-    date: 'December 28, 2024',
-    author: 'Rachel Kim',
-    authorRole: 'Maintenance Operations Director',
-    category: 'maintenance',
-    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8bWFpbnRlbmFuY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-    slug: 'ai-automated-property-maintenance-2025'
-  },
-  {
-    id: '10',
-    title: 'The Future of PropTech: Emerging Technologies for 2025',
-    excerpt: 'A deep dive into the newest property technology solutions that are transforming how properties are managed, marketed, and maintained.',
-    date: 'December 15, 2024',
-    author: 'Jason Lee',
-    authorRole: 'PropTech Innovation Lead',
-    category: 'technology',
-    image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTB8fHRlY2hub2xvZ3l8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60',
-    slug: 'future-of-proptech-2025'
-  }
-];
-
 const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchBlogPosts() {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .order('date', { ascending: false });
+        
+        if (error) throw error;
+        
+        setBlogPosts(data || []);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        toast({
+          title: "Error fetching blog posts",
+          description: "Please try again later.",
+          variant: "destructive"
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchBlogPosts();
+  }, []);
+
   const filteredPosts = blogPosts.filter(post => {
     return post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
            post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
@@ -132,6 +62,15 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   const getCategoryLabel = (categoryId: string) => {
     return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
+
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+        <p className="mt-2 text-gray-600">Loading blog posts...</p>
+      </div>
+    );
+  }
 
   return (
     <section className="bg-white">
@@ -142,7 +81,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
               <Card key={post.id} className="reveal overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-full flex flex-col">
                 <div className="h-48 w-full overflow-hidden relative">
                   <img 
-                    src={post.image} 
+                    src={post.image_url} 
                     alt={post.title} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -166,7 +105,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
                     </div>
                     <div>
                       <div className="text-sm font-medium">{post.author}</div>
-                      <div className="text-xs text-gray-500">{post.authorRole}</div>
+                      <div className="text-xs text-gray-500">{post.author_role}</div>
                     </div>
                   </div>
                   <Link 

@@ -1,25 +1,63 @@
+
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
 import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+
+interface FeaturedArticle {
+  title: string;
+  excerpt: string;
+  image_url: string;
+  slug: string;
+  date: string;
+}
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [featuredArticle, setFeaturedArticle] = useState<FeaturedArticle>({
+    title: "Loading featured article...",
+    excerpt: "Please wait while we load the featured content.",
+    image_url: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cmVhbCUyMGVzdGF0ZSUyMG1hcmtldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
+    slug: "",
+    date: "Loading..."
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     document.title = "Blog | Y Realty Team";
     window.scrollTo(0, 0);
-  }, []);
+    
+    async function fetchFeaturedArticle() {
+      try {
+        setLoading(true);
+        // Fetch the most recent article to use as featured
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('title, excerpt, image_url, slug, date')
+          .order('date', { ascending: false })
+          .limit(1)
+          .single();
+        
+        if (error) {
+          console.error('Error fetching featured article:', error);
+          return;
+        }
+        
+        if (data) {
+          setFeaturedArticle(data);
+        }
+      } catch (error) {
+        console.error('Error in featured article fetch:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const featuredArticle = {
-    title: "2025 Real Estate Market Outlook: Technology, Sustainability, and ROI",
-    excerpt: "Our comprehensive analysis of what property investors and managers need to know about the year ahead, with insights from industry leaders and data-driven predictions.",
-    image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cmVhbCUyMGVzdGF0ZSUyMG1hcmtldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    slug: "2025-real-estate-market-outlook",
-    date: "April 18, 2025"
-  };
+    fetchFeaturedArticle();
+  }, []);
 
   return (
     <PageLayout 
@@ -31,7 +69,7 @@ const Blog = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="h-64 lg:h-auto relative">
               <img 
-                src={featuredArticle.image} 
+                src={featuredArticle.image_url} 
                 alt={featuredArticle.title} 
                 className="w-full h-full object-cover"
               />
@@ -40,15 +78,26 @@ const Blog = () => {
               </div>
             </div>
             <div className="p-6 lg:p-8 flex flex-col justify-center">
-              <div className="text-sm text-gray-500 mb-2">{featuredArticle.date} | Market Analysis</div>
-              <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-yrealty-navy">{featuredArticle.title}</h2>
-              <p className="text-gray-600 mb-6">{featuredArticle.excerpt}</p>
-              <Link to={`/blog/${featuredArticle.slug}`}>
-                <Button className="bg-yrealty-navy hover:bg-yrealty-navy/90 w-full sm:w-auto">
-                  <FileText className="mr-2" />
-                  Read Full Analysis
-                </Button>
-              </Link>
+              {loading ? (
+                <div className="animate-pulse space-y-4">
+                  <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                  <div className="h-8 bg-gray-300 rounded w-full"></div>
+                  <div className="h-4 bg-gray-300 rounded w-full"></div>
+                  <div className="h-4 bg-gray-300 rounded w-5/6"></div>
+                </div>
+              ) : (
+                <>
+                  <div className="text-sm text-gray-500 mb-2">{featuredArticle.date} | Market Analysis</div>
+                  <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-yrealty-navy">{featuredArticle.title}</h2>
+                  <p className="text-gray-600 mb-6">{featuredArticle.excerpt}</p>
+                  <Link to={`/blog/${featuredArticle.slug}`}>
+                    <Button className="bg-yrealty-navy hover:bg-yrealty-navy/90 w-full sm:w-auto">
+                      <FileText className="mr-2" />
+                      Read Full Analysis
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

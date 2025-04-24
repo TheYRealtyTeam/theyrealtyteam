@@ -48,9 +48,9 @@ const ContactInfo = () => {
       </div>
       
       <div className="mt-10">
-        <h4 className="font-bold text-yrealty-navy mb-4">24/6 Emergency Service</h4>
+        <h4 className="font-bold text-yrealty-navy mb-4">24/7 Emergency Service</h4>
         <p className="text-gray-700">
-          Property emergencies don't wait for business hours. Our clients have access to 24/6 emergency support.
+          Property emergencies don't wait for business hours. Our clients have access to 24/7 emergency support.
         </p>
       </div>
     </div>

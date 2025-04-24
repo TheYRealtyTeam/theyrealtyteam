@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Download, FileText, Book, Newspaper } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "@/hooks/use-toast";
 
 const ResourcesContent = () => {
   const [activeCategory, setActiveCategory] = useState('all');
@@ -31,6 +31,30 @@ const ResourcesContent = () => {
         variant: "destructive",
         title: "Download failed",
         description: `There was an error downloading ${resourceName}. Please try again later.`,
+      });
+    }
+  };
+
+  // Handler for downloading all resources
+  const handleDownloadAll = () => {
+    try {
+      // Small delay between downloads to prevent browser blocking
+      resources.forEach((resource, index) => {
+        setTimeout(() => {
+          handleDownload(resource.title, resource.file);
+        }, index * 1000); // 1 second delay between each download
+      });
+
+      toast({
+        title: "Downloading all resources",
+        description: "All resources will begin downloading shortly.",
+      });
+    } catch (error) {
+      console.error("Download all error:", error);
+      toast({
+        variant: "destructive",
+        title: "Download failed",
+        description: "There was an error initiating the downloads. Please try again later.",
       });
     }
   };
@@ -109,6 +133,14 @@ const ResourcesContent = () => {
   return (
     <div className="space-y-10">
       <div className="text-center">
+        <Button
+          onClick={handleDownloadAll}
+          className="mb-6 bg-yrealty-navy hover:bg-yrealty-navy/90 flex items-center gap-2"
+        >
+          <Download className="h-4 w-4" />
+          Download All Resources
+        </Button>
+
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {categories.map((category) => (
             <button

@@ -6,6 +6,7 @@ import { FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { supabase, BlogPostData } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface BlogPostsListProps {
   searchTerm: string;
@@ -14,22 +15,43 @@ interface BlogPostsListProps {
 const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   const [blogPosts, setBlogPosts] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBlogPosts() {
       try {
         setLoading(true);
+        setError(null);
+        
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
           .order('date', { ascending: false });
         
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching blog posts:', error);
+          setError(error.message);
+          toast({
+            title: "Error fetching blog posts",
+            description: error.message,
+            variant: "destructive"
+          });
+          return;
+        }
         
         console.log("Blog posts fetched:", data);
-        setBlogPosts(data as BlogPostData[] || []);
+        
+        if (!data || data.length === 0) {
+          console.log("No blog posts found in the database");
+          setError("No blog posts found");
+          setBlogPosts([]);
+          return;
+        }
+        
+        setBlogPosts(data as BlogPostData[]);
       } catch (error) {
-        console.error('Error fetching blog posts:', error);
+        console.error('Error in blog posts fetch:', error);
+        setError("An unexpected error occurred");
         toast({
           title: "Error fetching blog posts",
           description: "Please try again later.",
@@ -57,6 +79,24 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
       <div className="text-center py-12">
         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
         <p className="mt-2 text-gray-600">Loading blog posts...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-xl font-medium text-gray-700">Error loading blog posts</p>
+        <p className="text-gray-500 mt-2">{error}</p>
+      </div>
+    );
+  }
+
+  if (blogPosts.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-xl font-medium text-gray-700">No blog posts found</p>
+        <p className="text-gray-500 mt-2">Please check your database connection</p>
       </div>
     );
   }

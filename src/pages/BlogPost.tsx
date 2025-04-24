@@ -4,11 +4,13 @@ import { useParams } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { supabase, BlogPostData } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPostData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchBlogPost() {
@@ -16,32 +18,48 @@ const BlogPost = () => {
 
       try {
         setLoading(true);
+        setError(null);
+        
         console.log("Fetching blog post with slug:", slug);
+        
+        // First try using eq and maybeSingle instead of single
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
           .eq('slug', slug)
-          .single();
+          .maybeSingle();
         
         console.log("Blog post data:", data, "Error:", error);
         
         if (error) {
           console.error('Error fetching blog post:', error);
+          setError(error.message);
           toast({
             title: "Error loading blog post",
-            description: "Please try again later.",
+            description: error.message,
             variant: "destructive"
           });
           return;
         }
         
-        if (data) {
-          setPost(data as BlogPostData);
-          document.title = `${data.title} | Y Realty Team`;
-          window.scrollTo(0, 0);
+        if (!data) {
+          console.log("No blog post found with slug:", slug);
+          setError("Blog post not found");
+          setPost(null);
+          return;
         }
+        
+        setPost(data as BlogPostData);
+        document.title = `${data.title} | Y Realty Team`;
+        window.scrollTo(0, 0);
       } catch (error) {
         console.error('Error in blog post fetch:', error);
+        setError("An unexpected error occurred");
+        toast({
+          title: "Error loading blog post",
+          description: "Please try again later.",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }
@@ -53,19 +71,25 @@ const BlogPost = () => {
   if (loading) {
     return (
       <PageLayout title="Loading...">
-        <div className="text-center py-12">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-          <p className="mt-2 text-gray-600">Loading blog post...</p>
+        <div className="max-w-4xl mx-auto">
+          <Skeleton className="w-full h-[500px] rounded-lg mb-6" />
+          <div className="space-y-4">
+            <Skeleton className="h-8 w-3/4" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-full" />
+            <Skeleton className="h-6 w-4/5" />
+          </div>
         </div>
       </PageLayout>
     );
   }
 
-  if (!post) {
+  if (error || !post) {
     return (
       <PageLayout title="Blog Post Not Found">
         <div className="text-center py-12">
-          <p>The blog post you are looking for does not exist.</p>
+          <p className="text-xl font-medium text-gray-700">{error || "The blog post you are looking for does not exist."}</p>
+          <p className="text-gray-500 mt-2">Please check the URL or go back to the blog page.</p>
         </div>
       </PageLayout>
     );

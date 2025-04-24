@@ -6,6 +6,7 @@ import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { supabase, BlogPostData } from '@/integrations/supabase/client';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface FeaturedArticle {
   title: string;
@@ -17,14 +18,9 @@ interface FeaturedArticle {
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [featuredArticle, setFeaturedArticle] = useState<FeaturedArticle>({
-    title: "Loading featured article...",
-    excerpt: "Please wait while we load the featured content.",
-    image_url: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cmVhbCUyMGVzdGF0ZSUyMG1hcmtldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
-    slug: "",
-    date: "Loading..."
-  });
+  const [featuredArticle, setFeaturedArticle] = useState<FeaturedArticle | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = "Blog | Y Realty Team";
@@ -33,24 +29,35 @@ const Blog = () => {
     async function fetchFeaturedArticle() {
       try {
         setLoading(true);
+        setError(null);
+        
+        console.log("Attempting to fetch featured article...");
+        
         const { data, error } = await supabase
           .from('blog_posts')
           .select('title, excerpt, image_url, slug, date')
           .order('date', { ascending: false })
-          .limit(1)
-          .single();
+          .limit(1);
         
         if (error) {
           console.error('Error fetching featured article:', error);
+          setError(error.message);
           return;
         }
         
-        console.log("Featured article data:", data);
-        if (data) {
-          setFeaturedArticle(data as FeaturedArticle);
+        console.log("Featured article response:", data);
+        
+        if (!data || data.length === 0) {
+          console.log("No featured article found");
+          setError("No featured article found");
+          setFeaturedArticle(null);
+          return;
         }
+        
+        setFeaturedArticle(data[0] as FeaturedArticle);
       } catch (error) {
         console.error('Error in featured article fetch:', error);
+        setError("An unexpected error occurred");
       } finally {
         setLoading(false);
       }
@@ -68,14 +75,27 @@ const Blog = () => {
         <div className="bg-yrealty-blue/20 rounded-xl overflow-hidden shadow-lg mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="h-64 lg:h-auto relative">
-              <img 
-                src={featuredArticle.image_url} 
-                alt={featuredArticle.title} 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 left-4 bg-yrealty-navy text-white text-xs font-bold px-3 py-1 rounded-full">
-                FEATURED
-              </div>
+              {loading ? (
+                <Skeleton className="w-full h-full" />
+              ) : featuredArticle ? (
+                <img 
+                  src={featuredArticle.image_url} 
+                  alt={featuredArticle.title} 
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <p className="text-gray-500">No featured image available</p>
+                </div>
+              )}
+              {!loading && featuredArticle && (
+                <div className="absolute top-4 left-4 bg-yrealty-navy text-white text-xs font-bold px-3 py-1 rounded-full">
+                  FEATURED
+                </div>
+              )}
             </div>
             <div className="p-6 lg:p-8 flex flex-col justify-center">
               {loading ? (
@@ -85,7 +105,12 @@ const Blog = () => {
                   <div className="h-4 bg-gray-300 rounded w-full"></div>
                   <div className="h-4 bg-gray-300 rounded w-5/6"></div>
                 </div>
-              ) : (
+              ) : error ? (
+                <div className="text-center">
+                  <p className="text-lg font-medium text-gray-700">Error loading featured article</p>
+                  <p className="text-gray-500 mt-2">{error}</p>
+                </div>
+              ) : featuredArticle ? (
                 <>
                   <div className="text-sm text-gray-500 mb-2">{featuredArticle.date} | Market Analysis</div>
                   <h2 className="text-2xl lg:text-3xl font-bold mb-4 text-yrealty-navy">{featuredArticle.title}</h2>
@@ -97,6 +122,10 @@ const Blog = () => {
                     </Button>
                   </Link>
                 </>
+              ) : (
+                <div className="text-center">
+                  <p className="text-lg font-medium text-gray-700">No featured article available</p>
+                </div>
               )}
             </div>
           </div>

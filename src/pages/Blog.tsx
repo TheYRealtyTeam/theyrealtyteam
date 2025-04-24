@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
@@ -27,7 +26,6 @@ const Blog = () => {
     { id: 'sustainability', label: 'Sustainability' }
   ];
 
-  // Featured article
   const featuredArticle = {
     title: "2025 Real Estate Market Outlook: Technology, Sustainability, and ROI",
     excerpt: "Our comprehensive analysis of what property investors and managers need to know about the year ahead, with insights from industry leaders and data-driven predictions.",
@@ -36,8 +34,8 @@ const Blog = () => {
     date: "April 18, 2025"
   };
 
-  const handleCategoryChange = (categoryId) => {
-    console.log("Setting active category to:", categoryId);
+  const handleCategoryChange = (categoryId: string) => {
+    console.log(`Changing category to: ${categoryId}`);
     setActiveCategory(categoryId);
   };
 
@@ -47,7 +45,6 @@ const Blog = () => {
       subtitle="Stay ahead of the curve with our latest property management trends, AI-driven strategies, and market forecasts"
     >
       <div className="space-y-8">
-        {/* Featured Article */}
         <div className="bg-yrealty-blue/20 rounded-xl overflow-hidden shadow-lg mb-12">
           <div className="grid grid-cols-1 lg:grid-cols-2">
             <div className="h-64 lg:h-auto relative">
@@ -105,7 +102,10 @@ const Blog = () => {
           </div>
         </div>
 
-        <BlogPostsList searchTerm={searchTerm} activeCategory={activeCategory} />
+        <BlogPostsList 
+          searchTerm={searchTerm} 
+          activeCategory={activeCategory} 
+        />
 
         <div className="text-center mt-12 mb-8">
           <div className="inline-flex items-center text-yrealty-navy hover:underline">

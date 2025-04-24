@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,7 +22,6 @@ interface BlogPostsListProps {
 }
 
 const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategory }) => {
-  // Updated blog posts data with current dates and latest property management trends for 2025
   const blogPosts: BlogPost[] = [
     {
       id: '1',
@@ -126,16 +124,14 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     }
   ];
 
-  // Map category name 'technology' to match the filter ID in the parent component
-  const mapCategoryToFilter = (category: string) => {
+  const mapCategoryToFilter = (category: string): string => {
     if (category === 'technology') return 'technology';
     return category;
   };
 
-  // Filter posts based on search term and active category
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     
     const mappedCategory = mapCategoryToFilter(post.category);
     const matchesCategory = activeCategory === 'all' || mappedCategory === activeCategory;
@@ -143,7 +139,6 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     return matchesSearch && matchesCategory;
   });
 
-  // Get category label for display
   const getCategoryLabel = (categoryId: string) => {
     return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
@@ -161,7 +156,6 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
                     alt={post.title} 
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      // Fallback image if the original fails to load
                       (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
                     }}
                   />

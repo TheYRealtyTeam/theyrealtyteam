@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Phone, Mail } from 'lucide-react';
+import { Phone, Mail, Globe } from 'lucide-react';
 
 const ContactInfo = () => {
   return (
@@ -27,6 +26,11 @@ const ContactInfo = () => {
             <p className="text-gray-700">info@theYteam.co</p>
           </div>
         </div>
+      </div>
+      
+      <div className="mt-8 flex items-center gap-2">
+        <Globe className="h-5 w-5 text-yrealty-accent" />
+        <span className="text-gray-700">theyteam.co</span>
       </div>
       
       <div className="mt-8">

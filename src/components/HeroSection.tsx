@@ -4,7 +4,7 @@ import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const backgroundImage = '/lovable-uploads/a5037dad-b649-4bbb-8c0c-55b142bb5ecb.png';
+  const backgroundImage = '/lovable-uploads/cbf74a6b-42eb-4fc9-90ae-54777b85808c.png';
 
   useEffect(() => {
     const img = new Image();
@@ -43,26 +43,25 @@ const HeroSection = () => {
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundColor: '#2e3440', // Fallback color
+        backgroundColor: '#f4f4f4', // Lighter fallback color
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
       
       <div className="container-custom relative z-10">
         <div className="max-w-3xl text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-fade-in">
-            Premier Property Management Nationwide
+            Modern Property Management Solutions
           </h1>
           <p className="text-lg md:text-xl mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            Elevating property management to new heights across all 50 states with exceptional service, 
-            innovative solutions, and a client-first approach.
+            Transforming real estate management with cutting-edge technology and personalized service.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in" style={{ animationDelay: '0.3s' }}>
             <a href="#services" className="btn-accent">
-              Our Services
+              Explore Services
             </a>
-            <a href="#contact" className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy">
-              Contact Us
+            <a href="#contact" className="btn-outline border-white text-white hover:bg-white hover:text-black">
+              Contact Our Team
             </a>
           </div>
         </div>

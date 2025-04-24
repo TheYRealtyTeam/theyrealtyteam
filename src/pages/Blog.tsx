@@ -14,7 +14,7 @@ const Blog = () => {
     document.title = "Blog | Y Realty Team";
     window.scrollTo(0, 0);
     
-    // Reset to default category when returning to the page
+    // Always reset to default category on page load
     setActiveCategory('all');
   }, []);
 
@@ -37,7 +37,7 @@ const Blog = () => {
     date: "April 18, 2025"
   };
 
-  const handleCategoryChange = (categoryId: string) => {
+  const handleCategoryChange = (categoryId) => {
     console.log(`Changing category to: ${categoryId}`);
     setActiveCategory(categoryId);
   };

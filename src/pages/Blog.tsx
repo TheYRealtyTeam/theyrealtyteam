@@ -5,7 +5,7 @@ import BlogPostsList from '@/components/BlogPostsList';
 import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, BlogPostData } from '@/integrations/supabase/client';
 
 interface FeaturedArticle {
   title: string;
@@ -39,7 +39,7 @@ const Blog = () => {
           .select('title, excerpt, image_url, slug, date')
           .order('date', { ascending: false })
           .limit(1)
-          .single();
+          .single() as { data: BlogPostData | null; error: Error | null };
         
         if (error) {
           console.error('Error fetching featured article:', error);

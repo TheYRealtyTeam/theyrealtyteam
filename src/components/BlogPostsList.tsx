@@ -1,30 +1,17 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, BlogPostData } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  date: string;
-  author: string;
-  author_role: string;
-  category: string;
-  image_url: string;
-  slug: string;
-}
 
 interface BlogPostsListProps {
   searchTerm: string;
 }
 
 const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -34,7 +21,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
-          .order('date', { ascending: false });
+          .order('date', { ascending: false }) as { data: BlogPostData[] | null; error: Error | null };
         
         if (error) throw error;
         

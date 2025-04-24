@@ -1,22 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
-import { supabase } from '@/integrations/supabase/client';
+import { supabase, BlogPostData } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-
-interface BlogPostData {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  author: string;
-  author_role: string;
-  category: string;
-  image_url: string;
-  slug: string;
-}
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -33,7 +19,7 @@ const BlogPost = () => {
           .from('blog_posts')
           .select('*')
           .eq('slug', slug)
-          .single();
+          .single() as { data: BlogPostData | null; error: Error | null };
         
         if (error) {
           console.error('Error fetching blog post:', error);

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Download, FileText, Book, Newspaper } from 'lucide-react';
+import { Download, FileText, Book, Newspaper, Upload } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import UploadResourceForm from './UploadResourceForm';
 
 const ResourcesContent = () => {
   const [activeCategory, setActiveCategory] = useState('all');
+  const [showUploadForm, setShowUploadForm] = useState(false);
 
   // Handler for download button clicks
   const handleDownload = (resourceName: string, resourceFile: string) => {
@@ -123,13 +125,28 @@ const ResourcesContent = () => {
   return (
     <div className="space-y-10">
       <div className="text-center">
-        <Button
-          onClick={handleDownloadAll}
-          className="mb-6 bg-yrealty-navy hover:bg-yrealty-navy/90 flex items-center gap-2"
-        >
-          <Download className="h-4 w-4" />
-          Download All Resources
-        </Button>
+        <div className="flex justify-center gap-4 mb-6">
+          <Button
+            onClick={handleDownloadAll}
+            className="bg-yrealty-navy hover:bg-yrealty-navy/90 flex items-center gap-2"
+          >
+            <Download className="h-4 w-4" />
+            Download All Resources
+          </Button>
+          <Button
+            onClick={() => setShowUploadForm(!showUploadForm)}
+            className="bg-yrealty-navy hover:bg-yrealty-navy/90 flex items-center gap-2"
+          >
+            <Upload className="h-4 w-4" />
+            {showUploadForm ? 'Hide Upload Form' : 'Upload New Resource'}
+          </Button>
+        </div>
+
+        {showUploadForm && (
+          <div className="max-w-md mx-auto mb-8">
+            <UploadResourceForm />
+          </div>
+        )}
 
         <div className="flex flex-wrap justify-center gap-2 mb-8">
           {categories.map((category) => (

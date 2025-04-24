@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface BlogPost {
   id: string;
@@ -127,18 +128,25 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
 
   // Map category name 'technology' to match the filter ID in the parent component
   const mapCategoryToFilter = (category: string) => {
-    return category === 'technology' ? 'technology' : category;
+    if (category === 'technology') return 'technology';
+    return category;
   };
 
   // Filter posts based on search term and active category
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+    
     const mappedCategory = mapCategoryToFilter(post.category);
     const matchesCategory = activeCategory === 'all' || mappedCategory === activeCategory;
     
     return matchesSearch && matchesCategory;
   });
+
+  // Get category label for display
+  const getCategoryLabel = (categoryId: string) => {
+    return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
 
   return (
     <section className="bg-white">
@@ -158,10 +166,13 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
                     }}
                   />
                   <div className="absolute top-0 right-0 bg-yrealty-accent text-white text-xs px-2 py-1">
-                    {post.category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                    {getCategoryLabel(post.category)}
                   </div>
                 </div>
                 <CardContent className="p-6 flex-grow flex flex-col">
+                  <Badge variant="outline" className="w-fit mb-2 text-sm bg-gray-100">
+                    {getCategoryLabel(post.category)}
+                  </Badge>
                   <div className="text-sm text-gray-500 mb-2">{post.date}</div>
                   <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{post.title}</h3>
                   <p className="text-gray-600 mb-4 flex-grow">{post.excerpt}</p>

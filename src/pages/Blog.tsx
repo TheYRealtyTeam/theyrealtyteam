@@ -5,7 +5,7 @@ import BlogPostsList from '@/components/BlogPostsList';
 import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +36,8 @@ const Blog = () => {
     date: "April 18, 2025"
   };
 
-  const handleCategoryChange = (categoryId: string) => {
+  const handleCategoryChange = (categoryId) => {
+    console.log("Setting active category to:", categoryId);
     setActiveCategory(categoryId);
   };
 
@@ -86,25 +87,22 @@ const Blog = () => {
           </div>
         </div>
         
-        <div className="flex justify-center mb-8">
-          <Tabs 
-            defaultValue="all" 
-            value={activeCategory}
-            onValueChange={handleCategoryChange}
-            className="w-full max-w-4xl"
-          >
-            <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0">
-              {categories.map((category) => (
-                <TabsTrigger
-                  key={category.id}
-                  value={category.id}
-                  className="px-4 py-2 rounded-full text-sm font-medium transition-colors data-[state=active]:bg-yrealty-navy data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 data-[state=inactive]:hover:bg-gray-100"
-                >
-                  {category.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+        <div className="flex justify-center mb-8 overflow-x-auto">
+          <div className="flex flex-wrap justify-center gap-2 w-full max-w-4xl">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => handleCategoryChange(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  activeCategory === category.id 
+                    ? 'bg-yrealty-navy text-white' 
+                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                {category.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <BlogPostsList searchTerm={searchTerm} activeCategory={activeCategory} />

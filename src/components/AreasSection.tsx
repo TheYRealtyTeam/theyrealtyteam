@@ -1,10 +1,11 @@
 
-import React, { useEffect, useRef, memo } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { MapPin, Globe } from 'lucide-react';
 
-const AreasSection = memo(() => {
+const AreasSection = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   
+  // Areas we serve - representing nationwide coverage
   const areas = [
     { name: "East Coast", description: "Full-service property management throughout all East Coast states including New York, New Jersey, Massachusetts, and more." },
     { name: "West Coast", description: "Comprehensive management services across California, Oregon, Washington, and all West Coast markets." },
@@ -13,31 +14,23 @@ const AreasSection = memo(() => {
     { name: "Southwest", description: "Specialized management across Arizona, New Mexico, Nevada, and throughout the Southwest." },
   ];
 
-  // Map initialization with more reliable approach and proper cleanup
+  // Map initialization with more reliable approach
   useEffect(() => {
-    if (!mapRef.current) return;
-    
-    // Create an iframe with Google Maps embed showing wider national view
-    const iframe = document.createElement('iframe');
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = '0';
-    iframe.style.borderRadius = '8px';
-    iframe.allowFullscreen = true;
-    iframe.referrerPolicy = 'no-referrer-when-downgrade';
-    iframe.loading = 'lazy'; // Add lazy loading attribute
-    iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12470187.461098605!2d-95.665!3d39.7837!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698429602019!5m2!1sen!2sus';
-    
-    // Clear any existing content
-    mapRef.current.innerHTML = '';
-    mapRef.current.appendChild(iframe);
-    
-    // Cleanup function
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.innerHTML = '';
-      }
-    };
+    if (mapRef.current) {
+      // Create an iframe with Google Maps embed showing wider national view
+      const iframe = document.createElement('iframe');
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      iframe.style.borderRadius = '8px';
+      iframe.allowFullscreen = true;
+      iframe.referrerPolicy = 'no-referrer-when-downgrade';
+      iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12470187.461098605!2d-95.665!3d39.7837!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698429602019!5m2!1sen!2sus';
+      
+      // Clear any existing content
+      mapRef.current.innerHTML = '';
+      mapRef.current.appendChild(iframe);
+    }
   }, []);
 
   return (
@@ -104,8 +97,6 @@ const AreasSection = memo(() => {
       </div>
     </section>
   );
-});
-
-AreasSection.displayName = 'AreasSection';
+};
 
 export default AreasSection;

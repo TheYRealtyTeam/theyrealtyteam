@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Info } from 'lucide-react';
+import { ToggleLeft, ToggleRight } from 'lucide-react';
 
 interface RentalPropertyCalculatorProps {
   sharedState: {
@@ -41,18 +42,21 @@ const RentalPropertyCalculator = ({ sharedState, updateSharedState }: RentalProp
   };
   
   const calculateResults = () => {
+    // Calculate monthly income
     const monthlyIncome = sharedState.isYearly ? sharedState.monthlyRent / 12 : sharedState.monthlyRent;
     
+    // Calculate monthly expenses
     const propertyTaxMonthly = sharedState.propertyTax / 12;
     const insuranceMonthly = sharedState.insurance / 12;
-    const maintenanceCost = sharedState.maintenanceCost;
+    const maintenanceCost = sharedState.maintenanceCost; // Now using direct dollar amount
     const vacancyCost = (monthlyIncome * sharedState.vacancyRate) / 100;
     
+    // Calculate management fee based on type (percentage or flat)
     let managementCost = 0;
     if (sharedState.isFlatFee) {
-      managementCost = sharedState.managementFee;
+      managementCost = sharedState.managementFee; // Flat fee is already a monthly amount
     } else {
-      managementCost = (monthlyIncome * sharedState.managementFee) / 100;
+      managementCost = (monthlyIncome * sharedState.managementFee) / 100; // Percentage of rent
     }
     
     const otherExpenses = sharedState.otherExpenses;
@@ -65,9 +69,11 @@ const RentalPropertyCalculator = ({ sharedState, updateSharedState }: RentalProp
                            sharedState.mortgagePayment + 
                            otherExpenses;
     
+    // Calculate cash flow
     const monthlyCashFlow = monthlyIncome - monthlyExpenses;
     const annualCashFlow = monthlyCashFlow * 12;
     
+    // Using the calculated down payment for cash on cash return calculation
     const closingCosts = sharedState.propertyValue * 0.03;
     const initialInvestment = sharedState.downPaymentAmount + closingCosts;
     
@@ -260,20 +266,7 @@ const RentalPropertyCalculator = ({ sharedState, updateSharedState }: RentalProp
             
             <div className="bg-white p-4 rounded-lg shadow-sm">
               <p className="text-gray-500 text-sm">Monthly Expenses</p>
-              
-              <div className="bg-blue-50 border border-blue-200 rounded p-2 mb-2 flex items-center space-x-2">
-                <Info className="h-4 w-4 text-blue-500" />
-                <p className="text-xs text-blue-700">
-                  This field is automatically calculated based on your input expenses and cannot be manually edited.
-                </p>
-              </div>
-
-              <input
-                type="number"
-                value={results.monthlyExpenses.toFixed(2)}
-                readOnly
-                className="input-field bg-gray-100 cursor-not-allowed"
-              />
+              <p className="text-xl font-bold text-yrealty-navy">${results.monthlyExpenses.toFixed(2)}</p>
             </div>
             
             <div className="bg-white p-4 rounded-lg shadow-sm">

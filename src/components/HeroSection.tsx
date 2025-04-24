@@ -1,15 +1,19 @@
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
+    const img = new Image();
+    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
+    img.onload = () => setIsImageLoaded(true);
+
     const handleScroll = () => {
       if (!heroRef.current) return;
       const scrollTop = window.scrollY;
-      // Apply parallax effect to background
       const parallaxOffset = scrollTop * 0.4;
       heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
     };
@@ -22,8 +26,15 @@ const HeroSection = () => {
     <section 
       id="home" 
       ref={heroRef}
-      className="relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920')" }}
+      className={`
+        relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16
+        ${!isImageLoaded ? 'bg-gradient-to-r from-yrealty-navy to-yrealty-blue' : ''}
+      `}
+      style={{ 
+        backgroundImage: isImageLoaded 
+          ? "url('https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920')" 
+          : 'none'
+      }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-yrealty-navy/80 to-yrealty-navy/40"></div>
       

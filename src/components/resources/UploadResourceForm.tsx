@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Upload } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -59,34 +58,29 @@ const UploadResourceForm = () => {
       const fileName = `${Math.random().toString(36).slice(2)}.${fileExt}`;
       const filePath = fileName;
 
-      // 1. First upload the file to storage
       const { error: uploadError, data: fileData } = await supabase.storage
         .from('resources')
         .upload(filePath, values.file);
 
       if (uploadError) throw uploadError;
 
-      // 2. Get the public URL for the file
       const { data: publicUrlData } = supabase.storage
         .from('resources')
         .getPublicUrl(filePath);
       
       const fileUrl = publicUrlData.publicUrl;
       
-      // 3. Store the resource metadata in the database
       const { error: dbError } = await supabase
         .from('resources')
-        .insert([
-          { 
-            title: values.title, 
-            description: values.description, 
-            file_path: filePath,
-            file_url: fileUrl,
-            file_type: 'pdf',
-            file_name: values.file.name,
-            file_size: values.file.size
-          }
-        ]);
+        .insert({
+          title: values.title,
+          description: values.description,
+          file_path: filePath,
+          file_url: fileUrl,
+          file_type: 'pdf',
+          file_name: values.file.name,
+          file_size: values.file.size
+        });
         
       if (dbError) throw dbError;
 

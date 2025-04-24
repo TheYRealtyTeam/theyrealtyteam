@@ -22,7 +22,7 @@ const FAQSection = () => {
         },
         {
           question: "How do you handle maintenance and repairs?",
-          answer: "We our one team plus a network of licensed, insured, and vetted contractors who provide quality service at competitive rates. For routine maintenance, we handle everything without bothering you. For larger repairs, we seek your approval before proceeding, unless it's an emergency situation."
+          answer: "We have our own in-house maintenance team plus a network of licensed, insured, and vetted contractors who provide quality service at competitive rates. For routine maintenance, our team handles everything without bothering you. For larger repairs, we seek your approval before proceeding, unless it's an emergency situation."
         },
         {
           question: "How often will I receive statements and payments?",

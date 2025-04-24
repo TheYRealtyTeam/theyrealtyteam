@@ -1,10 +1,10 @@
+
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
 import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +13,9 @@ const Blog = () => {
   useEffect(() => {
     document.title = "Blog | Y Realty Team";
     window.scrollTo(0, 0);
+    
+    // Reset to default category when returning to the page
+    setActiveCategory('all');
   }, []);
 
   const categories = [
@@ -95,6 +98,7 @@ const Blog = () => {
                     ? 'bg-yrealty-navy text-white' 
                     : 'bg-white text-gray-700 hover:bg-gray-100'
                 }`}
+                type="button"
               >
                 {category.label}
               </button>

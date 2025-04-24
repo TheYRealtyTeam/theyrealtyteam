@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText } from 'lucide-react';
@@ -22,6 +23,8 @@ interface BlogPostsListProps {
 }
 
 const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategory }) => {
+  const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
+  
   const blogPosts: BlogPost[] = [
     {
       id: '1',
@@ -124,20 +127,35 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     }
   ];
 
-  const mapCategoryToFilter = (category: string): string => {
-    if (category === 'technology') return 'technology';
-    return category;
-  };
+  useEffect(() => {
+    // Apply filters every time dependencies change
+    filterPosts();
+  }, [searchTerm, activeCategory]);
 
-  const filteredPosts = blogPosts.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+  const filterPosts = () => {
+    console.log(`Filtering posts. Category: ${activeCategory}, Search: ${searchTerm}`);
     
-    const mappedCategory = mapCategoryToFilter(post.category);
-    const matchesCategory = activeCategory === 'all' || mappedCategory === activeCategory;
-    
-    return matchesSearch && matchesCategory;
-  });
+    const filtered = blogPosts.filter(post => {
+      // Search term matching
+      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                           post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // Category matching with special handling for 'technology'
+      let matchesCategory = false;
+      if (activeCategory === 'all') {
+        matchesCategory = true;
+      } else if (activeCategory === 'technology' && post.category === 'technology') {
+        matchesCategory = true;
+      } else {
+        matchesCategory = post.category === activeCategory;
+      }
+      
+      return matchesSearch && matchesCategory;
+    });
+
+    console.log(`Found ${filtered.length} matching posts`);
+    setFilteredPosts(filtered);
+  };
 
   const getCategoryLabel = (categoryId: string) => {
     return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');

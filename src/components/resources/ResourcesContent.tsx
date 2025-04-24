@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Download, FileText, Book, Newspaper } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -104,15 +103,6 @@ const ResourcesContent = () => {
       icon: <FileText className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download XLSX (780 KB)",
       file: "/resources/property-maintenance-schedule.xlsx"
-    },
-    {
-      id: 6,
-      title: "Smart Home Upgrade ROI Calculator",
-      description: "Interactive spreadsheet to calculate return on investment for various smart home upgrades.",
-      type: "tool",
-      icon: <FileText className="h-8 w-8 text-yrealty-navy" />,
-      downloadText: "Download XLSX (950 KB)",
-      file: "/resources/smart-home-upgrade-roi-calculator.xlsx"
     }
   ];
 

@@ -1,3 +1,4 @@
+
 import React, { useRef } from 'react';
 import { CheckCircle } from 'lucide-react';
 
@@ -16,8 +17,8 @@ const AboutSection = () => {
           <div className="reveal">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&q=80&w=1920" 
-                alt="Modern architectural cityscape" 
+                src="/lovable-uploads/4aab176d-95ee-4ae9-bda7-892530d680f6.png"
+                alt="Historic luxury apartment building with green copper roof" 
                 className="rounded-lg shadow-lg w-full" 
               />
               <div className="absolute -bottom-8 -right-8 bg-white p-6 rounded-lg shadow-lg hidden md:block">

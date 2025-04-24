@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
@@ -15,11 +16,14 @@ const BlogPost = () => {
 
       try {
         setLoading(true);
+        console.log("Fetching blog post with slug:", slug);
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
           .eq('slug', slug)
           .single();
+        
+        console.log("Blog post data:", data, "Error:", error);
         
         if (error) {
           console.error('Error fetching blog post:', error);
@@ -32,7 +36,7 @@ const BlogPost = () => {
         }
         
         if (data) {
-          setPost(data);
+          setPost(data as BlogPostData);
           document.title = `${data.title} | Y Realty Team`;
           window.scrollTo(0, 0);
         }

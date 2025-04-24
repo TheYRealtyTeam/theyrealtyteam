@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,7 +26,8 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         
         if (error) throw error;
         
-        setBlogPosts(data || []);
+        console.log("Blog posts fetched:", data);
+        setBlogPosts(data as BlogPostData[] || []);
       } catch (error) {
         console.error('Error fetching blog posts:', error);
         toast({

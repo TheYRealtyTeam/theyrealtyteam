@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
@@ -44,8 +45,9 @@ const Blog = () => {
           return;
         }
         
+        console.log("Featured article data:", data);
         if (data) {
-          setFeaturedArticle(data);
+          setFeaturedArticle(data as FeaturedArticle);
         }
       } catch (error) {
         console.error('Error in featured article fetch:', error);

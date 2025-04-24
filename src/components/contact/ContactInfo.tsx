@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Phone, Mail, Globe } from 'lucide-react';
 
@@ -26,11 +27,16 @@ const ContactInfo = () => {
             <p className="text-gray-700">info@theYteam.co</p>
           </div>
         </div>
-      </div>
-      
-      <div className="mt-8 flex items-center gap-2">
-        <Globe className="h-5 w-5 text-yrealty-accent" />
-        <span className="text-gray-700">theyteam.co</span>
+
+        <div className="flex items-start">
+          <div className="mt-1 mr-4 bg-white/80 p-2 rounded-full">
+            <Globe className="h-5 w-5 text-yrealty-accent" />
+          </div>
+          <div>
+            <h4 className="font-bold text-yrealty-navy">Website</h4>
+            <p className="text-gray-700">theyteam.co</p>
+          </div>
+        </div>
       </div>
       
       <div className="mt-8">

@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet';
 
 const Resources = () => {
   useEffect(() => {
-    document.title = "Resources | Y Realty Team";
     window.scrollTo(0, 0);
   }, []);
 

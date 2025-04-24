@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -55,6 +56,7 @@ const Navbar = () => {
     { name: 'FAQ', href: '/faq', isAnchorLink: false },
     { name: 'Blog', href: '/blog', isAnchorLink: false },
     { name: 'Tools', href: '/tools', isAnchorLink: false },
+    { name: 'Resources', href: '/resources', isAnchorLink: false },
     { name: 'Contact', href: '/contact', isAnchorLink: false },
   ];
 

@@ -137,7 +137,7 @@ const BlogPost = () => {
         
         <div className="prose prose-lg max-w-none mb-8">
           {formattedContent.split('\n').map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
+            paragraph ? <p key={index}>{paragraph}</p> : <br key={index} />
           ))}
         </div>
 

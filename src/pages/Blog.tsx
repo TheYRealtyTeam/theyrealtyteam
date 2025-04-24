@@ -34,7 +34,6 @@ const Blog = () => {
         
         console.log("Attempting to fetch featured article...");
         
-        // Use maybeSingle() instead of single() to avoid errors if no data is found
         const { data, error } = await supabase
           .from('blog_posts')
           .select('title, excerpt, image_url, slug, date')
@@ -79,6 +78,11 @@ const Blog = () => {
 
     fetchFeaturedArticle();
   }, []);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    console.log("Search term updated:", e.target.value);
+  };
 
   return (
     <PageLayout 
@@ -152,10 +156,7 @@ const Blog = () => {
               type="text"
               placeholder="Search articles..."
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                console.log("Search term updated:", e.target.value);
-              }}
+              onChange={handleSearchChange}
               className="w-full px-4 py-3 pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yrealty-accent focus:border-transparent"
             />
             <Search className="absolute left-3 top-3 text-gray-500 w-5 h-5" />

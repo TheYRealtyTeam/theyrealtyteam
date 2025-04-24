@@ -26,10 +26,10 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         
         console.log("Starting to fetch blog posts...");
         
-        // Perform the fetch from Supabase with simplified query
         const { data, error } = await supabase
           .from('blog_posts')
-          .select('*');
+          .select('*')
+          .order('created_at', { ascending: false });
         
         console.log("Blog posts fetch complete:", { 
           success: !error, 
@@ -74,16 +74,16 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   }, []);
 
   // Filter posts based on search term
-  const filteredPosts = blogPosts.filter(post => {
-    if (!searchTerm) return true;
-    
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return (
-      post.title.toLowerCase().includes(lowerSearchTerm) || 
-      post.excerpt.toLowerCase().includes(lowerSearchTerm) ||
-      post.content.toLowerCase().includes(lowerSearchTerm)
-    );
-  });
+  const filteredPosts = searchTerm.trim() === '' 
+    ? blogPosts 
+    : blogPosts.filter(post => {
+        const lowerSearchTerm = searchTerm.toLowerCase().trim();
+        return (
+          post.title.toLowerCase().includes(lowerSearchTerm) || 
+          post.excerpt.toLowerCase().includes(lowerSearchTerm) ||
+          post.content.toLowerCase().includes(lowerSearchTerm)
+        );
+      });
 
   console.log("Filtered posts count:", filteredPosts.length, "Total posts:", blogPosts.length);
 
@@ -171,7 +171,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
                     </div>
                     <div>
                       <div className="text-sm font-medium">{post.author}</div>
-                      <div className="text-xs text-gray-500">{post.author_role}</div>
+                      <div className="text-xs text-gray-500">{post.author_role || 'Author'}</div>
                     </div>
                   </div>
                   <Link 

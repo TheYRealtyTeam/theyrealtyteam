@@ -1,11 +1,9 @@
-
 import React, { useEffect, useRef, useCallback } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  // Use a placeholder image as fallback since the current image isn't loading
-  const backgroundImage = 'https://images.unsplash.com/photo-1486718448742-163732cd1544?auto=format&fit=crop&w=1600&q=80';
+  const backgroundImage = '/lovable-uploads/817e82bd-e01a-4213-932f-319f5fa641bc.png';
 
   useEffect(() => {
     const img = new Image();

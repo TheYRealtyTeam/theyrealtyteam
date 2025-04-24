@@ -11,10 +11,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Check if page is scrolled
       setIsScrolled(window.scrollY > 10);
       
-      // Determine which section is currently in view for homepage
       if (location.pathname === '/') {
         const sections = document.querySelectorAll('section[id]');
         const scrollPosition = window.scrollY + 100;
@@ -35,13 +33,11 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
-  // Check current path to determine active link
   useEffect(() => {
     const pathname = location.pathname;
     if (pathname === '/') {
       setActiveSection('home');
     } else {
-      // Extract the main path without slashes or params
       const mainPath = pathname.split('/')[1];
       setActiveSection(mainPath || 'home');
     }
@@ -61,7 +57,6 @@ const Navbar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
 
-  // Helper function to determine if a link is active
   const isLinkActive = (link: { href: string, isAnchorLink: boolean }) => {
     if (link.isAnchorLink) {
       const anchorId = link.href.split('#')[1];
@@ -75,7 +70,6 @@ const Navbar = () => {
     }
   };
 
-  // Handle navigation for both anchor links and regular routes
   const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string, isAnchorLink: boolean }) => {
     closeMenu();
     
@@ -85,7 +79,7 @@ const Navbar = () => {
       const element = document.getElementById(sectionId);
       
       if (element) {
-        const yOffset = -80; // Adjust based on navbar height
+        const yOffset = -80;
         const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
         
         window.scrollTo({
@@ -93,11 +87,9 @@ const Navbar = () => {
           behavior: 'smooth'
         });
       } else if (location.pathname !== '/') {
-        // If we're not on the homepage, navigate to homepage first then scroll
         window.location.href = link.href;
       }
     }
-    // For non-anchor links, the default Link behavior will handle navigation
   };
 
   return (
@@ -106,7 +98,6 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <Logo />
           
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
             {navLinks.map((link) => (
               link.isAnchorLink ? (
@@ -134,7 +125,6 @@ const Navbar = () => {
             </Link>
           </nav>
           
-          {/* Mobile Menu Button */}
           <button 
             className="md:hidden text-black"
             onClick={toggleMenu}
@@ -144,7 +134,6 @@ const Navbar = () => {
           </button>
         </div>
         
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 py-4 bg-white rounded-lg shadow-lg animate-fade-in">
             <div className="flex flex-col space-y-4">

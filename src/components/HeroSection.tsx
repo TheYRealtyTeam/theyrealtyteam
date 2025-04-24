@@ -1,9 +1,11 @@
+
 import React, { useEffect, useRef, useCallback } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const backgroundImage = '/lovable-uploads/817e82bd-e01a-4213-932f-319f5fa641bc.png';
+  // Use a reliable external image URL since the local one isn't loading
+  const backgroundImage = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=2000&q=80';
 
   useEffect(() => {
     const img = new Image();

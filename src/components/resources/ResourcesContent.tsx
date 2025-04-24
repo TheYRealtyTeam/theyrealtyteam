@@ -11,13 +11,15 @@ const ResourcesContent = () => {
   // Handler for download button clicks
   const handleDownload = (resourceName: string, resourceFile: string) => {
     try {
-      // For downloadable files, we need to create a direct link
+      // Create a direct link to the file in the public directory
       const link = document.createElement('a');
       link.href = resourceFile;
       link.setAttribute('download', resourceName);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      console.log(`Initiating download for: ${resourceName} from: ${resourceFile}`);
       
       toast({
         title: "Download started",
@@ -26,9 +28,9 @@ const ResourcesContent = () => {
     } catch (error) {
       console.error("Download error:", error);
       toast({
-        title: "Download unavailable",
+        variant: "destructive",
+        title: "Download failed",
         description: `There was an error downloading ${resourceName}. Please try again later.`,
-        variant: "destructive"
       });
     }
   };

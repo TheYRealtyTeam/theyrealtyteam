@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,10 +18,9 @@ interface BlogPost {
 
 interface BlogPostsListProps {
   searchTerm: string;
-  activeCategory: string;
 }
 
-const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategory }) => {
+const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   // Define static blog posts
   const blogPosts: BlogPost[] = [
     {
@@ -126,21 +124,9 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
     }
   ];
 
-  // Simple filtering without useState or useEffect - this will run on every render
   const filteredPosts = blogPosts.filter(post => {
-    // Search term matching
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    // Category matching (simplified)
-    let matchesCategory = false;
-    if (activeCategory === 'all') {
-      matchesCategory = true;
-    } else {
-      matchesCategory = post.category === activeCategory;
-    }
-    
-    return matchesSearch && matchesCategory;
+    return post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+           post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const getCategoryLabel = (categoryId: string) => {
@@ -196,8 +182,8 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, activeCategor
           </div>
         ) : (
           <div className="text-center py-12">
-            <h3 className="text-xl font-medium text-gray-700">No posts found matching your criteria</h3>
-            <p className="text-gray-500 mt-2">Try adjusting your search or filter settings</p>
+            <h3 className="text-xl font-medium text-gray-700">No posts found matching your search</h3>
+            <p className="text-gray-500 mt-2">Try adjusting your search terms</p>
           </div>
         )}
       </div>

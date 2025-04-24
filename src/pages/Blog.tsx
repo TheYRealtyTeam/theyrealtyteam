@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
@@ -8,26 +7,11 @@ import { Link } from 'react-router-dom';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeCategory, setActiveCategory] = useState('all');
 
   useEffect(() => {
     document.title = "Blog | Y Realty Team";
     window.scrollTo(0, 0);
-    
-    // Always reset to default category on page load
-    setActiveCategory('all');
   }, []);
-
-  const categories = [
-    { id: 'all', label: 'All Posts' },
-    { id: 'property-management', label: 'Property Management' },
-    { id: 'market-trends', label: 'Market Trends' },
-    { id: 'landlord-tips', label: 'Landlord Tips' },
-    { id: 'investment', label: 'Investment' },
-    { id: 'maintenance', label: 'Maintenance' },
-    { id: 'technology', label: 'PropTech' },
-    { id: 'sustainability', label: 'Sustainability' }
-  ];
 
   const featuredArticle = {
     title: "2025 Real Estate Market Outlook: Technology, Sustainability, and ROI",
@@ -35,11 +19,6 @@ const Blog = () => {
     image: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cmVhbCUyMGVzdGF0ZSUyMG1hcmtldHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60",
     slug: "2025-real-estate-market-outlook",
     date: "April 18, 2025"
-  };
-
-  const handleCategoryChange = (categoryId) => {
-    console.log(`Changing category to: ${categoryId}`);
-    setActiveCategory(categoryId);
   };
 
   return (
@@ -86,30 +65,8 @@ const Blog = () => {
             <Search className="absolute left-3 top-3 text-gray-500 w-5 h-5" />
           </div>
         </div>
-        
-        <div className="flex justify-center mb-8 overflow-x-auto">
-          <div className="flex flex-wrap justify-center gap-2 w-full max-w-4xl">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => handleCategoryChange(category.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  activeCategory === category.id 
-                    ? 'bg-yrealty-navy text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
-                type="button"
-              >
-                {category.label}
-              </button>
-            ))}
-          </div>
-        </div>
 
-        <BlogPostsList 
-          searchTerm={searchTerm} 
-          activeCategory={activeCategory} 
-        />
+        <BlogPostsList searchTerm={searchTerm} />
 
         <div className="text-center mt-12 mb-8">
           <div className="inline-flex items-center text-yrealty-navy hover:underline">

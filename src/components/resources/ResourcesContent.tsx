@@ -5,29 +5,16 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 
-// Sample resource files
-const resourceFiles = {
-  "2025-property-investment-guide.pdf": "/resources/2025-property-investment-guide.pdf",
-  "rental-property-tax-deduction-checklist.pdf": "/resources/rental-property-tax-deduction-checklist.pdf",
-  "tenant-screening-template.docx": "/resources/tenant-screening-template.docx",
-  "2025-market-analysis-report.pdf": "/resources/2025-market-analysis-report.pdf",
-  "property-maintenance-schedule.xlsx": "/resources/property-maintenance-schedule.xlsx",
-  "smart-home-upgrade-roi-calculator.xlsx": "/resources/smart-home-upgrade-roi-calculator.xlsx"
-};
-
 const ResourcesContent = () => {
   const [activeCategory, setActiveCategory] = useState('all');
 
   // Handler for download button clicks
   const handleDownload = (resourceName: string, resourceFile: string) => {
-    // Check if we have a file path for this resource
-    const filePath = resourceFiles[resourceFile];
-    
-    if (filePath) {
-      // Create a download link and trigger it
+    try {
+      // For downloadable files, we need to create a direct link
       const link = document.createElement('a');
-      link.href = filePath;
-      link.download = resourceFile;
+      link.href = resourceFile;
+      link.setAttribute('download', resourceName);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -36,11 +23,11 @@ const ResourcesContent = () => {
         title: "Download started",
         description: `${resourceName} is downloading.`,
       });
-    } else {
-      // No file available, show a message
+    } catch (error) {
+      console.error("Download error:", error);
       toast({
         title: "Download unavailable",
-        description: `${resourceName} is currently unavailable. Please try again later.`,
+        description: `There was an error downloading ${resourceName}. Please try again later.`,
         variant: "destructive"
       });
     }
@@ -54,7 +41,7 @@ const ResourcesContent = () => {
       type: "guide",
       icon: <Book className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download PDF (2.4 MB)",
-      file: "2025-property-investment-guide.pdf"
+      file: "/resources/2025-property-investment-guide.pdf"
     },
     {
       id: 2,
@@ -63,7 +50,7 @@ const ResourcesContent = () => {
       type: "checklist",
       icon: <FileText className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download PDF (1.1 MB)",
-      file: "rental-property-tax-deduction-checklist.pdf"
+      file: "/resources/rental-property-tax-deduction-checklist.pdf"
     },
     {
       id: 3,
@@ -72,7 +59,7 @@ const ResourcesContent = () => {
       type: "template",
       icon: <FileText className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download DOCX (820 KB)",
-      file: "tenant-screening-template.docx"
+      file: "/resources/tenant-screening-template.docx"
     },
     {
       id: 4,
@@ -81,7 +68,7 @@ const ResourcesContent = () => {
       type: "report",
       icon: <Newspaper className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download PDF (3.2 MB)",
-      file: "2025-market-analysis-report.pdf"
+      file: "/resources/2025-market-analysis-report.pdf"
     },
     {
       id: 5,
@@ -90,7 +77,7 @@ const ResourcesContent = () => {
       type: "template",
       icon: <FileText className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download XLSX (780 KB)",
-      file: "property-maintenance-schedule.xlsx"
+      file: "/resources/property-maintenance-schedule.xlsx"
     },
     {
       id: 6,
@@ -99,7 +86,7 @@ const ResourcesContent = () => {
       type: "tool",
       icon: <FileText className="h-8 w-8 text-yrealty-navy" />,
       downloadText: "Download XLSX (950 KB)",
-      file: "smart-home-upgrade-roi-calculator.xlsx"
+      file: "/resources/smart-home-upgrade-roi-calculator.xlsx"
     }
   ];
 

@@ -19,7 +19,7 @@ const BlogPost = () => {
           .from('blog_posts')
           .select('*')
           .eq('slug', slug)
-          .single() as { data: BlogPostData | null; error: Error | null };
+          .single();
         
         if (error) {
           console.error('Error fetching blog post:', error);

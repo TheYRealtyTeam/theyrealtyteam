@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
@@ -33,13 +32,12 @@ const Blog = () => {
     async function fetchFeaturedArticle() {
       try {
         setLoading(true);
-        // Fetch the most recent article to use as featured
         const { data, error } = await supabase
           .from('blog_posts')
           .select('title, excerpt, image_url, slug, date')
           .order('date', { ascending: false })
           .limit(1)
-          .single() as { data: BlogPostData | null; error: Error | null };
+          .single();
         
         if (error) {
           console.error('Error fetching featured article:', error);

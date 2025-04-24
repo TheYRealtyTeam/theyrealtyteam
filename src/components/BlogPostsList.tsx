@@ -21,7 +21,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
-          .order('date', { ascending: false }) as { data: BlogPostData[] | null; error: Error | null };
+          .order('date', { ascending: false });
         
         if (error) throw error;
         

@@ -98,14 +98,26 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
-        <p className="mt-2 text-gray-600">Loading blog posts...</p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-          {[1, 2, 3].map(i => (
-            <Skeleton key={i} className="h-[400px] w-full rounded-lg" />
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[1, 2, 3].map(i => (
+          <Card key={i} className="overflow-hidden h-full flex flex-col">
+            <Skeleton className="h-48 w-full" />
+            <CardContent className="p-6 flex-grow flex flex-col">
+              <Skeleton className="h-4 w-20 mb-2" />
+              <Skeleton className="h-4 w-32 mb-2" />
+              <Skeleton className="h-6 w-full mb-2" />
+              <Skeleton className="h-24 w-full mb-4" />
+              <div className="flex items-center mb-4">
+                <Skeleton className="h-10 w-10 rounded-full mr-3" />
+                <div>
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-3 w-16 mt-1" />
+                </div>
+              </div>
+              <Skeleton className="h-4 w-24" />
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }

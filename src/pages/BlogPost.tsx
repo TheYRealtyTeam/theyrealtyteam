@@ -117,6 +117,9 @@ const BlogPost = () => {
     );
   }
 
+  // Parse blog content - replace escaped newlines with actual newlines
+  const formattedContent = post.content.replace(/\\n/g, '\n');
+
   return (
     <PageLayout 
       title={post.title}
@@ -139,7 +142,7 @@ const BlogPost = () => {
         </div>
         
         <div className="prose prose-lg max-w-none mb-8">
-          {post.content.split('\n').map((paragraph, index) => (
+          {formattedContent.split('\n').map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
         </div>

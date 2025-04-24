@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
+import { toast } from '@/components/ui/use-toast';
 
 interface FeaturedArticle {
   title: string;
@@ -36,28 +37,39 @@ const Blog = () => {
         const { data, error } = await supabase
           .from('blog_posts')
           .select('title, excerpt, image_url, slug, date')
-          .order('date', { ascending: false })
-          .limit(1);
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
         
         if (error) {
           console.error('Error fetching featured article:', error);
           setError(error.message);
+          toast({
+            title: "Error loading featured article",
+            description: error.message,
+            variant: "destructive"
+          });
           return;
         }
         
         console.log("Featured article response:", data);
         
-        if (!data || data.length === 0) {
+        if (!data) {
           console.log("No featured article found");
           setError("No featured article found");
           setFeaturedArticle(null);
           return;
         }
         
-        setFeaturedArticle(data[0] as FeaturedArticle);
-      } catch (error) {
+        setFeaturedArticle(data as FeaturedArticle);
+      } catch (error: any) {
         console.error('Error in featured article fetch:', error);
         setError("An unexpected error occurred");
+        toast({
+          title: "Error loading featured article",
+          description: "Please try again later",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }

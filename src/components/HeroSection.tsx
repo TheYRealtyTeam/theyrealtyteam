@@ -4,7 +4,8 @@ import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-  const backgroundImage = '/lovable-uploads/cbf74a6b-42eb-4fc9-90ae-54777b85808c.png';
+  // Use a placeholder image as fallback since the current image isn't loading
+  const backgroundImage = 'https://images.unsplash.com/photo-1486718448742-163732cd1544?auto=format&fit=crop&w=1600&q=80';
 
   useEffect(() => {
     const img = new Image();
@@ -46,7 +47,7 @@ const HeroSection = () => {
         backgroundColor: '#f4f4f4', // Lighter fallback color
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40"></div>
       
       <div className="container-custom relative z-10">
         <div className="max-w-3xl text-white">

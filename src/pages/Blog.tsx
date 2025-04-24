@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
-import { Search } from 'lucide-react';
+import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +36,10 @@ const Blog = () => {
     date: "April 18, 2025"
   };
 
+  const handleCategoryChange = (categoryId: string) => {
+    setActiveCategory(categoryId);
+  };
+
   return (
     <PageLayout 
       title="2025 Property Management Insights"
@@ -60,6 +65,7 @@ const Blog = () => {
               <p className="text-gray-600 mb-6">{featuredArticle.excerpt}</p>
               <Link to={`/blog/${featuredArticle.slug}`}>
                 <Button className="bg-yrealty-navy hover:bg-yrealty-navy/90 w-full sm:w-auto">
+                  <FileText className="mr-2" />
                   Read Full Analysis
                 </Button>
               </Link>
@@ -67,7 +73,7 @@ const Blog = () => {
           </div>
         </div>
 
-        <div className="max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto mb-8">
           <div className="relative">
             <input
               type="text"
@@ -80,23 +86,35 @@ const Blog = () => {
           </div>
         </div>
         
-        <div className="flex flex-wrap justify-center gap-2">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                activeCategory === category.id 
-                  ? 'bg-yrealty-navy text-white' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              {category.label}
-            </button>
-          ))}
+        <div className="flex justify-center mb-8">
+          <Tabs 
+            defaultValue="all" 
+            value={activeCategory}
+            onValueChange={handleCategoryChange}
+            className="w-full max-w-4xl"
+          >
+            <TabsList className="w-full flex flex-wrap justify-center gap-2 bg-transparent h-auto p-0">
+              {categories.map((category) => (
+                <TabsTrigger
+                  key={category.id}
+                  value={category.id}
+                  className="px-4 py-2 rounded-full text-sm font-medium transition-colors data-[state=active]:bg-yrealty-navy data-[state=active]:text-white data-[state=inactive]:bg-white data-[state=inactive]:text-gray-700 data-[state=inactive]:hover:bg-gray-100"
+                >
+                  {category.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
 
         <BlogPostsList searchTerm={searchTerm} activeCategory={activeCategory} />
+
+        <div className="text-center mt-12 mb-8">
+          <div className="inline-flex items-center text-yrealty-navy hover:underline">
+            <Rss className="w-5 h-5 mr-2" />
+            <span>Subscribe to our blog updates</span>
+          </div>
+        </div>
 
         <div className="text-center mt-8">
           <Link to="/resources">

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Accordion, 
@@ -63,7 +62,7 @@ const FAQSection = () => {
       faqs: [
         {
           question: "Can you help me identify good investment properties?",
-          answer: "Yes, our team has extensive knowledge of local real estate markets and can help you identify properties with good investment potential based on your financial goals and risk tolerance."
+          answer: "Yes, our team has extensive knowledge of real estate markets and can help you identify properties with good investment potential based on your financial goals and risk tolerance."
         },
         {
           question: "Do you work with out-of-state property owners?",

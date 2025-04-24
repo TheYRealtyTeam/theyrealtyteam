@@ -4,9 +4,25 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent } from "@/components/ui/card";
 import { FileText } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { supabase, BlogPostData } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+
+// Define BlogPostData interface for easier access
+interface BlogPostData {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  author: string;
+  author_role: string;
+  category: string;
+  image_url: string;
+  slug: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 interface BlogPostsListProps {
   searchTerm: string;
@@ -23,10 +39,14 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         setLoading(true);
         setError(null);
         
+        console.log("Starting to fetch blog posts...");
+        
+        // Perform the fetch from Supabase
         const { data, error } = await supabase
           .from('blog_posts')
-          .select('*')
-          .order('date', { ascending: false });
+          .select('*');
+        
+        console.log("Blog posts fetch response:", { data, error });
         
         if (error) {
           console.error('Error fetching blog posts:', error);
@@ -39,8 +59,6 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
           return;
         }
         
-        console.log("Blog posts fetched:", data);
-        
         if (!data || data.length === 0) {
           console.log("No blog posts found in the database");
           setError("No blog posts found");
@@ -48,9 +66,10 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
           return;
         }
         
+        console.log("Blog posts fetched successfully:", data);
         setBlogPosts(data as BlogPostData[]);
-      } catch (error) {
-        console.error('Error in blog posts fetch:', error);
+      } catch (error: any) {
+        console.error('Unexpected error in blog posts fetch:', error);
         setError("An unexpected error occurred");
         toast({
           title: "Error fetching blog posts",
@@ -66,9 +85,12 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   }, []);
 
   const filteredPosts = blogPosts.filter(post => {
+    if (!searchTerm) return true;
     return post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
            post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
   });
+
+  console.log("Filtered posts:", filteredPosts);
 
   const getCategoryLabel = (categoryId: string) => {
     return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -79,6 +101,11 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
       <div className="text-center py-12">
         <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
         <p className="mt-2 text-gray-600">Loading blog posts...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
+          {[1, 2, 3].map(i => (
+            <Skeleton key={i} className="h-[400px] w-full rounded-lg" />
+          ))}
+        </div>
       </div>
     );
   }
@@ -101,6 +128,8 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
     );
   }
 
+  console.log("Rendering blog posts list, posts count:", filteredPosts.length);
+  
   return (
     <section className="bg-white">
       <div className="container-custom">

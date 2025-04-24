@@ -5,7 +5,7 @@ import BlogPostsList from '@/components/BlogPostsList';
 import { Search, FileText, Rss } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { supabase, BlogPostData } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface FeaturedArticle {
@@ -137,7 +137,10 @@ const Blog = () => {
               type="text"
               placeholder="Search articles..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                console.log("Search term updated:", e.target.value);
+              }}
               className="w-full px-4 py-3 pl-10 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yrealty-accent focus:border-transparent"
             />
             <Search className="absolute left-3 top-3 text-gray-500 w-5 h-5" />

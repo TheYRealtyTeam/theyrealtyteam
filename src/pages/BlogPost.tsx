@@ -1,10 +1,27 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
-import { supabase, BlogPostData } from '@/integrations/supabase/client';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+
+interface BlogPostData {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  author: string;
+  author_role: string;
+  category: string;
+  image_url: string;
+  slug: string;
+  created_at?: string;
+  updated_at?: string;
+}
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -22,7 +39,6 @@ const BlogPost = () => {
         
         console.log("Fetching blog post with slug:", slug);
         
-        // First try using eq and maybeSingle instead of single
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
@@ -90,6 +106,12 @@ const BlogPost = () => {
         <div className="text-center py-12">
           <p className="text-xl font-medium text-gray-700">{error || "The blog post you are looking for does not exist."}</p>
           <p className="text-gray-500 mt-2">Please check the URL or go back to the blog page.</p>
+          <Link to="/blog">
+            <Button className="mt-6">
+              <ArrowLeft className="mr-2" />
+              Back to Blog
+            </Button>
+          </Link>
         </div>
       </PageLayout>
     );
@@ -116,10 +138,19 @@ const BlogPost = () => {
           </div>
         </div>
         
-        <div className="prose prose-lg max-w-none">
+        <div className="prose prose-lg max-w-none mb-8">
           {post.content.split('\n').map((paragraph, index) => (
             <p key={index}>{paragraph}</p>
           ))}
+        </div>
+
+        <div className="mt-8 border-t pt-6">
+          <Link to="/blog">
+            <Button variant="outline" className="flex items-center">
+              <ArrowLeft className="mr-2" />
+              Back to Blog
+            </Button>
+          </Link>
         </div>
       </article>
     </PageLayout>

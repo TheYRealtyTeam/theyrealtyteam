@@ -78,9 +78,10 @@ const ServicesSection = () => {
             Elevating property management with a full suite of premium services designed 
             to maximize your property's potential and minimize your stress
           </p>
-          <div className="mt-4 mb-12 bg-yrealty-blue/10 p-6 rounded-lg max-w-3xl mx-auto reveal">
-            <p className="text-yrealty-navy font-medium">
-              As our valued client, you receive <span className="font-bold">ALL</span> of these premium services as part of our comprehensive property management package. We believe in delivering complete solutions, not partial services.
+          <div className="mt-4 mb-12 bg-yrealty-blue/10 p-6 rounded-lg max-w-4xl mx-auto reveal">
+            <p className="text-yrealty-navy font-medium text-lg">
+              As our valued client, you receive <span className="font-bold text-yrealty-accent">ALL</span> of these premium services as part of our comprehensive property management package. 
+              But that's not all – we go <span className="font-bold text-yrealty-accent">BEYOND</span> the standard offerings to provide truly exceptional, tailored support.
             </p>
           </div>
         </div>

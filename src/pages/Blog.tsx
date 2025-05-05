@@ -69,7 +69,7 @@ const Blog = () => {
         setFeaturedArticle(data as FeaturedArticle);
       } catch (error: any) {
         console.error('Error in featured article fetch:', error);
-        setError("An unexpected error occurred");
+        setError("An unexpected error occurred: " + (error.message || "Unknown error"));
         toast({
           title: "Error loading featured article",
           description: "Please try again later",
@@ -98,15 +98,9 @@ const Blog = () => {
     fetchWithRetry();
   }, [refreshTrigger]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    console.log("Search term updated:", e.target.value);
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Search submitted with term:", searchTerm);
-    // The search is already reactive, so we don't need to do anything else here
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    console.log("Search term updated:", value);
   };
 
   const handleBlogPostsAdded = () => {
@@ -176,6 +170,12 @@ const Blog = () => {
           <div className="text-center">
             <p className="text-lg font-medium text-gray-700">No featured article available</p>
             <p className="text-gray-500 mt-2">Check back later for new content</p>
+            <Button 
+              onClick={() => setRefreshTrigger(prev => prev + 1)} 
+              className="mt-4 bg-yrealty-navy hover:bg-yrealty-navy/90"
+            >
+              Try Again
+            </Button>
           </div>
         </div>
       );
@@ -244,16 +244,14 @@ const Blog = () => {
 
         {/* Search Section */}
         <div className="max-w-2xl mx-auto mb-8">
-          <form onSubmit={handleSearchSubmit}>
-            <Command className="rounded-lg border shadow-md">
-              <CommandInput 
-                placeholder="Search articles by title, content, or author..." 
-                value={searchTerm}
-                onValueChange={setSearchTerm}
-                className="h-12"
-              />
-            </Command>
-          </form>
+          <Command className="rounded-lg border shadow-md">
+            <CommandInput 
+              placeholder="Search articles by title, content, or author..." 
+              value={searchTerm}
+              onValueChange={handleSearchChange}
+              className="h-12"
+            />
+          </Command>
         </div>
 
         {/* Blog Posts List */}

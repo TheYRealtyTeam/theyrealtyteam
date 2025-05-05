@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { FileText, Clock, Tag, Search, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/ui/skeleton";
 import { BlogPostData } from '@/integrations/supabase/client';
 import {
   Pagination,
@@ -17,6 +17,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Button } from '@/components/ui/button';
 
 interface BlogPostsListProps {
   searchTerm: string;
@@ -30,6 +31,12 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   const [postsPerPage] = useState(9); // Increased from 6 to 9 posts per page
   const [isSearching, setIsSearching] = useState(false);
   const [totalPosts, setTotalPosts] = useState(0);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleRetry = () => {
+    console.log("Retrying blog posts fetch...");
+    setRefreshTrigger(prev => prev + 1);
+  };
 
   useEffect(() => {
     async function fetchBlogPosts() {
@@ -44,7 +51,12 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
           .from('blog_posts')
           .select('id', { count: 'exact', head: true });
           
+        if (countResponse.error) {
+          throw new Error(`Error counting posts: ${countResponse.error.message}`);
+        }
+        
         setTotalPosts(countResponse.count || 0);
+        console.log(`Total posts count: ${countResponse.count}`);
         
         // Then fetch the current page of posts
         const { data, error } = await supabase
@@ -83,7 +95,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         setBlogPosts(data as BlogPostData[]);
       } catch (error: any) {
         console.error('Unexpected error in blog posts fetch:', error);
-        setError("An unexpected error occurred");
+        setError("An unexpected error occurred: " + (error.message || "Unknown error"));
         toast({
           title: "Error fetching blog posts",
           description: "Please try again later.",
@@ -133,7 +145,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         setCurrentPage(1); // Reset to first page on new search
       } catch (error: any) {
         console.error('Unexpected error in blog post search:', error);
-        setError("An unexpected error occurred during search");
+        setError("An unexpected error occurred during search: " + (error.message || "Unknown error"));
       } finally {
         setLoading(false);
         setTimeout(() => setIsSearching(false), 500);
@@ -143,9 +155,24 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
     if (searchTerm.trim() !== '') {
       searchBlogPosts();
     } else {
-      fetchBlogPosts();
+      // Retry logic for network errors
+      const fetchWithRetry = async (retries = 3, delay = 1000) => {
+        for (let i = 0; i < retries; i++) {
+          try {
+            await fetchBlogPosts();
+            break; // If successful, exit the retry loop
+          } catch (error) {
+            console.log(`Retry ${i + 1}/${retries} failed:`, error);
+            if (i < retries - 1) {
+              await new Promise(resolve => setTimeout(resolve, delay));
+            }
+          }
+        }
+      };
+
+      fetchWithRetry();
     }
-  }, [currentPage, postsPerPage, searchTerm]);
+  }, [currentPage, postsPerPage, searchTerm, refreshTrigger]);
 
   // Filter posts based on search term (client-side filtering backup)
   const filteredPosts = searchTerm.trim() === '' 
@@ -207,12 +234,20 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
     );
   }
 
-  if (error && !filteredPosts.length) {
+  if (error) {
     return (
       <div className="text-center py-12 bg-red-50 rounded-lg">
         <p className="text-xl font-medium text-gray-700">Error loading blog posts</p>
         <p className="text-gray-500 mt-2">{error}</p>
-        <p className="text-sm mt-4 text-gray-500">Please check your database connection or try refreshing the page</p>
+        <Button 
+          onClick={handleRetry} 
+          className="mt-4 bg-yrealty-navy hover:bg-yrealty-navy/90"
+        >
+          Try Again
+        </Button>
+        <p className="text-sm mt-4 text-gray-500">
+          Please check your database connection or try refreshing the page
+        </p>
       </div>
     );
   }
@@ -221,7 +256,19 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
     return (
       <div className="text-center py-12 bg-gray-50 rounded-lg">
         <p className="text-xl font-medium text-gray-700">No blog posts found</p>
-        <p className="text-gray-500 mt-2">Please check your database or add some content</p>
+        <p className="text-gray-500 mt-2">
+          {searchTerm.trim() !== '' 
+            ? 'No results match your search terms' 
+            : 'Please check your database or add some content'}
+        </p>
+        {searchTerm.trim() === '' && (
+          <Button 
+            onClick={handleRetry} 
+            className="mt-4 bg-yrealty-navy hover:bg-yrealty-navy/90"
+          >
+            Try Again
+          </Button>
+        )}
       </div>
     );
   }
@@ -361,6 +408,12 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
             <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-medium text-gray-700">No posts found matching your search</h3>
             <p className="text-gray-500 mt-2">Try adjusting your search terms or browse all articles</p>
+            <Button 
+              onClick={handleRetry} 
+              className="mt-4 bg-yrealty-navy hover:bg-yrealty-navy/90"
+            >
+              Refresh Posts
+            </Button>
           </div>
         )}
       </div>

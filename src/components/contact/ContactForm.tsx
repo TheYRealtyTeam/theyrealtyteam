@@ -28,8 +28,7 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Instead of directly using .from('contact_submissions'), we'll use a more generic approach
-      // that works with the current database structure by calling the notification function directly
+      // Send the form data to our edge function
       const response = await fetch(
         'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
         {
@@ -48,7 +47,8 @@ const ContactForm = () => {
       );
       
       if (!response.ok) {
-        throw new Error('Failed to send message');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send message');
       }
       
       toast({

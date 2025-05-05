@@ -1,5 +1,6 @@
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,6 +17,11 @@ function handleCors(req: Request) {
   }
 }
 
+// Initialize Supabase client with Deno environment variables
+const supabaseUrl = Deno.env.get("SUPABASE_URL") || "https://axgepdguspqqxudqnobz.supabase.co";
+const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
 serve(async (req) => {
   // Handle CORS
   const corsResponse = handleCors(req);
@@ -25,23 +31,37 @@ serve(async (req) => {
     // Get the form data from the request
     const formData = await req.json();
 
-    // Log the received form data
-    console.log("Contact form submission received:", {
+    // Create a contact_submissions record
+    const submissionData = {
       name: formData.name,
       email: formData.email,
-      phone: formData.phone || "Not provided",
+      phone: formData.phone || null,
       property_type: formData.property_type,
       message: formData.message,
-      timestamp: new Date().toISOString(),
-    });
+      created_at: new Date().toISOString(),
+    };
 
-    // In a real implementation, you would send an email to info@theYteam.co
-    // For now, we're just logging the data
+    console.log("Contact form submission received:", submissionData);
+
+    // Store the submission in Supabase
+    const { data, error } = await supabase
+      .from("contact_submissions")
+      .insert([submissionData])
+      .select();
+
+    if (error) {
+      console.error("Error storing contact submission:", error);
+      throw new Error("Failed to store contact submission");
+    }
+
+    // In a real implementation, you can set up Supabase Database Webhooks
+    // to trigger email notifications when a new record is inserted
     
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: "Contact message received",
+        message: "Contact message received and stored",
+        data: data,
         recipientEmail: "info@theYteam.co" 
       }),
       {

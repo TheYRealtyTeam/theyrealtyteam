@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const ContactForm = () => {
   const { toast } = useToast();
@@ -22,17 +23,32 @@ const ContactForm = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    setTimeout(() => {
+    try {
+      // Save form data to Supabase
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || null, // Handle empty phone
+          property_type: formData.propertyType,
+          message: formData.message,
+          status: 'new'
+        });
+      
+      if (error) throw error;
+      
       toast({
         title: "Message Sent!",
         description: "We'll get back to you as soon as possible.",
         duration: 5000,
       });
       
+      // Reset form data after successful submission
       setFormData({
         name: '',
         email: '',
@@ -40,9 +56,17 @@ const ContactForm = () => {
         propertyType: '',
         message: ''
       });
-      
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Something went wrong",
+        description: "We couldn't send your message. Please try again.",
+        variant: "destructive",
+        duration: 5000,
+      });
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (

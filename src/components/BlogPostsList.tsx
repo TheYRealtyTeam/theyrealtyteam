@@ -27,8 +27,9 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(6);
+  const [postsPerPage] = useState(9); // Increased from 6 to 9 posts per page
   const [isSearching, setIsSearching] = useState(false);
+  const [totalPosts, setTotalPosts] = useState(0);
 
   useEffect(() => {
     async function fetchBlogPosts() {
@@ -38,15 +39,26 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
         
         console.log("Starting to fetch blog posts...");
         
+        // First get count of total posts for pagination
+        const countResponse = await supabase
+          .from('blog_posts')
+          .select('id', { count: 'exact', head: true });
+          
+        setTotalPosts(countResponse.count || 0);
+        
+        // Then fetch the current page of posts
         const { data, error } = await supabase
           .from('blog_posts')
           .select('*')
-          .order('created_at', { ascending: false });
+          .order('created_at', { ascending: false })
+          .range((currentPage - 1) * postsPerPage, currentPage * postsPerPage - 1);
         
         console.log("Blog posts fetch complete:", { 
           success: !error, 
           count: data?.length || 0,
-          error: error?.message
+          error: error?.message,
+          page: currentPage,
+          totalPosts: countResponse.count
         });
         
         if (error) {
@@ -82,43 +94,73 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
       }
     }
 
-    fetchBlogPosts();
-  }, []);
-
-  useEffect(() => {
-    // Show searching state when search term changes
-    if (searchTerm.trim() !== '') {
-      setIsSearching(true);
-      const timer = setTimeout(() => {
-        setIsSearching(false);
-      }, 500); // Short delay for search animation
-      return () => clearTimeout(timer);
+    // If search term is provided, don't use pagination, search all posts
+    async function searchBlogPosts() {
+      if (searchTerm.trim() === '') {
+        return;
+      }
+      
+      try {
+        setLoading(true);
+        setIsSearching(true);
+        setError(null);
+        
+        console.log("Searching blog posts for:", searchTerm);
+        
+        const lowerSearchTerm = searchTerm.toLowerCase().trim();
+        
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .or(
+            `title.ilike.%${lowerSearchTerm}%,excerpt.ilike.%${lowerSearchTerm}%,content.ilike.%${lowerSearchTerm}%,category.ilike.%${lowerSearchTerm}%,author.ilike.%${lowerSearchTerm}%`
+          )
+          .order('created_at', { ascending: false });
+        
+        console.log("Search complete:", { 
+          success: !error, 
+          resultsCount: data?.length || 0 
+        });
+        
+        if (error) {
+          console.error('Error searching blog posts:', error);
+          setError(error.message);
+          return;
+        }
+        
+        setTotalPosts(data?.length || 0);
+        setBlogPosts(data as BlogPostData[] || []);
+        setCurrentPage(1); // Reset to first page on new search
+      } catch (error: any) {
+        console.error('Unexpected error in blog post search:', error);
+        setError("An unexpected error occurred during search");
+      } finally {
+        setLoading(false);
+        setTimeout(() => setIsSearching(false), 500);
+      }
     }
-    setIsSearching(false);
-  }, [searchTerm]);
 
-  // Filter posts based on search term
+    if (searchTerm.trim() !== '') {
+      searchBlogPosts();
+    } else {
+      fetchBlogPosts();
+    }
+  }, [currentPage, postsPerPage, searchTerm]);
+
+  // Filter posts based on search term (client-side filtering backup)
   const filteredPosts = searchTerm.trim() === '' 
     ? blogPosts 
-    : blogPosts.filter(post => {
-        const lowerSearchTerm = searchTerm.toLowerCase().trim();
-        return (
-          post.title.toLowerCase().includes(lowerSearchTerm) || 
-          post.excerpt.toLowerCase().includes(lowerSearchTerm) ||
-          post.content.toLowerCase().includes(lowerSearchTerm) ||
-          post.category.toLowerCase().includes(lowerSearchTerm) ||
-          post.author.toLowerCase().includes(lowerSearchTerm)
-        );
-      });
+    : blogPosts;  // Server-side search is now handling this
 
-  // Get current posts
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  // Get current posts for display
+  const currentPosts = filteredPosts;
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
 
   // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const getCategoryLabel = (categoryId: string) => {
     if (!categoryId) return 'General';
@@ -144,7 +186,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[1, 2, 3].map(i => (
+        {[1, 2, 3, 4, 5, 6].map(i => (
           <Card key={i} className="overflow-hidden h-full flex flex-col">
             <Skeleton className="h-48 w-full" />
             <CardContent className="p-6 flex-grow flex flex-col">
@@ -259,7 +301,7 @@ const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
               ))}
             </div>
             
-            {totalPages > 1 && (
+            {searchTerm.trim() === '' && totalPages > 1 && (
               <div className="mt-12">
                 <Pagination>
                   <PaginationContent>

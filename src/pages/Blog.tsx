@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/use-toast';
 import { Command, CommandInput } from "@/components/ui/command";
+import AdminControls from '@/components/blog/AdminControls';
 
 interface FeaturedArticle {
   title: string;
@@ -24,6 +25,7 @@ const Blog = () => {
   const [featuredArticle, setFeaturedArticle] = useState<FeaturedArticle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     document.title = "Blog | Y Realty Team";
@@ -79,7 +81,7 @@ const Blog = () => {
     }
 
     fetchFeaturedArticle();
-  }, []);
+  }, [refreshTrigger]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -90,6 +92,10 @@ const Blog = () => {
     e.preventDefault();
     console.log("Search submitted with term:", searchTerm);
     // The search is already reactive, so we don't need to do anything else here
+  };
+
+  const handleBlogPostsAdded = () => {
+    setRefreshTrigger(prev => prev + 1);
   };
 
   const getCategoryLabel = (categoryId: string) => {
@@ -119,6 +125,9 @@ const Blog = () => {
       subtitle="Stay ahead of the curve with our latest property management trends, strategies, and market forecasts"
     >
       <div className="space-y-12">
+        {/* Admin Controls */}
+        <AdminControls onBlogPostsAdded={handleBlogPostsAdded} />
+
         {/* Featured Article */}
         <div className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 mb-12 transform transition-all duration-500 hover:shadow-xl">
           <div className="grid grid-cols-1 lg:grid-cols-2">
@@ -213,7 +222,7 @@ const Blog = () => {
         </div>
 
         {/* Blog Posts List */}
-        <BlogPostsList searchTerm={searchTerm} />
+        <BlogPostsList searchTerm={searchTerm} key={`blog-posts-list-${refreshTrigger}`} />
 
         {/* Subscribe Section */}
         <div className="bg-gradient-to-r from-yrealty-blue to-yrealty-blue/20 rounded-lg p-8 mt-16">

@@ -51,9 +51,11 @@ const ContactForm = () => {
         throw new Error(errorData.error || 'Failed to send message');
       }
       
+      const responseData = await response.json();
+      
       toast({
         title: "Message Sent!",
-        description: "We'll get back to you as soon as possible.",
+        description: `We'll get back to you as soon as possible${responseData.emailSent ? ' at ' + formData.email : ''}.`,
         duration: 5000,
       });
       

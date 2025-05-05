@@ -22,6 +22,48 @@ const supabaseUrl = Deno.env.get("SUPABASE_URL") || "https://axgepdguspqqxudqnob
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+// Function to send an email notification
+async function sendEmailNotification(submissionData: any) {
+  const recipientEmail = "info@theYteam.co";
+  const subject = `New Contact Form Submission from ${submissionData.name}`;
+  
+  // Create HTML email body with submission details
+  const htmlBody = `
+    <h2>New Contact Form Submission</h2>
+    <p><strong>Name:</strong> ${submissionData.name}</p>
+    <p><strong>Email:</strong> ${submissionData.email}</p>
+    <p><strong>Phone:</strong> ${submissionData.phone || "Not provided"}</p>
+    <p><strong>Property Type:</strong> ${submissionData.property_type}</p>
+    <p><strong>Message:</strong></p>
+    <p>${submissionData.message}</p>
+    <p><small>Submitted on: ${new Date().toLocaleString()}</small></p>
+  `;
+  
+  try {
+    // Send email using Supabase edge function
+    const { error } = await supabase.auth.admin.createUser({
+      email: recipientEmail,
+      email_confirm: true,
+      user_metadata: {
+        subject,
+        content: htmlBody,
+        forceEmailNotification: true
+      }
+    });
+    
+    if (error) {
+      console.error("Error sending email notification:", error);
+      return false;
+    }
+    
+    console.log("Email notification sent successfully to:", recipientEmail);
+    return true;
+  } catch (error) {
+    console.error("Failed to send email notification:", error);
+    return false;
+  }
+}
+
 serve(async (req) => {
   // Handle CORS
   const corsResponse = handleCors(req);
@@ -54,13 +96,14 @@ serve(async (req) => {
       throw new Error("Failed to store contact submission");
     }
 
-    // In a real implementation, you can set up Supabase Database Webhooks
-    // to trigger email notifications when a new record is inserted
+    // Send email notification
+    const emailSent = await sendEmailNotification(submissionData);
     
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: "Contact message received and stored",
+        emailSent: emailSent,
         data: data,
         recipientEmail: "info@theYteam.co" 
       }),

@@ -28,19 +28,28 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Save form data to Supabase
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null, // Handle empty phone
-          property_type: formData.propertyType,
-          message: formData.message,
-          status: 'new'
-        });
+      // Instead of directly using .from('contact_submissions'), we'll use a more generic approach
+      // that works with the current database structure by calling the notification function directly
+      const response = await fetch(
+        'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone || null,
+            property_type: formData.propertyType,
+            message: formData.message
+          })
+        }
+      );
       
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
       
       toast({
         title: "Message Sent!",

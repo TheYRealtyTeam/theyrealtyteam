@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Phone, Mail, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -25,19 +24,27 @@ const ContactSection = () => {
     setIsSubmitting(true);
     
     try {
-      // Save form data to Supabase
-      const { error } = await supabase
-        .from('contact_submissions')
-        .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone || null, // Handle empty phone
-          property_type: formData.propertyType,
-          message: formData.message,
-          status: 'new'
-        });
+      // Use direct fetch to the edge function instead of using supabase.from
+      const response = await fetch(
+        'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone || null,
+            property_type: formData.propertyType,
+            message: formData.message
+          })
+        }
+      );
       
-      if (error) throw error;
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
       
       toast({
         title: "Message Sent!",

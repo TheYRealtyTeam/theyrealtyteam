@@ -197,6 +197,7 @@ const ContactSection = () => {
                   >
                     <option value="">Select property type</option>
                     <option value="residential">Residential</option>
+                    <option value="multi-family">Multi-Family</option>
                     <option value="commercial">Commercial</option>
                     <option value="mixed-use">Mixed-Use</option>
                     <option value="other">Other</option>

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
@@ -225,28 +224,7 @@ const Blog = () => {
         <BlogPostsList searchTerm={searchTerm} key={`blog-posts-list-${refreshTrigger}`} />
 
         {/* Subscribe Section */}
-        <div className="bg-gradient-to-r from-yrealty-blue to-yrealty-blue/20 rounded-lg p-8 mt-16">
-          <div className="max-w-lg mx-auto text-center">
-            <h3 className="text-xl md:text-2xl font-bold text-yrealty-navy mb-4">
-              Stay Updated with Our Latest Insights
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Subscribe to receive notifications when we publish new articles about property management trends and strategies.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button className="bg-yrealty-accent hover:bg-yrealty-accent/90 flex items-center">
-                <Rss className="w-4 h-4 mr-2" />
-                <span>Subscribe to Updates</span>
-              </Button>
-              <Link to="/resources">
-                <Button variant="outline" className="border-yrealty-navy text-yrealty-navy hover:bg-yrealty-blue/50">
-                  <span>Free Resources</span>
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </PageLayout>
   );

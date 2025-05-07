@@ -14,6 +14,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const ServicesSection = () => {
   const isMobile = useIsMobile();
+  const [activeTab, setActiveTab] = useState("residential");
   
   // Common service objects
   const commonServices = [
@@ -88,6 +89,11 @@ const ServicesSection = () => {
     ...commonServices
   ];
 
+  // Handle tab change
+  const handleTabChange = (value) => {
+    setActiveTab(value);
+  };
+
   return (
     <section id="services" className="section-padding bg-white">
       <div className="container-custom">
@@ -105,7 +111,12 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="residential" className="w-full">
+        <Tabs 
+          defaultValue="residential" 
+          value={activeTab} 
+          onValueChange={handleTabChange}
+          className="w-full"
+        >
           <div className="flex justify-center mb-10">
             <TabsList className={`${isMobile ? 'w-full' : 'w-96'}`}>
               <TabsTrigger value="residential" className="flex-1">

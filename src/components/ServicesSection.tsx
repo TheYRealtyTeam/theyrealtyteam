@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
   ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank
@@ -94,6 +94,25 @@ const ServicesSection = () => {
     setActiveTab(value);
   };
 
+  // Render service cards for the active tab
+  const renderServiceCards = (services, tabName) => {
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {services.map((service, index) => (
+          <div 
+            key={`${tabName}-${index}`}
+            className="service-card reveal"
+            style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
+          >
+            <div className="mb-4">{service.icon}</div>
+            <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
+            <p className="text-gray-600">{service.description}</p>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <section id="services" className="section-padding bg-white">
       <div className="container-custom">
@@ -130,36 +149,12 @@ const ServicesSection = () => {
             </TabsList>
           </div>
           
-          <TabsContent value="residential" className="mt-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {residentialServices.map((service, index) => (
-                <div 
-                  key={`residential-${index}`}
-                  className="service-card reveal"
-                  style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
-                >
-                  <div className="mb-4">{service.icon}</div>
-                  <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </div>
-              ))}
-            </div>
+          <TabsContent value="residential" className="mt-4 block">
+            {renderServiceCards(residentialServices, "residential")}
           </TabsContent>
           
-          <TabsContent value="commercial" className="mt-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {commercialServices.map((service, index) => (
-                <div 
-                  key={`commercial-${index}`}
-                  className="service-card reveal"
-                  style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
-                >
-                  <div className="mb-4">{service.icon}</div>
-                  <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
-                  <p className="text-gray-600">{service.description}</p>
-                </div>
-              ))}
-            </div>
+          <TabsContent value="commercial" className="mt-4 block">
+            {renderServiceCards(commercialServices, "commercial")}
           </TabsContent>
         </Tabs>
 

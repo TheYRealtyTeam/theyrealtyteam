@@ -1,22 +1,22 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
   ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank
 } from 'lucide-react';
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from "@/components/ui/tabs";
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ServicesSection = () => {
-  const services = [
-    {
-      title: "Residential Property Management",
-      description: "Comprehensive management for apartments, condos, and homes with tenant screening, rent collection, and maintenance coordination.",
-      icon: <Home className="h-10 w-10 text-yrealty-accent" />,
-    },
-    {
-      title: "Commercial Property Management",
-      description: "Expert management of office buildings, retail spaces, and industrial properties to maximize ROI and tenant satisfaction.",
-      icon: <Building className="h-10 w-10 text-yrealty-accent" />,
-    },
+  const isMobile = useIsMobile();
+  
+  // Common service objects
+  const commonServices = [
     {
       title: "Tenant Placement",
       description: "Rigorous tenant screening, background checks, and placement services to find reliable, qualified tenants for your property.",
@@ -69,6 +69,25 @@ const ServicesSection = () => {
     },
   ];
 
+  // Create specific service arrays for each tab
+  const residentialServices = [
+    {
+      title: "Residential Property Management",
+      description: "Comprehensive management for apartments, condos, and homes with tenant screening, rent collection, and maintenance coordination.",
+      icon: <Home className="h-10 w-10 text-yrealty-accent" />,
+    },
+    ...commonServices
+  ];
+
+  const commercialServices = [
+    {
+      title: "Commercial Property Management",
+      description: "Expert management of office buildings, retail spaces, and industrial properties to maximize ROI and tenant satisfaction.",
+      icon: <Building className="h-10 w-10 text-yrealty-accent" />,
+    },
+    ...commonServices
+  ];
+
   return (
     <section id="services" className="section-padding bg-white">
       <div className="container-custom">
@@ -86,19 +105,52 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div 
-              key={index} 
-              className="service-card reveal"
-              style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
-            >
-              <div className="mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
-              <p className="text-gray-600">{service.description}</p>
+        <Tabs defaultValue="residential" className="w-full">
+          <div className="flex justify-center mb-10">
+            <TabsList className={`${isMobile ? 'w-full' : 'w-96'}`}>
+              <TabsTrigger value="residential" className="flex-1">
+                <Home className="mr-2 h-5 w-5" />
+                Residential
+              </TabsTrigger>
+              <TabsTrigger value="commercial" className="flex-1">
+                <Building className="mr-2 h-5 w-5" />
+                Commercial
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          
+          <TabsContent value="residential" className="mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {residentialServices.map((service, index) => (
+                <div 
+                  key={`residential-${index}`}
+                  className="service-card reveal"
+                  style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
+                >
+                  <div className="mb-4">{service.icon}</div>
+                  <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
+                  <p className="text-gray-600">{service.description}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </TabsContent>
+          
+          <TabsContent value="commercial" className="mt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {commercialServices.map((service, index) => (
+                <div 
+                  key={`commercial-${index}`}
+                  className="service-card reveal"
+                  style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
+                >
+                  <div className="mb-4">{service.icon}</div>
+                  <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
+                  <p className="text-gray-600">{service.description}</p>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
 
         <div className="mt-16 text-center reveal">
           <p className="text-lg mb-6">

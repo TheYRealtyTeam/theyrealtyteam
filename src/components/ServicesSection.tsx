@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
   ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank
@@ -88,15 +88,15 @@ const ServicesSection = () => {
     ...commonServices
   ];
 
-  // Create a ServiceCard component for consistent rendering
-  const ServiceCard = ({ service, index }) => (
+  // ServiceCard component
+  const ServiceCard = ({ title, description, icon, delay }) => (
     <div 
-      className="service-card reveal"
-      style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
+      className="service-card reveal bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      style={{ transitionDelay: `${delay}s` }}
     >
-      <div className="mb-4">{service.icon}</div>
-      <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
-      <p className="text-gray-600">{service.description}</p>
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{title}</h3>
+      <p className="text-gray-600">{description}</p>
     </div>
   );
 
@@ -131,18 +131,30 @@ const ServicesSection = () => {
             </TabsList>
           </div>
           
-          <TabsContent value="residential" className="block">
+          <TabsContent value="residential" className="mt-6 block">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {residentialServices.map((service, index) => (
-                <ServiceCard key={`residential-${index}`} service={service} index={index} />
+                <ServiceCard 
+                  key={`residential-${index}`} 
+                  title={service.title} 
+                  description={service.description} 
+                  icon={service.icon} 
+                  delay={0.1 + index * 0.05} 
+                />
               ))}
             </div>
           </TabsContent>
           
-          <TabsContent value="commercial" className="block">
+          <TabsContent value="commercial" className="mt-6 block">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {commercialServices.map((service, index) => (
-                <ServiceCard key={`commercial-${index}`} service={service} index={index} />
+                <ServiceCard 
+                  key={`commercial-${index}`} 
+                  title={service.title} 
+                  description={service.description} 
+                  icon={service.icon} 
+                  delay={0.1 + index * 0.05} 
+                />
               ))}
             </div>
           </TabsContent>

@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import ContactInfo from '@/components/contact/ContactInfo';
-import ContactForm from '@/components/contact/ContactForm';
+import ContactTabs from '@/components/contact/ContactTabs';
 
 const Contact = () => {
   useEffect(() => {
@@ -20,7 +20,7 @@ const Contact = () => {
           <ContactInfo />
         </div>
         <div className="reveal">
-          <ContactForm />
+          <ContactTabs />
         </div>
       </div>
     </PageLayout>

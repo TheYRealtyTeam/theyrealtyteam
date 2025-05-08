@@ -2,7 +2,7 @@
 import React from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ContactForm from "./ContactForm";
-import AppointmentScheduler from "@/components/AppointmentScheduler";
+import AppointmentScheduler from "../AppointmentScheduler";
 
 const ContactTabs = () => {
   return (
@@ -17,7 +17,9 @@ const ContactTabs = () => {
       </TabsContent>
       
       <TabsContent value="appointment" className="reveal">
-        <AppointmentScheduler />
+        <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <AppointmentScheduler />
+        </div>
       </TabsContent>
     </Tabs>
   );

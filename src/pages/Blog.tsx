@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
@@ -9,7 +8,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/use-toast';
 import { Command, CommandInput } from "@/components/ui/command";
-import AdminControls from '@/components/blog/AdminControls';
 
 interface FeaturedArticle {
   title: string;
@@ -101,10 +99,6 @@ const Blog = () => {
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     console.log("Search term updated:", value);
-  };
-
-  const handleBlogPostsAdded = () => {
-    setRefreshTrigger(prev => prev + 1);
   };
 
   const getCategoryLabel = (categoryId: string) => {
@@ -236,9 +230,6 @@ const Blog = () => {
       subtitle="Stay ahead of the curve with our latest property management trends, strategies, and market forecasts"
     >
       <div className="space-y-12">
-        {/* Admin Controls */}
-        <AdminControls onBlogPostsAdded={handleBlogPostsAdded} />
-
         {/* Featured Article */}
         {renderFeaturedArticle()}
 

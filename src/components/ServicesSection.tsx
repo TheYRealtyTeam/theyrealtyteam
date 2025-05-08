@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
   ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank
@@ -9,7 +9,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const ServicesSection = () => {
   const isMobile = useIsMobile();
-  const [activeTab, setActiveTab] = React.useState("residential");
+  const [activeTab, setActiveTab] = useState("residential");
   
   // Common service objects
   const commonServices = [
@@ -84,11 +84,11 @@ const ServicesSection = () => {
     ...commonServices
   ];
 
-  // ServiceCard component
+  // ServiceCard component - simplified and made more reliable
   const ServiceCard = ({ title, description, icon, delay }) => (
     <div 
-      className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow service-card reveal"
-      style={{ transitionDelay: `${delay}s` }}
+      className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
+      style={{ animationDelay: `${delay}s` }}
     >
       <div className="mb-4">{icon}</div>
       <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{title}</h3>
@@ -113,13 +113,13 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        {/* Custom Tab Implementation Instead of Using shadcn Tabs */}
+        {/* Simple Tab Navigation */}
         <div className="w-full">
           <div className="flex justify-center mb-10">
             <div className={`${isMobile ? 'w-full' : 'w-96'} inline-flex h-auto min-h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground`}>
               <button 
                 onClick={() => setActiveTab("residential")}
-                className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium 
+                className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
                   ${activeTab === "residential" ? "bg-background text-foreground shadow-sm" : ""}`}
               >
                 <Home className="mr-2 h-5 w-5" />
@@ -127,7 +127,7 @@ const ServicesSection = () => {
               </button>
               <button 
                 onClick={() => setActiveTab("commercial")}
-                className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium 
+                className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
                   ${activeTab === "commercial" ? "bg-background text-foreground shadow-sm" : ""}`}
               >
                 <Building className="mr-2 h-5 w-5" />
@@ -146,7 +146,7 @@ const ServicesSection = () => {
                     title={service.title} 
                     description={service.description} 
                     icon={service.icon} 
-                    delay={0.1 + index * 0.05} 
+                    delay={0.1 * (index + 1)} 
                   />
                 ))}
               </div>
@@ -160,7 +160,7 @@ const ServicesSection = () => {
                     title={service.title} 
                     description={service.description} 
                     icon={service.icon} 
-                    delay={0.1 + index * 0.05} 
+                    delay={0.1 * (index + 1)} 
                   />
                 ))}
               </div>

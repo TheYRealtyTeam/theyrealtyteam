@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
   ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank
@@ -89,18 +88,13 @@ const ServicesSection = () => {
     ...commonServices
   ];
 
-  // Handle tab change
-  const handleTabChange = (value) => {
-    setActiveTab(value);
-  };
-
   // Render service cards for the active tab
-  const renderServiceCards = (services, tabName) => {
+  const renderServiceCards = (services) => {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((service, index) => (
           <div 
-            key={`${tabName}-${index}`}
+            key={index}
             className="service-card reveal"
             style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
           >
@@ -130,12 +124,7 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        <Tabs 
-          defaultValue="residential" 
-          value={activeTab} 
-          onValueChange={handleTabChange}
-          className="w-full"
-        >
+        <Tabs defaultValue="residential" className="w-full">
           <div className="flex justify-center mb-10">
             <TabsList className={`${isMobile ? 'w-full' : 'w-96'}`}>
               <TabsTrigger value="residential" className="flex-1">
@@ -149,12 +138,12 @@ const ServicesSection = () => {
             </TabsList>
           </div>
           
-          <TabsContent value="residential" className="mt-4 block">
-            {renderServiceCards(residentialServices, "residential")}
+          <TabsContent value="residential">
+            {renderServiceCards(residentialServices)}
           </TabsContent>
           
-          <TabsContent value="commercial" className="mt-4 block">
-            {renderServiceCards(commercialServices, "commercial")}
+          <TabsContent value="commercial">
+            {renderServiceCards(commercialServices)}
           </TabsContent>
         </Tabs>
 

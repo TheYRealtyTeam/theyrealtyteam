@@ -2,6 +2,7 @@
 import React from 'react';
 import { Mail, Phone, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
 import Logo from './Logo';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -10,6 +11,24 @@ const Footer = () => {
       behavior: 'smooth'
     });
   };
+
+  const quickLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/#about' },
+    { name: 'Services', path: '/#services' },
+    { name: 'Areas', path: '/#areas' },
+    { name: 'FAQ', path: '/faq' },
+    { name: 'Contact', path: '/contact' }
+  ];
+
+  const serviceLinks = [
+    'Residential Management',
+    'Commercial Management',
+    'Tenant Placement',
+    'Property Marketing',
+    'Maintenance',
+    'Financial Reporting'
+  ];
 
   return (
     <footer className="bg-yrealty-navy text-white pt-16 pb-8">
@@ -21,16 +40,16 @@ const Footer = () => {
               Premier property management company dedicated to maximizing your property's potential through exceptional service and innovative solutions.
             </p>
             <div className="flex space-x-4">
-              <a href="https://facebook.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Facebook">
+              <a href="https://facebook.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Facebook" rel="noopener noreferrer" target="_blank">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="https://instagram.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Instagram">
+              <a href="https://instagram.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Instagram" rel="noopener noreferrer" target="_blank">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="https://twitter.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Twitter">
+              <a href="https://twitter.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Twitter" rel="noopener noreferrer" target="_blank">
                 <Twitter className="h-5 w-5" />
               </a>
-              <a href="https://linkedin.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="LinkedIn">
+              <a href="https://linkedin.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="LinkedIn" rel="noopener noreferrer" target="_blank">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -39,12 +58,19 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              {['Home', 'About', 'Services', 'Areas', 'Testimonials', 'Contact'].map((item) => (
-                <li key={item}>
-                  <a href={`#${item.toLowerCase()}`} className="text-gray-300 hover:text-white transition-colors flex items-center">
-                    <ArrowUp className="h-3 w-3 rotate-45 mr-2" />
-                    {item}
-                  </a>
+              {quickLinks.map((item) => (
+                <li key={item.name}>
+                  {item.path.startsWith('/#') ? (
+                    <a href={item.path} className="text-gray-300 hover:text-white transition-colors flex items-center">
+                      <ArrowUp className="h-3 w-3 rotate-45 mr-2" />
+                      {item.name}
+                    </a>
+                  ) : (
+                    <Link to={item.path} className="text-gray-300 hover:text-white transition-colors flex items-center">
+                      <ArrowUp className="h-3 w-3 rotate-45 mr-2" />
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -53,9 +79,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-6">Our Services</h3>
             <ul className="space-y-3">
-              {['Residential Management', 'Commercial Management', 'Tenant Placement', 'Property Marketing', 'Maintenance', 'Financial Reporting'].map((item) => (
+              {serviceLinks.map((item) => (
                 <li key={item}>
-                  <a href="#services" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                  <a href="/#services" className="text-gray-300 hover:text-white transition-colors flex items-center">
                     <ArrowUp className="h-3 w-3 rotate-45 mr-2" />
                     {item}
                   </a>
@@ -76,20 +102,20 @@ const Footer = () => {
                 <a href="mailto:info@theYteam.co" className="text-gray-300 hover:text-white transition-colors">info@theYteam.co</a>
               </li>
             </ul>
-            <a href="#contact" className="mt-6 inline-block px-5 py-2 bg-yrealty-accent text-white rounded-md hover:bg-opacity-90 transition-all">
+            <Link to="/contact" className="mt-6 inline-block px-5 py-2 bg-yrealty-accent text-white rounded-md hover:bg-opacity-90 transition-all">
               Contact Us
-            </a>
+            </Link>
           </div>
         </div>
         
         <div className="border-t border-gray-700 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Y Realty Team. All rights reserved. <a href="https://theYteam.co" className="hover:text-white transition-colors">theYteam.co</a>
+            &copy; {new Date().getFullYear()} Y Realty Team. All rights reserved. <a href="https://theYteam.co" className="hover:text-white transition-colors" rel="noopener noreferrer" target="_blank">theYteam.co</a>
           </p>
           <div className="flex space-x-6 text-sm text-gray-400">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Sitemap</a>
+            <Link to="/" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="/" className="hover:text-white transition-colors">Sitemap</Link>
           </div>
         </div>
       </div>

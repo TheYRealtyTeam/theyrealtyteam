@@ -15,7 +15,13 @@ const HeroSection = () => {
       if (!heroRef.current) return;
       const scrollTop = window.scrollY;
       const parallaxOffset = scrollTop * 0.4;
-      heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
+      
+      // Apply smoother parallax effect with requestAnimationFrame
+      requestAnimationFrame(() => {
+        if (heroRef.current) {
+          heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
+        }
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -27,8 +33,8 @@ const HeroSection = () => {
       id="home" 
       ref={heroRef}
       className={`
-        relative h-screen bg-cover bg-center bg-fixed flex items-center pt-16
-        ${!isImageLoaded ? 'bg-gradient-to-r from-yrealty-navy to-yrealty-blue' : ''}
+        relative h-screen bg-cover bg-center bg-no-repeat flex items-center pt-16 transition-opacity duration-700
+        ${isImageLoaded ? 'opacity-100' : 'opacity-0 bg-gradient-to-r from-yrealty-navy to-yrealty-blue'}
       `}
       style={{ 
         backgroundImage: isImageLoaded 

@@ -16,7 +16,7 @@ const PageLayout = ({ children, title, subtitle, className = '' }: PageLayoutPro
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
-        <div className="pt-24 pb-12 bg-yrealty-blue">
+        <div className="pt-32 pb-12 bg-yrealty-blue">
           <div className="container-custom">
             <h1 className="text-4xl md:text-5xl font-bold text-yrealty-navy text-center">{title}</h1>
             {subtitle && (

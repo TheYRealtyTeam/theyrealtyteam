@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
@@ -13,7 +14,6 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const ServicesSection = () => {
   const isMobile = useIsMobile();
-  const [activeTab, setActiveTab] = useState("residential");
   
   // Common service objects
   const commonServices = [
@@ -88,24 +88,17 @@ const ServicesSection = () => {
     ...commonServices
   ];
 
-  // Render service cards for the active tab
-  const renderServiceCards = (services) => {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {services.map((service, index) => (
-          <div 
-            key={index}
-            className="service-card reveal"
-            style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
-          >
-            <div className="mb-4">{service.icon}</div>
-            <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
-            <p className="text-gray-600">{service.description}</p>
-          </div>
-        ))}
-      </div>
-    );
-  };
+  // Create a ServiceCard component for consistent rendering
+  const ServiceCard = ({ service, index }) => (
+    <div 
+      className="service-card reveal"
+      style={{ transitionDelay: `${0.1 + index * 0.05}s` }}
+    >
+      <div className="mb-4">{service.icon}</div>
+      <h3 className="text-xl font-bold mb-2 text-yrealty-navy">{service.title}</h3>
+      <p className="text-gray-600">{service.description}</p>
+    </div>
+  );
 
   return (
     <section id="services" className="section-padding bg-white">
@@ -138,12 +131,20 @@ const ServicesSection = () => {
             </TabsList>
           </div>
           
-          <TabsContent value="residential">
-            {renderServiceCards(residentialServices)}
+          <TabsContent value="residential" className="block">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {residentialServices.map((service, index) => (
+                <ServiceCard key={`residential-${index}`} service={service} index={index} />
+              ))}
+            </div>
           </TabsContent>
           
-          <TabsContent value="commercial">
-            {renderServiceCards(commercialServices)}
+          <TabsContent value="commercial" className="block">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {commercialServices.map((service, index) => (
+                <ServiceCard key={`commercial-${index}`} service={service} index={index} />
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
 

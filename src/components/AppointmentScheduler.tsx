@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -141,7 +140,7 @@ const AppointmentScheduler = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="reveal">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -237,7 +236,7 @@ const AppointmentScheduler = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="input-field"
+                  className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
                   placeholder="Your name"
                 />
               </div>
@@ -252,7 +251,7 @@ const AppointmentScheduler = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="input-field"
+                    className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
                     placeholder="Your email"
                   />
                 </div>
@@ -266,7 +265,7 @@ const AppointmentScheduler = () => {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="input-field"
+                    className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
                     placeholder="Your phone"
                   />
                 </div>
@@ -280,7 +279,7 @@ const AppointmentScheduler = () => {
                   value={formData.propertyType}
                   onChange={handleChange}
                   required
-                  className="input-field"
+                  className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
                 >
                   <option value="">Select property type</option>
                   <option value="residential">Residential</option>
@@ -299,7 +298,7 @@ const AppointmentScheduler = () => {
                   rows={4}
                   value={formData.message}
                   onChange={handleChange}
-                  className="input-field resize-none"
+                  className="input-field resize-none w-full rounded-md border border-gray-300 px-4 py-3"
                   placeholder="Tell us about your property management needs or any questions you have"
                 />
               </div>
@@ -317,8 +316,6 @@ const AppointmentScheduler = () => {
           </div>
         </div>
       </div>
-      
-      {/* Remove the "Why Schedule a Consultation" section to simplify the component in the tabs view */}
     </div>
   );
 };

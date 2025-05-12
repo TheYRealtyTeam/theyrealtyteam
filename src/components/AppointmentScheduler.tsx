@@ -141,8 +141,8 @@ const AppointmentScheduler = () => {
   };
 
   return (
-    <div className="max-w-6xl">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+    <div className="max-w-6xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="reveal">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <h2 className="text-2xl font-bold mb-6 text-yrealty-navy">Select Date & Time</h2>
@@ -155,7 +155,7 @@ const AppointmentScheduler = () => {
                   selected={date}
                   onSelect={setDate}
                   disabled={isDateDisabled}
-                  className="rounded-md border"
+                  className="rounded-md border pointer-events-auto"
                 />
               </div>
             </div>
@@ -172,6 +172,7 @@ const AppointmentScheduler = () => {
                         ? 'bg-yrealty-navy text-white' 
                         : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                     }`}
+                    type="button"
                   >
                     {time}
                   </button>

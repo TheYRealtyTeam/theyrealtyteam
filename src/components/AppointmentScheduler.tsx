@@ -142,7 +142,10 @@ const AppointmentScheduler = () => {
 
   React.useEffect(() => {
     console.log("AppointmentScheduler mounted");
-    console.log("Calendar pointer-events:", document.querySelector('.react-day-picker')?.style.pointerEvents);
+    
+    // Fix: Use the optional chaining with HTMLElement type assertion to safely access style
+    const dayPicker = document.querySelector('.react-day-picker');
+    console.log("Calendar pointer-events:", dayPicker ? (dayPicker as HTMLElement).style.pointerEvents : "element not found");
   }, []);
 
   return (

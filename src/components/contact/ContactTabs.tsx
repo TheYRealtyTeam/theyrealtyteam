@@ -17,7 +17,11 @@ const ContactTabs = () => {
       </TabsContent>
       
       <TabsContent value="appointment" className="reveal">
-        <AppointmentScheduler />
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          {/* Debug text to verify component rendering */}
+          <p className="mb-4 text-yrealty-navy font-medium">Schedule your appointment below:</p>
+          <AppointmentScheduler />
+        </div>
       </TabsContent>
     </Tabs>
   );

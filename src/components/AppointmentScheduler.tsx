@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -139,22 +140,27 @@ const AppointmentScheduler = () => {
     }
   };
 
+  React.useEffect(() => {
+    console.log("AppointmentScheduler mounted");
+    console.log("Calendar pointer-events:", document.querySelector('.react-day-picker')?.style.pointerEvents);
+  }, []);
+
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="reveal">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative z-20">
             <h2 className="text-2xl font-bold mb-6 text-yrealty-navy">Select Date & Time</h2>
             
             <div className="mb-6">
               <h3 className="text-lg font-medium mb-3 text-gray-700">1. Choose a Date</h3>
-              <div className="border rounded-lg overflow-hidden">
+              <div className="border rounded-lg overflow-hidden relative z-30">
                 <Calendar
                   mode="single"
                   selected={date}
                   onSelect={setDate}
                   disabled={isDateDisabled}
-                  className="rounded-md border pointer-events-auto"
+                  className="rounded-md border pointer-events-auto relative z-40"
                 />
               </div>
             </div>

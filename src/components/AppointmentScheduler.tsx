@@ -13,6 +13,7 @@ const AppointmentScheduler = () => {
     callType,
     setCallType,
     formData,
+    formErrors,
     isSubmitting,
     availableTimes,
     handleChange,
@@ -46,6 +47,7 @@ const AppointmentScheduler = () => {
         
         <AppointmentForm
           formData={formData}
+          formErrors={formErrors}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           isSubmitting={isSubmitting}

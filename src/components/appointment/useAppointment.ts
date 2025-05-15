@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -14,6 +15,10 @@ const useAppointment = () => {
     propertyType: '',
     message: ''
   });
+  const [formErrors, setFormErrors] = useState({
+    email: '',
+    phone: ''
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -23,9 +28,42 @@ const useAppointment = () => {
     '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
   ];
 
+  // Validation functions
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    // Allow formats like (123) 456-7890, 123-456-7890, 1234567890
+    const phoneRegex = /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Validate email and phone as user types
+    if (name === 'email') {
+      if (!value) {
+        setFormErrors(prev => ({ ...prev, email: '' }));
+      } else if (!validateEmail(value)) {
+        setFormErrors(prev => ({ ...prev, email: 'Please enter a valid email address' }));
+      } else {
+        setFormErrors(prev => ({ ...prev, email: '' }));
+      }
+    }
+    
+    if (name === 'phone') {
+      if (!value) {
+        setFormErrors(prev => ({ ...prev, phone: '' }));
+      } else if (!validatePhone(value)) {
+        setFormErrors(prev => ({ ...prev, phone: 'Please enter a valid phone number' }));
+      } else {
+        setFormErrors(prev => ({ ...prev, phone: '' }));
+      }
+    }
   };
 
   const handleTimeSelect = (time: string) => {
@@ -55,9 +93,27 @@ const useAppointment = () => {
     day: 'numeric'
   }) : '';
 
+  // Check if form is valid
+  const checkFormValidity = (): boolean => {
+    const { name, email, phone, propertyType } = formData;
+    
+    // Basic required field validation
+    if (!name || !email || !phone || !propertyType || !date || !selectedTime || !callType) {
+      return false;
+    }
+    
+    // Format validation
+    if (!validateEmail(email) || !validatePhone(phone)) {
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate required fields
     if (!date) {
       toast({
         title: "Error",
@@ -80,6 +136,25 @@ const useAppointment = () => {
       toast({
         title: "Error",
         description: "Please select either phone or video call.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Validate email and phone format
+    if (!validateEmail(formData.email)) {
+      toast({
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!validatePhone(formData.phone)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid phone number.",
         variant: "destructive",
       });
       return;
@@ -143,13 +218,14 @@ const useAppointment = () => {
     callType,
     setCallType,
     formData,
+    formErrors,
     isSubmitting,
     availableTimes,
     handleChange,
     handleTimeSelect,
     isDateDisabled,
     handleSubmit,
-    isFormValid: !!date && !!selectedTime && !!callType,
+    isFormValid: checkFormValidity(),
     showConfirmation,
     setShowConfirmation,
     formattedDate

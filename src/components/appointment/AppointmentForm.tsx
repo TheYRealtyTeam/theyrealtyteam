@@ -10,6 +10,10 @@ interface AppointmentFormProps {
     propertyType: string;
     message: string;
   };
+  formErrors?: {
+    email: string;
+    phone: string;
+  };
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
   isSubmitting: boolean;
@@ -18,6 +22,7 @@ interface AppointmentFormProps {
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
   formData,
+  formErrors = { email: '', phone: '' },
   handleChange,
   handleSubmit,
   isSubmitting,
@@ -53,9 +58,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
+                className={`input-field w-full rounded-md border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} px-4 py-3`}
                 placeholder="Your email"
               />
+              {formErrors.email && (
+                <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>
+              )}
             </div>
             
             <div>
@@ -67,9 +75,12 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
+                className={`input-field w-full rounded-md border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} px-4 py-3`}
                 placeholder="Your phone"
               />
+              {formErrors.phone && (
+                <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>
+              )}
             </div>
           </div>
           

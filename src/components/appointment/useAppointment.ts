@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,6 +15,7 @@ const useAppointment = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Available appointment times
   const availableTimes = [
@@ -46,6 +46,14 @@ const useAppointment = () => {
   const isDateDisabled = (date: Date) => {
     return isWeekend(date) || isPastDate(date);
   };
+
+  // Format the date for display
+  const formattedDate = date ? date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }) : '';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,18 +110,10 @@ const useAppointment = () => {
         throw error;
       }
       
-      toast({
-        title: "Appointment Scheduled!",
-        description: `Your ${callType} call has been scheduled for ${date.toLocaleDateString('en-US', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })} at ${selectedTime}.`,
-        duration: 5000,
-      });
+      // Instead of showing a toast, show the confirmation dialog
+      setShowConfirmation(true);
       
-      // Reset form
+      // Reset form (we'll keep the confirmation data available until dialog is closed)
       setDate(undefined);
       setSelectedTime('');
       setCallType('');
@@ -149,7 +149,10 @@ const useAppointment = () => {
     handleTimeSelect,
     isDateDisabled,
     handleSubmit,
-    isFormValid: !!date && !!selectedTime && !!callType
+    isFormValid: !!date && !!selectedTime && !!callType,
+    showConfirmation,
+    setShowConfirmation,
+    formattedDate
   };
 };
 

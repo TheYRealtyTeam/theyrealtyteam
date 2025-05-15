@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import DateTimeSelector from './appointment/DateTimeSelector';
 import AppointmentForm from './appointment/AppointmentForm';
+import AppointmentConfirmation from './appointment/AppointmentConfirmation';
 import useAppointment from './appointment/useAppointment';
 
 const AppointmentScheduler = () => {
@@ -18,7 +19,10 @@ const AppointmentScheduler = () => {
     handleTimeSelect,
     isDateDisabled,
     handleSubmit,
-    isFormValid
+    isFormValid,
+    showConfirmation,
+    setShowConfirmation,
+    formattedDate
   } = useAppointment();
 
   useEffect(() => {
@@ -48,6 +52,18 @@ const AppointmentScheduler = () => {
           isFormValid={isFormValid}
         />
       </div>
+      
+      {/* Confirmation Dialog */}
+      <AppointmentConfirmation
+        isOpen={showConfirmation}
+        onClose={() => setShowConfirmation(false)}
+        appointmentDetails={{
+          date: formattedDate,
+          time: selectedTime,
+          callType: callType,
+          name: formData.name
+        }}
+      />
     </div>
   );
 };

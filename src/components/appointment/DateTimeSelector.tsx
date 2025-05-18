@@ -1,11 +1,9 @@
-
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PhoneCall, Video, ArrowRight } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Button } from '@/components/ui/button';
-
 interface DateTimeSelectorProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
@@ -18,7 +16,6 @@ interface DateTimeSelectorProps {
   onContinue: () => void;
   isValid: boolean;
 }
-
 const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   date,
   setDate,
@@ -34,7 +31,6 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   const handleCallTypeSelect = (type: string) => {
     setCallType(type);
   };
-  
   return <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative">
       <div className="mb-6">
         <div className="flex items-center justify-between">
@@ -100,11 +96,10 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
           </p>
         </div>}
 
-      <Button onClick={onContinue} className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90 text-white flex justify-center items-center gap-2">
+      <Button onClick={onContinue} className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90 text-white flex justify-center items-center gap-2 text-center text-xs">
         Continue to Personal Information
         <ArrowRight className="h-4 w-4" />
       </Button>
     </div>;
 };
-
 export default DateTimeSelector;

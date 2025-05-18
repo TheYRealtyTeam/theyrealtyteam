@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
 
 interface AppointmentFormProps {
   formData: {
@@ -16,8 +18,14 @@ interface AppointmentFormProps {
   };
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
+  onBack: () => void;
   isSubmitting: boolean;
   isFormValid: boolean;
+  appointmentDetails: {
+    date: string;
+    time: string;
+    callType: string;
+  }
 }
 
 const AppointmentForm: React.FC<AppointmentFormProps> = ({
@@ -25,13 +33,31 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   formErrors = { email: '', phone: '' },
   handleChange,
   handleSubmit,
+  onBack,
   isSubmitting,
-  isFormValid
+  isFormValid,
+  appointmentDetails
 }) => {
   return (
     <div className="reveal">
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-2xl font-bold mb-6 text-yrealty-navy">Your Information</h2>
+        <div className="mb-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-yrealty-navy">Your Information</h2>
+            <div className="text-sm text-gray-500">Step 2 of 2</div>
+          </div>
+          <Progress value={100} className="mt-2 h-2" />
+        </div>
+        
+        <div className="mb-6 p-4 bg-yrealty-blue rounded-lg">
+          <p className="font-medium text-yrealty-navy">Selected Appointment:</p>
+          <p className="text-gray-700">
+            {appointmentDetails.date} at {appointmentDetails.time}
+          </p>
+          <p className="text-gray-700 mt-1">
+            Call type: <span className="font-medium capitalize">{appointmentDetails.callType}</span>
+          </p>
+        </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -116,10 +142,19 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
             />
           </div>
           
-          <div className="pt-2">
+          <div className="flex gap-4 pt-2">
+            <Button 
+              type="button" 
+              variant="outline"
+              className="flex-1"
+              onClick={onBack}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back
+            </Button>
             <Button 
               type="submit" 
-              className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90"
+              className="flex-1 bg-yrealty-navy hover:bg-yrealty-navy/90"
               disabled={isSubmitting || !isFormValid}
             >
               {isSubmitting ? 'Scheduling...' : 'Schedule Appointment'}

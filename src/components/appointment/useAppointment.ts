@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
+// Define the two steps in our appointment process
+type AppointmentStep = 'dateSelection' | 'personalInfo';
+
 const useAppointment = () => {
   const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -21,12 +24,36 @@ const useAppointment = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  
+  // Track the current step
+  const [currentStep, setCurrentStep] = useState<AppointmentStep>('dateSelection');
 
   // Available appointment times
   const availableTimes = [
     '9:00 AM', '10:00 AM', '11:00 AM', 
     '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
   ];
+
+  // Step navigation functions
+  const goToNextStep = () => {
+    if (currentStep === 'dateSelection') {
+      if (!date || !selectedTime || !callType) {
+        toast({
+          title: "Incomplete Selection",
+          description: "Please select a date, time, and call type before continuing.",
+          variant: "destructive",
+        });
+        return;
+      }
+      setCurrentStep('personalInfo');
+    }
+  };
+
+  const goToPreviousStep = () => {
+    if (currentStep === 'personalInfo') {
+      setCurrentStep('dateSelection');
+    }
+  };
 
   // Validation functions
   const validateEmail = (email: string): boolean => {
@@ -92,6 +119,11 @@ const useAppointment = () => {
     month: 'long',
     day: 'numeric'
   }) : '';
+
+  // Check if first step is valid (date, time and call type are selected)
+  const isFirstStepValid = (): boolean => {
+    return !!date && !!selectedTime && !!callType;
+  };
 
   // Check if form is valid
   const checkFormValidity = (): boolean => {
@@ -199,6 +231,8 @@ const useAppointment = () => {
         propertyType: '',
         message: ''
       });
+      // Reset to first step
+      setCurrentStep('dateSelection');
     } catch (error) {
       console.error('Error scheduling appointment:', error);
       toast({
@@ -228,7 +262,11 @@ const useAppointment = () => {
     isFormValid: checkFormValidity(),
     showConfirmation,
     setShowConfirmation,
-    formattedDate
+    formattedDate,
+    currentStep,
+    goToNextStep,
+    goToPreviousStep,
+    isFirstStepValid: isFirstStepValid()
   };
 };
 

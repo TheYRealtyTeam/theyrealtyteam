@@ -15,9 +15,11 @@ const Appointment = () => {
       subtitle="Book a time to speak with one of our property management specialists about your needs"
     >
       <section className="bg-white">
-        <AppointmentScheduler />
+        <div className="max-w-3xl mx-auto">
+          <AppointmentScheduler />
+        </div>
         
-        {/* Add the benefits section here since we removed it from the component */}
+        {/* Benefits section */}
         <div className="mt-16 reveal max-w-6xl mx-auto">
           <div className="bg-yrealty-blue rounded-xl p-8">
             <h2 className="text-2xl font-bold mb-4 text-yrealty-navy text-center">Why Schedule a Consultation?</h2>

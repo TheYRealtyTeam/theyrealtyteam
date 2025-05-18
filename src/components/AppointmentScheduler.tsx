@@ -23,7 +23,11 @@ const AppointmentScheduler = () => {
     isFormValid,
     showConfirmation,
     setShowConfirmation,
-    formattedDate
+    formattedDate,
+    currentStep,
+    goToNextStep,
+    goToPreviousStep,
+    isFirstStepValid
   } = useAppointment();
 
   useEffect(() => {
@@ -38,7 +42,7 @@ const AppointmentScheduler = () => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {currentStep === 'dateSelection' ? (
         <DateTimeSelector
           date={date}
           setDate={setDate}
@@ -48,17 +52,25 @@ const AppointmentScheduler = () => {
           setCallType={setCallType}
           availableTimes={availableTimes}
           isDateDisabled={isDateDisabled}
+          onContinue={goToNextStep}
+          isValid={isFirstStepValid}
         />
-        
+      ) : (
         <AppointmentForm
           formData={formData}
           formErrors={formErrors}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
+          onBack={goToPreviousStep}
           isSubmitting={isSubmitting}
           isFormValid={isFormValid}
+          appointmentDetails={{
+            date: formattedDate,
+            time: selectedTime,
+            callType: callType
+          }}
         />
-      </div>
+      )}
       
       {/* Confirmation Dialog */}
       <AppointmentConfirmation

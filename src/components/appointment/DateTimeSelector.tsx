@@ -2,8 +2,10 @@
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Phone, Video } from 'lucide-react';
+import { Phone, Video, ArrowRight } from 'lucide-react';
 import { cn } from "@/lib/utils";
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 interface DateTimeSelectorProps {
   date: Date | undefined;
@@ -14,6 +16,8 @@ interface DateTimeSelectorProps {
   setCallType: (callType: string) => void;
   availableTimes: string[];
   isDateDisabled: (date: Date) => boolean;
+  onContinue: () => void;
+  isValid: boolean;
 }
 
 const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
@@ -24,11 +28,19 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   callType,
   setCallType,
   availableTimes,
-  isDateDisabled
+  isDateDisabled,
+  onContinue,
+  isValid
 }) => {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative">
-      <h2 className="text-2xl font-bold mb-6 text-yrealty-navy">Select Date & Time</h2>
+      <div className="mb-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-yrealty-navy">Schedule an Appointment</h2>
+          <div className="text-sm text-gray-500">Step 1 of 2</div>
+        </div>
+        <Progress value={50} className="mt-2 h-2" />
+      </div>
       
       <div className="mb-6">
         <h3 className="text-lg font-medium mb-3 text-gray-700">1. Choose a Date</h3>
@@ -90,7 +102,7 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       </div>
       
       {date && selectedTime && callType && (
-        <div className="p-4 bg-yrealty-blue rounded-lg">
+        <div className="p-4 bg-yrealty-blue rounded-lg mb-6">
           <p className="font-medium text-yrealty-navy">Your Selected Appointment:</p>
           <p className="text-gray-700">
             {date.toLocaleDateString('en-US', {
@@ -105,6 +117,15 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
           </p>
         </div>
       )}
+
+      <Button 
+        onClick={onContinue}
+        className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90 text-white"
+        disabled={!isValid}
+      >
+        Continue to Personal Information
+        <ArrowRight className="ml-2 h-4 w-4" />
+      </Button>
     </div>
   );
 };

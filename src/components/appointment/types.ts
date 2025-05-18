@@ -1,5 +1,5 @@
 
-export type AppointmentStep = 'dateSelection' | 'personalInfo';
+export type AppointmentStep = 'dateSelection' | 'personalInfo' | 'confirmation';
 
 export interface AppointmentFormData {
   name: string;

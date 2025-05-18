@@ -49,13 +49,22 @@ const useAppointment = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    await submitAppointment(date, selectedTime, callType, formData, () => {
-      // Reset form after successful submission
-      resetFormData();
-      resetDateTimeSelection();
-      setCurrentStep('dateSelection');
-    });
+    if (currentStep === 'personalInfo') {
+      // Move to confirmation step instead of submitting directly
+      goToNextStep(true);
+    } else if (currentStep === 'confirmation') {
+      // Only submit when on confirmation step
+      await submitAppointment(date, selectedTime, callType, formData, () => {
+        // Reset form after successful submission
+        resetFormData();
+        resetDateTimeSelection();
+        setCurrentStep('dateSelection');
+      });
+    }
   };
+
+  // Check if the form is valid to enable "Review" button
+  const isFormValid = checkFormValidity(date, selectedTime, callType);
 
   // Check if the first step is valid to enable "Continue" button
   useEffect(() => {
@@ -81,7 +90,7 @@ const useAppointment = () => {
     // Submission state
     isSubmitting,
     handleSubmit,
-    isFormValid: checkFormValidity(date, selectedTime, callType),
+    isFormValid: isFormValid,
     
     // Confirmation dialog
     showConfirmation,

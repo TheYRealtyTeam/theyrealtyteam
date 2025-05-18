@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import DateTimeSelector from './appointment/DateTimeSelector';
 import AppointmentForm from './appointment/AppointmentForm';
+import ConfirmationStep from './appointment/ConfirmationStep';
 import AppointmentConfirmation from './appointment/AppointmentConfirmation';
 import useAppointment from './appointment/useAppointment';
 
@@ -55,20 +56,32 @@ const AppointmentScheduler = () => {
           onContinue={goToNextStep}
           isValid={isFirstStepValid}
         />
-      ) : (
+      ) : currentStep === 'personalInfo' ? (
         <AppointmentForm
           formData={formData}
           formErrors={formErrors}
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           onBack={goToPreviousStep}
-          isSubmitting={isSubmitting}
+          isSubmitting={false}
           isFormValid={isFormValid}
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
             callType: callType
           }}
+        />
+      ) : (
+        <ConfirmationStep
+          formData={formData}
+          appointmentDetails={{
+            date: formattedDate,
+            time: selectedTime,
+            callType: callType
+          }}
+          onBack={goToPreviousStep}
+          onSubmit={handleSubmit}
+          isSubmitting={isSubmitting}
         />
       )}
       

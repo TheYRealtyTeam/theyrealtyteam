@@ -19,12 +19,16 @@ export const useStepNavigation = () => {
         return;
       }
       setCurrentStep('personalInfo');
+    } else if (currentStep === 'personalInfo') {
+      setCurrentStep('confirmation');
     }
   };
 
   const goToPreviousStep = () => {
     if (currentStep === 'personalInfo') {
       setCurrentStep('dateSelection');
+    } else if (currentStep === 'confirmation') {
+      setCurrentStep('personalInfo');
     }
   };
 

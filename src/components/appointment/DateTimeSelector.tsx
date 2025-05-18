@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PhoneCall, Video, ArrowRight } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+
 interface DateTimeSelectorProps {
   date: Date | undefined;
   setDate: (date: Date | undefined) => void;
@@ -17,6 +18,7 @@ interface DateTimeSelectorProps {
   onContinue: () => void;
   isValid: boolean;
 }
+
 const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   date,
   setDate,
@@ -32,13 +34,12 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   const handleCallTypeSelect = (type: string) => {
     setCallType(type);
   };
+  
   return <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative">
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-yrealty-navy">Schedule an Appointment</h2>
-          
         </div>
-        <Progress value={33.33} className="mt-2 h-2" />
       </div>
       
       <div className="mb-6">
@@ -105,4 +106,5 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       </Button>
     </div>;
 };
+
 export default DateTimeSelector;

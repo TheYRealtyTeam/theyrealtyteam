@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 import RentalPropertyCalculator from './calculators/RentalPropertyCalculator';
 import MortgageCalculator from './calculators/MortgageCalculator';
 import ROICalculator from './calculators/ROICalculator';
@@ -140,8 +141,8 @@ const CalculatorsSection = () => {
           <p className="text-gray-600 mb-6 max-w-3xl mx-auto">
             Our team of property investment specialists can help you analyze potential investments and develop a customized strategy for your goals.
           </p>
-          <Button className="bg-yrealty-navy hover:bg-yrealty-navy/90">
-            <a href="#contact" className="text-white">Schedule a Consultation</a>
+          <Button asChild className="bg-yrealty-navy hover:bg-yrealty-navy/90 text-white py-3 px-6 text-base font-medium rounded">
+            <Link to="/appointment">Schedule a Consultation</Link>
           </Button>
         </div>
       </div>

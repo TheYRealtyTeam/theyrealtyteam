@@ -63,7 +63,7 @@ const AppointmentScheduler = () => {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           onBack={goToPreviousStep}
-          isSubmitting={false}
+          isSubmitting={isSubmitting}
           isFormValid={isFormValid}
           appointmentDetails={{
             date: formattedDate,

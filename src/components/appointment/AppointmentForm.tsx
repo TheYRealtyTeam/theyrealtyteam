@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 interface AppointmentFormProps {
@@ -44,9 +44,9 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
         <div className="mb-6">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-yrealty-navy">Your Information</h2>
-            <div className="text-sm text-gray-500">Step 2 of 2</div>
+            <div className="text-sm text-gray-500">Step 2 of 3</div>
           </div>
-          <Progress value={100} className="mt-2 h-2" />
+          <Progress value={66} className="mt-2 h-2" />
         </div>
         
         <div className="mb-6 p-4 bg-yrealty-blue rounded-lg">
@@ -71,6 +71,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               required
               className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
               placeholder="Your name"
+              disabled={isSubmitting}
             />
           </div>
           
@@ -86,6 +87,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 required
                 className={`input-field w-full rounded-md border ${formErrors.email ? 'border-red-500' : 'border-gray-300'} px-4 py-3`}
                 placeholder="Your email"
+                disabled={isSubmitting}
               />
               {formErrors.email && (
                 <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>
@@ -103,6 +105,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
                 required
                 className={`input-field w-full rounded-md border ${formErrors.phone ? 'border-red-500' : 'border-gray-300'} px-4 py-3`}
                 placeholder="Your phone"
+                disabled={isSubmitting}
               />
               {formErrors.phone && (
                 <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>
@@ -119,6 +122,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               onChange={handleChange}
               required
               className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
+              disabled={isSubmitting}
             >
               <option value="">Select property type</option>
               <option value="residential">Residential</option>
@@ -139,6 +143,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               onChange={handleChange}
               className="input-field resize-none w-full rounded-md border border-gray-300 px-4 py-3"
               placeholder="Tell us about your property management needs or any questions you have"
+              disabled={isSubmitting}
             />
           </div>
           
@@ -148,6 +153,7 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               variant="outline"
               className="flex-1"
               onClick={onBack}
+              disabled={isSubmitting}
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
@@ -157,7 +163,14 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
               className="flex-1 bg-yrealty-navy hover:bg-yrealty-navy/90"
               disabled={isSubmitting || !isFormValid}
             >
-              {isSubmitting ? 'Scheduling...' : 'Schedule Appointment'}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                'Continue'
+              )}
             </Button>
           </div>
         </form>

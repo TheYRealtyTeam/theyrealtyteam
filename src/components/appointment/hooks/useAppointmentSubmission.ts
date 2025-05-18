@@ -20,7 +20,7 @@ export const useAppointmentSubmission = () => {
     // Validate required fields
     if (!date) {
       toast({
-        title: "Error",
+        title: "Missing Information",
         description: "Please select a date for your appointment.",
         variant: "destructive",
       });
@@ -29,7 +29,7 @@ export const useAppointmentSubmission = () => {
     
     if (!selectedTime) {
       toast({
-        title: "Error",
+        title: "Missing Information",
         description: "Please select a time for your appointment.",
         variant: "destructive",
       });
@@ -38,8 +38,26 @@ export const useAppointmentSubmission = () => {
     
     if (!callType) {
       toast({
-        title: "Error",
+        title: "Missing Information",
         description: "Please select either phone or video call.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!formData.name || formData.name.trim() === '') {
+      toast({
+        title: "Missing Information",
+        description: "Please enter your full name.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!formData.propertyType) {
+      toast({
+        title: "Missing Information",
+        description: "Please select a property type.",
         variant: "destructive",
       });
       return;
@@ -49,7 +67,7 @@ export const useAppointmentSubmission = () => {
     if (!validateEmail(formData.email)) {
       toast({
         title: "Invalid Email",
-        description: "Please enter a valid email address.",
+        description: "The email address you entered is not valid. Please check and try again.",
         variant: "destructive",
       });
       return;
@@ -58,7 +76,7 @@ export const useAppointmentSubmission = () => {
     if (!validatePhone(formData.phone)) {
       toast({
         title: "Invalid Phone Number",
-        description: "Please enter a valid phone number.",
+        description: "The phone number you entered is not valid. Please use format (XXX) XXX-XXXX.",
         variant: "destructive",
       });
       return;
@@ -95,13 +113,35 @@ export const useAppointmentSubmission = () => {
       // Execute success callback
       onSuccess();
       
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error scheduling appointment:', error);
-      toast({
-        title: "Error",
-        description: "Failed to schedule appointment. Please try again.",
-        variant: "destructive",
-      });
+      
+      // More specific error messages based on error type
+      if (error.code === '23505') {
+        toast({
+          title: "Duplicate Appointment",
+          description: "You already have an appointment scheduled at this time. Please choose a different time.",
+          variant: "destructive",
+        });
+      } else if (error.code === '23502') {
+        toast({
+          title: "Missing Information",
+          description: "Some required information is missing. Please check all fields and try again.",
+          variant: "destructive",
+        });
+      } else if (error.message?.includes('network')) {
+        toast({
+          title: "Network Error",
+          description: "Unable to connect to our servers. Please check your internet connection and try again.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Submission Error",
+          description: "There was a problem scheduling your appointment. Please try again or contact us directly.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }

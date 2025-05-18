@@ -2,7 +2,7 @@
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Phone, Video, ArrowRight } from 'lucide-react';
+import { PhoneCall, Video, ArrowRight } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -32,6 +32,10 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
   onContinue,
   isValid
 }) => {
+  const handleCallTypeSelect = (type: string) => {
+    setCallType(type);
+  };
+
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative">
       <div className="mb-6">
@@ -80,24 +84,37 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       <div className="mb-6 relative z-10">
         <h3 className="text-lg font-medium mb-3 text-gray-700">3. Choose Call Type</h3>
         <RadioGroup value={callType} onValueChange={setCallType} className="flex gap-4">
-          <div className={`flex flex-col items-center p-4 border rounded-lg cursor-pointer transition-all ${callType === 'phone' ? 'border-yrealty-navy bg-yrealty-blue/20' : 'border-gray-200'}`}>
+          <label 
+            htmlFor="phone" 
+            className={`flex flex-col items-center p-4 border rounded-lg cursor-pointer transition-all w-full ${
+              callType === 'phone' ? 'border-yrealty-navy bg-yrealty-blue/20' : 'border-gray-200 hover:bg-gray-50'
+            }`}
+            onClick={() => handleCallTypeSelect('phone')}
+          >
             <div className="mb-2 rounded-full bg-gray-100 p-2">
-              <Phone className={`h-6 w-6 ${callType === 'phone' ? 'text-yrealty-navy' : 'text-gray-600'}`} />
+              <PhoneCall className={`h-6 w-6 ${callType === 'phone' ? 'text-yrealty-navy' : 'text-gray-600'}`} />
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="phone" id="phone" />
-              <label htmlFor="phone" className="font-medium cursor-pointer">Phone Call</label>
+              <RadioGroupItem value="phone" id="phone" className="sr-only" />
+              <span className="font-medium">Phone Call</span>
             </div>
-          </div>
-          <div className={`flex flex-col items-center p-4 border rounded-lg cursor-pointer transition-all ${callType === 'video' ? 'border-yrealty-navy bg-yrealty-blue/20' : 'border-gray-200'}`}>
+          </label>
+          
+          <label 
+            htmlFor="video" 
+            className={`flex flex-col items-center p-4 border rounded-lg cursor-pointer transition-all w-full ${
+              callType === 'video' ? 'border-yrealty-navy bg-yrealty-blue/20' : 'border-gray-200 hover:bg-gray-50'
+            }`}
+            onClick={() => handleCallTypeSelect('video')}
+          >
             <div className="mb-2 rounded-full bg-gray-100 p-2">
               <Video className={`h-6 w-6 ${callType === 'video' ? 'text-yrealty-navy' : 'text-gray-600'}`} />
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="video" id="video" />
-              <label htmlFor="video" className="font-medium cursor-pointer">Video Call</label>
+              <RadioGroupItem value="video" id="video" className="sr-only" />
+              <span className="font-medium">Video Call</span>
             </div>
-          </div>
+          </label>
         </RadioGroup>
       </div>
       

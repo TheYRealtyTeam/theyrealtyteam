@@ -100,9 +100,9 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
           </p>
         </div>}
 
-      <Button onClick={onContinue} className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90 text-white" disabled={!isValid}>
+      <Button onClick={onContinue} className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90 text-white flex justify-center items-center gap-2">
         Continue to Personal Information
-        <ArrowRight className="ml-2 h-4 w-4" />
+        <ArrowRight className="h-4 w-4" />
       </Button>
     </div>;
 };

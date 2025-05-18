@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Calendar, Phone, Video, User, Mail, Building2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Phone, Video, User, Mail, Building2, Clock } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { AppointmentFormData, AppointmentDetails } from './types';
 import { Card, CardContent } from '@/components/ui/card';
@@ -43,9 +43,7 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
                 <span>{appointmentDetails.date}</span>
               </div>
               <div className="flex items-center">
-                <div className="h-5 w-5 flex items-center justify-center mr-2">
-                  <span className="text-yrealty-navy font-bold">⏰</span>
-                </div>
+                <Clock className="h-5 w-5 text-yrealty-navy mr-2" />
                 <span>{appointmentDetails.time}</span>
               </div>
               <div className="flex items-center">

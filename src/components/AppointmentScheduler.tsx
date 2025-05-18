@@ -27,7 +27,13 @@ const AppointmentScheduler = () => {
   } = useAppointment();
 
   useEffect(() => {
-    console.log("AppointmentScheduler mounted");
+    console.log("AppointmentScheduler mounted with date:", date);
+    // Force active class on parent if it has reveal class
+    const parent = document.querySelector('.reveal[data-value="appointment"]');
+    if (parent && !parent.classList.contains('active')) {
+      console.log("Forcing active class on appointment tab");
+      parent.classList.add('active');
+    }
   }, []);
 
   return (

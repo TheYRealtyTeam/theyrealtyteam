@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, Calendar, Phone, Video } from 'lucide-react';
+import { Check, Calendar, Phone, Video, CalendarPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
@@ -20,6 +20,93 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
   onClose,
   appointmentDetails
 }) => {
+  // Function to create an iCalendar file and download it
+  const addToCalendar = () => {
+    try {
+      // Format the date and time for iCalendar
+      const dateStr = appointmentDetails.date;
+      const timeStr = appointmentDetails.time;
+      
+      // Parse the date (assumes format like "May 18, 2025")
+      const dateParts = dateStr.match(/([A-Za-z]+) (\d+), (\d+)/);
+      if (!dateParts) {
+        console.error("Could not parse date:", dateStr);
+        return;
+      }
+      
+      const months = {
+        'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+        'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+      };
+      
+      const month = months[dateParts[1] as keyof typeof months];
+      const day = parseInt(dateParts[2], 10);
+      const year = parseInt(dateParts[3], 10);
+      
+      // Parse the time (assumes format like "10:00 AM")
+      const timeParts = timeStr.match(/(\d+):(\d+) ([AP]M)/);
+      if (!timeParts) {
+        console.error("Could not parse time:", timeStr);
+        return;
+      }
+      
+      let hour = parseInt(timeParts[1], 10);
+      const minute = parseInt(timeParts[2], 10);
+      const ampm = timeParts[3];
+      
+      // Convert from 12-hour to 24-hour format
+      if (ampm === "PM" && hour < 12) hour += 12;
+      if (ampm === "AM" && hour === 12) hour = 0;
+      
+      // Create Date objects for start and end times
+      const startDate = new Date(year, month, day, hour, minute);
+      const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add one hour
+      
+      // Format dates for iCalendar
+      const formatDate = (date: Date) => {
+        return date.toISOString().replace(/-|:|\.\d+/g, '');
+      };
+      
+      const start = formatDate(startDate);
+      const end = formatDate(endDate);
+      
+      // Create iCalendar content
+      const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Y Realty Team//Property Management Consultation//EN',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        `DTSTART:${start}`,
+        `DTEND:${end}`,
+        `SUMMARY:Y Realty Team ${appointmentDetails.callType.charAt(0).toUpperCase() + appointmentDetails.callType.slice(1)} Call`,
+        'DESCRIPTION:Property Management Consultation with Y Realty Team',
+        'LOCATION:Online',
+        `ORGANIZER;CN=Y Realty Team:mailto:appointments@yrealty.com`,
+        'STATUS:CONFIRMED',
+        'SEQUENCE:0',
+        'BEGIN:VALARM',
+        'TRIGGER:-PT15M',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:Reminder',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+      
+      // Create and download the file
+      const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'y-realty-appointment.ics';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error creating calendar event:", error);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
@@ -65,9 +152,19 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
             We've sent the details to your email. Our team will contact you shortly before the scheduled time.
           </p>
           
-          <Button onClick={onClose} className="bg-yrealty-navy hover:bg-yrealty-navy/90 w-full">
-            Close
-          </Button>
+          <div className="flex flex-col w-full gap-2">
+            <Button 
+              onClick={addToCalendar} 
+              className="w-full flex items-center justify-center bg-yrealty-blue text-yrealty-navy hover:bg-yrealty-blue/90"
+            >
+              <CalendarPlus className="h-4 w-4 mr-2" />
+              Add to Calendar
+            </Button>
+            
+            <Button onClick={onClose} className="bg-yrealty-navy hover:bg-yrealty-navy/90 w-full">
+              Close
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

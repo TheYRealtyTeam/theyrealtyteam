@@ -3,6 +3,7 @@ import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Phone, Video } from 'lucide-react';
+import { cn } from "@/lib/utils";
 
 interface DateTimeSelectorProps {
   date: Date | undefined;
@@ -38,8 +39,7 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
               selected={date}
               onSelect={setDate}
               disabled={isDateDisabled}
-              className="rounded-md border w-full pointer-events-auto"
-              styles={{ zIndex: 50 }}
+              className={cn("rounded-md border w-full pointer-events-auto z-50")}
             />
           </div>
         </div>

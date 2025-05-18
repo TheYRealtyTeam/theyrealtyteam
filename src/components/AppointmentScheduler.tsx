@@ -100,7 +100,7 @@ const AppointmentScheduler = () => {
       {/* Confirmation Dialog */}
       <AppointmentConfirmation
         isOpen={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
+        onClose={() => setShowConfirmation()}
         appointmentDetails={{
           date: formattedDate,
           time: selectedTime,

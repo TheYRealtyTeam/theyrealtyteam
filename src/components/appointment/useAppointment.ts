@@ -5,6 +5,7 @@ import { useDateTimeSelection } from './hooks/useDateTimeSelection';
 import { useStepNavigation } from './hooks/useStepNavigation';
 import { useAppointmentSubmission } from './hooks/useAppointmentSubmission';
 import { isDateDisabled, formatDate } from './utils/validationUtils';
+import { toast } from '@/components/ui/use-toast';
 
 const useAppointment = () => {
   // Combine the smaller hooks
@@ -102,7 +103,7 @@ const useAppointment = () => {
     
     // Confirmation dialog
     showConfirmation,
-    setShowConfirmation: handleConfirmationAndReset, // Use new handler for dialog close
+    setShowConfirmation: handleConfirmationAndReset, // Use new handler for dialog close, takes no arguments
     
     // Formatted date for display
     formattedDate,

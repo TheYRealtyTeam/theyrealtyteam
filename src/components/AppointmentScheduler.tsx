@@ -41,6 +41,18 @@ const AppointmentScheduler = () => {
     }
   }, []);
 
+  // Log the appointment details to debug
+  useEffect(() => {
+    if (showConfirmation) {
+      console.log("Showing confirmation with details:", {
+        date: formattedDate,
+        time: selectedTime,
+        callType,
+        name: formData.name
+      });
+    }
+  }, [showConfirmation, formattedDate, selectedTime, callType, formData.name]);
+
   return (
     <div className="w-full">
       {currentStep === 'dateSelection' ? (

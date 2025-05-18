@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Check, Calendar, Phone, Video, CalendarPlus, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 
 interface AppointmentConfirmationProps {
   isOpen: boolean;
@@ -18,11 +19,33 @@ interface AppointmentConfirmationProps {
 const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
   isOpen,
   onClose,
-  appointmentDetails
+  appointmentDetails: initialAppointmentDetails
 }) => {
+  // Store appointment details locally to prevent them from disappearing
+  const [appointmentDetails, setAppointmentDetails] = useState(initialAppointmentDetails);
+  const { toast } = useToast();
+
+  // Update local state when props change and dialog is opened
+  useEffect(() => {
+    if (isOpen && initialAppointmentDetails.date) {
+      setAppointmentDetails(initialAppointmentDetails);
+      console.log("Confirmation dialog opened with details:", initialAppointmentDetails);
+    }
+  }, [isOpen, initialAppointmentDetails]);
+
   // Function to create an iCalendar file and download it
   const addToCalendar = () => {
     try {
+      // Check if we have valid date and time
+      if (!appointmentDetails.date || !appointmentDetails.time) {
+        toast({
+          title: "Missing Information",
+          description: "Could not create calendar event due to missing date or time",
+          variant: "destructive",
+        });
+        return;
+      }
+
       // Format the date and time for iCalendar
       const dateStr = appointmentDetails.date;
       const timeStr = appointmentDetails.time;
@@ -39,6 +62,11 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         const dateParts = dateStr.match(/([A-Za-z]+) (\d+), (\d+)/);
         if (!dateParts) {
           console.error("Could not parse date:", dateStr);
+          toast({
+            title: "Calendar Error",
+            description: "Could not process the appointment date. Please try again.",
+            variant: "destructive",
+          });
           return;
         }
         
@@ -55,6 +83,11 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         const timeParts = timeStr.match(/(\d+):(\d+) ([AP]M)/);
         if (!timeParts) {
           console.error("Could not parse time:", timeStr);
+          toast({
+            title: "Calendar Error",
+            description: "Could not process the appointment time. Please try again.",
+            variant: "destructive",
+          });
           return;
         }
         
@@ -125,8 +158,18 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      toast({
+        title: "Calendar Event Created",
+        description: "Your appointment has been added to your calendar.",
+      });
     } catch (error) {
       console.error("Error creating calendar event:", error);
+      toast({
+        title: "Calendar Error",
+        description: "Could not create calendar event. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 

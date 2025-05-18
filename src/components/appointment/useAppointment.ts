@@ -39,7 +39,8 @@ const useAppointment = () => {
     isSubmitting,
     showConfirmation,
     setShowConfirmation,
-    submitAppointment
+    submitAppointment,
+    handleConfirmationClose
   } = useAppointmentSubmission();
 
   // Format the date for display
@@ -55,12 +56,19 @@ const useAppointment = () => {
     } else if (currentStep === 'confirmation') {
       // Only submit when on confirmation step
       await submitAppointment(date, selectedTime, callType, formData, () => {
-        // Reset form after successful submission
-        resetFormData();
-        resetDateTimeSelection();
-        setCurrentStep('dateSelection');
+        // This success callback will now be called in handleConfirmationClose
       });
     }
+  };
+
+  // New function to reset form after confirmation is closed
+  const handleConfirmationAndReset = () => {
+    handleConfirmationClose(() => {
+      // Reset form after dialog is closed
+      resetFormData();
+      resetDateTimeSelection();
+      setCurrentStep('dateSelection');
+    });
   };
 
   // Check if the form is valid to enable "Review" button
@@ -94,7 +102,7 @@ const useAppointment = () => {
     
     // Confirmation dialog
     showConfirmation,
-    setShowConfirmation,
+    setShowConfirmation: handleConfirmationAndReset, // Use new handler for dialog close
     
     // Formatted date for display
     formattedDate,

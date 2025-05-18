@@ -114,8 +114,8 @@ export const useAppointmentSubmission = () => {
       // Show the confirmation dialog
       setShowConfirmation(true);
       
-      // Execute success callback
-      onSuccess();
+      // NOTE: We're NOT calling onSuccess() here anymore
+      // Instead, we'll do it after the confirmation dialog is closed
       
     } catch (error: any) {
       console.error('Error scheduling appointment:', error);
@@ -151,10 +151,21 @@ export const useAppointmentSubmission = () => {
     }
   };
 
+  // New function to handle dialog close and form reset
+  const handleConfirmationClose = (resetCallback: () => void) => {
+    setShowConfirmation(false);
+    
+    // Execute the reset callback after the dialog is closed
+    setTimeout(() => {
+      resetCallback();
+    }, 300); // Small delay to ensure dialog animation completes
+  };
+
   return {
     isSubmitting,
     showConfirmation,
     setShowConfirmation,
-    submitAppointment
+    submitAppointment,
+    handleConfirmationClose
   };
 };

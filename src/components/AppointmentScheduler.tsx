@@ -28,11 +28,10 @@ const AppointmentScheduler = () => {
 
   useEffect(() => {
     console.log("AppointmentScheduler mounted");
-    // No more DOM query that was causing issues
   }, []);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <DateTimeSelector
           date={date}

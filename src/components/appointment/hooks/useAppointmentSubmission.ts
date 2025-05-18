@@ -88,6 +88,8 @@ export const useAppointmentSubmission = () => {
     const formattedDate = date.toISOString().split('T')[0];
     
     try {
+      console.log("Submitting appointment data:", { formattedDate, selectedTime, formData, callType });
+      
       // Save the appointment to the database
       const { data, error } = await supabase
         .from('appointments')
@@ -107,7 +109,9 @@ export const useAppointmentSubmission = () => {
         throw error;
       }
       
-      // Instead of showing a toast, show the confirmation dialog
+      console.log("Appointment submission successful:", data);
+      
+      // Show the confirmation dialog
       setShowConfirmation(true);
       
       // Execute success callback

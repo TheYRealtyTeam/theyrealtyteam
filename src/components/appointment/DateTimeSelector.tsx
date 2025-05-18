@@ -37,21 +37,21 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       <div className="mb-6">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-yrealty-navy">Schedule an Appointment</h2>
-          <div className="text-sm text-gray-500">Step 1 of 2</div>
+          <div className="text-sm text-gray-500">Step 1 of 3</div>
         </div>
-        <Progress value={50} className="mt-2 h-2" />
+        <Progress value={33.33} className="mt-2 h-2" />
       </div>
       
       <div className="mb-6">
         <h3 className="text-lg font-medium mb-3 text-gray-700">1. Choose a Date</h3>
-        <div className="border rounded-lg overflow-hidden relative" style={{ zIndex: 50 }}>
-          <div className="relative" style={{ zIndex: 50 }}>
+        <div className="border rounded-lg overflow-hidden relative">
+          <div className="relative z-40 w-full">
             <Calendar
               mode="single"
               selected={date}
               onSelect={setDate}
               disabled={isDateDisabled}
-              className={cn("rounded-md border w-full pointer-events-auto z-50")}
+              className={cn("rounded-md border w-full pointer-events-auto")}
             />
           </div>
         </div>

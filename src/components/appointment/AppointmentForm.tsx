@@ -3,6 +3,13 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 
 interface AppointmentFormProps {
   formData: {
@@ -38,6 +45,20 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
   isFormValid,
   appointmentDetails
 }) => {
+  // Handle select change separately since the shadcn Select component
+  // doesn't work with the standard onChange handler
+  const handlePropertyTypeChange = (value: string) => {
+    // Create a synthetic event object that matches the expected interface
+    const syntheticEvent = {
+      target: {
+        name: 'propertyType',
+        value
+      }
+    } as React.ChangeEvent<HTMLSelectElement>;
+    
+    handleChange(syntheticEvent);
+  };
+
   return (
     <div className="reveal">
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -115,22 +136,23 @@ const AppointmentForm: React.FC<AppointmentFormProps> = ({
           
           <div>
             <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
-            <select
-              id="propertyType"
+            <Select
               name="propertyType"
               value={formData.propertyType}
-              onChange={handleChange}
-              required
-              className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
+              onValueChange={handlePropertyTypeChange}
               disabled={isSubmitting}
             >
-              <option value="">Select property type</option>
-              <option value="residential">Residential</option>
-              <option value="commercial">Commercial</option>
-              <option value="mixed-use">Mixed-Use</option>
-              <option value="not-sure">Not Sure Yet</option>
-              <option value="other">Other</option>
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select property type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="residential">Residential</SelectItem>
+                <SelectItem value="multi-family">Multi-Family</SelectItem>
+                <SelectItem value="commercial">Commercial</SelectItem>
+                <SelectItem value="mixed-use">Mixed-Use</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
           <div>

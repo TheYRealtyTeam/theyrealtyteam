@@ -20,8 +20,14 @@ export const addToMicrosoftCalendar = async (
       return; // The page will redirect to Microsoft login
     }
     
-    // Create the calendar event
-    const result = await microsoftGraphApi.createCalendarEvent(appointmentDetails);
+    // Create the calendar event with name defaulting to "Guest" if not provided
+    // This is a temporary fallback during the type transition
+    const detailsWithName = {
+      ...appointmentDetails,
+      name: appointmentDetails.name || "Guest" 
+    };
+    
+    const result = await microsoftGraphApi.createCalendarEvent(detailsWithName);
     
     if (result.success) {
       toast({

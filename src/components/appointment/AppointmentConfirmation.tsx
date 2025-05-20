@@ -20,7 +20,10 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
   appointmentDetails: initialAppointmentDetails
 }) => {
   // Store appointment details locally to prevent them from disappearing
-  const [appointmentDetails, setAppointmentDetails] = useState(initialAppointmentDetails);
+  const [appointmentDetails, setAppointmentDetails] = useState<AppointmentDetails>({
+    ...initialAppointmentDetails,
+    name: initialAppointmentDetails.name || "Guest" // Ensure name is always provided
+  });
   const [isAddingToMSCalendar, setIsAddingToMSCalendar] = useState(false);
   const [msCalendarConnected, setMsCalendarConnected] = useState(false);
   const { toast } = useToast();
@@ -28,7 +31,10 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
   // Update local state when props change and dialog is opened
   useEffect(() => {
     if (isOpen && initialAppointmentDetails.date) {
-      setAppointmentDetails(initialAppointmentDetails);
+      setAppointmentDetails({
+        ...initialAppointmentDetails,
+        name: initialAppointmentDetails.name || "Guest" // Ensure name is always provided
+      });
       console.log("Confirmation dialog opened with details:", initialAppointmentDetails);
       
       // Check if Microsoft Graph API is authenticated

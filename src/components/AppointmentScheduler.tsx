@@ -81,7 +81,7 @@ const AppointmentScheduler = () => {
             date: formattedDate,
             time: selectedTime,
             callType: callType,
-            name: formData.name || "Guest" // Add the name property with a fallback
+            name: formData.name || "Guest" // Adding name property with a fallback
           }}
         />
       ) : (
@@ -91,7 +91,7 @@ const AppointmentScheduler = () => {
             date: formattedDate,
             time: selectedTime,
             callType: callType,
-            name: formData.name || "Guest" // Add the name property with a fallback
+            name: formData.name || "Guest" // Adding name property with a fallback
           }}
           onBack={goToPreviousStep}
           onSubmit={handleSubmit}

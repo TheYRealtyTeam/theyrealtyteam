@@ -81,7 +81,7 @@ const AppointmentScheduler = () => {
             date: formattedDate,
             time: selectedTime,
             callType: callType,
-            name: formData.name || "Guest" // Adding name property with a fallback
+            name: formData.name || "Guest"
           }}
         />
       ) : (
@@ -91,7 +91,7 @@ const AppointmentScheduler = () => {
             date: formattedDate,
             time: selectedTime,
             callType: callType,
-            name: formData.name || "Guest" // Adding name property with a fallback
+            name: formData.name || "Guest"
           }}
           onBack={goToPreviousStep}
           onSubmit={handleSubmit}
@@ -104,10 +104,10 @@ const AppointmentScheduler = () => {
         isOpen={showConfirmation}
         onClose={() => setShowConfirmation()}
         appointmentDetails={{
-          date: formattedDate,
-          time: selectedTime,
-          callType: callType,
-          name: formData.name || "Guest" // Adding name property with a fallback
+            date: formattedDate,
+            time: selectedTime,
+            callType: callType,
+            name: formData.name || "Guest"
         }}
       />
     </div>

@@ -12,6 +12,7 @@ import Tools from "./pages/Tools";
 import Appointment from "./pages/Appointment";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import MicrosoftAuthCallback from "./components/appointment/MicrosoftAuthCallback";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/tools" element={<Tools />} />
           <Route path="/appointment" element={<Appointment />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/auth/callback" element={<MicrosoftAuthCallback />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

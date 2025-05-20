@@ -80,8 +80,7 @@ const AppointmentScheduler = () => {
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
-            callType: callType,
-            name: formData.name || "Guest"
+            callType: callType
           }}
         />
       ) : (
@@ -90,8 +89,7 @@ const AppointmentScheduler = () => {
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
-            callType: callType,
-            name: formData.name || "Guest"
+            callType: callType
           }}
           onBack={goToPreviousStep}
           onSubmit={handleSubmit}
@@ -104,10 +102,10 @@ const AppointmentScheduler = () => {
         isOpen={showConfirmation}
         onClose={() => setShowConfirmation()}
         appointmentDetails={{
-            date: formattedDate,
-            time: selectedTime,
-            callType: callType,
-            name: formData.name || "Guest"
+          date: formattedDate,
+          time: selectedTime,
+          callType: callType,
+          name: formData.name
         }}
       />
     </div>

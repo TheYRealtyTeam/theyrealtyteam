@@ -80,7 +80,8 @@ const AppointmentScheduler = () => {
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
-            callType: callType
+            callType: callType,
+            name: formData.name
           }}
         />
       ) : (
@@ -89,7 +90,8 @@ const AppointmentScheduler = () => {
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
-            callType: callType
+            callType: callType,
+            name: formData.name
           }}
           onBack={goToPreviousStep}
           onSubmit={handleSubmit}

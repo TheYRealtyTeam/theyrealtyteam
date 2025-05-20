@@ -18,5 +18,5 @@ export interface AppointmentDetails {
   date: string;
   time: string;
   callType: string;
-  name?: string;
+  name: string;
 }

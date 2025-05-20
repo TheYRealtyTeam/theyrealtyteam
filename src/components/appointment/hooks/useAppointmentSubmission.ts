@@ -114,8 +114,44 @@ export const useAppointmentSubmission = () => {
       // Show the confirmation dialog
       setShowConfirmation(true);
       
-      // NOTE: We're NOT calling onSuccess() here anymore
-      // Instead, we'll do it after the confirmation dialog is closed
+      // Send email notifications using our edge function
+      try {
+        // Format the date for human-readable display
+        const readableDate = date.toLocaleDateString('en-US', { 
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/appointment-notification`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabase.supabaseKey}`
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            date: readableDate,
+            time: selectedTime,
+            callType: callType,
+            propertyType: formData.propertyType,
+            message: formData.message || ''
+          })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error sending appointment notifications:", errorData);
+          // Don't throw here, as we already saved to database and want to show confirmation
+        } else {
+          console.log("Email notifications sent successfully");
+        }
+      } catch (emailError) {
+        console.error("Failed to send email notifications:", emailError);
+        // We don't throw here because the appointment was still created successfully
+      }
       
     } catch (error: any) {
       console.error('Error scheduling appointment:', error);

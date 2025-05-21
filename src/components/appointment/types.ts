@@ -1,17 +1,10 @@
 
-export type AppointmentStep = 'dateSelection' | 'personalInfo' | 'confirmation';
-
 export interface AppointmentFormData {
   name: string;
   email: string;
   phone: string;
   propertyType: string;
-  message: string;
-}
-
-export interface FormErrors {
-  email: string;
-  phone: string;
+  message?: string;
 }
 
 export interface AppointmentDetails {
@@ -19,4 +12,12 @@ export interface AppointmentDetails {
   time: string;
   callType: string;
   name: string;
+}
+
+export interface ToastFunction {
+  (props: {
+    title?: string;
+    description?: string;
+    variant?: 'default' | 'destructive';
+  }): void;
 }

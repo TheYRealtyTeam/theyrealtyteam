@@ -123,11 +123,14 @@ export const useAppointmentSubmission = () => {
           day: 'numeric'
         });
 
-        const response = await fetch(`${supabase.supabaseUrl}/functions/v1/appointment-notification`, {
+        // Use the correct way to construct the URL for the Edge Function
+        const functionUrl = `${import.meta.env.VITE_SUPABASE_URL || 'https://axgepdguspqqxudqnobz.supabase.co'}/functions/v1/appointment-notification`;
+        
+        const response = await fetch(functionUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${supabase.supabaseKey}`
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4Z2VwZGd1c3BxcXh1ZHFub2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjE0MjIsImV4cCI6MjA1OTc5NzQyMn0.GFk04igJ-d6iEB_Da8et-ZVG_eRi9u9xbCbRLnGKdEY'}`
           },
           body: JSON.stringify({
             name: formData.name,

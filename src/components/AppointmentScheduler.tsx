@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import DateTimeSelector from './appointment/DateTimeSelector';
 import AppointmentForm from './appointment/AppointmentForm';
@@ -100,7 +101,7 @@ const AppointmentScheduler = () => {
       {/* Confirmation Dialog */}
       <AppointmentConfirmation
         isOpen={showConfirmation}
-        onClose={() => setShowConfirmation()}
+        onClose={setShowConfirmation} // Now correctly passes the function without arguments
         appointmentDetails={{
           date: formattedDate,
           time: selectedTime,

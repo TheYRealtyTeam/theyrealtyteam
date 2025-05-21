@@ -103,7 +103,8 @@ const useAppointment = () => {
     
     // Confirmation dialog
     showConfirmation,
-    setShowConfirmation: handleConfirmationAndReset, // Use new handler for dialog close, takes no arguments
+    // Update this line to call handleConfirmationAndReset directly without arguments
+    setShowConfirmation: () => handleConfirmationAndReset(),
     
     // Formatted date for display
     formattedDate,

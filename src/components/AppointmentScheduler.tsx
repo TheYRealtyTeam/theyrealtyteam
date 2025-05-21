@@ -80,8 +80,7 @@ const AppointmentScheduler = () => {
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
-            callType: callType,
-            name: formData.name
+            callType: callType
           }}
         />
       ) : (

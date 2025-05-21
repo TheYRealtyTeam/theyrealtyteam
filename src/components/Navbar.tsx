@@ -3,12 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import Logo from './Logo';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -136,9 +138,21 @@ const Navbar = () => {
                 </Link>
               )
             ))}
-            <Link to="/appointment" className="ml-4 btn-primary font-bold">
-              Get Started
-            </Link>
+            
+            {user ? (
+              <Link to="/profile" className="ml-4 btn-primary font-bold">
+                Profile
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth" className="ml-4 btn-outline font-bold">
+                  Sign In
+                </Link>
+                <Link to="/appointment" className="ml-1 btn-primary font-bold">
+                  Get Started
+                </Link>
+              </>
+            )}
           </nav>
           
           <button 
@@ -191,9 +205,21 @@ const Navbar = () => {
                   </Link>
                 )
               ))}
-              <Link to="/appointment" className="mx-4 mt-4 btn-primary text-center font-bold" onClick={closeMenu}>
-                Get Started
-              </Link>
+              
+              {user ? (
+                <Link to="/profile" className="mx-4 mt-4 btn-primary text-center font-bold" onClick={closeMenu}>
+                  Profile
+                </Link>
+              ) : (
+                <>
+                  <Link to="/auth" className="mx-4 mt-4 btn-outline text-center font-bold" onClick={closeMenu}>
+                    Sign In
+                  </Link>
+                  <Link to="/appointment" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
+                    Get Started
+                  </Link>
+                </>
+              )}
             </div>
           </nav>
         </div>

@@ -64,6 +64,26 @@ export const formatDate = (date: Date | undefined): string => {
 };
 
 /**
+ * Converts a time string like "11:00 AM" to hour and minute components
+ */
+export const parseTimeString = (timeString: string): { hour: number, minute: number } => {
+  const [timePart, amPm] = timeString.split(' ');
+  let [hourStr, minuteStr] = timePart.split(':');
+  
+  let hour = parseInt(hourStr);
+  const minute = parseInt(minuteStr);
+  
+  // Convert to 24-hour format
+  if (amPm.toUpperCase() === 'PM' && hour !== 12) {
+    hour += 12;
+  } else if (amPm.toUpperCase() === 'AM' && hour === 12) {
+    hour = 0;
+  }
+  
+  return { hour, minute };
+};
+
+/**
  * Filters available times based on current time if the selected date is today
  */
 export const filterAvailableTimes = (times: string[], selectedDate: Date | undefined): string[] => {
@@ -77,19 +97,7 @@ export const filterAvailableTimes = (times: string[], selectedDate: Date | undef
   const currentMinute = now.getMinutes();
   
   return times.filter(timeSlot => {
-    // Parse the time slot (e.g., "9:00 AM")
-    const [hourStr, minuteStr] = timeSlot.split(':');
-    const isPM = timeSlot.includes('PM');
-    
-    let hour = parseInt(hourStr);
-    const minute = parseInt(minuteStr);
-    
-    // Convert to 24-hour format
-    if (isPM && hour !== 12) {
-      hour += 12;
-    } else if (!isPM && hour === 12) {
-      hour = 0;
-    }
+    const { hour, minute } = parseTimeString(timeSlot);
     
     // Compare with current time
     if (hour < currentHour) {

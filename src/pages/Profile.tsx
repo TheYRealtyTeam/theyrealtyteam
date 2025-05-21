@@ -39,7 +39,7 @@ const Profile = () => {
       try {
         setLoading(true);
         
-        // Using a more type-safe approach with explicit typing
+        // Using a more direct query approach that doesn't rely on table types
         const { data, error } = await supabase
           .from('profiles')
           .select('id, username, full_name, avatar_url')
@@ -77,6 +77,7 @@ const Profile = () => {
 
     setUpdating(true);
     try {
+      // Using a more direct update approach
       const { error } = await supabase
         .from('profiles')
         .update({

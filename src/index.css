@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
@@ -52,6 +53,16 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
   }
+  
+  /* Basic focus styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-background;
+  }
+  
+  /* Skip to main content link for keyboard users */
+  .skip-to-content {
+    @apply sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-white focus:text-black focus:top-2 focus:left-2 focus:ring-2 focus:ring-accent;
+  }
 }
 
 @layer components {
@@ -68,7 +79,7 @@
   }
 
   .nav-link {
-    @apply relative px-3 py-2 text-sm font-medium text-black transition-colors after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-yrealty-accent after:transition-all hover:after:w-full;
+    @apply relative px-3 py-2 text-sm font-medium text-black transition-colors after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-yrealty-accent after:transition-all hover:after:w-full focus-visible:after:w-full;
   }
 
   .nav-link.active {
@@ -84,7 +95,7 @@
   }
 
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-yrealty-accent focus:ring-offset-2;
   }
 
   .service-card {
@@ -100,15 +111,15 @@
   }
 
   .btn-primary {
-    @apply px-6 py-3 rounded-md bg-yrealty-navy text-white font-medium transition-all hover:bg-opacity-90 hover:shadow-md;
+    @apply px-6 py-3 rounded-md bg-yrealty-navy text-white font-medium transition-all hover:bg-opacity-90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yrealty-navy focus:ring-offset-2;
   }
 
   .btn-outline {
-    @apply px-6 py-3 rounded-md border border-yrealty-navy text-yrealty-navy font-medium transition-all hover:bg-yrealty-navy hover:text-white;
+    @apply px-6 py-3 rounded-md border border-yrealty-navy text-yrealty-navy font-medium transition-all hover:bg-yrealty-navy hover:text-white focus:outline-none focus:ring-2 focus:ring-yrealty-navy focus:ring-offset-2;
   }
 
   .btn-accent {
-    @apply px-6 py-3 rounded-md bg-yrealty-accent text-white font-medium transition-all hover:bg-opacity-90 hover:shadow-md;
+    @apply px-6 py-3 rounded-md bg-yrealty-accent text-white font-medium transition-all hover:bg-opacity-90 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-yrealty-accent focus:ring-offset-2;
   }
 
   .property-card {
@@ -147,6 +158,11 @@
     position: relative;
     z-index: 50 !important;
   }
+  
+  /* Improved focus states for form elements */
+  input:focus, textarea:focus, select:focus, button:focus {
+    @apply outline-none ring-2 ring-yrealty-accent ring-offset-1;
+  }
 }
 
 /* Custom animations */
@@ -182,6 +198,21 @@
 .stagger-4 { transition-delay: 0.4s; }
 .stagger-5 { transition-delay: 0.5s; }
 
+/* Enhanced hover effects */
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-float {
+  transition: transform 0.3s ease-in-out;
+}
+.hover-float:hover {
+  transform: translateY(-5px);
+}
+
 /* Special fix for appointment tab */
 [data-value="appointment"] .rdp {
   z-index: 9999 !important;
@@ -207,4 +238,24 @@
 [role="tabpanel"] {
   position: relative;
   z-index: 10;
+}
+
+/* Page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0px);
+  transition: opacity 300ms, transform 300ms;
+}
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms, transform 300ms;
 }

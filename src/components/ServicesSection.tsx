@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
-  ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank
+  ShieldCheck, Wrench, Calendar, Search, Handshake, PiggyBank,
+  Loader
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -10,58 +11,59 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const ServicesSection = () => {
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("residential");
+  const [isLoading, setIsLoading] = useState(false);
   
   // Common service objects
   const commonServices = [
     {
       title: "Tenant Placement",
       description: "Rigorous tenant screening, background checks, and placement services to find reliable, qualified tenants for your property.",
-      icon: <User className="h-10 w-10 text-yrealty-accent" />,
+      icon: <User className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Property Inspections",
       description: "Regular inspections to maintain property conditions, identify issues early, and ensure tenant compliance.",
-      icon: <ClipboardCheck className="h-10 w-10 text-yrealty-accent" />,
+      icon: <ClipboardCheck className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Rent Collection",
       description: "Timely, efficient rent collection with online payment options, detailed accounting, and instant owner access.",
-      icon: <Wallet className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Wallet className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Financial Reporting",
       description: "Detailed monthly and annual financial statements, tax documentation, and performance analytics.",
-      icon: <LineChart className="h-10 w-10 text-yrealty-accent" />,
+      icon: <LineChart className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Property Security",
       description: "Implementation of security measures, monitoring systems, and emergency response protocols.",
-      icon: <ShieldCheck className="h-10 w-10 text-yrealty-accent" />,
+      icon: <ShieldCheck className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Maintenance Management",
       description: "24/7 maintenance coordination, vendor management, and preventative maintenance scheduling.",
-      icon: <Wrench className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Wrench className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Lease Management",
       description: "Lease drafting, renewals, enforcement, and legal compliance for all property types.",
-      icon: <Calendar className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Calendar className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Property Marketing",
       description: "Strategic property marketing, professional photography, and targeted advertising to minimize vacancies.",
-      icon: <Search className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Search className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Investor Relations",
       description: "Dedicated support for property investors with market analysis, acquisition assistance, and portfolio management.",
-      icon: <Handshake className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Handshake className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     {
       title: "Value Enhancement",
       description: "Strategies to enhance property value through improvements, renovations, and market positioning.",
-      icon: <PiggyBank className="h-10 w-10 text-yrealty-accent" />,
+      icon: <PiggyBank className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
   ];
 
@@ -70,7 +72,7 @@ const ServicesSection = () => {
     {
       title: "Residential Property Management",
       description: "Comprehensive management for apartments, condos, and homes with tenant screening, rent collection, and maintenance coordination.",
-      icon: <Home className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Home className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     ...commonServices
   ];
@@ -79,10 +81,17 @@ const ServicesSection = () => {
     {
       title: "Commercial Property Management",
       description: "Expert management of office buildings, retail spaces, and industrial properties to maximize ROI and tenant satisfaction.",
-      icon: <Building className="h-10 w-10 text-yrealty-accent" />,
+      icon: <Building className="h-10 w-10 text-yrealty-accent" aria-hidden="true" />,
     },
     ...commonServices
   ];
+
+  const handleTabChange = (tabName) => {
+    setIsLoading(true);
+    setActiveTab(tabName);
+    // Simulate tab content loading
+    setTimeout(() => setIsLoading(false), 300);
+  };
 
   // ServiceCard component - simplified and made more reliable
   const ServiceCard = ({ title, description, icon, delay }) => (
@@ -118,52 +127,65 @@ const ServicesSection = () => {
           <div className="flex justify-center mb-10">
             <div className={`${isMobile ? 'w-full' : 'w-96'} inline-flex h-auto min-h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground`}>
               <button 
-                onClick={() => setActiveTab("residential")}
+                onClick={() => handleTabChange("residential")}
+                aria-pressed={activeTab === "residential"}
+                aria-label="View residential property management services"
                 className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
                   ${activeTab === "residential" ? "bg-background text-foreground shadow-sm" : ""}`}
               >
-                <Home className="mr-2 h-5 w-5" />
+                <Home className="mr-2 h-5 w-5" aria-hidden="true" />
                 Residential
               </button>
               <button 
-                onClick={() => setActiveTab("commercial")}
+                onClick={() => handleTabChange("commercial")}
+                aria-pressed={activeTab === "commercial"}
+                aria-label="View commercial property management services"
                 className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50
                   ${activeTab === "commercial" ? "bg-background text-foreground shadow-sm" : ""}`}
               >
-                <Building className="mr-2 h-5 w-5" />
+                <Building className="mr-2 h-5 w-5" aria-hidden="true" />
                 Commercial
               </button>
             </div>
           </div>
           
           {/* Tab Content */}
-          <div className="mt-6">
-            {activeTab === "residential" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {residentialServices.map((service, index) => (
-                  <ServiceCard 
-                    key={`residential-${index}`} 
-                    title={service.title} 
-                    description={service.description} 
-                    icon={service.icon} 
-                    delay={0.1 * (index + 1)} 
-                  />
-                ))}
+          <div className="mt-6 min-h-[800px]">
+            {isLoading ? (
+              <div className="flex justify-center items-center h-40">
+                <Loader className="h-8 w-8 text-yrealty-accent animate-spin" aria-hidden="true" />
+                <span className="sr-only">Loading content...</span>
               </div>
-            )}
-            
-            {activeTab === "commercial" && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {commercialServices.map((service, index) => (
-                  <ServiceCard 
-                    key={`commercial-${index}`} 
-                    title={service.title} 
-                    description={service.description} 
-                    icon={service.icon} 
-                    delay={0.1 * (index + 1)} 
-                  />
-                ))}
-              </div>
+            ) : (
+              <>
+                {activeTab === "residential" && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" role="region" aria-label="Residential property management services">
+                    {residentialServices.map((service, index) => (
+                      <ServiceCard 
+                        key={`residential-${index}`} 
+                        title={service.title} 
+                        description={service.description} 
+                        icon={service.icon} 
+                        delay={0.1 * (index + 1)} 
+                      />
+                    ))}
+                  </div>
+                )}
+                
+                {activeTab === "commercial" && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" role="region" aria-label="Commercial property management services">
+                    {commercialServices.map((service, index) => (
+                      <ServiceCard 
+                        key={`commercial-${index}`} 
+                        title={service.title} 
+                        description={service.description} 
+                        icon={service.icon} 
+                        delay={0.1 * (index + 1)} 
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

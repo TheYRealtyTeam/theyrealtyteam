@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
@@ -8,10 +8,39 @@ interface PageLayoutProps {
   children: React.ReactNode;
   title: string;
   subtitle?: string;
+  metaDescription?: string;
   className?: string;
 }
 
-const PageLayout = ({ children, title, subtitle, className = '' }: PageLayoutProps) => {
+const PageLayout = ({ 
+  children, 
+  title, 
+  subtitle, 
+  metaDescription,
+  className = '' 
+}: PageLayoutProps) => {
+  
+  // Set page title and meta description
+  useEffect(() => {
+    // Set page title
+    document.title = `${title} | Y Realty Team`;
+    
+    // Add meta description if provided
+    if (metaDescription) {
+      const metaDesc = document.createElement('meta');
+      metaDesc.name = 'description';
+      metaDesc.content = metaDescription;
+      document.head.appendChild(metaDesc);
+      
+      return () => {
+        const existingDesc = document.querySelector('meta[name="description"]');
+        if (existingDesc) {
+          document.head.removeChild(existingDesc);
+        }
+      };
+    }
+  }, [title, metaDescription]);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />

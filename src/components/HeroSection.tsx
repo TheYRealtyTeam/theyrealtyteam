@@ -32,6 +32,7 @@ const HeroSection = () => {
     <section 
       id="home" 
       ref={heroRef}
+      aria-label="Welcome to Y Realty Team"
       className={`
         relative h-screen bg-cover bg-center bg-no-repeat flex items-center pt-16 transition-opacity duration-700
         ${isImageLoaded ? 'opacity-100' : 'opacity-0 bg-gradient-to-r from-yrealty-navy to-yrealty-blue'}
@@ -67,7 +68,7 @@ const HeroSection = () => {
       <a 
         href="#about"
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce"
-        aria-label="Scroll Down"
+        aria-label="Scroll Down to About Section"
       >
         <ArrowDown size={32} />
       </a>

@@ -11,9 +11,15 @@ import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
 
 const Index = () => {
-  // Set page title
+  // Set page title and meta tags
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
+    
+    // Add meta description for SEO
+    const metaDescription = document.createElement('meta');
+    metaDescription.name = 'description';
+    metaDescription.content = 'Y Realty Team offers premium property management services across all 50 states. Expert tenant placement, maintenance coordination, and financial reporting for residential and commercial properties.';
+    document.head.appendChild(metaDescription);
     
     // Add canonical link
     const canonicalLink = document.createElement('link');
@@ -22,10 +28,14 @@ const Index = () => {
     document.head.appendChild(canonicalLink);
     
     return () => {
-      // Clean up the canonical link when component unmounts
+      // Clean up the meta tags when component unmounts
       const existingCanonical = document.querySelector('link[rel="canonical"]');
+      const existingDescription = document.querySelector('meta[name="description"]');
       if (existingCanonical) {
         document.head.removeChild(existingCanonical);
+      }
+      if (existingDescription) {
+        document.head.removeChild(existingDescription);
       }
     };
   }, []);

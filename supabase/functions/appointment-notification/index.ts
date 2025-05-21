@@ -38,7 +38,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to client
     const clientEmailResponse = await resend.emails.send({
-      from: "Y Realty Team <onboarding@resend.dev>",
+      from: "Y Realty Team <appointments@theyteam.co>",
       to: [email],
       subject: "Your Appointment Confirmation with Y Realty Team",
       html: `
@@ -52,7 +52,7 @@ const handler = async (req: Request): Promise<Response> => {
             <p><strong>Format:</strong> ${callType.charAt(0).toUpperCase() + callType.slice(1)} Call</p>
             <p><strong>Property Type:</strong> ${propertyType}</p>
           </div>
-          <p>Our team will contact you shortly before the scheduled time. If you need to reschedule, please contact us at appointments@yrealty.com or call (555) 123-4567.</p>
+          <p>Our team will contact you shortly before the scheduled time. If you need to reschedule, please contact us at appointments@theyteam.co or call (555) 123-4567.</p>
           <p>We look forward to helping you with your property management needs!</p>
           <p>Best regards,<br>Y Realty Team</p>
         </div>
@@ -67,8 +67,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to business
     const businessEmailResponse = await resend.emails.send({
-      from: "Y Realty Team <onboarding@resend.dev>",
-      to: ["appointments@yrealty.com"], // Replace with your actual business email
+      from: "Y Realty Team <appointments@theyteam.co>",
+      to: ["appointments@theyteam.co"], // Replace with your actual business email
       subject: `New Appointment: ${name} on ${date} at ${time}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

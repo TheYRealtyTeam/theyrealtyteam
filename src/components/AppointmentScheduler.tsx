@@ -85,7 +85,10 @@ const AppointmentScheduler = () => {
         />
       ) : (
         <ConfirmationStep
-          formData={formData}
+          formData={{
+            ...formData,
+            message: formData.message || '' // Ensure message is not undefined
+          }}
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,
@@ -101,7 +104,7 @@ const AppointmentScheduler = () => {
       {/* Confirmation Dialog */}
       <AppointmentConfirmation
         isOpen={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
+        onClose={() => setShowConfirmation()}
         appointmentDetails={{
           date: formattedDate,
           time: selectedTime,

@@ -67,14 +67,9 @@ const MobileMenu = ({
               Profile
             </Link>
           ) : (
-            <>
-              <Link to="/auth" className="mx-4 mt-4 btn-outline text-center font-bold" onClick={closeMenu}>
-                Sign In
-              </Link>
-              <Link to="/appointment" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
-                Get Started
-              </Link>
-            </>
+            <Link to="/appointment" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
+              Get Started
+            </Link>
           )}
         </div>
       </nav>

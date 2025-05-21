@@ -34,6 +34,16 @@ export const isPastDate = (date: Date): boolean => {
 };
 
 /**
+ * Checks if a date is today
+ */
+export const isToday = (date: Date): boolean => {
+  const today = new Date();
+  return date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear();
+};
+
+/**
  * Determines if a date should be disabled in the date picker
  */
 export const isDateDisabled = (date: Date): boolean => {
@@ -50,5 +60,44 @@ export const formatDate = (date: Date | undefined): string => {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
+  });
+};
+
+/**
+ * Filters available times based on current time if the selected date is today
+ */
+export const filterAvailableTimes = (times: string[], selectedDate: Date | undefined): string[] => {
+  if (!selectedDate || !isToday(selectedDate)) {
+    return times;
+  }
+  
+  // If date is today, filter out past times
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+  
+  return times.filter(timeSlot => {
+    // Parse the time slot (e.g., "9:00 AM")
+    const [hourStr, minuteStr] = timeSlot.split(':');
+    const isPM = timeSlot.includes('PM');
+    
+    let hour = parseInt(hourStr);
+    const minute = parseInt(minuteStr);
+    
+    // Convert to 24-hour format
+    if (isPM && hour !== 12) {
+      hour += 12;
+    } else if (!isPM && hour === 12) {
+      hour = 0;
+    }
+    
+    // Compare with current time
+    if (hour < currentHour) {
+      return false;
+    } else if (hour === currentHour && minute <= currentMinute) {
+      return false;
+    }
+    
+    return true;
   });
 };

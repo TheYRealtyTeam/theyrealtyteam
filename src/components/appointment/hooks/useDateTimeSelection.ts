@@ -7,9 +7,9 @@ export const useDateTimeSelection = () => {
   const [selectedTime, setSelectedTime] = useState('');
   const [callType, setCallType] = useState('');
 
-  // Base available appointment times starting from 11:00 AM
+  // Base available appointment times including 12:00 PM
   const baseAvailableTimes = [
-    '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
+    '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
   ];
   
   // Filtered available times based on current time if date is today

@@ -39,18 +39,26 @@ const Profile = () => {
       try {
         setLoading(true);
         
+        // Using a more type-safe approach with explicit typing
         const { data, error } = await supabase
           .from('profiles')
           .select('id, username, full_name, avatar_url')
           .eq('id', user.id)
-          .maybeSingle();
+          .single();
 
         if (error) throw error;
 
         if (data) {
-          setProfile(data);
-          setUsername(data.username || '');
-          setFullName(data.full_name || '');
+          const profileData: ProfileData = {
+            id: data.id,
+            username: data.username,
+            full_name: data.full_name,
+            avatar_url: data.avatar_url
+          };
+          
+          setProfile(profileData);
+          setUsername(profileData.username || '');
+          setFullName(profileData.full_name || '');
         }
       } catch (error: any) {
         console.error('Error fetching profile:', error);

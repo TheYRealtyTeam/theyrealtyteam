@@ -9,7 +9,7 @@ export const useAppointmentForm = () => {
     email: '',
     phone: '',
     propertyType: '',
-    message: ''
+    message: '' // Initialize with empty string instead of undefined
   });
   
   const [formErrors, setFormErrors] = useState<FormErrors>({
@@ -68,7 +68,7 @@ export const useAppointmentForm = () => {
       email: '',
       phone: '',
       propertyType: '',
-      message: ''
+      message: '' // Make sure to reset with empty string
     });
   };
 

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import DateTimeSelector from './appointment/DateTimeSelector';
 import AppointmentForm from './appointment/AppointmentForm';
@@ -85,10 +84,7 @@ const AppointmentScheduler = () => {
         />
       ) : (
         <ConfirmationStep
-          formData={{
-            ...formData,
-            message: formData.message || '' // Ensure message is not undefined
-          }}
+          formData={formData}
           appointmentDetails={{
             date: formattedDate,
             time: selectedTime,

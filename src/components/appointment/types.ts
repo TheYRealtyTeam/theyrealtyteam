@@ -6,7 +6,7 @@ export interface AppointmentFormData {
   email: string;
   phone: string;
   propertyType: string;
-  message?: string;
+  message: string; // Changed from message?: string to make it required
 }
 
 export interface FormErrors {

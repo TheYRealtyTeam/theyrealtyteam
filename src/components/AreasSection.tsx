@@ -1,98 +1,259 @@
 
-import React, { useEffect, useRef } from 'react';
-import { MapPin, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Monitor, Users, Shield, CheckCircle, Globe, Smartphone, Headphones } from 'lucide-react';
 
 const AreasSection = () => {
-  const mapRef = useRef<HTMLDivElement>(null);
-  
-  // Areas we serve - representing nationwide coverage
-  const areas = [
-    { name: "East Coast", description: "Full-service property management throughout all East Coast states including New York, New Jersey, Massachusetts, and more." },
-    { name: "West Coast", description: "Comprehensive management services across California, Oregon, Washington, and all West Coast markets." },
-    { name: "Midwest", description: "Complete property management throughout Illinois, Michigan, Ohio, and all Midwest states." },
-    { name: "South", description: "Dedicated management solutions for Texas, Florida, Georgia, and all southern regions." },
-    { name: "Southwest", description: "Specialized management across Arizona, New Mexico, Nevada, and throughout the Southwest." },
+  const [activeFeature, setActiveFeature] = useState(0);
+
+  const features = [
+    {
+      icon: <Monitor className="h-8 w-8 text-yrealty-accent" />,
+      title: "Advanced Technology Stack",
+      description: "AppFolio property management software, Site Audit Pro inspections, and our proprietary platform ensure seamless remote management across all states.",
+      details: [
+        "Real-time property monitoring",
+        "Digital inspection reports",
+        "Online rent collection",
+        "24/7 client portal access"
+      ]
+    },
+    {
+      icon: <Users className="h-8 w-8 text-yrealty-accent" />,
+      title: "Local Expert Network",
+      description: "Our trained team members and vetted third-party partners in every state provide on-ground support while maintaining our quality standards.",
+      details: [
+        "Trained local representatives",
+        "Vetted contractor network",
+        "Regional market expertise",
+        "Quality assurance protocols"
+      ]
+    },
+    {
+      icon: <Shield className="h-8 w-8 text-yrealty-accent" />,
+      title: "Compliance & Legal",
+      description: "State-specific legal knowledge and compliance management ensure your properties meet all local regulations and requirements.",
+      details: [
+        "State-specific expertise",
+        "Legal compliance monitoring",
+        "Local regulation updates",
+        "Risk management protocols"
+      ]
+    },
+    {
+      icon: <Headphones className="h-8 w-8 text-yrealty-accent" />,
+      title: "24/7 Communication",
+      description: "Round-the-clock support and communication systems keep you connected to your properties no matter where you are.",
+      details: [
+        "24/7 emergency response",
+        "Real-time notifications",
+        "Mobile app access",
+        "Direct communication channels"
+      ]
+    }
   ];
 
-  // Map initialization with more reliable approach
-  useEffect(() => {
-    if (mapRef.current) {
-      // Create an iframe with Google Maps embed showing wider national view
-      const iframe = document.createElement('iframe');
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = '0';
-      iframe.style.borderRadius = '8px';
-      iframe.allowFullscreen = true;
-      iframe.referrerPolicy = 'no-referrer-when-downgrade';
-      iframe.src = 'https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12470187.461098605!2d-95.665!3d39.7837!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x54eab584e432360b%3A0x1c3bb99243deb742!2sUnited%20States!5e0!3m2!1sen!2sus!4v1698429602019!5m2!1sen!2sus';
-      
-      // Clear any existing content
-      mapRef.current.innerHTML = '';
-      mapRef.current.appendChild(iframe);
+  const states = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
+    "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
+    "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+    "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico",
+    "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania",
+    "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
+    "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+  ];
+
+  const processSteps = [
+    {
+      step: "1",
+      title: "Property Assessment",
+      description: "Remote and local evaluation using Site Audit Pro technology and local experts"
+    },
+    {
+      step: "2", 
+      title: "Market Analysis",
+      description: "Local market research and competitive pricing analysis for optimal positioning"
+    },
+    {
+      step: "3",
+      title: "Team Assignment",
+      description: "Dedicated local support team assigned with regional expertise and connections"
+    },
+    {
+      step: "4",
+      title: "Technology Setup",
+      description: "AppFolio integration and proprietary platform configuration for your property"
+    },
+    {
+      step: "5",
+      title: "Ongoing Management",
+      description: "Continuous monitoring, reporting, and optimization with 24/7 support"
     }
-  }, []);
+  ];
 
   return (
-    <section id="areas" className="section-padding bg-white">
+    <section id="areas" className="section-padding bg-gradient-to-b from-white to-yrealty-blue/5">
       <div className="container-custom">
         <div className="text-center mb-16">
-          <h2 className="section-title reveal">Service Areas</h2>
-          <p className="section-subtitle reveal">
-            Comprehensive property management across all 50 states
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-yrealty-navy reveal">
+            Nationwide Excellence, Local Expertise
+          </h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto reveal leading-relaxed">
+            Managing properties across all 50 states with the perfect blend of cutting-edge technology, 
+            local market knowledge, and personalized service that delivers results everywhere.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        {/* Technology & Process Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
           <div className="reveal">
-            <div ref={mapRef} className="h-96 bg-gray-200 rounded-lg shadow-lg relative overflow-hidden">
-              {/* Map will be inserted here via the useEffect */}
-              <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                <div className="text-center p-6 bg-white/80 rounded-lg max-w-xs">
-                  <Globe className="h-10 w-10 text-yrealty-accent mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-yrealty-navy mb-2">Nationwide Coverage</h3>
-                  <p className="text-gray-700">
-                    Serving properties in all 50 states
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-2xl font-bold mb-6 text-yrealty-navy reveal">
-              Established Presence Across America
-            </h3>
-            
+            <h3 className="text-3xl font-bold mb-8 text-yrealty-navy">How We Manage Nationwide</h3>
             <div className="space-y-6">
-              {areas.map((area, index) => (
+              {features.map((feature, index) => (
                 <div 
-                  key={index} 
-                  className="bg-white p-4 rounded-lg shadow-sm border border-yrealty-accent reveal flex"
-                  style={{ transitionDelay: `${0.1 + index * 0.1}s` }}
+                  key={index}
+                  className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-300 ${
+                    activeFeature === index 
+                      ? 'border-yrealty-accent bg-yrealty-blue/20' 
+                      : 'border-gray-200 bg-white hover:border-yrealty-accent/50'
+                  }`}
+                  onClick={() => setActiveFeature(index)}
                 >
-                  <div className="mr-4">
-                    <div className="w-10 h-10 rounded-full bg-yrealty-blue flex items-center justify-center">
-                      <MapPin className="h-5 w-5 text-yrealty-accent" />
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 p-2 bg-white rounded-lg shadow-sm">
+                      {feature.icon}
                     </div>
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-yrealty-navy mb-1">
-                      {area.name}
-                    </h4>
-                    <p className="text-gray-600">{area.description}</p>
+                    <div>
+                      <h4 className="text-xl font-bold mb-2 text-yrealty-navy">{feature.title}</h4>
+                      <p className="text-gray-600 mb-4">{feature.description}</p>
+                      {activeFeature === index && (
+                        <ul className="space-y-2 animate-fade-in">
+                          {feature.details.map((detail, i) => (
+                            <li key={i} className="flex items-center gap-2 text-sm">
+                              <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />
+                              <span>{detail}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-            
-            <div className="mt-8 reveal" style={{ transitionDelay: '0.6s' }}>
-              <p className="text-gray-700 mb-4">
-                Looking for property management in a specific location? Our nationwide team is ready to assist you.
-              </p>
-              <a href="#contact" className="btn-primary">Contact Our Team</a>
+          </div>
+
+          <div className="reveal">
+            <h3 className="text-3xl font-bold mb-8 text-yrealty-navy">Our Process</h3>
+            <div className="space-y-4">
+              {processSteps.map((step, index) => (
+                <div key={index} className="flex gap-4 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                  <div className="flex-shrink-0 w-12 h-12 bg-yrealty-accent text-white rounded-full flex items-center justify-center font-bold text-lg">
+                    {step.step}
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold mb-1 text-yrealty-navy">{step.title}</h4>
+                    <p className="text-gray-600">{step.description}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
+
+        {/* Technology Stack Showcase */}
+        <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200 mb-20 reveal">
+          <h3 className="text-3xl font-bold text-center mb-12 text-yrealty-navy">
+            Powered by Industry-Leading Technology
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-gradient-to-br from-yrealty-accent to-yrealty-navy rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                <Monitor className="h-12 w-12 text-white" />
+              </div>
+              <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">AppFolio Platform</h4>
+              <p className="text-gray-600 mb-4">Industry-leading property management software providing comprehensive operational management, financial reporting, and tenant communication tools.</p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Automated rent collection</li>
+                <li>• Maintenance request management</li>
+                <li>• Financial reporting & analytics</li>
+                <li>• Tenant screening & communication</li>
+              </ul>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-gradient-to-br from-yrealty-accent to-yrealty-navy rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                <Smartphone className="h-12 w-12 text-white" />
+              </div>
+              <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">Site Audit Pro</h4>
+              <p className="text-gray-600 mb-4">Advanced property inspection technology with detailed photo documentation, condition reports, and preventive maintenance alerts.</p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Digital inspection reports</li>
+                <li>• Photo documentation</li>
+                <li>• Maintenance scheduling</li>
+                <li>• Compliance monitoring</li>
+              </ul>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-gradient-to-br from-yrealty-accent to-yrealty-navy rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-6">
+                <Globe className="h-12 w-12 text-white" />
+              </div>
+              <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">Proprietary Platform</h4>
+              <p className="text-gray-600 mb-4">Our custom-built state-of-the-art software platform designed specifically for enhanced client experience and operational efficiency.</p>
+              <ul className="text-sm text-gray-600 space-y-1">
+                <li>• Real-time dashboard</li>
+                <li>• Custom reporting</li>
+                <li>• Enhanced communication</li>
+                <li>• Advanced analytics</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        {/* States Coverage */}
+        <div className="text-center mb-16 reveal">
+          <h3 className="text-3xl font-bold mb-8 text-yrealty-navy">
+            Operating in All 50 States
+          </h3>
+          <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+            From coast to coast, we provide the same exceptional level of service and expertise. 
+            Our nationwide presence ensures consistent quality regardless of your property location.
+          </p>
+          
+          <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">
+            <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-2 text-sm">
+              {states.map((state, index) => (
+                <div key={index} className="p-2 bg-yrealty-blue/10 rounded text-yrealty-navy font-medium hover:bg-yrealty-accent hover:text-white transition-colors cursor-default">
+                  {state}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Guarantees & Commitments */}
+        <div className="bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-8 rounded-2xl text-white text-center reveal">
+          <h3 className="text-3xl font-bold mb-6">Our Nationwide Commitment</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div>
+              <CheckCircle className="h-12 w-12 mx-auto mb-4" />
+              <h4 className="text-xl font-bold mb-2">Same Day Response</h4>
+              <p className="opacity-95">Emergency issues addressed within hours, anywhere in the US</p>
+            </div>
+            <div>
+              <CheckCircle className="h-12 w-12 mx-auto mb-4" />
+              <h4 className="text-xl font-bold mb-2">Local Expertise</h4>
+              <p className="opacity-95">Regional market knowledge and compliance in every state</p>
+            </div>
+            <div>
+              <CheckCircle className="h-12 w-12 mx-auto mb-4" />
+              <h4 className="text-xl font-bold mb-2">Consistent Quality</h4>
+              <p className="opacity-95">Same high standards and processes nationwide</p>
+            </div>
+          </div>
+          <a href="#contact" className="btn-accent bg-white text-yrealty-navy hover:bg-gray-100 text-lg px-8 py-4 font-bold">
+            Discover How We Can Help Your Property
+          </a>
         </div>
       </div>
     </section>

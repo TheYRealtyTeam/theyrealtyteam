@@ -1,4 +1,3 @@
-
 import { BlogPostData } from '@/integrations/supabase/client';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
@@ -98,12 +97,18 @@ const generateRandomTitle = (): string => {
     .replace('{year}', year.toString());
 };
 
-// Function to generate random slug from title
+// Function to generate random slug from title with unique suffix
 const generateSlugFromTitle = (title: string): string => {
-  return title
+  const baseSlug = title
     .toLowerCase()
     .replace(/[^\w\s]/gi, '')
     .replace(/\s+/g, '-');
+  
+  // Add timestamp and random suffix to ensure uniqueness
+  const timestamp = Date.now();
+  const randomSuffix = Math.random().toString(36).substring(2, 8);
+  
+  return `${baseSlug}-${timestamp}-${randomSuffix}`;
 };
 
 // Function to generate random paragraphs for content

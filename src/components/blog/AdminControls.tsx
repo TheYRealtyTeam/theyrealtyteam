@@ -10,23 +10,24 @@ interface AdminControlsProps {
 
 const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(15);
+  const [count, setCount] = useState(20);
   const [justAdded, setJustAdded] = useState(false);
 
-  // Automatically add 15 posts when component mounts (one time only)
+  // Automatically add 20 posts when component mounts (one time only)
   useEffect(() => {
     const hasAutoAdded = localStorage.getItem('blog-auto-added');
     if (!hasAutoAdded) {
-      handleAddPosts();
+      handleAddPosts(20); // Force 20 posts
       localStorage.setItem('blog-auto-added', 'true');
     }
   }, []);
 
-  const handleAddPosts = async () => {
+  const handleAddPosts = async (customCount?: number) => {
     setLoading(true);
     setJustAdded(false);
+    const postsToAdd = customCount || count;
     try {
-      const success = await addRandomBlogPosts(count);
+      const success = await addRandomBlogPosts(postsToAdd);
       if (success) {
         onBlogPostsAdded();
         setJustAdded(true);
@@ -51,13 +52,13 @@ const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
             value={count}
             onChange={(e) => setCount(Number(e.target.value))}
           >
-            {[5, 10, 15, 20, 25].map(num => (
+            {[5, 10, 15, 20, 25, 30].map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
           </select>
         </div>
         <Button 
-          onClick={handleAddPosts} 
+          onClick={() => handleAddPosts()} 
           className="bg-yrealty-navy hover:bg-yrealty-navy/80"
           disabled={loading}
         >

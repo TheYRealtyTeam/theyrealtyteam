@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { addRandomBlogPosts } from '@/utils/blogUtils';
-import { PlusIcon, Loader2 } from 'lucide-react';
+import { PlusIcon, Loader2, CheckCircle } from 'lucide-react';
 
 interface AdminControlsProps {
   onBlogPostsAdded: () => void;
@@ -10,14 +10,27 @@ interface AdminControlsProps {
 
 const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(5);
+  const [count, setCount] = useState(10);
+  const [justAdded, setJustAdded] = useState(false);
+
+  // Automatically add 10 posts when component mounts (one time only)
+  useEffect(() => {
+    const hasAutoAdded = localStorage.getItem('blog-auto-added');
+    if (!hasAutoAdded) {
+      handleAddPosts();
+      localStorage.setItem('blog-auto-added', 'true');
+    }
+  }, []);
 
   const handleAddPosts = async () => {
     setLoading(true);
+    setJustAdded(false);
     try {
       const success = await addRandomBlogPosts(count);
       if (success) {
         onBlogPostsAdded();
+        setJustAdded(true);
+        setTimeout(() => setJustAdded(false), 3000);
       }
     } finally {
       setLoading(false);
@@ -53,6 +66,11 @@ const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Adding...
             </>
+          ) : justAdded ? (
+            <>
+              <CheckCircle className="mr-2 h-4 w-4 text-green-500" />
+              Added!
+            </>
           ) : (
             <>
               <PlusIcon className="mr-2 h-4 w-4" />
@@ -64,6 +82,11 @@ const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
       <p className="text-xs text-gray-500 mt-2">
         This will add randomly generated blog posts to the database.
       </p>
+      {justAdded && (
+        <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+          Successfully added {count} new blog posts!
+        </div>
+      )}
     </div>
   );
 };

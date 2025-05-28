@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
 import BlogPost from "./pages/BlogPost";
+import BlogAdmin from "./pages/BlogAdmin";
 import Tools from "./pages/Tools";
 import Appointment from "./pages/Appointment";
 import Contact from "./pages/Contact";
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/blog-admin" element={<BlogAdmin />} />
             <Route path="/tools" element={<Tools />} />
             <Route path="/appointment" element={<Appointment />} />
             <Route path="/contact" element={<Contact />} />

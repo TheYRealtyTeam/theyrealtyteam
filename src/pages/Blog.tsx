@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import { blogPosts } from '@/data/blogPosts';
 import { Link } from 'react-router-dom';
-import { Clock, User, Tag } from 'lucide-react';
+import { Clock, User, Tag, Settings } from 'lucide-react';
 
 const Blog = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -29,6 +29,17 @@ const Blog = () => {
       subtitle="Expert advice, market trends, and practical tips for property owners and investors"
     >
       <div className="max-w-6xl mx-auto">
+        {/* Admin Link */}
+        <div className="mb-6 text-right">
+          <Link 
+            to="/blog-admin" 
+            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-yrealty-navy transition-colors"
+          >
+            <Settings className="h-4 w-4" />
+            Admin
+          </Link>
+        </div>
+
         {/* Category Filter */}
         <div className="mb-12">
           <div className="flex flex-wrap gap-3 justify-center">

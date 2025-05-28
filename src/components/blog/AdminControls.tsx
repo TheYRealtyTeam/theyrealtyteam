@@ -10,10 +10,10 @@ interface AdminControlsProps {
 
 const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
   const [loading, setLoading] = useState(false);
-  const [count, setCount] = useState(10);
+  const [count, setCount] = useState(15);
   const [justAdded, setJustAdded] = useState(false);
 
-  // Automatically add 10 posts when component mounts (one time only)
+  // Automatically add 15 posts when component mounts (one time only)
   useEffect(() => {
     const hasAutoAdded = localStorage.getItem('blog-auto-added');
     if (!hasAutoAdded) {
@@ -51,7 +51,7 @@ const AdminControls: React.FC<AdminControlsProps> = ({ onBlogPostsAdded }) => {
             value={count}
             onChange={(e) => setCount(Number(e.target.value))}
           >
-            {[1, 5, 10, 20].map(num => (
+            {[5, 10, 15, 20, 25].map(num => (
               <option key={num} value={num}>{num}</option>
             ))}
           </select>

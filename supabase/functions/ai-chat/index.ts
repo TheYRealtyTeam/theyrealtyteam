@@ -30,7 +30,7 @@ serve(async (req) => {
     const createHeaders = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${OPENAI_API_KEY}`,
-      "OpenAI-Beta": "assistants=v1"
+      "OpenAI-Beta": "assistants=v2"
     };
 
     // 1. Create thread

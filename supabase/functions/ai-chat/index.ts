@@ -4,9 +4,11 @@ serve(async (req) => {
   try {
     const contentType = req.headers.get("content-type") || "";
     if (!contentType.includes("application/json")) {
-      return new Response(JSON.stringify({ error: "Invalid content type" }), {
+      return new Response(JSON.stringify({
+        error: "Invalid content type"
+      }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
@@ -14,9 +16,11 @@ serve(async (req) => {
     const { message } = body;
 
     if (!message) {
-      return new Response(JSON.stringify({ error: "No message provided" }), {
+      return new Response(JSON.stringify({
+        error: "No message provided"
+      }), {
         status: 400,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 
@@ -26,14 +30,15 @@ serve(async (req) => {
     const createHeaders = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${OPENAI_API_KEY}`,
-      "OpenAI-Beta": "assistants=v1",
+      "OpenAI-Beta": "assistants=v1"
     };
 
     // 1. Create thread
     const threadRes = await fetch("https://api.openai.com/v1/threads", {
       method: "POST",
-      headers: createHeaders,
+      headers: createHeaders
     });
+
     const threadData = await threadRes.json();
     const thread_id = threadData.id;
 
@@ -43,58 +48,66 @@ serve(async (req) => {
       headers: createHeaders,
       body: JSON.stringify({
         role: "user",
-        content: message,
-      }),
+        content: message
+      })
     });
 
     // 3. Run assistant
     const runRes = await fetch(`https://api.openai.com/v1/threads/${thread_id}/runs`, {
       method: "POST",
       headers: createHeaders,
-      body: JSON.stringify({ assistant_id }),
+      body: JSON.stringify({ assistant_id })
     });
+
     const runData = await runRes.json();
     const run_id = runData.id;
 
     // 4. Poll for completion
     let status = "queued";
     let attempts = 0;
+
     while (status !== "completed" && attempts < 10) {
       await new Promise((res) => setTimeout(res, 1500));
-      const checkRes = await fetch(
-        `https://api.openai.com/v1/threads/${thread_id}/runs/${run_id}`,
-        {
-          method: "GET",
-          headers: createHeaders,
-        }
-      );
+      const checkRes = await fetch(`https://api.openai.com/v1/threads/${thread_id}/runs/${run_id}`, {
+        method: "GET",
+        headers: createHeaders
+      });
       const checkData = await checkRes.json();
       status = checkData.status;
       attempts++;
     }
 
     // 5. Get final message
-    const messagesRes = await fetch(
-      `https://api.openai.com/v1/threads/${thread_id}/messages`,
-      {
-        method: "GET",
-        headers: createHeaders,
-      }
-    );
-    const messagesData = await messagesRes.json();
-    const lastMessage = messagesData.data.find((msg: any) => msg.role === "assistant");
+    const messagesRes = await fetch(`https://api.openai.com/v1/threads/${thread_id}/messages`, {
+      method: "GET",
+      headers: createHeaders
+    });
 
+    const messagesData = await messagesRes.json();
+
+    if (!messagesData || !Array.isArray(messagesData.data)) {
+      console.error("Invalid response from OpenAI when fetching messages:", messagesData);
+      throw new Error("Invalid response structure from OpenAI");
+    }
+
+    const lastMessage = messagesData.data.find((msg) => msg.role === "assistant");
     const reply = lastMessage?.content?.[0]?.text?.value || "Sorry, I couldn’t respond.";
 
-    return new Response(JSON.stringify({ response: reply }), {
-      headers: { "Content-Type": "application/json" },
+    return new Response(JSON.stringify({
+      response: reply
+    }), {
+      headers: { "Content-Type": "application/json" }
     });
 
   } catch (err) {
     console.error("Error:", err);
-    return new Response(
-      JSON.stringify({ error: "Something went wrong", details: err.message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return new Response(JSON.stringify({
+      error: "Something went wrong",
+      details: err.message
+    }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
   }
 });
+

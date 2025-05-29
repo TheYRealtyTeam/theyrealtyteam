@@ -10,7 +10,8 @@ serve(async (req) => {
       });
     }
 
-    const { message } = await req.json();
+    const body = await req.json();
+    const { message } = body;
 
     if (!message) {
       return new Response(JSON.stringify({ error: "No message provided" }), {
@@ -46,7 +47,7 @@ serve(async (req) => {
       }),
     });
 
-    // 3. Run the assistant
+    // 3. Run assistant
     const runRes = await fetch(`https://api.openai.com/v1/threads/${thread_id}/runs`, {
       method: "POST",
       headers: createHeaders,

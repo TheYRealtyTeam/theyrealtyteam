@@ -4,6 +4,7 @@ import { Send, Bot, User, X, MessageCircle, Loader } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -49,31 +50,37 @@ const AIChat = () => {
     setMessages(prev => [...prev, newUserMessage]);
 
     try {
+      console.log('Sending message to AI chat function:', userMessage);
+      
       // Prepare conversation history for API
       const conversationHistory = messages.map(msg => ({
         role: msg.role,
         content: msg.content
       }));
 
-      const response = await fetch('/functions/v1/ai-chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      // Use Supabase client to invoke the edge function
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
           message: userMessage,
           conversationHistory: conversationHistory
-        })
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to get AI response');
+      console.log('AI chat response:', data, error);
+
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw new Error(error.message || 'Failed to get AI response');
       }
 
-      const data = await response.json();
-      
-      if (data.error) {
+      if (data?.error) {
+        console.error('AI chat function error:', data.error);
         throw new Error(data.error);
+      }
+
+      if (!data?.response) {
+        console.error('No response from AI chat function:', data);
+        throw new Error('No response received from AI');
       }
 
       // Add AI response to chat
@@ -91,6 +98,9 @@ const AIChat = () => {
         description: "Sorry, I'm having trouble responding right now. Please try again or contact us directly.",
         variant: "destructive"
       });
+      
+      // Remove the user message if there was an error
+      setMessages(prev => prev.slice(0, -1));
     } finally {
       setIsLoading(false);
     }

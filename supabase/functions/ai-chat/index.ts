@@ -10,15 +10,25 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
+  console.log('AI Chat function called with method:', req.method);
+  
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, conversationHistory = [] } = await req.json();
-
     if (!openAIApiKey) {
+      console.error('OpenAI API key not configured');
       throw new Error('OpenAI API key not configured');
+    }
+
+    const requestBody = await req.json();
+    console.log('Request body:', requestBody);
+    
+    const { message, conversationHistory = [] } = requestBody;
+
+    if (!message) {
+      throw new Error('Message is required');
     }
 
     // Build conversation history with system prompt
@@ -30,6 +40,8 @@ serve(async (req) => {
       ...conversationHistory,
       { role: 'user', content: message }
     ];
+
+    console.log('Sending request to OpenAI with messages:', messages.length);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -45,20 +57,39 @@ serve(async (req) => {
       }),
     });
 
+    console.log('OpenAI response status:', response.status);
+
     if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.statusText}`);
+      const errorText = await response.text();
+      console.error('OpenAI API error:', response.status, errorText);
+      throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
+    console.log('OpenAI response data:', data);
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid OpenAI response structure:', data);
+      throw new Error('Invalid response from OpenAI');
+    }
+
     const aiResponse = data.choices[0].message.content;
 
-    return new Response(JSON.stringify({ 
+    if (!aiResponse) {
+      console.error('Empty response from OpenAI');
+      throw new Error('Empty response from OpenAI');
+    }
+
+    const responseData = { 
       response: aiResponse,
       conversationHistory: [...conversationHistory, 
         { role: 'user', content: message },
         { role: 'assistant', content: aiResponse }
       ]
-    }), {
+    };
+
+    console.log('Sending successful response');
+    return new Response(JSON.stringify(responseData), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {

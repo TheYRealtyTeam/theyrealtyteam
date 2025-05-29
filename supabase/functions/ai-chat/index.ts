@@ -1,10 +1,17 @@
-// functions/ai-chat/index.ts
-
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 
 serve(async (req) => {
   try {
-    const { message } = await req.json();
+    const contentType = req.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) {
+      return new Response(JSON.stringify({ error: "Invalid content type" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const body = await req.json();
+    const { message } = body;
 
     if (!message) {
       return new Response(JSON.stringify({ error: "No message provided" }), {
@@ -14,7 +21,6 @@ serve(async (req) => {
     }
 
     const assistant_id = "asst_Lavu1npRoD3YMFXFxIGRxK4y";
-
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
 
     const createHeaders = {
@@ -28,7 +34,6 @@ serve(async (req) => {
       method: "POST",
       headers: createHeaders,
     });
-
     const threadData = await threadRes.json();
     const thread_id = threadData.id;
 
@@ -48,7 +53,6 @@ serve(async (req) => {
       headers: createHeaders,
       body: JSON.stringify({ assistant_id }),
     });
-
     const runData = await runRes.json();
     const run_id = runData.id;
 
@@ -85,6 +89,7 @@ serve(async (req) => {
     return new Response(JSON.stringify({ response: reply }), {
       headers: { "Content-Type": "application/json" },
     });
+
   } catch (err) {
     console.error("Error:", err);
     return new Response(

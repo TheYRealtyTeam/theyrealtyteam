@@ -10,8 +10,7 @@ serve(async (req) => {
       });
     }
 
-    const body = await req.json();
-    const { message } = body;
+    const { message } = await req.json();
 
     if (!message) {
       return new Response(JSON.stringify({ error: "No message provided" }), {

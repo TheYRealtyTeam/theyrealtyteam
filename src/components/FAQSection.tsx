@@ -13,10 +13,6 @@ const FAQSection = () => {
       title: "For Property Owners",
       faqs: [
         {
-          question: "What services does Y Realty Team offer to property owners?",
-          answer: "We offer comprehensive property management services including tenant placement, rent collection, property maintenance, financial reporting, regular inspections, and 24/6 emergency support. Our goal is to maximize your property's ROI while minimizing your personal involvement."
-        },
-        {
           question: "How do you screen potential tenants?",
           answer: "Our tenant screening process is thorough and includes background checks, credit reports, employment verification, income validation, rental history, and reference checks. We ensure only qualified tenants are placed in your property."
         },
@@ -64,7 +60,7 @@ const FAQSection = () => {
         },
         {
           question: "How do I pay my rent?",
-          answer: "We offer multiple convenient payment methods including online payments through our tenant portal, bank transfers, and check payments. We encourage setting up automatic payments for convenience and to avoid late fees."
+          answer: "We offer multiple convenient payment methods including online payments through our tenant portal and bank transfers. We encourage setting up automatic payments for convenience and to avoid late fees."
         },
         {
           question: "What happens when my lease is ending?",

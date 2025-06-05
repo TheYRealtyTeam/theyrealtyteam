@@ -135,10 +135,6 @@ const FAQSection = () => {
           answer: "Y Realty Team has years of experience in property management and real estate services. Our team combines industry expertise with innovative technology to deliver superior results for our clients."
         },
         {
-          question: "Are you licensed and insured?",
-          answer: "Yes, Y Realty Team is fully licensed in all markets we serve and carries comprehensive insurance coverage including general liability and errors & omissions insurance to protect our clients."
-        },
-        {
           question: "How do I get started with Y Realty Team?",
           answer: "Getting started is easy! Contact us for a free consultation where we'll discuss your needs, explain our services, and provide a customized proposal. You can reach us through our website, phone, or email."
         },

@@ -39,26 +39,24 @@ const Profile = () => {
       try {
         setLoading(true);
         
-        // Using type assertion to bypass TypeScript type checks since we know the structure
-        const response = await fetch(`https://axgepdguspqqxudqnobz.supabase.co/rest/v1/profiles?id=eq.${user.id}`, {
-          headers: {
-            'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4Z2VwZGd1c3BxcXh1ZHFub2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjE0MjIsImV4cCI6MjA1OTc5NzQyMn0.GFk04igJ-d6iEB_Da8et-ZVG_eRi9u9xbCbRLnGKdEY',
-            'Content-Type': 'application/json'
-          }
-        });
+        // Use proper Supabase client instead of hardcoded fetch
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .maybeSingle();
 
-        if (!response.ok) {
-          throw new Error('Failed to fetch profile');
+        if (error) {
+          console.error('Error fetching profile:', error);
+          throw error;
         }
-
-        const data = await response.json();
         
-        if (data && data.length > 0) {
+        if (data) {
           const profileData: ProfileData = {
-            id: data[0].id,
-            username: data[0].username,
-            full_name: data[0].full_name,
-            avatar_url: data[0].avatar_url
+            id: data.id,
+            username: data.username,
+            full_name: data.full_name,
+            avatar_url: data.avatar_url
           };
           
           setProfile(profileData);
@@ -82,23 +80,19 @@ const Profile = () => {
 
     setUpdating(true);
     try {
-      // Using fetch API with type assertion to bypass TypeScript errors
-      const response = await fetch(`https://axgepdguspqqxudqnobz.supabase.co/rest/v1/profiles?id=eq.${user.id}`, {
-        method: 'PATCH',
-        headers: {
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4Z2VwZGd1c3BxcXh1ZHFub2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMjE0MjIsImV4cCI6MjA1OTc5NzQyMn0.GFk04igJ-d6iEB_Da8et-ZVG_eRi9u9xbCbRLnGKdEY',
-          'Content-Type': 'application/json',
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({
-          username,
-          full_name: fullName,
+      // Use proper Supabase client instead of hardcoded fetch
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          username: username || null,
+          full_name: fullName || null,
           updated_at: new Date().toISOString(),
         })
-      });
+        .eq('id', user.id);
 
-      if (!response.ok) {
-        throw new Error('Failed to update profile');
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
       }
       
       toast.success('Profile updated successfully');
@@ -165,6 +159,7 @@ const Profile = () => {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
+                  maxLength={100}
                 />
               </div>
               
@@ -175,6 +170,7 @@ const Profile = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Your username"
+                  maxLength={50}
                 />
               </div>
               

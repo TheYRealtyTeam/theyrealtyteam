@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -17,12 +18,20 @@ function handleCors(req: Request) {
   }
 }
 
-// Initialize Supabase client with Deno environment variables
-const supabaseUrl = Deno.env.get("SUPABASE_URL") || "https://axgepdguspqqxudqnobz.supabase.co";
+// Initialize Supabase client with environment variables
+const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
 const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
 
-// Function to send an email notification
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const resend = new Resend(resendApiKey);
+
+// Input sanitization function
+function sanitizeInput(input: string): string {
+  return input.trim().replace(/[<>]/g, '');
+}
+
+// Function to send an email notification using Resend
 async function sendEmailNotification(submissionData: any) {
   const recipientEmail = "info@theYteam.co";
   const subject = `New Contact Form Submission from ${submissionData.name}`;
@@ -40,27 +49,19 @@ async function sendEmailNotification(submissionData: any) {
   `;
   
   try {
-    // Send email using Supabase edge function
-    const { error } = await supabase.auth.admin.createUser({
-      email: recipientEmail,
-      email_confirm: true,
-      user_metadata: {
-        subject,
-        content: htmlBody,
-        forceEmailNotification: true
-      }
+    // Send email using Resend
+    const emailResponse = await resend.emails.send({
+      from: "Y Realty Team <no-reply@theYteam.co>",
+      to: [recipientEmail],
+      subject,
+      html: htmlBody,
     });
     
-    if (error) {
-      console.error("Error sending email notification:", error);
-      return false;
-    }
-    
-    console.log("Email notification sent successfully to:", recipientEmail);
-    return true;
+    console.log("Email notification sent successfully:", emailResponse);
+    return { success: true, data: emailResponse };
   } catch (error) {
     console.error("Failed to send email notification:", error);
-    return false;
+    return { success: false, error: error.message };
   }
 }
 
@@ -73,13 +74,18 @@ serve(async (req) => {
     // Get the form data from the request
     const formData = await req.json();
 
-    // Create a contact_submissions record
+    // Validate required fields
+    if (!formData.name || !formData.email || !formData.property_type || !formData.message) {
+      throw new Error("Missing required fields");
+    }
+
+    // Sanitize inputs
     const submissionData = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone || null,
-      property_type: formData.property_type,
-      message: formData.message,
+      name: sanitizeInput(formData.name),
+      email: sanitizeInput(formData.email),
+      phone: formData.phone ? sanitizeInput(formData.phone) : null,
+      property_type: sanitizeInput(formData.property_type),
+      message: sanitizeInput(formData.message),
       created_at: new Date().toISOString(),
     };
 
@@ -96,14 +102,17 @@ serve(async (req) => {
       throw new Error("Failed to store contact submission");
     }
 
-    // Send email notification
-    const emailSent = await sendEmailNotification(submissionData);
+    // Send email notification if Resend API key is available
+    let emailResult = { success: false, error: "Resend API key not configured" };
+    if (resendApiKey) {
+      emailResult = await sendEmailNotification(submissionData);
+    }
     
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: "Contact message received and stored",
-        emailSent: emailSent,
+        emailSent: emailResult.success,
         data: data,
         recipientEmail: "info@theYteam.co" 
       }),
@@ -116,7 +125,10 @@ serve(async (req) => {
     console.error("Error processing contact form:", error);
     
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message || "Internal server error",
+        success: false 
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 500,

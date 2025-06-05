@@ -29,11 +29,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Show toast message on successful sign in/out
-        if (event === 'SIGNED_IN') {
-          toast.success('Successfully signed in!');
-        } else if (event === 'SIGNED_OUT') {
-          toast.success('Successfully signed out!');
+        // Show toast message on successful sign in/out (only when not loading)
+        if (!loading) {
+          if (event === 'SIGNED_IN') {
+            toast.success('Successfully signed in!');
+          } else if (event === 'SIGNED_OUT') {
+            toast.success('Successfully signed out!');
+          }
         }
       }
     );
@@ -42,11 +44,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const initializeAuth = async () => {
       try {
         setLoading(true);
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+          // Don't throw error, just log it and continue
+        }
+        
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
       } catch (error) {
         console.error('Error initializing auth:', error);
+        // Continue without auth if there's an error
       } finally {
         setLoading(false);
       }
@@ -125,7 +134,18 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    // Return a default context instead of throwing an error
+    // This allows the app to function without authentication
+    console.warn('useAuth used outside of AuthProvider - returning default values');
+    return {
+      session: null,
+      user: null,
+      loading: false,
+      signIn: async () => ({ error: new Error('Auth not available') }),
+      signUp: async () => ({ error: new Error('Auth not available') }),
+      signOut: async () => {},
+      setSessionAndUser: () => {}
+    };
   }
   
   return context;

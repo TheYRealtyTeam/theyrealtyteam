@@ -17,19 +17,33 @@ const ContactForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Input sanitization function
+  // Enhanced input sanitization function
   const sanitizeInput = (input: string): string => {
-    return input.trim().replace(/[<>]/g, '');
+    return input
+      .trim()
+      .replace(/[<>]/g, '') // Remove potential XSS characters
+      .replace(/javascript:/gi, '') // Remove javascript: protocol
+      .replace(/data:/gi, '') // Remove data: protocol
+      .replace(/vbscript:/gi, ''); // Remove vbscript: protocol
   };
 
   const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(email) && email.length <= 254; // RFC 5321 limit
   };
 
   const validatePhone = (phone: string): boolean => {
     const phoneRegex = /^[\d\s\-\+\(\)\.]+$/;
-    return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
+    return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10 && phone.length <= 20;
+  };
+
+  const validateName = (name: string): boolean => {
+    const nameRegex = /^[a-zA-Z\s\-\.\']+$/;
+    return nameRegex.test(name) && name.length >= 2 && name.length <= 100;
+  };
+
+  const validateMessage = (message: string): boolean => {
+    return message.length >= 10 && message.length <= 2000;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,6 +56,16 @@ const ContactForm = () => {
       toast({
         title: "Missing Required Fields",
         description: "Please fill in all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate name format
+    if (!validateName(formData.name)) {
+      toast({
+        title: "Invalid Name",
+        description: "Please enter a valid name (2-100 characters, letters only).",
         variant: "destructive"
       });
       return;
@@ -61,7 +85,17 @@ const ContactForm = () => {
     if (formData.phone && !validatePhone(formData.phone)) {
       toast({
         title: "Invalid Phone Number",
-        description: "Please enter a valid phone number.",
+        description: "Please enter a valid phone number (10-20 digits).",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate message length and content
+    if (!validateMessage(formData.message)) {
+      toast({
+        title: "Invalid Message",
+        description: "Message must be between 10 and 2000 characters.",
         variant: "destructive"
       });
       return;
@@ -79,7 +113,7 @@ const ContactForm = () => {
         message: sanitizeInput(formData.message)
       };
 
-      // Store in database
+      // Store in database using Supabase client
       const { error: dbError } = await supabase
         .from('contact_submissions')
         .insert([sanitizedData]);
@@ -126,9 +160,19 @@ const ContactForm = () => {
   };
 
   const handleInputChange = (field: string, value: string) => {
+    // Basic input filtering during typing
+    let filteredValue = value;
+    
+    // Remove potential malicious content during input
+    if (field === 'name') {
+      filteredValue = value.replace(/[^a-zA-Z\s\-\.']/g, '');
+    } else if (field === 'phone') {
+      filteredValue = value.replace(/[^0-9\s\-\+\(\)\.]/g, '');
+    }
+    
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: filteredValue
     }));
   };
 
@@ -162,7 +206,7 @@ const ContactForm = () => {
             onChange={(e) => handleInputChange('email', e.target.value)}
             placeholder="Enter your email address"
             required
-            maxLength={100}
+            maxLength={254}
             className="w-full"
           />
         </div>
@@ -215,9 +259,13 @@ const ContactForm = () => {
           placeholder="Tell us about your property management needs..."
           required
           maxLength={2000}
+          minLength={10}
           rows={5}
           className="w-full resize-none"
         />
+        <p className="text-xs text-gray-500">
+          {formData.message.length}/2000 characters (minimum 10)
+        </p>
       </div>
 
       <Button 

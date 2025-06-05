@@ -32,10 +32,10 @@ const ValueProposition = () => {
       </div>
       <div className="bg-white/20 p-4 rounded-lg">
         <p className="text-lg font-bold">
-          What you pay for maintenance = Actual contractor cost + Small coordination fee
+          What you pay for maintenance = Actual contractor cost
         </p>
         <p className="text-sm opacity-90 mt-1">
-          We pass through maintenance costs at invoice price with just a minimal coordination fee - no markups or inflated charges.
+          We pass through maintenance costs at exact invoice price with no markups, no coordination fees, and no inflated charges.
         </p>
       </div>
     </div>

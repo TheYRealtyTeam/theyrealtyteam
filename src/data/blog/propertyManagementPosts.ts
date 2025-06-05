@@ -30,7 +30,8 @@ Partner with Y Realty Team for professional property management that delivers re
     date: "2024-01-15",
     category: "Property Management",
     tags: ["property management", "investment", "real estate"],
-    readTime: 8
+    readTime: 8,
+    image_url: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60"
   },
   {
     id: 2,
@@ -64,6 +65,7 @@ Choose Y Realty Team for property management that enhances your investment retur
     date: "2024-01-10",
     category: "Property Management",
     tags: ["ROI", "professional management", "investment returns"],
-    readTime: 6
+    readTime: 6,
+    image_url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   }
 ];

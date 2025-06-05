@@ -11,6 +11,7 @@ export interface BlogPost {
   category: string;
   tags: string[];
   readTime: number;
+  image_url: string;
 }
 
 // Import blog posts from category-specific files

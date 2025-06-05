@@ -34,6 +34,7 @@ Trust Y Realty Team to manage your tenant relationships professionally and effec
     date: "2024-01-08",
     category: "Tenant Relations",
     tags: ["tenant retention", "communication", "property management"],
-    readTime: 5
+    readTime: 5,
+    image_url: "https://images.unsplash.com/photo-1560184897-ae75f418493e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   }
 ];

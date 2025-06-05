@@ -38,7 +38,8 @@ Stay ahead of market trends with Y Realty Team's expert analysis and management 
     date: "2023-12-28",
     category: "Market Trends",
     tags: ["market analysis", "rental trends", "2024 outlook"],
-    readTime: 7
+    readTime: 7,
+    image_url: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzJ8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   },
   {
     id: 8,
@@ -76,6 +77,7 @@ Leverage Y Realty Team's market expertise for informed property management decis
     date: "2023-12-25",
     category: "Market Trends",
     tags: ["market research", "data analysis", "competitive analysis"],
-    readTime: 6
+    readTime: 6,
+    image_url: "https://images.unsplash.com/photo-1567684014761-b65e2e59b9eb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   }
 ];

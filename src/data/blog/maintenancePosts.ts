@@ -38,6 +38,7 @@ Trust Y Realty Team's maintenance expertise to protect your property investment.
     date: "2024-01-01",
     category: "Maintenance",
     tags: ["preventive maintenance", "property care", "cost savings"],
-    readTime: 6
+    readTime: 6,
+    image_url: "https://images.unsplash.com/photo-1613545325278-f24b0cae1224?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mjd8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   }
 ];

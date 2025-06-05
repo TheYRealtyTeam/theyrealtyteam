@@ -38,7 +38,8 @@ Partner with Y Realty Team to maximize your rental property investments.`,
     date: "2024-01-05",
     category: "Investment Advice",
     tags: ["ROI", "investment strategy", "property improvement"],
-    readTime: 7
+    readTime: 7,
+    image_url: "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjB8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   },
   {
     id: 5,
@@ -76,6 +77,7 @@ Let Y Realty Team help you build and manage a profitable rental property portfol
     date: "2024-01-03",
     category: "Investment Advice",
     tags: ["portfolio growth", "investment strategy", "real estate"],
-    readTime: 8
+    readTime: 8,
+    image_url: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
   }
 ];

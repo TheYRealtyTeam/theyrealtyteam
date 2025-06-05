@@ -114,9 +114,10 @@ Our commitment extends beyond business hours with 24/7 emergency support for our
 
 IMPORTANT: When users ask to speak with a person, representative, agent, or any human contact, immediately provide our contact information:
 
-📞 Phone: (845) 734-3331
-📧 Email: [Contact Us](mailto:info@theYteam.co?subject=Inquiry%20from%20Website) or visit our [Contact Page](/contact)
-🌐 Website: [theyteam.co](https://theyteam.co) or visit our [Contact Page](/contact)
+Phone: (845) 734-3331
+Email: info@theYteam.co
+Website: theyteam.co
+You can also visit our contact page on the website.
 
 Business Hours: Monday through Friday, 9:00 AM to 6:00 PM
 We're closed on weekends, but our clients have access to 24/7 emergency support for urgent property matters.

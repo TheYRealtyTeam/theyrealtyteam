@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Star, ChevronLeft, ChevronRight, Quote, TrendingUp, MapPin } from 'lucide-react';
 
@@ -60,6 +59,33 @@ const TestimonialsSection = () => {
       stars: 5,
       text: "What sets Y Realty Team apart is their proactive approach and use of technology. I get detailed monthly reports, real-time maintenance updates, and their preventive maintenance program has saved me thousands in major repairs. They're true partners in my investment success.",
       results: "Thousands saved in repairs"
+    },
+    {
+      name: "James Patterson",
+      role: "Commercial Property Executive",
+      location: "Illinois",
+      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=400&h=400&fit=crop&crop=face",
+      stars: 5,
+      text: "As an executive managing a portfolio of commercial properties, I need a partner who understands the complexities of commercial real estate. Y Realty Team delivers exceptional service with their professional approach and comprehensive reporting. They've increased our NOI by 12% across our entire portfolio.",
+      results: "12% NOI increase across portfolio"
+    },
+    {
+      name: "Victoria Sterling",
+      role: "Investment Fund Manager",
+      location: "New York",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=400&fit=crop&crop=face",
+      stars: 5,
+      text: "Managing institutional-grade properties requires precision and expertise. Y Realty Team has proven themselves as the premier choice for our fund's real estate investments. Their technology platform provides the transparency and data analytics we need for informed decision-making.",
+      results: "Institutional-grade management"
+    },
+    {
+      name: "Alexander Brooks",
+      role: "Corporate Real Estate Director",
+      location: "California",
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=400&h=400&fit=crop&crop=face",
+      stars: 5,
+      text: "Our corporate real estate portfolio spans multiple states, and Y Realty Team has been instrumental in streamlining our operations. Their professional team handles everything from lease negotiations to maintenance coordination with remarkable efficiency. We've seen a 20% reduction in operational costs.",
+      results: "20% operational cost reduction"
     }
   ];
 

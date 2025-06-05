@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
@@ -82,7 +81,7 @@ const coreServices: Service[] = [
     description: "Strategic property improvements, renovation management, market positioning optimization, and ROI maximization planning.",
     icon: <PiggyBank className="h-12 w-12 text-yrealty-accent" />,
     features: ["Improvement planning", "Renovation management", "ROI optimization", "Market positioning"],
-    pricing: "Custom project pricing"
+    pricing: "Included in management fee"
   }
 ];
 

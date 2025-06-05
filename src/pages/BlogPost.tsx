@@ -2,40 +2,137 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
-import { blogPosts, BlogPost as BlogPostType } from '@/data/blogPosts';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Clock, User, Tag, Calendar } from 'lucide-react';
+import { supabase, BlogPostData } from '@/integrations/supabase/client';
+import { toast } from '@/components/ui/use-toast';
+import { Skeleton } from "@/components/ui/skeleton";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<BlogPostType | null>(null);
-  const [relatedPosts, setRelatedPosts] = useState<BlogPostType[]>([]);
+  const [post, setPost] = useState<BlogPostData | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPostData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug) return;
 
-    // Find the post by slug
-    const foundPost = blogPosts.find(p => p.slug === slug);
-    setPost(foundPost || null);
+    async function fetchBlogPost() {
+      try {
+        setLoading(true);
+        setError(null);
 
-    if (foundPost) {
-      // Find related posts (same category, excluding current post)
-      const related = blogPosts
-        .filter(p => p.category === foundPost.category && p.id !== foundPost.id)
-        .slice(0, 3);
-      setRelatedPosts(related);
+        console.log("Fetching blog post with slug:", slug);
 
-      document.title = `${foundPost.title} | Y Realty Team Blog`;
-      window.scrollTo(0, 0);
+        // Find the post by slug
+        const { data: postData, error: postError } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('slug', slug)
+          .maybeSingle();
+
+        if (postError) {
+          console.error('Error fetching blog post:', postError);
+          setError(postError.message);
+          toast({
+            title: "Error fetching blog post",
+            description: postError.message,
+            variant: "destructive"
+          });
+          return;
+        }
+
+        if (!postData) {
+          console.log("No blog post found with slug:", slug);
+          setPost(null);
+          return;
+        }
+
+        console.log("Blog post found:", postData.title);
+        setPost(postData as BlogPostData);
+
+        // Find related posts (same category, excluding current post)
+        const { data: relatedData, error: relatedError } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('category', postData.category)
+          .neq('id', postData.id)
+          .limit(3);
+
+        if (relatedError) {
+          console.error('Error fetching related posts:', relatedError);
+        } else {
+          setRelatedPosts(relatedData as BlogPostData[] || []);
+        }
+
+        document.title = `${postData.title} | Y Realty Team Blog`;
+        window.scrollTo(0, 0);
+      } catch (error: any) {
+        console.error('Unexpected error fetching blog post:', error);
+        setError("An unexpected error occurred: " + (error.message || "Unknown error"));
+      } finally {
+        setLoading(false);
+      }
     }
+
+    fetchBlogPost();
   }, [slug]);
 
-  if (!post) {
+  const getCategoryLabel = (categoryId: string) => {
+    if (!categoryId) return 'General';
+    return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  };
+
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return dateString;
+      }
+      return new Intl.DateTimeFormat('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      }).format(date);
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  if (loading) {
+    return (
+      <PageLayout title="Loading...">
+        <article className="max-w-4xl mx-auto">
+          <Skeleton className="w-full h-[400px] md:h-[500px] rounded-xl mb-8" />
+          <div className="space-y-4 mb-8">
+            <Skeleton className="h-6 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+            <div className="flex gap-3">
+              <Skeleton className="h-8 w-24 rounded-full" />
+              <Skeleton className="h-8 w-20 rounded-full" />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+          </div>
+        </article>
+      </PageLayout>
+    );
+  }
+
+  if (error || !post) {
     return (
       <PageLayout title="Blog Post Not Found">
         <div className="text-center py-12">
-          <p className="text-xl font-medium text-gray-700">The blog post you are looking for does not exist.</p>
-          <p className="text-gray-500 mt-2">Please check the URL or go back to the blog page.</p>
+          <p className="text-xl font-medium text-gray-700">
+            {error ? "Error loading blog post" : "The blog post you are looking for does not exist."}
+          </p>
+          <p className="text-gray-500 mt-2">
+            {error || "Please check the URL or go back to the blog page."}
+          </p>
           <Link to="/blog">
             <Button className="mt-6">
               <ArrowLeft className="mr-2" />
@@ -59,17 +156,17 @@ const BlogPost = () => {
             src={post.image_url} 
             alt={post.title} 
             className="w-full h-[400px] md:h-[500px] object-cover rounded-xl mb-8"
+            onError={(e) => {
+              console.log("Image load error, using fallback");
+              (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
+            }}
           />
           
           {/* Article Meta */}
           <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-6">
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
-              <span>{new Date(post.date).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              })}</span>
+              <span>{formatDate(post.date)}</span>
             </div>
             <div className="flex items-center gap-2">
               <User className="h-5 w-5" />
@@ -77,21 +174,15 @@ const BlogPost = () => {
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5" />
-              <span>{post.readTime}</span>
+              <span>{post.read_time || 5} min read</span>
             </div>
           </div>
 
-          {/* Category and Tags */}
+          {/* Category */}
           <div className="flex flex-wrap items-center gap-3 mb-8">
             <span className="bg-yrealty-navy text-white px-4 py-2 rounded-full font-medium">
-              {post.category}
+              {getCategoryLabel(post.category)}
             </span>
-            {post.tags.map((tag, index) => (
-              <span key={index} className="flex items-center gap-1 bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                <Tag className="h-3 w-3" />
-                {tag}
-              </span>
-            ))}
           </div>
         </div>
         
@@ -145,10 +236,13 @@ const BlogPost = () => {
                       src={relatedPost.image_url} 
                       alt={relatedPost.title} 
                       className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
+                      }}
                     />
                     <div className="p-4">
                       <span className="text-xs bg-yrealty-blue text-yrealty-navy px-2 py-1 rounded-full">
-                        {relatedPost.category}
+                        {getCategoryLabel(relatedPost.category)}
                       </span>
                       <h4 className="font-bold mt-2 mb-2 text-yrealty-navy group-hover:text-yrealty-accent transition-colors line-clamp-2">
                         {relatedPost.title}

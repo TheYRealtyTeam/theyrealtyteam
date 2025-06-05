@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   Tabs, 
@@ -9,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 import EnhancedRentalCalculator from './calculators/enhanced/EnhancedRentalCalculator';
-import MortgageCalculator from './calculators/MortgageCalculator';
+import EnhancedMortgageCalculator from './calculators/enhanced/EnhancedMortgageCalculator';
 import ROICalculator from './calculators/ROICalculator';
 
 // Define shared state interface
@@ -90,8 +91,8 @@ const CalculatorsSection = () => {
           <div className="flex justify-center mb-8">
             <TabsList className={`flex flex-wrap ${isMobile ? 'flex-col w-full' : 'grid-cols-3'} max-w-2xl w-full`}>
               <TabsTrigger value="rental" className="flex-1">Enhanced Rental Calculator</TabsTrigger>
-              <TabsTrigger value="mortgage" className="flex-1">Mortgage</TabsTrigger>
-              <TabsTrigger value="roi" className="flex-1">ROI</TabsTrigger>
+              <TabsTrigger value="mortgage" className="flex-1">Mortgage Calculator</TabsTrigger>
+              <TabsTrigger value="roi" className="flex-1">ROI Calculator</TabsTrigger>
             </TabsList>
           </div>
           
@@ -111,12 +112,14 @@ const CalculatorsSection = () => {
           </TabsContent>
           
           <TabsContent value="mortgage" className="reveal">
-            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-              <h2 className="text-2xl font-bold mb-4 text-yrealty-navy">Mortgage Calculator</h2>
-              <p className="text-gray-600 mb-6">
-                Calculate your monthly mortgage payments based on property price, down payment, interest rate, and loan term.
-              </p>
-              <MortgageCalculator 
+            <div className="bg-gray-50 rounded-xl p-6">
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold mb-2 text-yrealty-navy">Advanced Mortgage Calculator</h2>
+                <p className="text-gray-600 max-w-3xl mx-auto">
+                  Calculate your mortgage payments with precision. Get detailed breakdowns, amortization schedules, and professional insights to make informed home buying decisions.
+                </p>
+              </div>
+              <EnhancedMortgageCalculator 
                 sharedState={sharedState} 
                 updateSharedState={updateSharedState} 
               />

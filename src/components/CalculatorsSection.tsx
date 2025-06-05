@@ -11,7 +11,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 import EnhancedRentalCalculator from './calculators/enhanced/EnhancedRentalCalculator';
 import EnhancedMortgageCalculator from './calculators/enhanced/EnhancedMortgageCalculator';
-import ROICalculator from './calculators/ROICalculator';
+import EnhancedROICalculator from './calculators/enhanced/EnhancedROICalculator';
 
 // Define shared state interface
 interface SharedCalculatorState {
@@ -46,7 +46,7 @@ interface SharedCalculatorState {
 const CalculatorsSection = () => {
   const isMobile = useIsMobile();
 
-  // Initialize shared state with default values
+  // Initialize shared state with default values - this persists across calculator switches
   const [sharedState, setSharedState] = useState<SharedCalculatorState>({
     propertyValue: 300000,
     downPaymentPercent: 20,
@@ -72,7 +72,7 @@ const CalculatorsSection = () => {
     holdingPeriod: 5
   });
 
-  // Function to update shared state
+  // Function to update shared state - persists data across calculator switches
   const updateSharedState = (updates: Partial<SharedCalculatorState>) => {
     setSharedState(prevState => ({
       ...prevState,
@@ -82,6 +82,34 @@ const CalculatorsSection = () => {
         ? ((updates.propertyValue || prevState.propertyValue) * (updates.downPaymentPercent || prevState.downPaymentPercent)) / 100
         : prevState.downPaymentAmount
     }));
+  };
+
+  // Reset function - only called when user explicitly resets or refreshes page
+  const resetCalculators = () => {
+    setSharedState({
+      propertyValue: 300000,
+      downPaymentPercent: 20,
+      downPaymentAmount: 60000,
+      
+      interestRate: 4.5,
+      loanTerm: 30,
+      mortgagePayment: 1500,
+      
+      monthlyRent: 2000,
+      propertyTax: 3000,
+      insurance: 1200,
+      maintenanceCost: 100,
+      vacancyRate: 5,
+      managementFee: 8,
+      isFlatFee: false,
+      isYearly: false,
+      otherExpenses: 100,
+
+      closingCosts: 5000,
+      renovationCosts: 10000,
+      annualAppreciation: 3,
+      holdingPeriod: 5
+    });
   };
   
   return (
@@ -94,6 +122,17 @@ const CalculatorsSection = () => {
               <TabsTrigger value="mortgage" className="flex-1">Mortgage Calculator</TabsTrigger>
               <TabsTrigger value="roi" className="flex-1">ROI Calculator</TabsTrigger>
             </TabsList>
+          </div>
+
+          {/* Reset Button */}
+          <div className="flex justify-end mb-4">
+            <Button 
+              variant="outline" 
+              onClick={resetCalculators}
+              className="text-sm"
+            >
+              Reset All Calculators
+            </Button>
           </div>
           
           <TabsContent value="rental" className="reveal">
@@ -127,14 +166,16 @@ const CalculatorsSection = () => {
           </TabsContent>
           
           <TabsContent value="roi" className="reveal">
-            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-              <h2 className="text-2xl font-bold mb-4 text-yrealty-navy">Return on Investment (ROI) Calculator</h2>
-              <p className="text-gray-600 mb-6">
-                Analyze the potential return on investment for a property, considering purchase price, rental income, expenses, and appreciation.
-              </p>
-              <ROICalculator 
+            <div className="bg-gray-50 rounded-xl p-6">
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold mb-2 text-yrealty-navy">Advanced ROI Investment Calculator</h2>
+                <p className="text-gray-600 max-w-3xl mx-auto">
+                  Analyze investment opportunities with sophisticated modeling. Calculate returns, cash flow projections, and get professional insights for your property investments.
+                </p>
+              </div>
+              <EnhancedROICalculator 
                 sharedState={sharedState} 
-                updateSharedState={updateSharedState}
+                updateSharedState={updateSharedState} 
               />
             </div>
           </TabsContent>

@@ -18,7 +18,7 @@ const coreServices: Service[] = [
     description: "Rigorous 12-point tenant screening process including credit checks, employment verification, rental history analysis, and background checks to place only the most qualified tenants.",
     icon: <User className="h-12 w-12 text-yrealty-accent" />,
     features: ["12-point screening process", "Average 3-day placement", "95% tenant retention rate", "Legal compliance guaranteed"],
-    pricing: "Contact for competitive rates"
+    pricing: "One-time placement fee"
   },
   {
     title: "Comprehensive Property Inspections",
@@ -91,7 +91,7 @@ export const getResidentialServices = (): Service[] => [
     description: "Comprehensive management for single-family homes, condos, and apartments with focus on maximizing rental income and maintaining property value.",
     icon: <Home className="h-12 w-12 text-yrealty-accent" />,
     features: ["Single-family homes", "Condos & apartments", "HOA coordination", "Residential compliance"],
-    pricing: "Competitive management fees"
+    pricing: "8-12% of monthly rent"
   },
   ...coreServices
 ];
@@ -102,7 +102,7 @@ export const getCommercialServices = (): Service[] => [
     description: "Expert management of office buildings, retail spaces, industrial properties, and mixed-use developments to maximize ROI and tenant satisfaction.",
     icon: <Building className="h-12 w-12 text-yrealty-accent" />,
     features: ["Office buildings", "Retail spaces", "Industrial properties", "Mixed-use developments"],
-    pricing: "Custom commercial rates"
+    pricing: "Custom commercial pricing"
   },
   ...coreServices
 ];

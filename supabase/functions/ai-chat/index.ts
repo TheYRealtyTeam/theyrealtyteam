@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 
 const corsHeaders = {
@@ -97,7 +96,19 @@ serve(async (req) => {
 
 Y Realty Team specializes in comprehensive property management solutions including residential and commercial properties, multi-family units, and mixed-use developments. We provide full-service property management with professional tenant placement and thorough screening processes, expert maintenance coordination and oversight, detailed monthly financial reporting with transparent rent collection, comprehensive market analysis and strategic investment advice, and specialized property investment consulting services.
 
-What sets us apart is that we always have boots on the ground with our own trained Y Realty Team members in every state, ensuring direct oversight and quality control. In addition to our dedicated team members, we work with carefully vetted third-party partners to provide comprehensive local support while maintaining our high standards.
+PRICING - ONE SIMPLE FEE INCLUDES EVERYTHING:
+Unlike other property management companies that charge additional fees for every service, Y Realty Team includes EVERYTHING in one transparent management fee:
+- No setup fees, no marketing costs, no inspection fees, no technology fees
+- No placement fees, no renewal fees, no administrative fees, no hidden costs
+- Maintenance costs are passed through at actual invoice price plus a small coordination fee (no markups)
+- Our comprehensive management fee covers ALL services, technology, inspections, marketing, and support
+
+BOOTS ON THE GROUND APPROACH:
+What sets Y Realty Team apart is our commitment to having our own trained team members in every state providing direct oversight and quality control. We don't rely primarily on third-party companies like others do:
+- We have our own Y Realty Team members in all 50 states as our primary approach
+- You work directly with Y Realty Team, not through middlemen
+- When additional support is needed, we supplement with carefully vetted third-party partners
+- This ensures consistent Y Realty standards and accountability nationwide
 
 Our commitment extends beyond business hours with 24/7 emergency support for our valued clients, professional property marketing and advertising, and complete eviction services when necessary.
 

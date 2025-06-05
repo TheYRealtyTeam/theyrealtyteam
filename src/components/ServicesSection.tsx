@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
@@ -195,28 +194,55 @@ const ServicesSection = () => {
             to maximize your property's potential and minimize your stress
           </p>
           
-          {/* Value proposition highlight */}
+          {/* Enhanced value proposition highlight */}
           <div className="bg-gradient-to-r from-yrealty-accent to-yrealty-navy p-8 rounded-2xl max-w-5xl mx-auto reveal text-white">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
-              ALL Services Included - NO Hidden Fees
+              ONE Simple Price - EVERYTHING Included
             </h3>
             <p className="text-lg md:text-xl opacity-95 mb-6">
-              As our valued client, you receive <span className="font-bold">ALL</span> of these premium services as part of our comprehensive property management package. 
-              But that's not all – we go <span className="font-bold">BEYOND</span> the standard offerings to provide truly exceptional, tailored support.
+              Unlike other property management companies that nickel and dime you with add-on fees, Y Realty Team includes <span className="font-bold">EVERYTHING</span> in one transparent management fee. Our comprehensive price covers ALL services, technology, inspections, marketing, and support with absolutely NO hidden costs or surprise charges.
             </p>
-            <div className="flex flex-wrap justify-center gap-6 text-lg">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-base mb-6">
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-6 w-6" />
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
                 <span>No Setup Fees</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-6 w-6" />
-                <span>No Hidden Costs</span>
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Marketing Costs</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-6 w-6" />
-                <span>Transparent Pricing</span>
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Inspection Fees</span>
               </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Technology Fees</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Placement Fees</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Renewal Fees</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Administrative Fees</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="h-5 w-5 flex-shrink-0" />
+                <span>No Hidden Costs</span>
+              </div>
+            </div>
+            <div className="bg-white/20 p-4 rounded-lg">
+              <p className="text-lg font-bold">
+                What you pay for maintenance = Actual contractor cost + Small coordination fee
+              </p>
+              <p className="text-sm opacity-90 mt-1">
+                We pass through maintenance costs at invoice price with just a minimal coordination fee - no markups or inflated charges.
+              </p>
             </div>
           </div>
         </div>
@@ -334,15 +360,15 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        {/* Enhanced CTA */}
+        {/* Enhanced CTA with pricing emphasis */}
         <div className="mt-20 text-center reveal">
           <div className="bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-12 rounded-2xl text-white">
             <h3 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Experience Premium Property Management?
+              Ready for Transparent, All-Inclusive Property Management?
             </h3>
             <p className="text-xl mb-8 opacity-95 max-w-3xl mx-auto">
-              Join hundreds of satisfied property owners who trust Y Realty Team with their most valuable investments. 
-              Get your free consultation and custom management proposal today.
+              Join hundreds of satisfied property owners who love our straightforward pricing with everything included. 
+              Get your free consultation and discover how much you can save with our transparent approach.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a href="#contact" className="btn-accent bg-white text-yrealty-navy hover:bg-gray-100 text-lg px-8 py-4 font-bold">

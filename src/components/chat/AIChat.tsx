@@ -38,6 +38,17 @@ const AIChat = () => {
     if (!inputMessage.trim() || isLoading) return;
 
     const userMessage = inputMessage.trim();
+    
+    // Validate message length
+    if (userMessage.length > 4000) {
+      toast({
+        title: "Message too long",
+        description: "Please keep your message under 4000 characters.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setInputMessage('');
     setIsLoading(true);
 
@@ -52,13 +63,13 @@ const AIChat = () => {
     try {
       console.log('Sending message to AI chat function:', userMessage);
       
-      // Prepare conversation history for API
-      const conversationHistory = messages.map(msg => ({
+      // Prepare conversation history for API (limit to recent messages to prevent token issues)
+      const conversationHistory = messages.slice(-8).map(msg => ({
         role: msg.role,
         content: msg.content
       }));
 
-      // Use Supabase client to invoke the edge function
+      // Call the edge function
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
           message: userMessage,
@@ -66,21 +77,24 @@ const AIChat = () => {
         }
       });
 
-      console.log('AI chat response:', data, error);
+      console.log('AI chat response received:', { data, error });
 
+      // Handle Supabase function errors
       if (error) {
         console.error('Supabase function error:', error);
-        throw new Error(error.message || 'Failed to get AI response');
+        throw new Error(`Function call failed: ${error.message || 'Unknown error'}`);
       }
 
+      // Handle application-level errors from the edge function
       if (data?.error) {
-        console.error('AI chat function error:', data.error);
+        console.error('AI chat function returned error:', data.error);
         throw new Error(data.error);
       }
 
-      if (!data?.response) {
-        console.error('No response from AI chat function:', data);
-        throw new Error('No response received from AI');
+      // Validate response
+      if (!data || !data.response) {
+        console.error('Invalid response structure:', data);
+        throw new Error('Invalid response from AI service');
       }
 
       // Add AI response to chat
@@ -91,11 +105,29 @@ const AIChat = () => {
       };
       setMessages(prev => [...prev, aiMessage]);
 
+      console.log('AI message added to chat successfully');
+
     } catch (error) {
-      console.error('Error sending message:', error);
+      console.error('Error in sendMessage:', error);
+      
+      // Determine appropriate error message
+      let errorMessage = "I'm having trouble responding right now. Please try again.";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('authentication')) {
+          errorMessage = "AI service authentication issue. Please contact support.";
+        } else if (error.message.includes('busy') || error.message.includes('429')) {
+          errorMessage = "AI service is busy. Please wait a moment and try again.";
+        } else if (error.message.includes('too long')) {
+          errorMessage = "Your message is too long. Please try a shorter message.";
+        } else if (error.message.includes('network') || error.message.includes('fetch')) {
+          errorMessage = "Network connection issue. Please check your internet and try again.";
+        }
+      }
+      
       toast({
-        title: "Error",
-        description: "Sorry, I'm having trouble responding right now. Please try again or contact us directly.",
+        title: "Chat Error",
+        description: errorMessage,
         variant: "destructive"
       });
       
@@ -167,7 +199,7 @@ const AIChat = () => {
                   : 'bg-gray-100 text-gray-800'
               }`}
             >
-              <p className="text-sm leading-relaxed">{message.content}</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
               <p className="text-xs opacity-70 mt-1">
                 {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
@@ -207,6 +239,7 @@ const AIChat = () => {
             placeholder="Ask about property management..."
             disabled={isLoading}
             className="flex-1"
+            maxLength={4000}
           />
           <Button
             onClick={sendMessage}
@@ -216,9 +249,14 @@ const AIChat = () => {
             <Send className="h-4 w-4" />
           </Button>
         </div>
-        <p className="text-xs text-gray-500 mt-2 text-center">
-          Powered by AI • For specific quotes, please contact us directly
-        </p>
+        <div className="flex justify-between items-center mt-2">
+          <p className="text-xs text-gray-500">
+            Powered by AI • For specific quotes, please contact us directly
+          </p>
+          <p className="text-xs text-gray-400">
+            {inputMessage.length}/4000
+          </p>
+        </div>
       </div>
     </div>
   );

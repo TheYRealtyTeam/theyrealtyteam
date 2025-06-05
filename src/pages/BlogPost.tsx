@@ -100,6 +100,13 @@ const BlogPost = () => {
     }
   };
 
+  // Calculate estimated read time based on content length
+  const getEstimatedReadTime = (content: string) => {
+    const wordsPerMinute = 200;
+    const wordCount = content.split(/\s+/).length;
+    return Math.max(1, Math.ceil(wordCount / wordsPerMinute));
+  };
+
   if (loading) {
     return (
       <PageLayout title="Loading...">
@@ -174,7 +181,7 @@ const BlogPost = () => {
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5" />
-              <span>{post.read_time || 5} min read</span>
+              <span>{getEstimatedReadTime(post.content)} min read</span>
             </div>
           </div>
 

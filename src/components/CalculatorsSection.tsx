@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Tabs, 
@@ -9,7 +8,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
-import RentalPropertyCalculator from './calculators/RentalPropertyCalculator';
+import EnhancedRentalCalculator from './calculators/enhanced/EnhancedRentalCalculator';
 import MortgageCalculator from './calculators/MortgageCalculator';
 import ROICalculator from './calculators/ROICalculator';
 
@@ -90,19 +89,21 @@ const CalculatorsSection = () => {
         <Tabs defaultValue="rental" className="w-full">
           <div className="flex justify-center mb-8">
             <TabsList className={`flex flex-wrap ${isMobile ? 'flex-col w-full' : 'grid-cols-3'} max-w-2xl w-full`}>
-              <TabsTrigger value="rental" className="flex-1">Rental Income</TabsTrigger>
+              <TabsTrigger value="rental" className="flex-1">Enhanced Rental Calculator</TabsTrigger>
               <TabsTrigger value="mortgage" className="flex-1">Mortgage</TabsTrigger>
               <TabsTrigger value="roi" className="flex-1">ROI</TabsTrigger>
             </TabsList>
           </div>
           
           <TabsContent value="rental" className="reveal">
-            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-              <h2 className="text-2xl font-bold mb-4 text-yrealty-navy">Rental Income Calculator</h2>
-              <p className="text-gray-600 mb-6">
-                Estimate your monthly and annual rental income after expenses to better understand the cash flow from your property investment.
-              </p>
-              <RentalPropertyCalculator 
+            <div className="bg-gray-50 rounded-xl p-6">
+              <div className="text-center mb-6">
+                <h2 className="text-3xl font-bold mb-2 text-yrealty-navy">Advanced Property Investment Calculator</h2>
+                <p className="text-gray-600 max-w-3xl mx-auto">
+                  Make informed investment decisions with our comprehensive analysis tool. Get detailed insights, real-time calculations, and professional recommendations for your property investment.
+                </p>
+              </div>
+              <EnhancedRentalCalculator 
                 sharedState={sharedState} 
                 updateSharedState={updateSharedState} 
               />

@@ -18,7 +18,7 @@ const coreServices: Service[] = [
     description: "Rigorous 12-point tenant screening process including credit checks, employment verification, rental history analysis, and background checks to place only the most qualified tenants.",
     icon: <User className="h-12 w-12 text-yrealty-accent" />,
     features: ["12-point screening process", "Average 3-day placement", "95% tenant retention rate", "Legal compliance guaranteed"],
-    pricing: "One-time placement fee"
+    pricing: "Included in management fee"
   },
   {
     title: "Comprehensive Property Inspections",

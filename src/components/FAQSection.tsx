@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Accordion, 
@@ -27,6 +28,22 @@ const FAQSection = () => {
         {
           question: "How often will I receive statements and payments?",
           answer: "Property owners receive detailed monthly statements showing all income and expenses. Payments are typically disbursed by the 15th of each month via direct deposit to your designated account."
+        },
+        {
+          question: "What are your management fees?",
+          answer: "Our management fees are competitive and transparent. We offer different service packages to meet varying needs and budgets. Contact us for a personalized quote based on your specific property and requirements."
+        },
+        {
+          question: "How quickly can you fill a vacant property?",
+          answer: "Our average vacancy time is significantly below market standards thanks to our proactive marketing strategies, competitive pricing, and extensive tenant network. Most properties are leased within 2-4 weeks of becoming available."
+        },
+        {
+          question: "Do you handle evictions if necessary?",
+          answer: "Yes, we handle the entire eviction process when necessary, including proper legal notices, court filings, and coordination with attorneys. We always attempt resolution first, but will protect your interests when eviction becomes unavoidable."
+        },
+        {
+          question: "Can I still have input on important decisions about my property?",
+          answer: "Absolutely! While we handle day-to-day operations, you remain the owner and have final say on major decisions. We'll consult with you on significant repairs, tenant selection criteria, and rental rate adjustments."
         }
       ]
     },
@@ -53,6 +70,18 @@ const FAQSection = () => {
         {
           question: "What happens when my lease is ending?",
           answer: "We'll contact you approximately 60 days before your lease ends to discuss renewal options. If you plan to move out, we'll provide clear instructions for the move-out process and security deposit return."
+        },
+        {
+          question: "What should I expect during the move-in process?",
+          answer: "Before move-in, we'll conduct a thorough walk-through with you to document the property's condition. You'll receive keys, garage remotes, and important contact information. We'll also explain emergency procedures and maintenance request processes."
+        },
+        {
+          question: "How are security deposits handled?",
+          answer: "Security deposits are held in separate, interest-bearing accounts as required by law. Upon move-out, we'll conduct a final inspection and return your deposit within the legally required timeframe, minus any legitimate deductions for damages beyond normal wear and tear."
+        },
+        {
+          question: "Who do I contact for emergencies?",
+          answer: "For true emergencies (water leaks, electrical issues, lockouts, heating/cooling failures), we provide 24/6 emergency contact numbers. Non-emergency maintenance requests should be submitted through our tenant portal during business hours."
         }
       ]
     },
@@ -79,6 +108,44 @@ const FAQSection = () => {
         {
           question: "What makes your property management services different from others?",
           answer: "We distinguish ourselves through personalized service, transparent communication, proactive maintenance, rigorous tenant screening, and leveraging technology to streamline operations and provide real-time information to property owners."
+        },
+        {
+          question: "Do you provide market analysis and investment consultation?",
+          answer: "Yes, we offer comprehensive market analysis reports and investment consultation services. Our team can help you evaluate potential acquisitions, assess portfolio performance, and develop long-term investment strategies."
+        },
+        {
+          question: "How do you handle multiple properties for one investor?",
+          answer: "We excel at managing investor portfolios of all sizes. You'll receive consolidated reporting, streamlined communication, and volume discounts when applicable. Our technology platform makes it easy to track performance across your entire portfolio."
+        },
+        {
+          question: "What technology tools do you use for property management?",
+          answer: "We use cutting-edge property management software that provides real-time access to financial reports, maintenance tracking, tenant communications, and market data. Property owners can access their dashboard 24/7 through our online portal."
+        }
+      ]
+    },
+    {
+      id: "general",
+      title: "General Questions",
+      faqs: [
+        {
+          question: "What areas does Y Realty Team serve?",
+          answer: "We provide property management services across multiple markets nationwide. Contact us to confirm coverage in your specific area and learn about our local market expertise."
+        },
+        {
+          question: "How long has Y Realty Team been in business?",
+          answer: "Y Realty Team has years of experience in property management and real estate services. Our team combines industry expertise with innovative technology to deliver superior results for our clients."
+        },
+        {
+          question: "Are you licensed and insured?",
+          answer: "Yes, Y Realty Team is fully licensed in all markets we serve and carries comprehensive insurance coverage including general liability and errors & omissions insurance to protect our clients."
+        },
+        {
+          question: "How do I get started with Y Realty Team?",
+          answer: "Getting started is easy! Contact us for a free consultation where we'll discuss your needs, explain our services, and provide a customized proposal. You can reach us through our website, phone, or email."
+        },
+        {
+          question: "Do you offer any guarantees on your services?",
+          answer: "We stand behind our work with service guarantees and are committed to client satisfaction. If you're not completely satisfied with our services, we'll work with you to resolve any concerns promptly."
         }
       ]
     }

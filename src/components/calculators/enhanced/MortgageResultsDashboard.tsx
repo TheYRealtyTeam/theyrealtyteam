@@ -101,7 +101,7 @@ const MortgageResultsDashboard = ({ state, results }: MortgageResultsDashboardPr
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, value }) => `${name}: $${value.toFixed(0)}`}
+                  label={({ name, value }) => `${name}: $${Number(value).toFixed(0)}`}
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
@@ -110,7 +110,7 @@ const MortgageResultsDashboard = ({ state, results }: MortgageResultsDashboardPr
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => `$${value.toFixed(0)}`} />
+                <Tooltip formatter={(value) => `$${Number(value).toFixed(0)}`} />
               </PieChart>
             </ResponsiveContainer>
           </CardContent>
@@ -126,7 +126,7 @@ const MortgageResultsDashboard = ({ state, results }: MortgageResultsDashboardPr
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="year" />
                 <YAxis />
-                <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+                <Tooltip formatter={(value) => `$${Number(value).toLocaleString()}`} />
                 <Legend />
                 <Line type="monotone" dataKey="principal" stroke="#10b981" strokeWidth={2} />
                 <Line type="monotone" dataKey="interest" stroke="#ef4444" strokeWidth={2} />

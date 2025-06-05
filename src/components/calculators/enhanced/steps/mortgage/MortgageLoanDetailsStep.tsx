@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DollarSign, Home, TrendingUp } from 'lucide-react';
 import QuickInsightCard from '../../components/QuickInsightCard';
 import { MortgageCalculatorState, MortgageResults } from '../../types/mortgageTypes';
 
@@ -100,6 +101,7 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
           title="Loan Amount"
           value={`$${results.loanAmount.toLocaleString()}`}
           subtitle="Principal to finance"
+          icon={<DollarSign className="h-4 w-4" />}
           trend="neutral"
         />
         
@@ -107,6 +109,7 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
           title="Est. Monthly Payment"
           value={`$${results.totalMonthlyPayment.toFixed(0)}`}
           subtitle="Principal, Interest, Taxes, Insurance"
+          icon={<Home className="h-4 w-4" />}
           trend={results.totalMonthlyPayment < state.propertyValue * 0.005 ? "positive" : "negative"}
         />
         

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
+import { DollarSign, TrendingDown, Calculator } from 'lucide-react';
 import QuickInsightCard from '../../components/QuickInsightCard';
 import { MortgageCalculatorState, MortgageResults } from '../../types/mortgageTypes';
 
@@ -85,6 +86,7 @@ const MortgageLoanTermsStep = ({ state, updateState, results }: MortgageLoanTerm
           title="Principal & Interest"
           value={`$${results.monthlyPrincipalInterest.toFixed(0)}`}
           subtitle="Monthly payment"
+          icon={<DollarSign className="h-4 w-4" />}
           trend="neutral"
         />
         
@@ -92,6 +94,7 @@ const MortgageLoanTermsStep = ({ state, updateState, results }: MortgageLoanTerm
           title="Total Interest"
           value={`$${results.totalInterestPaid.toLocaleString()}`}
           subtitle="Over loan lifetime"
+          icon={<TrendingDown className="h-4 w-4" />}
           trend="negative"
         />
         
@@ -99,6 +102,7 @@ const MortgageLoanTermsStep = ({ state, updateState, results }: MortgageLoanTerm
           title="Total of Payments"
           value={`$${results.totalPaymentLifetime.toLocaleString()}`}
           subtitle="Principal + Interest"
+          icon={<Calculator className="h-4 w-4" />}
           trend="neutral"
         />
         

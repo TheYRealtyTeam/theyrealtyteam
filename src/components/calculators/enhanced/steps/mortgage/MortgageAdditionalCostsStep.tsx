@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Home } from 'lucide-react';
 import QuickInsightCard from '../../components/QuickInsightCard';
 import { MortgageCalculatorState, MortgageResults } from '../../types/mortgageTypes';
 
@@ -99,6 +100,7 @@ const MortgageAdditionalCostsStep = ({ state, updateState, results }: MortgageAd
           title="Total Monthly Payment"
           value={`$${results.totalMonthlyPayment.toFixed(0)}`}
           subtitle="PITI + PMI + HOA"
+          icon={<Home className="h-4 w-4" />}
           trend="neutral"
         />
         

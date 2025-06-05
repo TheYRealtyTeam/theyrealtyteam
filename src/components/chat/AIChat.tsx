@@ -1,10 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, X, MessageCircle, Loader } from 'lucide-react';
+import { Send, Bot, User, X, MessageCircle, Loader, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -13,6 +13,7 @@ interface ChatMessage {
 }
 
 const AIChat = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -227,6 +228,21 @@ const AIChat = () => {
           </div>
         )}
         <div ref={messagesEndRef} />
+      </div>
+
+      {/* Contact Button */}
+      <div className="px-4 pb-2">
+        <Button
+          onClick={() => {
+            setIsOpen(false);
+            navigate('/contact');
+          }}
+          variant="outline"
+          className="w-full border-yrealty-navy text-yrealty-navy hover:bg-yrealty-navy hover:text-white"
+        >
+          <Phone className="h-4 w-4 mr-2" />
+          Contact Us Directly
+        </Button>
       </div>
 
       {/* Chat Input */}

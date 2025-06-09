@@ -2,6 +2,12 @@
 import * as React from 'react';
 
 export const AnimationObserver = () => {
+  // Ensure React is available before using hooks
+  if (!React || !React.useRef || !React.useEffect) {
+    console.error('React hooks not available in AnimationObserver');
+    return null;
+  }
+
   const observerRef = React.useRef<IntersectionObserver | null>(null);
   const elementsRef = React.useRef<Element[]>([]);
   const mutationObserverRef = React.useRef<MutationObserver | null>(null);

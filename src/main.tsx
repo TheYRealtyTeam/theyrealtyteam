@@ -1,9 +1,11 @@
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import * as React from 'react';
 import App from './App.tsx';
 import './styles/index.css';
+
+// Ensure React is available globally before any other imports
+import * as React from 'react';
 
 console.log('Main.tsx loading...');
 
@@ -21,6 +23,11 @@ console.log('React validation passed:', {
   version: React.version,
   hooksAvailable: !!(React.useState && React.useEffect && React.useContext)
 });
+
+// Make React available globally as a fallback
+if (typeof window !== 'undefined') {
+  (window as any).React = React;
+}
 
 const container = document.getElementById("root");
 if (!container) {

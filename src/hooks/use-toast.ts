@@ -169,16 +169,6 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  // Check if React hooks are available
-  if (!React?.useState || !React?.useEffect) {
-    console.warn('React hooks not available, returning fallback');
-    return {
-      toasts: [],
-      toast: () => ({ id: '', dismiss: () => {}, update: () => {} }),
-      dismiss: () => {}
-    };
-  }
-
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {

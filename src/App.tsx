@@ -31,16 +31,6 @@ const queryClient = new QueryClient({
 const App = () => {
   console.log('App component rendering...');
   
-  // Ensure React hooks are available before rendering
-  if (!React.useState || !React.useEffect) {
-    return (
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h2>Loading...</h2>
-        <p>Initializing application...</p>
-      </div>
-    );
-  }
-  
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

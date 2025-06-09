@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
@@ -142,41 +143,43 @@ const AIChat = () => {
     }
   };
 
-  if (!isOpen) {
-    return <ChatToggleButton onClick={() => setIsOpen(true)} />;
-  }
-
   return (
-    <div className={`fixed ${isMobile ? 'inset-x-4 bottom-20 top-20' : 'bottom-6 right-6 w-96 h-[500px]'} bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-40`}>
-      <ChatHeader onClose={() => setIsOpen(false)} />
-      <ChatMessages 
-        messages={messages}
-        isLoading={isLoading}
-        messagesEndRef={messagesEndRef}
-      />
-      
-      <div className="px-4 pb-2">
-        <Button
-          onClick={() => {
-            setIsOpen(false);
-            navigate('/contact');
-          }}
-          variant="outline"
-          className="w-full border-yrealty-navy text-yrealty-navy hover:bg-yrealty-navy hover:text-white"
-        >
-          <Phone className="h-4 w-4 mr-2" />
-          Contact Us Directly
-        </Button>
-      </div>
+    <TooltipProvider delayDuration={0}>
+      {!isOpen ? (
+        <ChatToggleButton onClick={() => setIsOpen(true)} />
+      ) : (
+        <div className={`fixed ${isMobile ? 'inset-x-4 bottom-20 top-20' : 'bottom-6 right-6 w-96 h-[500px]'} bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-40`}>
+          <ChatHeader onClose={() => setIsOpen(false)} />
+          <ChatMessages 
+            messages={messages}
+            isLoading={isLoading}
+            messagesEndRef={messagesEndRef}
+          />
+          
+          <div className="px-4 pb-2">
+            <Button
+              onClick={() => {
+                setIsOpen(false);
+                navigate('/contact');
+              }}
+              variant="outline"
+              className="w-full border-yrealty-navy text-yrealty-navy hover:bg-yrealty-navy hover:text-white"
+            >
+              <Phone className="h-4 w-4 mr-2" />
+              Contact Us Directly
+            </Button>
+          </div>
 
-      <ChatInput
-        inputMessage={inputMessage}
-        setInputMessage={setInputMessage}
-        onSendMessage={sendMessage}
-        onKeyPress={handleKeyPress}
-        isLoading={isLoading}
-      />
-    </div>
+          <ChatInput
+            inputMessage={inputMessage}
+            setInputMessage={setInputMessage}
+            onSendMessage={sendMessage}
+            onKeyPress={handleKeyPress}
+            isLoading={isLoading}
+          />
+        </div>
+      )}
+    </TooltipProvider>
   );
 };
 

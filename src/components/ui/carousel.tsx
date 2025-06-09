@@ -1,10 +1,7 @@
-
 import * as React from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-
-console.log("Carousel component loading - simplified version");
 
 type CarouselProps = {
   orientation?: "horizontal" | "vertical"
@@ -17,7 +14,8 @@ type CarouselContextProps = {
   scrollNext: () => void
   canScrollPrev: boolean
   canScrollNext: boolean
-} & CarouselProps
+  orientation?: "horizontal" | "vertical"
+}
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
@@ -42,7 +40,6 @@ const Carousel = React.forwardRef<
     },
     ref
   ) => {
-    console.log("Carousel render - simplified implementation");
     const [currentIndex, setCurrentIndex] = React.useState(0)
     const [itemCount, setItemCount] = React.useState(0)
 

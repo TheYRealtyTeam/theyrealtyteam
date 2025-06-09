@@ -28,7 +28,13 @@ const MobileBottomNavigation = () => {
   };
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
+    <div 
+      className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
+      style={{ 
+        zIndex: 9999,
+        paddingBottom: 'env(safe-area-inset-bottom)' 
+      }}
+    >
       <div className="grid grid-cols-5 h-16">
         {navItems.map((item, index) => {
           if (item.isExternal) {

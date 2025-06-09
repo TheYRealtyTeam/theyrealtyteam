@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -17,6 +18,9 @@ import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
   const { isMobile } = useIsMobileOptimized();
+
+  // Debug logging
+  console.log('Index component rendering, isMobile:', isMobile);
 
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
@@ -66,7 +70,7 @@ const Index = () => {
   };
 
   const content = (
-    <div className={`min-h-screen flex flex-col bg-white ${isMobile ? 'pb-20' : ''}`}>
+    <div className="min-h-screen flex flex-col bg-white" style={{ paddingBottom: isMobile ? '80px' : '0' }}>
       <Navbar />
       <main className="flex-1">
         <HeroSection />

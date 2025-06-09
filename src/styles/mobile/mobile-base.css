@@ -16,7 +16,6 @@
     overflow-x: hidden;
     min-height: 100vh;
     position: relative;
-    padding-bottom: 5rem; /* Space for fixed bottom navigation */
   }
 
   /* Prevent horizontal scroll */

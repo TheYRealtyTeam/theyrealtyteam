@@ -1,6 +1,5 @@
 
 import React, { useEffect } from 'react';
-import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -69,28 +68,26 @@ const Index = () => {
   };
 
   const mainContent = (
-    <TooltipProvider>
-      <div style={{ paddingBottom: isMobile ? '80px' : '0' }} className="min-h-screen flex flex-col bg-white">
-        <Navbar />
-        <main className="flex-1">
-          <HeroSection />
-          <AboutSection />
-          <ServicesSection />
-          <AreasSection />
-          <TestimonialsSection />
-          <ContactSection />
-        </main>
-        <Footer />
-        <AIChat />
-        <AnimationObserver />
-        {isMobile && (
-          <>
-            <MobilePWAPrompt />
-            <MobileOfflineIndicator />
-          </>
-        )}
-      </div>
-    </TooltipProvider>
+    <div style={{ paddingBottom: isMobile ? '80px' : '0' }} className="min-h-screen flex flex-col bg-white">
+      <Navbar />
+      <main className="flex-1">
+        <HeroSection />
+        <AboutSection />
+        <ServicesSection />
+        <AreasSection />
+        <TestimonialsSection />
+        <ContactSection />
+      </main>
+      <Footer />
+      <AIChat />
+      <AnimationObserver />
+      {isMobile && (
+        <>
+          <MobilePWAPrompt />
+          <MobileOfflineIndicator />
+        </>
+      )}
+    </div>
   );
 
   const content = isMobile ? (

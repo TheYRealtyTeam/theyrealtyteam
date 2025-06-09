@@ -26,30 +26,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     let mounted = true;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, currentSession) => {
-        if (!mounted) return;
-        
-        console.log('Auth state changed', event);
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
-        
-        if (!loading) {
-          if (event === 'SIGNED_IN') {
-            toast.success('Successfully signed in!');
-          } else if (event === 'SIGNED_OUT') {
-            toast.success('Successfully signed out!');
-          }
-        }
-      }
-    );
-
     const initializeAuth = async () => {
       if (!mounted) return;
       
       try {
         console.log("AuthProvider: Initializing auth");
         setLoading(true);
+        
+        // Get initial session
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -68,6 +52,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
     };
+
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, currentSession) => {
+        if (!mounted) return;
+        
+        console.log('Auth state changed', event);
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+        
+        if (!loading) {
+          if (event === 'SIGNED_IN') {
+            toast.success('Successfully signed in!');
+          } else if (event === 'SIGNED_OUT') {
+            toast.success('Successfully signed out!');
+          }
+        }
+      }
+    );
 
     initializeAuth();
 

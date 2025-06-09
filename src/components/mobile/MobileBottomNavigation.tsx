@@ -28,11 +28,14 @@ const MobileBottomNavigation = () => {
   };
 
   return (
-    <div 
+    <nav 
       className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg"
       style={{ 
-        zIndex: 9999,
-        paddingBottom: 'env(safe-area-inset-bottom)' 
+        position: 'fixed',
+        zIndex: 10000,
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        transform: 'translateZ(0)', // Force hardware acceleration
+        willChange: 'transform' // Optimize for position changes
       }}
     >
       <div className="grid grid-cols-5 h-16">
@@ -42,7 +45,7 @@ const MobileBottomNavigation = () => {
               <button
                 key={index}
                 onClick={() => handleNavClick(item.href, item.isExternal)}
-                className="mobile-nav-item mobile-haptic-btn flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group"
+                className="flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group min-h-[44px]"
               >
                 <item.icon className="h-5 w-5 text-gray-600 group-hover:text-yrealty-accent transition-colors" />
                 <span className="text-xs text-gray-600 group-hover:text-yrealty-accent transition-colors mt-1">
@@ -56,7 +59,7 @@ const MobileBottomNavigation = () => {
             <Link
               key={index}
               to={item.href}
-              className={`mobile-nav-item mobile-haptic-btn flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group ${
+              className={`flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group min-h-[44px] ${
                 isActive(item.href) ? 'text-yrealty-accent' : ''
               }`}
             >
@@ -72,7 +75,7 @@ const MobileBottomNavigation = () => {
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 };
 

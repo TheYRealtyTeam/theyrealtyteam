@@ -7,12 +7,16 @@
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100%;
   }
 
   body {
     font-size: 16px; /* Prevent zoom on focus */
     line-height: 1.5;
     overflow-x: hidden;
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 5rem; /* Space for fixed bottom navigation */
   }
 
   /* Prevent horizontal scroll */
@@ -81,17 +85,18 @@
     font-size: 0.875rem;
     line-height: 1.5;
   }
+
+  /* Fixed positioning optimization */
+  .fixed {
+    transform: translateZ(0);
+    will-change: transform;
+  }
 }
 
 /* Landscape mobile optimizations */
 @media screen and (max-width: 768px) and (orientation: landscape) {
-  .mobile-landscape-adjust {
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-
-  .mobile-nav-item {
-    min-height: 48px;
+  body {
+    padding-bottom: 4rem; /* Reduce padding in landscape */
   }
 }
 

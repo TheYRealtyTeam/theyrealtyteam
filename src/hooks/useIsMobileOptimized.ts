@@ -1,8 +1,9 @@
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const useIsMobileOptimized = () => {
   console.log("useIsMobileOptimized hook called");
+  console.log("React in hook:", React.version);
   console.log("useState available:", typeof useState);
   
   const [isMobile, setIsMobile] = useState(false);

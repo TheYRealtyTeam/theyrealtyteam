@@ -16,6 +16,9 @@ import NotFound from "./pages/NotFound";
 import MicrosoftAuthCallback from "./components/appointment/MicrosoftAuthCallback";
 import Profile from "./pages/Profile";
 
+console.log("App component rendering");
+console.log("React in App:", React.version);
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

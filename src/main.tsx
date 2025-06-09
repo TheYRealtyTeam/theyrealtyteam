@@ -4,10 +4,14 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './styles/index.css';
 
-// Ensure React is properly initialized
+// Ensure React is properly available globally
+if (typeof React === 'undefined' || React === null) {
+  throw new Error('React is not properly loaded');
+}
+
 console.log('Main.tsx loading...');
+console.log('React available:', !!React);
 console.log('React version:', React.version);
-console.log('Creating React root...');
 
 const container = document.getElementById("root");
 if (!container) {
@@ -15,8 +19,10 @@ if (!container) {
 }
 
 try {
-  console.log('Rendering App...');
+  console.log('Creating React root...');
   const root = createRoot(container);
+  
+  console.log('Rendering App...');
   root.render(
     <StrictMode>
       <App />

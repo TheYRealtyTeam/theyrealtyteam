@@ -4,14 +4,22 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './styles/index.css';
 
-// Ensure React is properly available globally
-if (typeof React === 'undefined' || React === null) {
-  throw new Error('React is not properly loaded');
+console.log('Main.tsx loading...');
+
+// Ensure React is properly available before proceeding
+if (!React || typeof React !== 'object') {
+  throw new Error('React is not properly loaded - React object is null or undefined');
 }
 
-console.log('Main.tsx loading...');
-console.log('React available:', !!React);
-console.log('React version:', React.version);
+if (!React.useState || !React.useEffect || !React.useContext) {
+  throw new Error('React hooks are not available - React may not be properly imported');
+}
+
+console.log('React validation passed:', {
+  reactAvailable: !!React,
+  version: React.version,
+  hooksAvailable: !!(React.useState && React.useEffect && React.useContext)
+});
 
 const container = document.getElementById("root");
 if (!container) {

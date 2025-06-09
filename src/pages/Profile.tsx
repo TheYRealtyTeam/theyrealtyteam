@@ -41,7 +41,7 @@ const Profile = () => {
         
         // Use proper Supabase client to fetch from profiles table
         const { data, error } = await supabase
-          .from('profiles' as any) // Type assertion until types are regenerated
+          .from('profiles')
           .select('*')
           .eq('id', user.id)
           .maybeSingle();
@@ -65,7 +65,7 @@ const Profile = () => {
         } else {
           // Create profile if it doesn't exist
           const { error: insertError } = await supabase
-            .from('profiles' as any)
+            .from('profiles')
             .insert({
               id: user.id,
               username: null,
@@ -96,7 +96,7 @@ const Profile = () => {
     try {
       // Use proper Supabase client to update profiles table
       const { error } = await supabase
-        .from('profiles' as any) // Type assertion until types are regenerated
+        .from('profiles')
         .update({
           username: username || null,
           full_name: fullName || null,

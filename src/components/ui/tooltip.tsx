@@ -2,8 +2,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-console.log("Tooltip component loading - simplified");
-
 const TooltipProvider = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -70,7 +69,13 @@ const Index = () => {
   };
 
   const content = (
-    <div className="min-h-screen flex flex-col bg-white" style={{ paddingBottom: isMobile ? '80px' : '0' }}>
+    <div 
+      className="min-h-screen flex flex-col bg-white" 
+      style={{ 
+        paddingBottom: isMobile ? '80px' : '0',
+        position: 'relative'
+      }}
+    >
       <Navbar />
       <main className="flex-1">
         <HeroSection />
@@ -83,11 +88,11 @@ const Index = () => {
       <Footer />
       <AIChat />
       <AnimationObserver />
+      {isMobile && <MobileBottomNavigation />}
       {isMobile && (
         <>
           <MobilePWAPrompt />
           <MobileOfflineIndicator />
-          <MobileBottomNavigation />
         </>
       )}
     </div>

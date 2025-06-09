@@ -33,35 +33,36 @@ const MobileBottomNavigation = () => {
   };
 
   return (
-    <nav 
-      className="block md:hidden"
+    <div 
+      className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-blue-500 shadow-2xl"
       style={{ 
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        backgroundColor: 'white',
-        borderTop: '1px solid #e5e7eb',
-        boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.1)',
-        paddingBottom: 'env(safe-area-inset-bottom)',
-        height: '64px',
-        transform: 'translateZ(0)',
-        willChange: 'transform'
+        zIndex: 999999,
+        height: '70px',
+        width: '100%',
+        position: 'fixed !important' as any,
+        bottom: '0 !important' as any,
+        left: '0 !important' as any,
+        right: '0 !important' as any,
+        backgroundColor: '#ffffff !important' as any,
+        borderTop: '2px solid #3b82f6 !important' as any,
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.3) !important' as any
       }}
     >
-      <div className="grid grid-cols-5 h-full">
+      <div className="grid grid-cols-5 h-full w-full">
         {navItems.map((item, index) => {
           if (item.isExternal) {
             return (
               <button
                 key={index}
                 onClick={() => handleNavClick(item.href, item.isExternal)}
-                className="flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group"
-                style={{ minHeight: '44px' }}
+                className="flex flex-col items-center justify-center p-2 hover:bg-gray-100 transition-colors"
+                style={{ 
+                  minHeight: '60px',
+                  minWidth: '60px'
+                }}
               >
-                <item.icon className="h-5 w-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                <span className="text-xs text-gray-600 group-hover:text-blue-600 transition-colors mt-1">
+                <item.icon className="h-6 w-6 text-gray-700 hover:text-blue-600 transition-colors" />
+                <span className="text-xs text-gray-700 hover:text-blue-600 transition-colors mt-1 font-medium">
                   {item.label}
                 </span>
               </button>
@@ -72,16 +73,19 @@ const MobileBottomNavigation = () => {
             <Link
               key={index}
               to={item.href}
-              className={`flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group ${
-                isActive(item.href) ? 'text-blue-600' : ''
+              className={`flex flex-col items-center justify-center p-2 hover:bg-gray-100 transition-colors ${
+                isActive(item.href) ? 'bg-blue-50' : ''
               }`}
-              style={{ minHeight: '44px' }}
+              style={{ 
+                minHeight: '60px',
+                minWidth: '60px'
+              }}
             >
-              <item.icon className={`h-5 w-5 transition-colors ${
-                isActive(item.href) ? 'text-blue-600' : 'text-gray-600 group-hover:text-blue-600'
+              <item.icon className={`h-6 w-6 transition-colors ${
+                isActive(item.href) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
               }`} />
-              <span className={`text-xs transition-colors mt-1 ${
-                isActive(item.href) ? 'text-blue-600 font-semibold' : 'text-gray-600 group-hover:text-blue-600'
+              <span className={`text-xs transition-colors mt-1 font-medium ${
+                isActive(item.href) ? 'text-blue-600 font-bold' : 'text-gray-700 hover:text-blue-600'
               }`}>
                 {item.label}
               </span>
@@ -89,7 +93,7 @@ const MobileBottomNavigation = () => {
           );
         })}
       </div>
-    </nav>
+    </div>
   );
 };
 

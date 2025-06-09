@@ -85,10 +85,16 @@
     line-height: 1.5;
   }
 
-  /* Fixed positioning optimization */
-  .fixed {
-    transform: translateZ(0);
-    will-change: transform;
+  /* Force bottom navigation to be visible */
+  .mobile-bottom-nav {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 999999 !important;
+    background: white !important;
+    border-top: 2px solid #3b82f6 !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3) !important;
   }
 }
 

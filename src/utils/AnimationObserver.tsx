@@ -1,10 +1,10 @@
 
-import * as React from 'react';
+import React from 'react';
 
 export const AnimationObserver = () => {
-  // Ensure React is available before using hooks
-  if (!React || !React.useRef || !React.useEffect) {
-    console.error('React hooks not available in AnimationObserver');
+  // Check if React hooks are available
+  if (!React?.useRef || !React?.useEffect) {
+    console.warn('React hooks not available in AnimationObserver');
     return null;
   }
 

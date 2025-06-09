@@ -1,5 +1,4 @@
-
-import * as React from 'react';
+import React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { 
   sanitizeInput, 
@@ -11,6 +10,18 @@ import {
 
 export const useContactSectionForm = () => {
   const { toast } = useToast();
+  
+  // Check if React hooks are available
+  if (!React?.useState) {
+    console.warn('React hooks not available in useContactSectionForm');
+    return {
+      formData: { name: '', email: '', phone: '', propertyType: '', message: '' },
+      isSubmitting: false,
+      handleChange: () => {},
+      handleSubmit: () => {}
+    };
+  }
+
   const [formData, setFormData] = React.useState({
     name: '',
     email: '',

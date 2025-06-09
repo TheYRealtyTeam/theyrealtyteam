@@ -1,51 +1,57 @@
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
 import './styles/index.css';
 
-// Ensure React is available globally before any other imports
-import * as React from 'react';
+// Import React first and ensure it's available
+import React from 'react';
 
 console.log('Main.tsx loading...');
 
-// Ensure React is properly available before proceeding
-if (!React || typeof React !== 'object') {
-  throw new Error('React is not properly loaded - React object is null or undefined');
+// Ensure React is properly loaded
+if (!React) {
+  throw new Error('React is not available');
 }
 
-if (!React.useState || !React.useEffect || !React.useContext) {
-  throw new Error('React hooks are not available - React may not be properly imported');
-}
-
-console.log('React validation passed:', {
-  reactAvailable: !!React,
-  version: React.version,
-  hooksAvailable: !!(React.useState && React.useEffect && React.useContext)
-});
-
-// Make React available globally as a fallback
+// Make React globally available
 if (typeof window !== 'undefined') {
   (window as any).React = React;
 }
+
+console.log('React is available:', {
+  react: !!React,
+  version: React.version,
+  hooks: !!(React.useState && React.useEffect)
+});
+
+// Dynamic import of App to ensure React is ready
+const loadApp = async () => {
+  const { default: App } = await import('./App');
+  return App;
+};
 
 const container = document.getElementById("root");
 if (!container) {
   throw new Error("Root element not found");
 }
 
-try {
-  console.log('Creating React root...');
-  const root = createRoot(container);
-  
-  console.log('Rendering App...');
+const root = createRoot(container);
+
+loadApp().then((App) => {
   root.render(
     <StrictMode>
       <App />
     </StrictMode>
   );
   console.log('App rendered successfully');
-} catch (error) {
-  console.error('Error rendering app:', error);
-  throw error;
-}
+}).catch((error) => {
+  console.error('Error loading app:', error);
+  // Render a simple error message
+  root.render(
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h2>Application Error</h2>
+      <p>Failed to load the application. Please refresh the page.</p>
+      <button onClick={() => window.location.reload()}>Refresh</button>
+    </div>
+  );
+});

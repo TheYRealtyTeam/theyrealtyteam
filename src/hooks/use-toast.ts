@@ -1,5 +1,4 @@
-
-import * as React from "react"
+import React from "react"
 
 import type {
   ToastActionElement,
@@ -170,9 +169,9 @@ function toast({ ...props }: Toast) {
 }
 
 function useToast() {
-  // Ensure React hooks are available
-  if (!React || !React.useState || !React.useEffect) {
-    console.error('React hooks not available in useToast');
+  // Check if React hooks are available
+  if (!React?.useState || !React?.useEffect) {
+    console.warn('React hooks not available, returning fallback');
     return {
       toasts: [],
       toast: () => ({ id: '', dismiss: () => {}, update: () => {} }),

@@ -33,19 +33,20 @@ const MobileBottomNavigation = () => {
   };
 
   return (
-    <div 
-      className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t-2 border-blue-500 shadow-2xl"
+    <nav 
+      className="md:hidden block"
       style={{ 
-        zIndex: 999999,
+        position: 'fixed',
+        bottom: '0',
+        left: '0',
+        right: '0',
+        zIndex: '999999',
         height: '70px',
-        width: '100%',
-        position: 'fixed !important' as any,
-        bottom: '0 !important' as any,
-        left: '0 !important' as any,
-        right: '0 !important' as any,
-        backgroundColor: '#ffffff !important' as any,
-        borderTop: '2px solid #3b82f6 !important' as any,
-        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.3) !important' as any
+        backgroundColor: '#ffffff',
+        borderTop: '2px solid #3b82f6',
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.3)',
+        transform: 'translateZ(0)',
+        willChange: 'transform'
       }}
     >
       <div className="grid grid-cols-5 h-full w-full">
@@ -93,7 +94,7 @@ const MobileBottomNavigation = () => {
           );
         })}
       </div>
-    </div>
+    </nav>
   );
 };
 

@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -27,7 +26,6 @@ const queryClient = new QueryClient({
 
 const App = () => {
   console.log("App component rendering");
-  console.log("React in App:", React.version);
   
   return (
     <QueryClientProvider client={queryClient}>

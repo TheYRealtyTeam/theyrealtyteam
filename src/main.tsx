@@ -1,11 +1,10 @@
 
-import React, { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './styles/index.css';
 
 console.log("Main.tsx loading...");
-console.log("React version:", React.version);
 
 const container = document.getElementById("root");
 if (!container) {

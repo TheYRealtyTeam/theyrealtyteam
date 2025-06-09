@@ -1,11 +1,8 @@
 
-import React, { StrictMode } from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './styles/index.css';
-
-// Ensure React is available globally to prevent null reference errors
-window.React = React;
 
 const container = document.getElementById("root");
 if (!container) {

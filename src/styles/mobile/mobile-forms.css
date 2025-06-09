@@ -1,0 +1,32 @@
+
+/* Mobile form optimizations */
+@media (max-width: 768px) {
+  /* Enhanced mobile form optimizations */
+  .mobile-form-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    border: 2px solid #e5e7eb;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-form-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  /* Mobile-specific content optimization */
+  .mobile-content-spacing {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Improved mobile spacing */
+  .mobile-space-y-6 > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .mobile-space-y-8 > * + * {
+    margin-top: 2rem;
+  }
+}

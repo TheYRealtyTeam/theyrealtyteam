@@ -1,0 +1,49 @@
+
+/* Mobile component styles */
+@media (max-width: 768px) {
+  /* Enhanced mobile card optimizations */
+  .mobile-card {
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .mobile-card:active {
+    transform: scale(0.98);
+  }
+
+  /* Enhanced mobile button optimizations */
+  .mobile-btn {
+    padding: 1rem 1.5rem;
+    font-size: 1.125rem;
+    border-radius: 1rem;
+    min-height: 56px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    letter-spacing: 0.025em;
+  }
+
+  .mobile-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Mobile-optimized shadows */
+  .mobile-shadow-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .mobile-shadow-elevated {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Mobile sticky elements */
+  .mobile-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+}

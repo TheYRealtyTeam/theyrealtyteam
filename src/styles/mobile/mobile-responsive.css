@@ -1,0 +1,71 @@
+
+/* Mobile responsive breakpoints */
+
+/* Large mobile devices (375px and up) */
+@media (min-width: 375px) and (max-width: 768px) {
+  .large-mobile-text h1 {
+    font-size: 2.5rem;
+  }
+  
+  .large-mobile-text h2 {
+    font-size: 2rem;
+  }
+  
+  .large-mobile-padding {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* Small mobile devices (below 375px) */
+@media (max-width: 374px) {
+  .small-mobile-text h1 {
+    font-size: 2rem;
+  }
+  
+  .small-mobile-text h2 {
+    font-size: 1.75rem;
+  }
+  
+  .small-mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .mobile-btn {
+    font-size: 1rem;
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (max-width: 768px) {
+  /* Ensure sufficient contrast */
+  .mobile-high-contrast {
+    --tw-text-opacity: 1;
+    color: rgba(17, 24, 39, var(--tw-text-opacity));
+  }
+
+  /* Improve focus indicators */
+  .mobile-focus:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+  }
+
+  /* Scroll optimizations */
+  .mobile-scroll-smooth {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile swipe gestures */
+  .mobile-swipeable {
+    touch-action: pan-x;
+    user-select: none;
+  }
+
+  /* Mobile pull-to-refresh */
+  .mobile-pull-refresh {
+    overscroll-behavior-y: contain;
+  }
+}

@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
@@ -65,15 +64,9 @@ const MobileMenu = ({
               )
             ))}
             
-            {user ? (
-              <Link to="/profile" className="mx-4 mt-4 btn-primary text-center font-bold" onClick={closeMenu}>
-                Profile
-              </Link>
-            ) : (
-              <Link to="/appointment" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
-                Get Started
-              </Link>
-            )}
+            <Link to="/appointment" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
+              Get Started
+            </Link>
           </div>
         </nav>
       </div>
@@ -131,23 +124,13 @@ const MobileMenu = ({
           </div>
           
           <div className="mt-8 pt-6 border-t border-gray-200">
-            {user ? (
-              <Link 
-                to="/profile" 
-                className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300" 
-                onClick={closeMenu}
-              >
-                Profile
-              </Link>
-            ) : (
-              <Link 
-                to="/appointment" 
-                className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300" 
-                onClick={closeMenu}
-              >
-                Get Started
-              </Link>
-            )}
+            <Link 
+              to="/appointment" 
+              className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300" 
+              onClick={closeMenu}
+            >
+              Get Started
+            </Link>
           </div>
         </div>
       </nav>

@@ -1,17 +1,13 @@
 
 import React from 'react';
-import { Home, Phone, MessageCircle, User, Building } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { Home, Phone, MessageCircle, Building } from 'lucide-react';
 
 const MobileBottomNavigation = () => {
-  const { user } = useAuth();
-
   const navItems = [
     { icon: Home, label: 'Home', href: '#home' },
     { icon: Building, label: 'Services', href: '#services' },
     { icon: MessageCircle, label: 'Contact', href: '#contact' },
-    { icon: Phone, label: 'Call', href: 'tel:(845)734-3331', isExternal: true },
-    { icon: User, label: user ? 'Profile' : 'Login', href: user ? '/profile' : '/appointment' }
+    { icon: Phone, label: 'Call', href: 'tel:(845)734-3331', isExternal: true }
   ];
 
   const handleNavClick = (href: string, isExternal?: boolean) => {
@@ -29,7 +25,7 @@ const MobileBottomNavigation = () => {
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
-      <div className="grid grid-cols-5 h-16">
+      <div className="grid grid-cols-4 h-16">
         {navItems.map((item, index) => (
           <button
             key={index}

@@ -1,14 +1,18 @@
 
-import { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 
+console.log('useNavigation loading...');
+
 export const useNavigation = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  console.log('useNavigation hook called');
+  
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [activeSection, setActiveSection] = React.useState('home');
   const location = useLocation();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
       
@@ -32,7 +36,7 @@ export const useNavigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const pathname = location.pathname;
     if (pathname === '/') {
       setActiveSection('home');
@@ -42,7 +46,7 @@ export const useNavigation = () => {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Prevent scrolling when mobile menu is open
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';

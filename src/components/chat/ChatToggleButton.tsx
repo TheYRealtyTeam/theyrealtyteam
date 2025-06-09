@@ -12,51 +12,38 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
 
   if (isMobile) {
     return (
-      <div
+      <button
+        onClick={onClick}
+        className="fixed bottom-[90px] right-4 bg-yrealty-navy text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-[9999]"
         style={{
           position: 'fixed',
           bottom: '90px',
           right: '16px',
-          zIndex: 999999,
-          pointerEvents: 'auto'
+          zIndex: 9999,
+          pointerEvents: 'auto',
+          transform: 'translateZ(0)', // Force hardware acceleration
+          willChange: 'transform'
         }}
+        aria-label="Open AI Chat"
       >
-        <button
-          onClick={onClick}
-          style={{
-            backgroundColor: '#1e3a8a',
-            color: 'white',
-            padding: '12px',
-            borderRadius: '50%',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-            border: 'none',
-            cursor: 'pointer',
-            width: '56px',
-            height: '56px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.3s ease',
-            transform: 'scale(1)',
-            position: 'relative'
-          }}
-          onTouchStart={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
-          onTouchEnd={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
-          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          aria-label="Open AI Chat"
-        >
-          <MessageCircle style={{ height: '24px', width: '24px' }} />
-        </button>
-      </div>
+        <MessageCircle className="h-6 w-6" />
+      </button>
     );
   }
 
   return (
     <button
       onClick={onClick}
-      className="fixed bottom-6 right-6 bg-yrealty-navy hover:bg-yrealty-navy/90 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40"
+      className="fixed bottom-6 right-6 bg-yrealty-navy hover:bg-yrealty-navy/90 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-[9999]"
+      style={{
+        position: 'fixed',
+        bottom: '24px',
+        right: '24px',
+        zIndex: 9999,
+        pointerEvents: 'auto',
+        transform: 'translateZ(0)', // Force hardware acceleration
+        willChange: 'transform'
+      }}
       aria-label="Open AI Chat"
     >
       <MessageCircle className="h-6 w-6" />

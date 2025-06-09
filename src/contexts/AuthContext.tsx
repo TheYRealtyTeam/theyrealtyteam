@@ -17,10 +17,10 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // Add defensive check for React hooks
-  if (!React || typeof React.useState !== 'function') {
-    console.error('React hooks are not available');
-    return <div>Loading...</div>;
+  // Ensure React is available first
+  if (typeof React === 'undefined' || !React.useState) {
+    console.error('React is not available or hooks are not working');
+    return React.createElement('div', null, 'Loading...');
   }
 
   const [session, setSession] = useState<Session | null>(null);
@@ -119,9 +119,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(newSession?.user ?? null);
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
+  return React.createElement(
+    AuthContext.Provider,
+    {
+      value: {
         session,
         user,
         loading,
@@ -129,10 +130,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signUp,
         signOut,
         setSessionAndUser
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+      }
+    },
+    children
   );
 };
 

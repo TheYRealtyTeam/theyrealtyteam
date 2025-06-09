@@ -27,7 +27,6 @@ const queryClient = new QueryClient({
 
 const App = () => {
   console.log("App component rendering");
-  console.log("React in App:", React.version);
   
   return (
     <QueryClientProvider client={queryClient}>

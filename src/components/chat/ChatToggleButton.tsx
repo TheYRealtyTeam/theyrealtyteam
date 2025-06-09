@@ -12,44 +12,37 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
 
   if (isMobile) {
     return (
-      <div
+      <button
+        onClick={onClick}
         style={{
           position: 'fixed',
           bottom: '90px',
           right: '16px',
+          backgroundColor: '#1e3a8a',
+          color: 'white',
+          padding: '12px',
+          borderRadius: '50%',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+          border: 'none',
+          cursor: 'pointer',
           zIndex: 999999,
-          pointerEvents: 'auto'
+          width: '56px',
+          height: '56px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s ease',
+          transform: 'scale(1)',
+          willChange: 'transform',
+          WebkitTransform: 'translateZ(0)'
         }}
+        onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+        onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        aria-label="Open AI Chat"
       >
-        <button
-          onClick={onClick}
-          style={{
-            backgroundColor: '#1e3a8a',
-            color: 'white',
-            padding: '12px',
-            borderRadius: '50%',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-            border: 'none',
-            cursor: 'pointer',
-            width: '56px',
-            height: '56px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'all 0.3s ease',
-            transform: 'scale(1)',
-            position: 'relative'
-          }}
-          onTouchStart={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
-          onTouchEnd={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
-          onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-          aria-label="Open AI Chat"
-        >
-          <MessageCircle style={{ height: '24px', width: '24px' }} />
-        </button>
-      </div>
+        <MessageCircle style={{ height: '24px', width: '24px' }} />
+      </button>
     );
   }
 

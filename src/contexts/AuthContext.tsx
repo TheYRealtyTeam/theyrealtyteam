@@ -17,6 +17,8 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  console.log("AuthProvider: Component initializing");
+  
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -49,6 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } finally {
         if (mounted) {
           setLoading(false);
+          console.log("AuthProvider: Auth initialization complete");
         }
       }
     };
@@ -82,6 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
+      console.log("AuthProvider: Attempting sign in");
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -95,6 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, userData: { full_name?: string, username?: string }) => {
     try {
+      console.log("AuthProvider: Attempting sign up");
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -114,6 +119,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
+      console.log("AuthProvider: Attempting sign out");
       await supabase.auth.signOut();
     } catch (error) {
       console.error('Error signing out:', error);
@@ -121,6 +127,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const setSessionAndUser = (newSession: Session | null) => {
+    console.log("AuthProvider: Manually setting session", newSession?.user?.email || 'none');
     setSession(newSession);
     setUser(newSession?.user ?? null);
   };
@@ -134,6 +141,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signOut,
     setSessionAndUser
   };
+
+  console.log("AuthProvider: Rendering with loading:", loading, "user:", user?.email || 'none');
 
   return (
     <AuthContext.Provider value={value}>

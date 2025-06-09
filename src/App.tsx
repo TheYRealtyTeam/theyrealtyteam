@@ -1,5 +1,4 @@
 
-import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -16,10 +15,6 @@ import NotFound from "./pages/NotFound";
 import MicrosoftAuthCallback from "./components/appointment/MicrosoftAuthCallback";
 import Profile from "./pages/Profile";
 
-console.log("App component rendering");
-console.log("React in App:", React.version);
-console.log("React object in App:", React);
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -30,35 +25,27 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  console.log("App component function executing");
-  
-  return React.createElement(
-    QueryClientProvider,
-    { client: queryClient },
-    React.createElement(
-      AuthProvider,
-      null,
-      React.createElement(
-        BrowserRouter,
-        null,
-        React.createElement(
-          Routes,
-          null,
-          React.createElement(Route, { path: "/", element: React.createElement(Index) }),
-          React.createElement(Route, { path: "/faq", element: React.createElement(FAQ) }),
-          React.createElement(Route, { path: "/blog", element: React.createElement(Blog) }),
-          React.createElement(Route, { path: "/blog/:slug", element: React.createElement(BlogPost) }),
-          React.createElement(Route, { path: "/blog-admin", element: React.createElement(BlogAdmin) }),
-          React.createElement(Route, { path: "/tools", element: React.createElement(Tools) }),
-          React.createElement(Route, { path: "/appointment", element: React.createElement(Appointment) }),
-          React.createElement(Route, { path: "/contact", element: React.createElement(Contact) }),
-          React.createElement(Route, { path: "/profile", element: React.createElement(Profile) }),
-          React.createElement(Route, { path: "/auth/callback", element: React.createElement(MicrosoftAuthCallback) }),
-          React.createElement(Route, { path: "*", element: React.createElement(NotFound) })
-        ),
-        React.createElement(Toaster)
-      )
-    )
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/blog-admin" element={<BlogAdmin />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/appointment" element={<Appointment />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/auth/callback" element={<MicrosoftAuthCallback />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

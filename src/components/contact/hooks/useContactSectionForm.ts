@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import * as React from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { 
   sanitizeInput, 
@@ -11,15 +11,15 @@ import {
 
 export const useContactSectionForm = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = React.useState({
     name: '',
     email: '',
     phone: '',
     propertyType: '',
     message: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [lastSubmissionTime, setLastSubmissionTime] = React.useState<number>(0);
 
   // Rate limiting: 1 submission per 60 seconds
   const RATE_LIMIT_MS = 60000;

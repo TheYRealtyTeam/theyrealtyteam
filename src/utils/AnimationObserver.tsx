@@ -1,10 +1,10 @@
 
-import React, { useEffect, useRef } from 'react';
+import * as React from 'react';
 
 export const AnimationObserver = () => {
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const elementsRef = useRef<Element[]>([]);
-  const mutationObserverRef = useRef<MutationObserver | null>(null);
+  const observerRef = React.useRef<IntersectionObserver | null>(null);
+  const elementsRef = React.useRef<Element[]>([]);
+  const mutationObserverRef = React.useRef<MutationObserver | null>(null);
 
   // Function to observe elements with the 'reveal' class
   const observeElements = () => {
@@ -27,7 +27,7 @@ export const AnimationObserver = () => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!window.IntersectionObserver) {
       console.warn('IntersectionObserver not supported in this browser');
       return;

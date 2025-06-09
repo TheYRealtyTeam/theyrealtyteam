@@ -67,9 +67,9 @@ const Index = () => {
   };
 
   const content = (
-    <div className={`min-h-screen flex flex-col ${isMobile ? 'pb-16' : ''}`}>
+    <div className={`min-h-screen flex flex-col bg-white ${isMobile ? 'pb-20' : ''}`}>
       <Navbar />
-      <main>
+      <main className="flex-1">
         <HeroSection />
         <AboutSection />
         <ServicesSection />
@@ -80,9 +80,13 @@ const Index = () => {
       <Footer />
       <AIChat />
       <AnimationObserver />
-      {isMobile && <MobileBottomNavigation />}
-      {isMobile && <MobilePWAPrompt />}
-      {isMobile && <MobileOfflineIndicator />}
+      {isMobile && (
+        <>
+          <MobileBottomNavigation />
+          <MobilePWAPrompt />
+          <MobileOfflineIndicator />
+        </>
+      )}
     </div>
   );
 

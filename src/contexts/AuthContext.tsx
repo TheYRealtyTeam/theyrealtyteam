@@ -16,54 +16,20 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  console.log("AuthProvider: Component initializing");
-  
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    console.log("AuthProvider: Setting up auth state listener");
-    
-    let mounted = true;
-
-    const initializeAuth = async () => {
-      if (!mounted) return;
-      
-      try {
-        console.log("AuthProvider: Initializing auth");
-        setLoading(true);
-        
-        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Error getting session:', error);
-        }
-        
-        if (mounted) {
-          console.log("AuthProvider: Setting initial session", currentSession?.user?.email || 'none');
-          setSession(currentSession);
-          setUser(currentSession?.user ?? null);
-        }
-      } catch (error) {
-        console.error('Error initializing auth:', error);
-      } finally {
-        if (mounted) {
-          setLoading(false);
-          console.log("AuthProvider: Auth initialization complete");
-        }
-      }
-    };
-
+    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
-        if (!mounted) return;
-        
-        console.log('Auth state changed:', event, currentSession?.user?.email || 'none');
+        console.log('Auth state changed', event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
+        // Show toast message on successful sign in/out (only when not loading)
         if (!loading) {
           if (event === 'SIGNED_IN') {
             toast.success('Successfully signed in!');
@@ -74,18 +40,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
+    // THEN check for existing session
+    const initializeAuth = async () => {
+      try {
+        setLoading(true);
+        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session:', error);
+          // Don't throw error, just log it and continue
+        }
+        
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        // Continue without auth if there's an error
+      } finally {
+        setLoading(false);
+      }
+    };
+
     initializeAuth();
 
     return () => {
-      console.log("AuthProvider: Cleaning up");
-      mounted = false;
       subscription.unsubscribe();
     };
-  }, [loading]);
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
-      console.log("AuthProvider: Attempting sign in");
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -99,7 +83,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string, userData: { full_name?: string, username?: string }) => {
     try {
-      console.log("AuthProvider: Attempting sign up");
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -119,7 +102,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     try {
-      console.log("AuthProvider: Attempting sign out");
       await supabase.auth.signOut();
     } catch (error) {
       console.error('Error signing out:', error);
@@ -127,25 +109,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const setSessionAndUser = (newSession: Session | null) => {
-    console.log("AuthProvider: Manually setting session", newSession?.user?.email || 'none');
     setSession(newSession);
     setUser(newSession?.user ?? null);
   };
 
-  const value = {
-    session,
-    user,
-    loading,
-    signIn,
-    signUp,
-    signOut,
-    setSessionAndUser
-  };
-
-  console.log("AuthProvider: Rendering with loading:", loading, "user:", user?.email || 'none');
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        session,
+        user,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+        setSessionAndUser
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -155,6 +134,8 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   
   if (context === undefined) {
+    // Return a default context instead of throwing an error
+    // This allows the app to function without authentication
     console.warn('useAuth used outside of AuthProvider - returning default values');
     return {
       session: null,

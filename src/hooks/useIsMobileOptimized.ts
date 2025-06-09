@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react';
 
 export const useIsMobileOptimized = () => {
-  console.log("useIsMobileOptimized hook called");
-  
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });

@@ -1,43 +1,70 @@
 
 import React from 'react';
-import { Home, Phone, MessageCircle, Building } from 'lucide-react';
+import { Home, Wrench, BookOpen, MessageCircle, Phone } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const MobileBottomNavigation = () => {
+  const location = useLocation();
+  
   const navItems = [
-    { icon: Home, label: 'Home', href: '#home' },
-    { icon: Building, label: 'Services', href: '#services' },
-    { icon: MessageCircle, label: 'Contact', href: '#contact' },
+    { icon: Home, label: 'Home', href: '/', isExternal: false },
+    { icon: Wrench, label: 'Tools', href: '/tools', isExternal: false },
+    { icon: BookOpen, label: 'Blog', href: '/blog', isExternal: false },
+    { icon: MessageCircle, label: 'Contact', href: '/contact', isExternal: false },
     { icon: Phone, label: 'Call', href: 'tel:(845)734-3331', isExternal: true }
   ];
 
-  const handleNavClick = (href: string, isExternal?: boolean) => {
+  const handleNavClick = (href: string, isExternal: boolean) => {
     if (isExternal) {
-      window.location.href = href;
-    } else if (href.startsWith('#')) {
-      const element = document.getElementById(href.slice(1));
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
       window.location.href = href;
     }
   };
 
+  const isActive = (href: string) => {
+    if (href === '/') {
+      return location.pathname === '/';
+    }
+    return location.pathname === href;
+  };
+
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg">
-      <div className="grid grid-cols-4 h-16">
-        {navItems.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => handleNavClick(item.href, item.isExternal)}
-            className="mobile-nav-item mobile-haptic-btn flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group"
-          >
-            <item.icon className="h-5 w-5 text-gray-600 group-hover:text-yrealty-accent transition-colors" />
-            <span className="text-xs text-gray-600 group-hover:text-yrealty-accent transition-colors mt-1">
-              {item.label}
-            </span>
-          </button>
-        ))}
+    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 shadow-lg safe-area-bottom">
+      <div className="grid grid-cols-5 h-16">
+        {navItems.map((item, index) => {
+          if (item.isExternal) {
+            return (
+              <button
+                key={index}
+                onClick={() => handleNavClick(item.href, item.isExternal)}
+                className="mobile-nav-item mobile-haptic-btn flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group"
+              >
+                <item.icon className="h-5 w-5 text-gray-600 group-hover:text-yrealty-accent transition-colors" />
+                <span className="text-xs text-gray-600 group-hover:text-yrealty-accent transition-colors mt-1">
+                  {item.label}
+                </span>
+              </button>
+            );
+          }
+
+          return (
+            <Link
+              key={index}
+              to={item.href}
+              className={`mobile-nav-item mobile-haptic-btn flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group ${
+                isActive(item.href) ? 'text-yrealty-accent' : ''
+              }`}
+            >
+              <item.icon className={`h-5 w-5 transition-colors ${
+                isActive(item.href) ? 'text-yrealty-accent' : 'text-gray-600 group-hover:text-yrealty-accent'
+              }`} />
+              <span className={`text-xs transition-colors mt-1 ${
+                isActive(item.href) ? 'text-yrealty-accent font-semibold' : 'text-gray-600 group-hover:text-yrealty-accent'
+              }`}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

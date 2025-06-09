@@ -30,7 +30,7 @@ const MobileBottomNavigation = () => {
           <button
             key={index}
             onClick={() => handleNavClick(item.href, item.isExternal)}
-            className="flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group"
+            className="mobile-nav-item mobile-haptic-btn flex flex-col items-center justify-center p-2 hover:bg-gray-50 transition-colors group"
           >
             <item.icon className="h-5 w-5 text-gray-600 group-hover:text-yrealty-accent transition-colors" />
             <span className="text-xs text-gray-600 group-hover:text-yrealty-accent transition-colors mt-1">

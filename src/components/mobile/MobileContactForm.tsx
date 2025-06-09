@@ -30,7 +30,7 @@ const MobileContactForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mobile-card-interactive">
       {/* Progress Header */}
       <div className="bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-4">
         <div className="flex items-center justify-between mb-2">
@@ -48,7 +48,7 @@ const MobileContactForm = () => {
       <form onSubmit={handleSubmit} className="p-6">
         {/* Step 1: Personal Info */}
         {currentStep === 1 && (
-          <div className="space-y-6">
+          <div className="space-y-6 mobile-fade-in">
             <div className="text-center mb-6">
               <User className="h-12 w-12 text-yrealty-accent mx-auto mb-3" />
               <h4 className="text-lg font-semibold text-gray-800">Tell us about yourself</h4>
@@ -66,7 +66,7 @@ const MobileContactForm = () => {
                 onChange={handleChange}
                 required
                 maxLength={100}
-                className="w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all"
+                className="mobile-input-enhanced w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all"
                 placeholder="Your name"
               />
             </div>
@@ -82,7 +82,7 @@ const MobileContactForm = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 maxLength={20}
-                className="w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all"
+                className="mobile-input-enhanced w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all"
                 placeholder="Your phone (optional)"
               />
             </div>
@@ -91,7 +91,7 @@ const MobileContactForm = () => {
 
         {/* Step 2: Contact Details */}
         {currentStep === 2 && (
-          <div className="space-y-6">
+          <div className="space-y-6 mobile-fade-in">
             <div className="text-center mb-6">
               <Mail className="h-12 w-12 text-yrealty-accent mx-auto mb-3" />
               <h4 className="text-lg font-semibold text-gray-800">Contact & Property Details</h4>
@@ -109,7 +109,7 @@ const MobileContactForm = () => {
                 onChange={handleChange}
                 required
                 maxLength={254}
-                className="w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all"
+                className="mobile-input-enhanced w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all"
                 placeholder="Your email"
               />
             </div>
@@ -124,7 +124,7 @@ const MobileContactForm = () => {
                 value={formData.propertyType}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all bg-white"
+                className="mobile-input-enhanced w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all bg-white"
               >
                 <option value="">Select property type</option>
                 <option value="residential">Residential</option>
@@ -139,7 +139,7 @@ const MobileContactForm = () => {
 
         {/* Step 3: Message */}
         {currentStep === 3 && (
-          <div className="space-y-6">
+          <div className="space-y-6 mobile-fade-in">
             <div className="text-center mb-6">
               <MessageCircle className="h-12 w-12 text-yrealty-accent mx-auto mb-3" />
               <h4 className="text-lg font-semibold text-gray-800">Tell us about your needs</h4>
@@ -158,7 +158,7 @@ const MobileContactForm = () => {
                 required
                 minLength={10}
                 maxLength={2000}
-                className="w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all resize-none"
+                className="mobile-input-enhanced w-full px-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-yrealty-accent focus:border-transparent transition-all resize-none"
                 placeholder="Tell us about your property and management needs"
               />
               <p className="text-xs text-gray-500 mt-2">
@@ -174,7 +174,7 @@ const MobileContactForm = () => {
             <button
               type="button"
               onClick={prevStep}
-              className="flex-1 px-6 py-4 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all"
+              className="mobile-haptic-btn flex-1 px-6 py-4 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all"
             >
               Back
             </button>
@@ -185,19 +185,23 @@ const MobileContactForm = () => {
               type="button"
               onClick={nextStep}
               disabled={!isStepValid()}
-              className="flex-1 px-6 py-4 bg-yrealty-accent text-white rounded-xl font-semibold disabled:bg-gray-300 disabled:text-gray-500 hover:bg-yrealty-accent/90 transition-all"
+              className="mobile-haptic-btn flex-1 px-6 py-4 bg-yrealty-accent text-white rounded-xl font-semibold disabled:bg-gray-300 disabled:text-gray-500 hover:bg-yrealty-accent/90 transition-all"
             >
               Next
             </button>
           ) : (
             <button 
               type="submit" 
-              className="flex-1 bg-yrealty-accent hover:bg-yrealty-accent/90 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all"
+              className="mobile-haptic-btn flex-1 bg-yrealty-accent hover:bg-yrealty-accent/90 text-white py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all"
               disabled={isSubmitting || !isStepValid()}
             >
               {isSubmitting ? (
                 <>
-                  <Send className="h-5 w-5 animate-pulse" />
+                  <div className="mobile-loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
                   Sending...
                 </>
               ) : (
@@ -216,7 +220,7 @@ const MobileContactForm = () => {
         <p className="text-center text-sm text-gray-600 mb-3">Prefer to talk directly?</p>
         <a 
           href="tel:(845)734-3331"
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all"
+          className="mobile-haptic-btn w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all"
         >
           <Phone size={18} />
           Call (845) 734-3331

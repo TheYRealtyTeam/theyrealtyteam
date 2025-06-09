@@ -1,0 +1,62 @@
+
+{
+  "name": "Y Realty Team - Premium Property Management",
+  "short_name": "Y Realty Team",
+  "description": "Premium property management services across all 50 states",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e3a8a",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait-primary",
+  "categories": ["business", "real-estate", "property"],
+  "lang": "en-US",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Contact Us",
+      "short_name": "Contact",
+      "description": "Get in touch with Y Realty Team",
+      "url": "/#contact",
+      "icons": [
+        {
+          "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Our Services",
+      "short_name": "Services",
+      "description": "View our property management services",
+      "url": "/#services",
+      "icons": [
+        {
+          "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

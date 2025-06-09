@@ -18,6 +18,8 @@ type CarouselContextProps = {
   canScrollPrev: boolean
   canScrollNext: boolean
   orientation?: "horizontal" | "vertical"
+  currentIndex: number
+  itemCount: number
 }
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -73,6 +75,8 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
+          currentIndex,
+          itemCount,
         }}
       >
         <div
@@ -93,20 +97,27 @@ Carousel.displayName = "Carousel"
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => {
-  const { orientation } = useCarousel()
+>(({ className, children, ...props }, ref) => {
+  const { orientation, currentIndex } = useCarousel()
 
   return (
     <div className="overflow-hidden">
       <div
         ref={ref}
         className={cn(
-          "flex",
+          "flex transition-transform duration-300 ease-in-out",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
         )}
+        style={{
+          transform: orientation === "horizontal" 
+            ? `translateX(-${currentIndex * 100}%)` 
+            : `translateY(-${currentIndex * 100}%)`
+        }}
         {...props}
-      />
+      >
+        {children}
+      </div>
     </div>
   )
 })

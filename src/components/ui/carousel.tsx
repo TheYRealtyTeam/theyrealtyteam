@@ -60,7 +60,6 @@ const Carousel = React.forwardRef<
     const canScrollNext = currentIndex < itemCount - 1
 
     React.useEffect(() => {
-      // Count carousel items
       const items = React.Children.toArray(children).filter(child => 
         React.isValidElement(child) && child.type === CarouselItem
       )

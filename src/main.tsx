@@ -4,7 +4,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './styles/index.css';
 
+// Ensure React is properly initialized
 console.log('Main.tsx loading...');
+console.log('React version:', React.version);
+console.log('Creating React root...');
 
 const container = document.getElementById("root");
 if (!container) {
@@ -12,6 +15,7 @@ if (!container) {
 }
 
 try {
+  console.log('Rendering App...');
   const root = createRoot(container);
   root.render(
     <StrictMode>
@@ -21,4 +25,5 @@ try {
   console.log('App rendered successfully');
 } catch (error) {
   console.error('Error rendering app:', error);
+  throw error;
 }

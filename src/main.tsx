@@ -4,7 +4,18 @@ import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './styles/index.css'
 
-// Ensure React is available globally
-window.React = React;
+// Ensure React is available globally before any components render
+if (typeof window !== 'undefined') {
+  window.React = React;
+}
 
-createRoot(document.getElementById("root")!).render(<App />);
+const rootElement = document.getElementById("root");
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+
+createRoot(rootElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

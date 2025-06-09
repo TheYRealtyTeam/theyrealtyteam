@@ -22,14 +22,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Set up auth state listener FIRST
+    console.log("AuthProvider: Setting up auth state listener");
+    
+    let mounted = true;
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
+        if (!mounted) return;
+        
         console.log('Auth state changed', event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Show toast message on successful sign in/out (only when not loading)
         if (!loading) {
           if (event === 'SIGNED_IN') {
             toast.success('Successfully signed in!');
@@ -40,33 +44,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     );
 
-    // THEN check for existing session
     const initializeAuth = async () => {
+      if (!mounted) return;
+      
       try {
+        console.log("AuthProvider: Initializing auth");
         setLoading(true);
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
         if (error) {
           console.error('Error getting session:', error);
-          // Don't throw error, just log it and continue
         }
         
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
+        if (mounted) {
+          setSession(currentSession);
+          setUser(currentSession?.user ?? null);
+        }
       } catch (error) {
         console.error('Error initializing auth:', error);
-        // Continue without auth if there's an error
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
     initializeAuth();
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
-  }, []); // Empty dependency array to prevent circular dependency
+  }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
@@ -113,18 +122,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(newSession?.user ?? null);
   };
 
+  const value = {
+    session,
+    user,
+    loading,
+    signIn,
+    signUp,
+    signOut,
+    setSessionAndUser
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        session,
-        user,
-        loading,
-        signIn,
-        signUp,
-        signOut,
-        setSessionAndUser
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
@@ -134,8 +143,6 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   
   if (context === undefined) {
-    // Return a default context instead of throwing an error
-    // This allows the app to function without authentication
     console.warn('useAuth used outside of AuthProvider - returning default values');
     return {
       session: null,

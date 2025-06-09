@@ -2,6 +2,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
+import ErrorBoundary from './components/ErrorBoundary.tsx';
 import './styles/index.css';
 
 console.log("Main.tsx loading...");
@@ -14,10 +15,12 @@ if (!container) {
 console.log("Creating React root...");
 const root = createRoot(container);
 
-console.log("Rendering App...");
+console.log("Rendering App with ErrorBoundary...");
 root.render(
   <StrictMode>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </StrictMode>
 );
 

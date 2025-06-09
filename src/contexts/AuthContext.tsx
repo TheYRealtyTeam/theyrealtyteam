@@ -33,7 +33,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log("AuthProvider: Initializing auth");
         setLoading(true);
         
-        // Get initial session
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -41,6 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         
         if (mounted) {
+          console.log("AuthProvider: Setting initial session", currentSession?.user?.email || 'none');
           setSession(currentSession);
           setUser(currentSession?.user ?? null);
         }
@@ -53,12 +53,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     };
 
-    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         if (!mounted) return;
         
-        console.log('Auth state changed', event);
+        console.log('Auth state changed:', event, currentSession?.user?.email || 'none');
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
@@ -75,10 +74,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
 
     return () => {
+      console.log("AuthProvider: Cleaning up");
       mounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [loading]);
 
   const signIn = async (email: string, password: string) => {
     try {

@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useEffect, useContext } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -17,17 +17,12 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // Ensure React is available first
-  if (typeof React === 'undefined' || !React.useState) {
-    console.error('React is not available or hooks are not working');
-    return React.createElement('div', null, 'Loading...');
-  }
+  // Use React.useState directly to avoid destructuring issues
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
+  React.useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
@@ -119,10 +114,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(newSession?.user ?? null);
   };
 
-  return React.createElement(
-    AuthContext.Provider,
-    {
-      value: {
+  return (
+    <AuthContext.Provider
+      value={{
         session,
         user,
         loading,
@@ -130,9 +124,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signUp,
         signOut,
         setSessionAndUser
-      }
-    },
-    children
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

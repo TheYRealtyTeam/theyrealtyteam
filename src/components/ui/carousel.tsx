@@ -7,6 +7,10 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
+console.log("Carousel component loading");
+console.log("React in Carousel:", React.version);
+console.log("useRef available:", typeof React.useRef);
+
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
@@ -56,6 +60,7 @@ const Carousel = React.forwardRef<
     },
     ref
   ) => {
+    console.log("Carousel render - useEmblaCarousel about to be called");
     const [carouselRef, api] = useEmblaCarousel(
       {
         ...opts,

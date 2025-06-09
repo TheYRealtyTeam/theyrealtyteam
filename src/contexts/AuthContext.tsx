@@ -17,6 +17,12 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  // Add defensive check for React hooks
+  if (!React || typeof React.useState !== 'function') {
+    console.error('React hooks are not available');
+    return <div>Loading...</div>;
+  }
+
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

@@ -69,37 +69,41 @@ const Index = () => {
     });
   };
 
-  const content = (
+  const mainContent = (
+    <div style={{ paddingBottom: isMobile ? '80px' : '0' }} className="min-h-screen flex flex-col bg-white">
+      <Navbar />
+      <main className="flex-1">
+        <HeroSection />
+        <AboutSection />
+        <ServicesSection />
+        <AreasSection />
+        <TestimonialsSection />
+        <ContactSection />
+      </main>
+      <Footer />
+      <AIChat />
+      <AnimationObserver />
+      {isMobile && (
+        <>
+          <MobilePWAPrompt />
+          <MobileOfflineIndicator />
+        </>
+      )}
+    </div>
+  );
+
+  const content = isMobile ? (
+    <MobilePullToRefresh onRefresh={handleRefresh}>
+      {mainContent}
+    </MobilePullToRefresh>
+  ) : mainContent;
+
+  return (
     <>
-      <div className="min-h-screen flex flex-col bg-white">
-        <Navbar />
-        <main className="flex-1">
-          <HeroSection />
-          <AboutSection />
-          <ServicesSection />
-          <AreasSection />
-          <TestimonialsSection />
-          <ContactSection />
-        </main>
-        <Footer />
-        <AIChat />
-        <AnimationObserver />
-        {isMobile && (
-          <>
-            <MobilePWAPrompt />
-            <MobileOfflineIndicator />
-          </>
-        )}
-      </div>
+      {content}
       {isMobile && <MobileBottomNavigation />}
     </>
   );
-
-  return isMobile ? (
-    <MobilePullToRefresh onRefresh={handleRefresh}>
-      {content}
-    </MobilePullToRefresh>
-  ) : content;
 };
 
 export default Index;

@@ -33,37 +33,57 @@ const MobileBottomNavigation = () => {
   };
 
   return (
-    <nav 
-      className="md:hidden block"
+    <div 
       style={{ 
         position: 'fixed',
-        bottom: '0',
-        left: '0',
-        right: '0',
-        zIndex: '999999',
+        bottom: '0px',
+        left: '0px',
+        right: '0px',
+        zIndex: 999999,
         height: '70px',
+        width: '100vw',
         backgroundColor: '#ffffff',
-        borderTop: '2px solid #3b82f6',
+        borderTop: '3px solid #3b82f6',
         boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.3)',
-        transform: 'translateZ(0)',
-        willChange: 'transform'
+        display: 'block'
       }}
+      className="md:hidden"
     >
-      <div className="grid grid-cols-5 h-full w-full">
+      <div 
+        style={{ 
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
+          height: '100%',
+          width: '100%'
+        }}
+      >
         {navItems.map((item, index) => {
           if (item.isExternal) {
             return (
               <button
                 key={index}
                 onClick={() => handleNavClick(item.href, item.isExternal)}
-                className="flex flex-col items-center justify-center p-2 hover:bg-gray-100 transition-colors"
                 style={{ 
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '8px',
                   minHeight: '60px',
-                  minWidth: '60px'
+                  minWidth: '60px',
+                  backgroundColor: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer'
                 }}
+                className="hover:bg-gray-100 transition-colors"
               >
-                <item.icon className="h-6 w-6 text-gray-700 hover:text-blue-600 transition-colors" />
-                <span className="text-xs text-gray-700 hover:text-blue-600 transition-colors mt-1 font-medium">
+                <item.icon style={{ height: '24px', width: '24px', color: '#374151' }} />
+                <span style={{ 
+                  fontSize: '12px', 
+                  color: '#374151', 
+                  marginTop: '4px',
+                  fontWeight: '500'
+                }}>
                   {item.label}
                 </span>
               </button>
@@ -74,27 +94,37 @@ const MobileBottomNavigation = () => {
             <Link
               key={index}
               to={item.href}
-              className={`flex flex-col items-center justify-center p-2 hover:bg-gray-100 transition-colors ${
-                isActive(item.href) ? 'bg-blue-50' : ''
-              }`}
               style={{ 
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '8px',
                 minHeight: '60px',
-                minWidth: '60px'
+                minWidth: '60px',
+                textDecoration: 'none',
+                backgroundColor: isActive(item.href) ? '#eff6ff' : 'transparent'
               }}
+              className="hover:bg-gray-100 transition-colors"
             >
-              <item.icon className={`h-6 w-6 transition-colors ${
-                isActive(item.href) ? 'text-blue-600' : 'text-gray-700 hover:text-blue-600'
-              }`} />
-              <span className={`text-xs transition-colors mt-1 font-medium ${
-                isActive(item.href) ? 'text-blue-600 font-bold' : 'text-gray-700 hover:text-blue-600'
-              }`}>
+              <item.icon style={{ 
+                height: '24px', 
+                width: '24px', 
+                color: isActive(item.href) ? '#2563eb' : '#374151'
+              }} />
+              <span style={{ 
+                fontSize: '12px', 
+                color: isActive(item.href) ? '#2563eb' : '#374151',
+                marginTop: '4px',
+                fontWeight: isActive(item.href) ? '600' : '500'
+              }}>
                 {item.label}
               </span>
             </Link>
           );
         })}
       </div>
-    </nav>
+    </div>
   );
 };
 

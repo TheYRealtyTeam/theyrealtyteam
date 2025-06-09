@@ -25,14 +25,16 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
           border: 'none',
           cursor: 'pointer',
-          zIndex: 999998,
+          zIndex: 999999,
           width: '56px',
           height: '56px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'all 0.3s ease',
-          transform: 'scale(1)'
+          transform: 'scale(1)',
+          willChange: 'transform',
+          WebkitTransform: 'translateZ(0)'
         }}
         onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
         onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}

@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, X, MessageCircle, Loader, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -5,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -14,6 +16,7 @@ interface ChatMessage {
 
 const AIChat = () => {
   const navigate = useNavigate();
+  const { isMobile } = useIsMobileOptimized();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -150,16 +153,16 @@ const AIChat = () => {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-yrealty-navy hover:bg-yrealty-navy/90 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-50"
+        className={`fixed ${isMobile ? 'bottom-20 right-4' : 'bottom-6 right-6'} bg-yrealty-navy hover:bg-yrealty-navy/90 text-white ${isMobile ? 'p-3' : 'p-4'} rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40`}
         aria-label="Open AI Chat"
       >
-        <MessageCircle className="h-6 w-6" />
+        <MessageCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'}`} />
       </button>
     );
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-50">
+    <div className={`fixed ${isMobile ? 'inset-x-4 bottom-20 top-20' : 'bottom-6 right-6 w-96 h-[500px]'} bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-40`}>
       {/* Chat Header */}
       <div className="bg-yrealty-navy text-white p-4 rounded-t-xl flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -194,7 +197,7 @@ const AIChat = () => {
             )}
             
             <div
-              className={`max-w-[280px] p-3 rounded-lg ${
+              className={`${isMobile ? 'max-w-[240px]' : 'max-w-[280px]'} p-3 rounded-lg ${
                 message.role === 'user'
                   ? 'bg-yrealty-navy text-white'
                   : 'bg-gray-100 text-gray-800'

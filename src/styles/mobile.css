@@ -141,6 +141,68 @@
   .mobile-shadow-elevated {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
+
+  /* Mobile-specific content optimization */
+  .mobile-content-spacing {
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Mobile swipe gestures */
+  .mobile-swipeable {
+    touch-action: pan-x;
+    user-select: none;
+  }
+
+  /* Mobile safe areas */
+  .mobile-safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .mobile-safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Mobile sticky elements */
+  .mobile-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.95);
+  }
+
+  /* Mobile loading states */
+  .mobile-loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: mobile-loading 1.5s infinite;
+  }
+
+  @keyframes mobile-loading {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  /* Mobile pull-to-refresh */
+  .mobile-pull-refresh {
+    overscroll-behavior-y: contain;
+  }
+
+  /* Mobile haptic feedback simulation */
+  .mobile-haptic:active {
+    animation: mobile-haptic-vibrate 0.1s ease-in-out;
+  }
+
+  @keyframes mobile-haptic-vibrate {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-1px); }
+    75% { transform: translateX(1px); }
+  }
 }
 
 /* Large mobile devices (375px and up) */

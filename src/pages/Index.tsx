@@ -11,7 +11,6 @@ import Footer from '@/components/Footer';
 import AIChat from '@/components/chat/AIChat';
 import AnimationObserver from '@/utils/AnimationObserver';
 import MobileBottomNavigation from '@/components/mobile/MobileBottomNavigation';
-import MobileFloatingActionButton from '@/components/mobile/MobileFloatingActionButton';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
@@ -56,12 +55,7 @@ const Index = () => {
       <Footer />
       <AIChat />
       <AnimationObserver />
-      {isMobile && (
-        <>
-          <MobileBottomNavigation />
-          <MobileFloatingActionButton />
-        </>
-      )}
+      {isMobile && <MobileBottomNavigation />}
     </div>
   );
 };

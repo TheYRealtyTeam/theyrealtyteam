@@ -1,10 +1,12 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import MobileHeroSection from './mobile/MobileHeroSection';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const { isMobile } = useIsMobileOptimized();
 
   useEffect(() => {
     const img = new Image();
@@ -26,6 +28,12 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Return mobile-optimized version for mobile devices
+  if (isMobile) {
+    return <MobileHeroSection />;
+  }
+
+  // Desktop version (keep existing code)
   return (
     <section 
       id="home" 

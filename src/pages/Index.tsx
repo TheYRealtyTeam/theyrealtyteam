@@ -10,8 +10,12 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import AIChat from '@/components/chat/AIChat';
 import AnimationObserver from '@/utils/AnimationObserver';
+import MobileBottomNavigation from '@/components/mobile/MobileBottomNavigation';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
+  const { isMobile } = useIsMobileOptimized();
+
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
     
@@ -38,7 +42,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`min-h-screen flex flex-col ${isMobile ? 'pb-16' : ''}`}>
       <Navbar />
       <main>
         <HeroSection />
@@ -51,6 +55,7 @@ const Index = () => {
       <Footer />
       <AIChat />
       <AnimationObserver />
+      {isMobile && <MobileBottomNavigation />}
     </div>
   );
 };

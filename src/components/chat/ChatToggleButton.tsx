@@ -17,10 +17,8 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
           position: 'fixed',
           bottom: '90px',
           right: '16px',
-          zIndex: 1000000, // Higher than navigation
-          pointerEvents: 'auto',
-          transform: 'translateZ(0)', // Force hardware acceleration
-          willChange: 'transform'
+          zIndex: 999999,
+          pointerEvents: 'auto'
         }}
       >
         <button

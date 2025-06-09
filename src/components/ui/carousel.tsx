@@ -1,8 +1,10 @@
 
-import * as React from "react"
+import React from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+
+console.log("Carousel component loading - native implementation");
 
 type CarouselProps = {
   orientation?: "horizontal" | "vertical"
@@ -63,26 +65,28 @@ const Carousel = React.forwardRef<
       setItemCount(items.length)
     }, [children])
 
-    return (
-      <CarouselContext.Provider
-        value={{
+    return React.createElement(
+      CarouselContext.Provider,
+      {
+        value: {
           orientation,
           scrollPrev,
           scrollNext,
           canScrollPrev,
           canScrollNext,
-        }}
-      >
-        <div
-          ref={ref}
-          className={cn("relative", className)}
-          role="region"
-          aria-roledescription="carousel"
-          {...props}
-        >
-          {children}
-        </div>
-      </CarouselContext.Provider>
+        }
+      },
+      React.createElement(
+        "div",
+        {
+          ref,
+          className: cn("relative", className),
+          role: "region",
+          "aria-roledescription": "carousel",
+          ...props
+        },
+        children
+      )
     )
   }
 )
@@ -94,18 +98,21 @@ const CarouselContent = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const { orientation } = useCarousel()
 
-  return (
-    <div className="overflow-hidden">
-      <div
-        ref={ref}
-        className={cn(
+  return React.createElement(
+    "div",
+    { className: "overflow-hidden" },
+    React.createElement(
+      "div",
+      {
+        ref,
+        className: cn(
           "flex",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
-        )}
-        {...props}
-      />
-    </div>
+        ),
+        ...props
+      }
+    )
   )
 })
 CarouselContent.displayName = "CarouselContent"
@@ -116,18 +123,19 @@ const CarouselItem = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const { orientation } = useCarousel()
 
-  return (
-    <div
-      ref={ref}
-      role="group"
-      aria-roledescription="slide"
-      className={cn(
+  return React.createElement(
+    "div",
+    {
+      ref,
+      role: "group",
+      "aria-roledescription": "slide",
+      className: cn(
         "min-w-0 shrink-0 grow-0 basis-full",
         orientation === "horizontal" ? "pl-4" : "pt-4",
         className
-      )}
-      {...props}
-    />
+      ),
+      ...props
+    }
   )
 })
 CarouselItem.displayName = "CarouselItem"
@@ -138,25 +146,25 @@ const CarouselPrevious = React.forwardRef<
 >(({ className, variant = "outline", size = "icon", ...props }, ref) => {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
-  return (
-    <Button
-      ref={ref}
-      variant={variant}
-      size={size}
-      className={cn(
+  return React.createElement(
+    Button,
+    {
+      ref,
+      variant,
+      size,
+      className: cn(
         "absolute h-8 w-8 rounded-full",
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
-      )}
-      disabled={!canScrollPrev}
-      onClick={scrollPrev}
-      {...props}
-    >
-      <ArrowLeft className="h-4 w-4" />
-      <span className="sr-only">Previous slide</span>
-    </Button>
+      ),
+      disabled: !canScrollPrev,
+      onClick: scrollPrev,
+      ...props
+    },
+    React.createElement(ArrowLeft, { className: "h-4 w-4" }),
+    React.createElement("span", { className: "sr-only" }, "Previous slide")
   )
 })
 CarouselPrevious.displayName = "CarouselPrevious"
@@ -167,25 +175,25 @@ const CarouselNext = React.forwardRef<
 >(({ className, variant = "outline", size = "icon", ...props }, ref) => {
   const { orientation, scrollNext, canScrollNext } = useCarousel()
 
-  return (
-    <Button
-      ref={ref}
-      variant={variant}
-      size={size}
-      className={cn(
+  return React.createElement(
+    Button,
+    {
+      ref,
+      variant,
+      size,
+      className: cn(
         "absolute h-8 w-8 rounded-full",
         orientation === "horizontal"
           ? "-right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
-      )}
-      disabled={!canScrollNext}
-      onClick={scrollNext}
-      {...props}
-    >
-      <ArrowRight className="h-4 w-4" />
-      <span className="sr-only">Next slide</span>
-    </Button>
+      ),
+      disabled: !canScrollNext,
+      onClick: scrollNext,
+      ...props
+    },
+    React.createElement(ArrowRight, { className: "h-4 w-4" }),
+    React.createElement("span", { className: "sr-only" }, "Next slide")
   )
 })
 CarouselNext.displayName = "CarouselNext"

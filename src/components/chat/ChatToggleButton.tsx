@@ -10,13 +10,47 @@ interface ChatToggleButtonProps {
 const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
   const { isMobile } = useIsMobileOptimized();
 
+  if (isMobile) {
+    return (
+      <button
+        onClick={onClick}
+        style={{
+          position: 'fixed',
+          bottom: '90px',
+          right: '16px',
+          backgroundColor: '#1e3a8a',
+          color: 'white',
+          padding: '12px',
+          borderRadius: '50%',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+          border: 'none',
+          cursor: 'pointer',
+          zIndex: 999998,
+          width: '56px',
+          height: '56px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          transition: 'all 0.3s ease',
+          transform: 'scale(1)'
+        }}
+        onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.95)'}
+        onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        aria-label="Open AI Chat"
+      >
+        <MessageCircle style={{ height: '24px', width: '24px' }} />
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={onClick}
-      className={`fixed ${isMobile ? 'bottom-24 right-4' : 'bottom-6 right-6'} bg-yrealty-navy hover:bg-yrealty-navy/90 text-white ${isMobile ? 'p-3' : 'p-4'} rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40`}
+      className="fixed bottom-6 right-6 bg-yrealty-navy hover:bg-yrealty-navy/90 text-white p-4 rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40"
       aria-label="Open AI Chat"
     >
-      <MessageCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'}`} />
+      <MessageCircle className="h-6 w-6" />
     </button>
   );
 };

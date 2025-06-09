@@ -21,13 +21,6 @@ import Profile from "./pages/Profile";
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
-  // Ensure React is available before rendering any components
-  React.useEffect(() => {
-    if (typeof window !== 'undefined' && !window.React) {
-      window.React = React;
-    }
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

@@ -1,10 +1,8 @@
 
-import React from "react"
+import * as React from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-
-console.log("Carousel component loading - fully native implementation");
 
 type CarouselProps = {
   orientation?: "horizontal" | "vertical"
@@ -18,8 +16,6 @@ type CarouselContextProps = {
   canScrollPrev: boolean
   canScrollNext: boolean
   orientation?: "horizontal" | "vertical"
-  currentIndex: number
-  itemCount: number
 }
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
@@ -60,6 +56,7 @@ const Carousel = React.forwardRef<
     const canScrollNext = currentIndex < itemCount - 1
 
     React.useEffect(() => {
+      // Count carousel items
       const items = React.Children.toArray(children).filter(child => 
         React.isValidElement(child) && child.type === CarouselItem
       )
@@ -74,8 +71,6 @@ const Carousel = React.forwardRef<
           scrollNext,
           canScrollPrev,
           canScrollNext,
-          currentIndex,
-          itemCount,
         }}
       >
         <div
@@ -96,27 +91,20 @@ Carousel.displayName = "Carousel"
 const CarouselContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => {
-  const { orientation, currentIndex } = useCarousel()
+>(({ className, ...props }, ref) => {
+  const { orientation } = useCarousel()
 
   return (
     <div className="overflow-hidden">
       <div
         ref={ref}
         className={cn(
-          "flex transition-transform duration-300 ease-in-out",
+          "flex",
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
         )}
-        style={{
-          transform: orientation === "horizontal" 
-            ? `translateX(-${currentIndex * 100}%)` 
-            : `translateY(-${currentIndex * 100}%)`
-        }}
         {...props}
-      >
-        {children}
-      </div>
+      />
     </div>
   )
 })

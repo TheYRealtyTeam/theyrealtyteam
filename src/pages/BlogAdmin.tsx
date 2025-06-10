@@ -4,13 +4,13 @@ import PageLayout from '@/components/layout/PageLayout';
 import AdminControls from '@/components/blog/AdminControls';
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from 'lucide-react';
-import { useSimpleNavigation } from '@/hooks/useSimpleNavigation';
+import { Link } from 'react-router-dom';
 
 const BlogAdmin = () => {
-  const { navigateToPage } = useSimpleNavigation();
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handleBackToBlog = () => {
-    navigateToPage('/blog');
+  const handleBlogPostsAdded = () => {
+    setRefreshTrigger(prev => prev + 1);
   };
 
   return (
@@ -20,13 +20,15 @@ const BlogAdmin = () => {
     >
       <div className="max-w-4xl mx-auto">
         <div className="mb-6">
-          <Button variant="outline" className="flex items-center" onClick={handleBackToBlog}>
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
-          </Button>
+          <Link to="/blog">
+            <Button variant="outline" className="flex items-center">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Blog
+            </Button>
+          </Link>
         </div>
 
-        <AdminControls isAdmin={true} />
+        <AdminControls onBlogPostsAdded={handleBlogPostsAdded} />
         
         <div className="bg-gray-50 rounded-lg p-6">
           <h3 className="text-lg font-medium mb-3">Quick Actions</h3>

@@ -1,8 +1,0 @@
-
-/* Mobile-specific optimizations - Main entry point */
-@import './mobile/mobile-base.css';
-@import './mobile/mobile-animations.css';
-@import './mobile/mobile-components.css';
-@import './mobile/mobile-forms.css';
-@import './mobile/mobile-responsive.css';
-@import './mobile/mobile-micro-interactions.css';

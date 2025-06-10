@@ -1,21 +1,15 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { useSimpleNavigation } from '@/hooks/useSimpleNavigation';
 
 interface BlogPostErrorProps {
   error: string | null;
 }
 
 const BlogPostError = ({ error }: BlogPostErrorProps) => {
-  const { navigateToPage } = useSimpleNavigation();
-
-  const handleBackClick = () => {
-    navigateToPage('/blog');
-  };
-
   return (
     <PageLayout title="Blog Post Not Found">
       <div className="text-center py-12">
@@ -25,10 +19,12 @@ const BlogPostError = ({ error }: BlogPostErrorProps) => {
         <p className="text-gray-500 mt-2">
           {error || "Please check the URL or go back to the blog page."}
         </p>
-        <Button className="mt-6" onClick={handleBackClick}>
-          <ArrowLeft className="mr-2" />
-          Back to Blog
-        </Button>
+        <Link to="/blog">
+          <Button className="mt-6">
+            <ArrowLeft className="mr-2" />
+            Back to Blog
+          </Button>
+        </Link>
       </div>
     </PageLayout>
   );

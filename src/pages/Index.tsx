@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -10,28 +10,9 @@ import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
 import AIChat from '@/components/chat/AIChat';
 import AnimationObserver from '@/utils/AnimationObserver';
-import MobileBottomNavigation from '@/components/mobile/MobileBottomNavigation';
-import MobilePWAPrompt from '@/components/mobile/MobilePWAPrompt';
-import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 
 const Index = () => {
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkDevice = () => {
-      const width = window.innerWidth;
-      setIsMobile(width < 768);
-    };
-
-    checkDevice();
-    window.addEventListener('resize', checkDevice);
-    
-    return () => window.removeEventListener('resize', checkDevice);
-  }, []);
-
-  console.log('Index component rendering, isMobile:', isMobile);
-
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
     
     const metaDescription = document.createElement('meta');
@@ -43,54 +24,34 @@ const Index = () => {
     canonicalLink.rel = 'canonical';
     canonicalLink.href = 'https://theYteam.co';
     document.head.appendChild(canonicalLink);
-
-    const manifestLink = document.createElement('link');
-    manifestLink.rel = 'manifest';
-    manifestLink.href = '/manifest.json';
-    document.head.appendChild(manifestLink);
-
-    const themeColor = document.createElement('meta');
-    themeColor.name = 'theme-color';
-    themeColor.content = '#1e3a8a';
-    document.head.appendChild(themeColor);
     
     return () => {
       const existingCanonical = document.querySelector('link[rel="canonical"]');
       const existingDescription = document.querySelector('meta[name="description"]');
-      const existingManifest = document.querySelector('link[rel="manifest"]');
-      const existingThemeColor = document.querySelector('meta[name="theme-color"]');
-      
-      if (existingCanonical) document.head.removeChild(existingCanonical);
-      if (existingDescription) document.head.removeChild(existingDescription);
-      if (existingManifest) document.head.removeChild(existingManifest);
-      if (existingThemeColor) document.head.removeChild(existingThemeColor);
+      if (existingCanonical) {
+        document.head.removeChild(existingCanonical);
+      }
+      if (existingDescription) {
+        document.head.removeChild(existingDescription);
+      }
     };
   }, []);
 
   return (
-    <>
-      <div style={{ paddingBottom: isMobile ? '80px' : '0' }} className="min-h-screen flex flex-col bg-white">
-        <Navbar />
-        <main className="flex-1">
-          <HeroSection />
-          <AboutSection />
-          <ServicesSection />
-          <AreasSection />
-          <TestimonialsSection />
-          <ContactSection />
-        </main>
-        <Footer />
-        <AIChat />
-        <AnimationObserver />
-        {isMobile && (
-          <>
-            <MobilePWAPrompt />
-            <MobileOfflineIndicator />
-          </>
-        )}
-      </div>
-      {isMobile && <MobileBottomNavigation />}
-    </>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main>
+        <HeroSection />
+        <AboutSection />
+        <ServicesSection />
+        <AreasSection />
+        <TestimonialsSection />
+        <ContactSection />
+      </main>
+      <Footer />
+      <AIChat />
+      <AnimationObserver />
+    </div>
   );
 };
 

@@ -1,11 +1,8 @@
 
-import * as React from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-
-console.log('AuthContext - React available:', !!React);
-console.log('AuthContext - React.useState available:', !!React.useState);
 
 type AuthContextType = {
   session: Session | null;
@@ -17,23 +14,17 @@ type AuthContextType = {
   setSessionAndUser: (session: Session | null) => void;
 };
 
-export const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  console.log('AuthProvider rendering - React:', !!React);
-  
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  React.useEffect(() => {
-    let mounted = true;
-
+  useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
-        if (!mounted) return;
-        
         console.log('Auth state changed', event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
@@ -52,7 +43,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // THEN check for existing session
     const initializeAuth = async () => {
       try {
-        if (!mounted) return;
         setLoading(true);
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
@@ -61,24 +51,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // Don't throw error, just log it and continue
         }
         
-        if (mounted) {
-          setSession(currentSession);
-          setUser(currentSession?.user ?? null);
-        }
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
       } catch (error) {
         console.error('Error initializing auth:', error);
         // Continue without auth if there's an error
       } finally {
-        if (mounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
     initializeAuth();
 
     return () => {
-      mounted = false;
       subscription.unsubscribe();
     };
   }, []);
@@ -128,10 +113,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(newSession?.user ?? null);
   };
 
-  return React.createElement(
-    AuthContext.Provider,
-    {
-      value: {
+  return (
+    <AuthContext.Provider
+      value={{
         session,
         user,
         loading,
@@ -139,14 +123,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signUp,
         signOut,
         setSessionAndUser
-      }
-    },
-    children
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = React.useContext(AuthContext);
+  const context = useContext(AuthContext);
   
   if (context === undefined) {
     // Return a default context instead of throwing an error

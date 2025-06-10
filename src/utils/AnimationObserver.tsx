@@ -1,14 +1,13 @@
 
-import * as React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
-  console.log('AnimationObserver component rendering');
-  
-  const observerRef = React.useRef<IntersectionObserver | null>(null);
-  const elementsRef = React.useRef<Element[]>([]);
-  const mutationObserverRef = React.useRef<MutationObserver | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const elementsRef = useRef<Element[]>([]);
+  const mutationObserverRef = useRef<MutationObserver | null>(null);
 
-  const observeElements = React.useCallback(() => {
+  // Function to observe elements with the 'reveal' class
+  const observeElements = () => {
     try {
       const revealElements = document.querySelectorAll('.reveal:not(.active)');
       
@@ -17,6 +16,7 @@ export const AnimationObserver = () => {
       }
       
       revealElements.forEach((el) => {
+        // Only observe if not already observed
         if (!elementsRef.current.includes(el)) {
           elementsRef.current.push(el);
           observerRef.current?.observe(el);
@@ -25,11 +25,9 @@ export const AnimationObserver = () => {
     } catch (error) {
       console.error('Error finding reveal elements:', error);
     }
-  }, []);
+  };
 
-  React.useEffect(() => {
-    console.log('AnimationObserver useEffect running');
-    
+  useEffect(() => {
     if (!window.IntersectionObserver) {
       console.warn('IntersectionObserver not supported in this browser');
       return;
@@ -42,18 +40,22 @@ export const AnimationObserver = () => {
     };
 
     try {
+      // Create the IntersectionObserver
       observerRef.current = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             console.log('Element is now visible:', entry.target);
             entry.target.classList.add('active');
+            // Once element is revealed, stop observing it
             observerRef.current?.unobserve(entry.target);
           }
         });
       }, observerOptions);
 
+      // Initial observation
       observeElements();
       
+      // Set up MutationObserver to detect DOM changes (like tab switching)
       mutationObserverRef.current = new MutationObserver((mutations) => {
         let shouldCheck = false;
         
@@ -72,10 +74,12 @@ export const AnimationObserver = () => {
         });
         
         if (shouldCheck) {
+          // Wait a bit for the DOM to settle
           setTimeout(observeElements, 50);
         }
       });
       
+      // Observe the entire document for changes
       mutationObserverRef.current.observe(document.body, {
         childList: true,
         subtree: true,
@@ -87,8 +91,6 @@ export const AnimationObserver = () => {
     }
 
     return () => {
-      console.log('AnimationObserver cleanup running');
-      
       if (observerRef.current) {
         elementsRef.current.forEach((el) => {
           try {
@@ -104,7 +106,7 @@ export const AnimationObserver = () => {
         mutationObserverRef.current.disconnect();
       }
     };
-  }, [observeElements]);
+  }, []);
 
   return null;
 };

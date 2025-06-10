@@ -39,7 +39,7 @@ const Profile = () => {
       try {
         setLoading(true);
         
-        // Use proper Supabase client to fetch from profiles table
+        // Use proper Supabase client instead of hardcoded fetch
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
@@ -62,20 +62,6 @@ const Profile = () => {
           setProfile(profileData);
           setUsername(profileData.username || '');
           setFullName(profileData.full_name || '');
-        } else {
-          // Create profile if it doesn't exist
-          const { error: insertError } = await supabase
-            .from('profiles')
-            .insert({
-              id: user.id,
-              username: null,
-              full_name: null,
-              avatar_url: null
-            });
-          
-          if (insertError) {
-            console.error('Error creating profile:', insertError);
-          }
         }
       } catch (error: any) {
         console.error('Error fetching profile:', error);
@@ -94,7 +80,7 @@ const Profile = () => {
 
     setUpdating(true);
     try {
-      // Use proper Supabase client to update profiles table
+      // Use proper Supabase client instead of hardcoded fetch
       const { error } = await supabase
         .from('profiles')
         .update({

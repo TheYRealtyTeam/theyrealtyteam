@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Building, Home } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import MobileServicesSection from './mobile/MobileServicesSection';
 import ValueProposition from './services/ValueProposition';
 import CaseStudies from './services/CaseStudies';
 import TechnologyStack from './services/TechnologyStack';
@@ -19,12 +18,6 @@ const ServicesSection = () => {
     setTimeout(() => setIsLoading(false), 300);
   };
 
-  // Return mobile-optimized version for mobile devices
-  if (isMobile) {
-    return <MobileServicesSection />;
-  }
-
-  // Desktop version (keep existing code)
   return (
     <section id="services" className="section-padding bg-gradient-to-b from-white to-gray-50">
       <div className="container-custom">
@@ -46,7 +39,7 @@ const ServicesSection = () => {
         {/* Enhanced Tab Navigation */}
         <div className="w-full">
           <div className="flex justify-center mb-12">
-            <div className="w-96 inline-flex h-auto min-h-12 items-center justify-center rounded-xl bg-gray-100 p-2 text-muted-foreground shadow-inner">
+            <div className={`${isMobile ? 'w-full' : 'w-96'} inline-flex h-auto min-h-12 items-center justify-center rounded-xl bg-gray-100 p-2 text-muted-foreground shadow-inner`}>
               <button 
                 onClick={() => handleTabChange("residential")}
                 className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-lg px-6 py-3 text-lg font-bold transition-all duration-300

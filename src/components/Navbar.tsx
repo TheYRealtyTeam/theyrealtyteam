@@ -9,6 +9,8 @@ import DesktopNav from './navbar/DesktopNav';
 import MobileMenu from './navbar/MobileMenu';
 
 const Navbar = () => {
+  console.log('Navbar component rendering');
+  
   const { user } = useAuth();
   const { 
     isMenuOpen, 
@@ -18,6 +20,8 @@ const Navbar = () => {
     isLinkActive, 
     handleNavigation 
   } = useNavigation();
+
+  console.log('Navbar navigation state:', { isMenuOpen, isScrolled });
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>

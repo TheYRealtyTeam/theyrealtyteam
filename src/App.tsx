@@ -21,7 +21,14 @@ import Profile from "./pages/Profile";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 const App: React.FC = () => {
   console.log('App component rendering');
@@ -30,7 +37,7 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
-          <div>
+          <div className="min-h-screen">
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/faq" element={<FAQ />} />

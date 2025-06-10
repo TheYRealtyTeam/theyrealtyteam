@@ -1,5 +1,5 @@
 
-import React from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -16,10 +16,9 @@ import MobilePWAPrompt from '@/components/mobile/MobilePWAPrompt';
 import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 
 const Index = () => {
-  // Replace the problematic hook with direct useState
-  const [isMobile, setIsMobile] = React.useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
       setIsMobile(width < 768);
@@ -31,10 +30,9 @@ const Index = () => {
     return () => window.removeEventListener('resize', checkDevice);
   }, []);
 
-  // Debug logging
   console.log('Index component rendering, isMobile:', isMobile);
 
-  React.useEffect(() => {
+  useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
     
     const metaDescription = document.createElement('meta');
@@ -47,13 +45,11 @@ const Index = () => {
     canonicalLink.href = 'https://theYteam.co';
     document.head.appendChild(canonicalLink);
 
-    // Add PWA manifest link
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
     manifestLink.href = '/manifest.json';
     document.head.appendChild(manifestLink);
 
-    // Add theme color meta tag
     const themeColor = document.createElement('meta');
     themeColor.name = 'theme-color';
     themeColor.content = '#1e3a8a';

@@ -12,7 +12,7 @@ const MobileHeroSection = () => {
     img.onload = () => setIsImageLoaded(true);
   }, []);
 
-  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const element = document.getElementById('contact');
     if (element) {
@@ -25,7 +25,7 @@ const MobileHeroSection = () => {
     }
   };
 
-  const handleAboutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleAboutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const element = document.getElementById('about');
     if (element) {
@@ -36,6 +36,10 @@ const MobileHeroSection = () => {
         behavior: 'smooth'
       });
     }
+  };
+
+  const handleCallClick = () => {
+    window.location.href = 'tel:(845)734-3331';
   };
 
   return (
@@ -69,33 +73,31 @@ const MobileHeroSection = () => {
         <div className="space-y-4 animate-fade-in" style={{
           animationDelay: '0.4s'
         }}>
-          <a 
-            href="tel:(845)734-3331" 
+          <button 
+            onClick={handleCallClick}
             className="w-full bg-yrealty-accent hover:bg-yrealty-accent/90 text-white text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all duration-300 transform hover:scale-105"
           >
             <Phone size={20} />
             Call Now
-          </a>
+          </button>
           
-          <a 
-            href="#contact" 
+          <button 
             onClick={handleContactClick}
             className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300"
           >
             <MessageCircle size={20} />
             Get Started
-          </a>
+          </button>
         </div>
       </div>
 
-      <a 
-        href="#about" 
+      <button 
         onClick={handleAboutClick}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white animate-bounce" 
         aria-label="Scroll Down to About Section"
       >
         <ArrowDown size={24} />
-      </a>
+      </button>
     </section>
   );
 };

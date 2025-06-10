@@ -19,6 +19,18 @@ const MobileAreasSection = () => {
     { icon: Star, title: 'Premium Service', description: 'Same high-quality service regardless of location' }
   ];
 
+  const handleContactClick = () => {
+    const element = document.getElementById('contact');
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <section className="py-16 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4">
@@ -75,12 +87,12 @@ const MobileAreasSection = () => {
           <p className="text-gray-600 mb-4">
             Ready to get started in your area?
           </p>
-          <a 
-            href="#contact"
+          <button 
+            onClick={handleContactClick}
             className="inline-flex items-center bg-yrealty-accent text-white px-6 py-3 rounded-xl font-semibold hover:bg-yrealty-accent/90 transition-colors"
           >
             Contact Us Today
-          </a>
+          </button>
         </div>
       </div>
     </section>

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import * as React from 'react';
 import { ArrowDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileHeroSection from './mobile/MobileHeroSection';
@@ -34,7 +34,7 @@ const HeroSection = () => {
     return <MobileHeroSection />;
   }
 
-  // Desktop version (keep existing code)
+  // Desktop version
   return (
     <section 
       id="home" 

@@ -1,14 +1,14 @@
 
-import { useRef, useEffect } from 'react';
+import * as React from 'react';
 
 export const AnimationObserver = () => {
   console.log('AnimationObserver component rendering');
   
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const elementsRef = useRef<Element[]>([]);
-  const mutationObserverRef = useRef<MutationObserver | null>(null);
+  const observerRef = React.useRef<IntersectionObserver | null>(null);
+  const elementsRef = React.useRef<Element[]>([]);
+  const mutationObserverRef = React.useRef<MutationObserver | null>(null);
 
-  const observeElements = () => {
+  const observeElements = React.useCallback(() => {
     try {
       const revealElements = document.querySelectorAll('.reveal:not(.active)');
       
@@ -25,9 +25,9 @@ export const AnimationObserver = () => {
     } catch (error) {
       console.error('Error finding reveal elements:', error);
     }
-  };
+  }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     console.log('AnimationObserver useEffect running');
     
     if (!window.IntersectionObserver) {
@@ -104,7 +104,7 @@ export const AnimationObserver = () => {
         mutationObserverRef.current.disconnect();
       }
     };
-  }, []);
+  }, [observeElements]);
 
   return null;
 };

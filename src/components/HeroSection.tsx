@@ -29,7 +29,7 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleServicesClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleServicesClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const element = document.getElementById('services');
     if (element) {
@@ -42,7 +42,7 @@ const HeroSection = () => {
     }
   };
 
-  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const element = document.getElementById('contact');
     if (element) {
@@ -55,7 +55,7 @@ const HeroSection = () => {
     }
   };
 
-  const handleAboutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleAboutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const element = document.getElementById('about');
     if (element) {
@@ -106,19 +106,19 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-6 animate-fade-in" style={{
             animationDelay: '0.4s'
           }}>
-            <a href="#services" onClick={handleServicesClick} className="btn-accent text-lg px-8 py-4 font-bold">
+            <button onClick={handleServicesClick} className="btn-accent text-lg px-8 py-4 font-bold">
               Our Services
-            </a>
-            <a href="#contact" onClick={handleContactClick} className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy text-lg px-8 py-4 font-bold">
+            </button>
+            <button onClick={handleContactClick} className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy text-lg px-8 py-4 font-bold">
               Contact Us
-            </a>
+            </button>
           </div>
         </div>
       </div>
 
-      <a href="#about" onClick={handleAboutClick} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce" aria-label="Scroll Down to About Section">
+      <button onClick={handleAboutClick} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce" aria-label="Scroll Down to About Section">
         <ArrowDown size={32} />
-      </a>
+      </button>
     </section>
   );
 };

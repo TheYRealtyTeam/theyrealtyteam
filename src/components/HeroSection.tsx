@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React from 'react';
 import { ArrowDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileHeroSection from './mobile/MobileHeroSection';

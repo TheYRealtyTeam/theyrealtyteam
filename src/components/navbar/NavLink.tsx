@@ -18,18 +18,33 @@ export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProp
   const navigate = useNavigate();
   
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    
     if (link.isAnchorLink) {
-      onClick(e);
+      // Handle anchor links with smooth scrolling
+      const sectionId = link.href.split('#')[1];
+      const element = document.getElementById(sectionId);
+      
+      if (element) {
+        const yOffset = -80;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      }
     } else {
-      e.preventDefault();
+      // Handle regular navigation
       navigate(link.href);
-      onClick(e);
     }
+    
+    onClick(e);
   };
 
   return (
     <button
-      className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className} bg-transparent border-none cursor-pointer`}
+      type="button"
+      className={`nav-link text-black font-medium transition-colors hover:text-yrealty-accent ${isActive ? 'active text-yrealty-accent' : ''} ${className} bg-transparent border-none cursor-pointer px-3 py-2`}
       onClick={handleClick}
       aria-current={isActive ? 'page' : undefined}
     >

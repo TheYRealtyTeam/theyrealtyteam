@@ -23,13 +23,27 @@ const MobileMenu = ({
   const navigate = useNavigate();
   
   const handleLinkClick = (e: React.MouseEvent<HTMLButtonElement>, link: { href: string; isAnchorLink: boolean }) => {
+    e.preventDefault();
+    
     if (link.isAnchorLink) {
-      handleNavigation(e, link);
+      // Handle anchor links
+      const sectionId = link.href.split('#')[1];
+      const element = document.getElementById(sectionId);
+      
+      if (element) {
+        const yOffset = -80;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      }
     } else {
-      e.preventDefault();
+      // Handle regular navigation
       navigate(link.href);
-      closeMenu();
     }
+    
+    closeMenu();
   };
 
   const handleAppointmentClick = () => {
@@ -59,6 +73,7 @@ const MobileMenu = ({
             {navLinks.map((link, index) => (
               <button
                 key={link.name}
+                type="button"
                 className={`block w-full text-left text-lg font-semibold text-gray-800 hover:text-yrealty-accent transition-all duration-200 transform hover:translate-x-2 bg-transparent border-none cursor-pointer ${
                   isLinkActive(link) ? 'text-yrealty-accent font-bold' : ''
                 }`}
@@ -73,8 +88,9 @@ const MobileMenu = ({
           
           <div className="mt-8 pt-6 border-t border-gray-200">
             <button 
+              type="button"
               onClick={handleAppointmentClick}
-              className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300"
+              className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300 border-none cursor-pointer"
             >
               Get Started
             </button>

@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
 import PageLayout from '@/components/layout/PageLayout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -12,66 +11,25 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
-interface ProfileData {
-  id: string;
-  username: string | null;
-  full_name: string | null;
-  avatar_url: string | null;
-}
-
 const Profile = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
-  const [profile, setProfile] = useState<ProfileData | null>(null);
-  const [username, setUsername] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [loading, setLoading] = React.useState(true);
+  const [updating, setUpdating] = React.useState(false);
+  const [username, setUsername] = React.useState('');
+  const [fullName, setFullName] = React.useState('');
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Redirect if not logged in
     if (!user) {
       navigate('/');
       return;
     }
 
-    const fetchProfile = async () => {
-      try {
-        setLoading(true);
-        
-        // Use proper Supabase client instead of hardcoded fetch
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .maybeSingle();
-
-        if (error) {
-          console.error('Error fetching profile:', error);
-          throw error;
-        }
-        
-        if (data) {
-          const profileData: ProfileData = {
-            id: data.id,
-            username: data.username,
-            full_name: data.full_name,
-            avatar_url: data.avatar_url
-          };
-          
-          setProfile(profileData);
-          setUsername(profileData.username || '');
-          setFullName(profileData.full_name || '');
-        }
-      } catch (error: any) {
-        console.error('Error fetching profile:', error);
-        toast.error('Failed to load profile data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProfile();
+    // For now, just use the user data from auth
+    setFullName(user.user_metadata?.full_name || '');
+    setUsername(user.user_metadata?.username || '');
+    setLoading(false);
   }, [user, navigate]);
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
@@ -80,33 +38,11 @@ const Profile = () => {
 
     setUpdating(true);
     try {
-      // Use proper Supabase client instead of hardcoded fetch
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          username: username || null,
-          full_name: fullName || null,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', user.id);
-
-      if (error) {
-        console.error('Database error:', error);
-        throw error;
-      }
-      
-      toast.success('Profile updated successfully');
-      
-      // Update local profile state
-      setProfile(prev => prev ? {
-        ...prev,
-        username,
-        full_name: fullName
-      } : null);
-      
+      // For now, just show a message that profile updates are not yet implemented
+      toast.success('Profile update feature coming soon!');
     } catch (error: any) {
       console.error('Error updating profile:', error);
-      toast.error(error.message || 'Failed to update profile');
+      toast.error('Failed to update profile');
     } finally {
       setUpdating(false);
     }
@@ -138,7 +74,7 @@ const Profile = () => {
           <CardHeader>
             <div className="flex items-center gap-4">
               <Avatar className="h-16 w-16 border-2 border-yrealty-accent">
-                <AvatarImage src={profile?.avatar_url || ''} />
+                <AvatarImage src="" />
                 <AvatarFallback className="bg-yrealty-navy text-white text-xl">
                   {fullName ? fullName.substring(0, 2).toUpperCase() : user?.email?.substring(0, 2).toUpperCase()}
                 </AvatarFallback>

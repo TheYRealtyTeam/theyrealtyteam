@@ -1,9 +1,11 @@
 
-import React, { useRef } from 'react';
+import * as React from 'react';
 import { CheckCircle } from 'lucide-react';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const AboutSection = () => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = React.useRef<HTMLElement>(null);
+  const isMobile = useIsMobileOptimized();
 
   return (
     <section id="about" className="section-padding bg-gradient-to-b from-yrealty-blue to-white" ref={sectionRef}>

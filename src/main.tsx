@@ -2,37 +2,54 @@
 import { StrictMode, createElement } from 'react'
 import { createRoot } from 'react-dom/client'
 
-console.log("main.tsx: Starting minimal React application");
+console.log("main.tsx: Starting completely isolated application");
 
-// Ultra-minimal component using createElement to avoid any JSX compilation issues
-const MinimalApp = () => {
-  console.log("MinimalApp: Rendering basic element");
+// Completely isolated app with no imports from our codebase
+const IsolatedApp = () => {
+  console.log("IsolatedApp: Rendering with zero dependencies");
   
   return createElement('div', {
     style: {
       minHeight: '100vh',
-      backgroundColor: '#f0f0f0',
+      backgroundColor: '#f8fafc',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      fontFamily: 'Arial, sans-serif'
+      fontFamily: 'system-ui, sans-serif',
+      padding: '20px'
     }
   }, 
     createElement('div', {
       style: {
         textAlign: 'center',
-        padding: '20px',
         backgroundColor: 'white',
-        borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+        padding: '40px',
+        borderRadius: '12px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        maxWidth: '400px'
       }
     },
       createElement('h1', {
-        style: { color: '#333', marginBottom: '10px' }
-      }, 'Minimal React App'),
+        style: { 
+          color: '#1f2937', 
+          marginBottom: '20px',
+          fontSize: '32px',
+          fontWeight: 'bold'
+        }
+      }, 'React Test App'),
       createElement('p', {
-        style: { color: '#666' }
-      }, 'Running without any external components')
+        style: { 
+          color: '#6b7280',
+          marginBottom: '20px'
+        }
+      }, 'Testing React isolation without any external components'),
+      createElement('div', {
+        style: {
+          backgroundColor: '#f3f4f6',
+          padding: '16px',
+          borderRadius: '8px'
+        }
+      }, 'If you see this, React is working correctly!')
     )
   );
 };
@@ -45,9 +62,9 @@ if (!container) {
 console.log("main.tsx: Creating React root");
 const root = createRoot(container);
 
-console.log("main.tsx: Rendering minimal application");
+console.log("main.tsx: Rendering isolated application");
 root.render(
-  createElement(StrictMode, null, createElement(MinimalApp, null))
+  createElement(StrictMode, null, createElement(IsolatedApp, null))
 );
 
-console.log("main.tsx: Minimal application rendered successfully");
+console.log("main.tsx: Application rendered successfully");

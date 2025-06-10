@@ -1,5 +1,5 @@
 
-import React, { createContext, useEffect, useContext } from 'react';
+import * as React from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -14,18 +14,22 @@ type AuthContextType = {
   setSessionAndUser: (session: Session | null) => void;
 };
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // Use React.useState directly to avoid destructuring issues
+  // Use React hooks with explicit namespace
   const [session, setSession] = React.useState<Session | null>(null);
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
+    let mounted = true;
+
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
+        if (!mounted) return;
+        
         console.log('Auth state changed', event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
@@ -44,6 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // THEN check for existing session
     const initializeAuth = async () => {
       try {
+        if (!mounted) return;
         setLoading(true);
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
@@ -52,19 +57,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           // Don't throw error, just log it and continue
         }
         
-        setSession(currentSession);
-        setUser(currentSession?.user ?? null);
+        if (mounted) {
+          setSession(currentSession);
+          setUser(currentSession?.user ?? null);
+        }
       } catch (error) {
         console.error('Error initializing auth:', error);
         // Continue without auth if there's an error
       } finally {
-        setLoading(false);
+        if (mounted) {
+          setLoading(false);
+        }
       }
     };
 
     initializeAuth();
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, []);
@@ -132,7 +142,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context = React.useContext(AuthContext);
   
   if (context === undefined) {
     // Return a default context instead of throwing an error

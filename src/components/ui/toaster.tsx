@@ -1,5 +1,5 @@
 
-import React from "react"
+import * as React from "react"
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
@@ -11,12 +11,6 @@ import {
 } from "@/components/ui/toast"
 
 export function Toaster() {
-  // Add safety check for React availability
-  if (!React) {
-    console.warn('React not available for Toaster');
-    return null;
-  }
-
   const { toasts } = useToast()
 
   return (

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
   const observerRef = useRef<IntersectionObserver | null>(null);

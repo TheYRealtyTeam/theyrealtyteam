@@ -12,6 +12,8 @@ interface DesktopNavProps {
 }
 
 const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user }: DesktopNavProps) => {
+  console.log('DesktopNav rendering, React available:', !!React);
+  
   return (
     <nav className="hidden md:flex items-center space-x-2" aria-label="Main Navigation">
       {navLinks.map((link) => (

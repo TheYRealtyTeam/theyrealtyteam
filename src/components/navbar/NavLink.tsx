@@ -14,6 +14,8 @@ interface NavLinkProps {
 }
 
 export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProps) => {
+  console.log('NavLink rendering:', link.name, 'React available:', !!React);
+  
   if (link.isAnchorLink) {
     return (
       <a

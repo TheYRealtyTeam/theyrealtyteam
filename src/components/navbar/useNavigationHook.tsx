@@ -3,7 +3,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 export const useNavigationHook = () => {
-  console.log('useNavigationHook called');
+  console.log('useNavigationHook called, React available:', !!React);
   
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);

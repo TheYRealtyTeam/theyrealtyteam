@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React from 'react';
 import { Home, Wrench, BookOpen, MessageCircle, Phone } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -7,7 +7,7 @@ const MobileBottomNavigation = () => {
   const location = useLocation();
   
   // Debug logging
-  console.log('MobileBottomNavigation is rendering');
+  console.log('MobileBottomNavigation is rendering, React available:', !!React);
   console.log('Current location:', location.pathname);
   
   const navItems = [

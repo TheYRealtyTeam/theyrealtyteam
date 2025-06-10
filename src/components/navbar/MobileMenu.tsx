@@ -19,6 +19,8 @@ const MobileMenu = ({
   handleNavigation,
   user 
 }: MobileMenuProps) => {
+  console.log('MobileMenu rendering, React available:', !!React);
+  
   // Mobile-optimized slide-down menu
   return (
     <div 

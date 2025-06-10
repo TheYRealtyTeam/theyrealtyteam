@@ -1,13 +1,11 @@
 
-import React, { StrictMode } from 'react';
+import React from 'react';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './styles/index.css';
 
-// Ensure React is available globally for debugging
-(window as any).React = React;
-
-console.log('Main.tsx loading...', { React: !!React, StrictMode: !!StrictMode });
+console.log('Main.tsx loading...', { React });
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {

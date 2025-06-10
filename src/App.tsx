@@ -20,8 +20,6 @@ import Profile from "./pages/Profile";
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
-  console.log('App component rendering', { React: !!React });
-  
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

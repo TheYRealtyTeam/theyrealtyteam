@@ -7,9 +7,7 @@ const MobileBottomNavigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   
-  // Debug logging
-  console.log('MobileBottomNavigation is rendering, React available:', !!React);
-  console.log('Current location:', location.pathname);
+  console.log('MobileBottomNavigation rendering');
   
   const navItems = [
     { icon: Home, label: 'Home', href: '/', isExternal: false },
@@ -21,74 +19,50 @@ const MobileBottomNavigation = () => {
 
   const handleNavClick = (href: string, isExternal: boolean) => {
     console.log('Navigation clicked:', href, isExternal);
-    if (isExternal) {
+    try {
+      if (isExternal) {
+        window.location.href = href;
+      } else {
+        navigate(href);
+      }
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback to window.location for problematic routes
       window.location.href = href;
-    } else {
-      navigate(href);
     }
   };
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return location.pathname === '/';
+    try {
+      if (href === '/') {
+        return location.pathname === '/';
+      }
+      return location.pathname === href;
+    } catch (error) {
+      console.error('Location check error:', error);
+      return false;
     }
-    return location.pathname === href;
   };
 
   return (
     <div 
+      className="fixed bottom-0 left-0 right-0 z-50 h-16 w-full bg-white border-t-2 border-yrealty-accent shadow-lg md:hidden"
       style={{ 
-        position: 'fixed',
-        bottom: '0px',
-        left: '0px',
-        right: '0px',
-        zIndex: 999999,
-        height: '70px',
-        width: '100vw',
-        backgroundColor: '#ffffff',
-        borderTop: '3px solid #3b82f6',
-        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.3)',
-        display: 'block'
+        boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)'
       }}
-      className="md:hidden"
     >
-      <div 
-        style={{ 
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          height: '100%',
-          width: '100%'
-        }}
-      >
+      <div className="grid grid-cols-5 h-full w-full">
         {navItems.map((item, index) => (
           <button
             key={index}
+            type="button"
             onClick={() => handleNavClick(item.href, item.isExternal)}
-            style={{ 
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '8px',
-              minHeight: '60px',
-              minWidth: '60px',
-              backgroundColor: isActive(item.href) ? '#eff6ff' : 'transparent',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-            className="hover:bg-gray-100 transition-colors"
+            className={`flex flex-col items-center justify-center p-2 min-h-[60px] min-w-[60px] transition-colors border-none cursor-pointer ${
+              isActive(item.href) ? 'bg-yrealty-blue text-yrealty-accent' : 'bg-transparent text-gray-600 hover:bg-gray-100'
+            }`}
           >
-            <item.icon style={{ 
-              height: '24px', 
-              width: '24px', 
-              color: isActive(item.href) ? '#2563eb' : '#374151'
-            }} />
-            <span style={{ 
-              fontSize: '12px', 
-              color: isActive(item.href) ? '#2563eb' : '#374151',
-              marginTop: '4px',
-              fontWeight: isActive(item.href) ? '600' : '500'
-            }}>
+            <item.icon className={`h-5 w-5 ${isActive(item.href) ? 'text-yrealty-accent' : 'text-gray-600'}`} />
+            <span className={`text-xs mt-1 font-medium ${isActive(item.href) ? 'text-yrealty-accent font-semibold' : 'text-gray-600'}`}>
               {item.label}
             </span>
           </button>

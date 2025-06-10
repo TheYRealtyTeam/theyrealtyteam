@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 
 interface NavLinkProps {
   link: {
@@ -15,27 +15,16 @@ interface NavLinkProps {
 
 export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProps) => {
   console.log('NavLink rendering:', link.name, 'React available:', !!React);
-  const navigate = useNavigate();
+  const { safeNavigate, scrollToSection } = useSafeNavigation();
   
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     
     if (link.isAnchorLink) {
-      // Handle anchor links with smooth scrolling
       const sectionId = link.href.split('#')[1];
-      const element = document.getElementById(sectionId);
-      
-      if (element) {
-        const yOffset = -80;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({
-          top: y,
-          behavior: 'smooth'
-        });
-      }
+      scrollToSection(sectionId);
     } else {
-      // Handle regular navigation
-      navigate(link.href);
+      safeNavigate(link.href);
     }
     
     onClick(e);

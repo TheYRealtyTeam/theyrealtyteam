@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -20,38 +20,26 @@ const MobileMenu = ({
   user 
 }: MobileMenuProps) => {
   console.log('MobileMenu rendering, React available:', !!React);
-  const navigate = useNavigate();
+  const { safeNavigate, scrollToSection } = useSafeNavigation();
   
   const handleLinkClick = (e: React.MouseEvent<HTMLButtonElement>, link: { href: string; isAnchorLink: boolean }) => {
     e.preventDefault();
     
     if (link.isAnchorLink) {
-      // Handle anchor links
       const sectionId = link.href.split('#')[1];
-      const element = document.getElementById(sectionId);
-      
-      if (element) {
-        const yOffset = -80;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({
-          top: y,
-          behavior: 'smooth'
-        });
-      }
+      scrollToSection(sectionId);
     } else {
-      // Handle regular navigation
-      navigate(link.href);
+      safeNavigate(link.href);
     }
     
     closeMenu();
   };
 
   const handleAppointmentClick = () => {
-    navigate('/appointment');
+    safeNavigate('/appointment');
     closeMenu();
   };
 
-  // Mobile-optimized slide-down menu
   return (
     <div 
       id="mobile-menu"

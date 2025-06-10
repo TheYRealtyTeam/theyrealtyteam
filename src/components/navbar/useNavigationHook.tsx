@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 
 export const useNavigationHook = () => {
   console.log('useNavigationHook called, React available:', !!React);
@@ -8,7 +8,7 @@ export const useNavigationHook = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [activeSection, setActiveSection] = React.useState('home');
-  const location = useLocation();
+  const { getCurrentPath, scrollToSection } = useSafeNavigation();
 
   console.log('useNavigationHook state:', { isMenuOpen, isScrolled, activeSection });
 
@@ -16,7 +16,8 @@ export const useNavigationHook = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
       
-      if (location.pathname === '/') {
+      const currentPath = getCurrentPath();
+      if (currentPath === '/') {
         const sections = document.querySelectorAll('section[id]');
         const scrollPosition = window.scrollY + 100;
 
@@ -34,17 +35,22 @@ export const useNavigationHook = () => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location]);
+  }, [getCurrentPath]);
 
   React.useEffect(() => {
-    const pathname = location.pathname;
-    if (pathname === '/') {
+    try {
+      const pathname = getCurrentPath();
+      if (pathname === '/') {
+        setActiveSection('home');
+      } else {
+        const mainPath = pathname.split('/')[1];
+        setActiveSection(mainPath || 'home');
+      }
+    } catch (error) {
+      console.error('Error setting active section:', error);
       setActiveSection('home');
-    } else {
-      const mainPath = pathname.split('/')[1];
-      setActiveSection(mainPath || 'home');
     }
-  }, [location.pathname]);
+  }, [getCurrentPath]);
 
   React.useEffect(() => {
     if (isMenuOpen) {
@@ -62,15 +68,21 @@ export const useNavigationHook = () => {
   const closeMenu = () => setIsMenuOpen(false);
 
   const isLinkActive = (link: { href: string, isAnchorLink: boolean }) => {
-    if (link.isAnchorLink) {
-      const anchorId = link.href.split('#')[1];
-      return activeSection === anchorId;
-    } else {
-      if (link.href === '/') {
-        return location.pathname === '/';
+    try {
+      if (link.isAnchorLink) {
+        const anchorId = link.href.split('#')[1];
+        return activeSection === anchorId;
       } else {
-        return location.pathname.startsWith(link.href);
+        const currentPath = getCurrentPath();
+        if (link.href === '/') {
+          return currentPath === '/';
+        } else {
+          return currentPath.startsWith(link.href);
+        }
       }
+    } catch (error) {
+      console.error('Error checking link active state:', error);
+      return false;
     }
   };
 
@@ -80,19 +92,7 @@ export const useNavigationHook = () => {
     if (link.isAnchorLink) {
       e.preventDefault();
       const sectionId = link.href.split('#')[1];
-      const element = document.getElementById(sectionId);
-      
-      if (element) {
-        const yOffset = -80;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        
-        window.scrollTo({
-          top: y,
-          behavior: 'smooth'
-        });
-      } else if (location.pathname !== '/') {
-        window.location.href = link.href;
-      }
+      scrollToSection(sectionId);
     }
   };
 

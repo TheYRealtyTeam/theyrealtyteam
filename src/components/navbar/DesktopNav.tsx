@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSafeNavigation } from '@/hooks/useSafeNavigation';
 import { NavLink } from './NavLink';
 
 interface DesktopNavProps {
@@ -13,14 +13,14 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user }: DesktopNavProps) => {
   console.log('DesktopNav rendering, React available:', !!React);
-  const navigate = useNavigate();
+  const { safeNavigate } = useSafeNavigation();
   
   const handleProfileClick = () => {
-    navigate('/profile');
+    safeNavigate('/profile');
   };
 
   const handleAppointmentClick = () => {
-    navigate('/appointment');
+    safeNavigate('/appointment');
   };
 
   return (

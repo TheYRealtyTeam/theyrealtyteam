@@ -1,13 +1,15 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { BlogPostData } from '@/integrations/supabase/client';
+import { useSimpleNavigation } from '@/hooks/useSimpleNavigation';
 
 interface RelatedPostsProps {
   relatedPosts: BlogPostData[];
 }
 
 const RelatedPosts = ({ relatedPosts }: RelatedPostsProps) => {
+  const { navigateToPage } = useSimpleNavigation();
+
   const getCategoryLabel = (categoryId: string) => {
     if (!categoryId) return 'General';
     return categoryId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -17,12 +19,16 @@ const RelatedPosts = ({ relatedPosts }: RelatedPostsProps) => {
     return null;
   }
 
+  const handlePostClick = (slug: string) => {
+    navigateToPage(`/blog/${slug}`);
+  };
+
   return (
     <div className="border-t pt-12">
       <h3 className="text-2xl font-bold mb-8 text-yrealty-navy">Related Articles</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {relatedPosts.map((relatedPost) => (
-          <Link key={relatedPost.id} to={`/blog/${relatedPost.slug}`} className="group">
+          <div key={relatedPost.id} className="group cursor-pointer" onClick={() => handlePostClick(relatedPost.slug)}>
             <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <img 
                 src={relatedPost.image_url} 
@@ -42,7 +48,7 @@ const RelatedPosts = ({ relatedPosts }: RelatedPostsProps) => {
                 <p className="text-sm text-gray-600 line-clamp-2">{relatedPost.excerpt}</p>
               </div>
             </article>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

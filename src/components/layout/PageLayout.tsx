@@ -27,17 +27,15 @@ const PageLayout = ({
     
     // Add meta description if provided
     if (metaDescription) {
-      const metaDesc = document.createElement('meta');
-      metaDesc.name = 'description';
-      metaDesc.content = metaDescription;
-      document.head.appendChild(metaDesc);
-      
-      return () => {
-        const existingDesc = document.querySelector('meta[name="description"]');
-        if (existingDesc) {
-          document.head.removeChild(existingDesc);
-        }
-      };
+      const existingDesc = document.querySelector('meta[name="description"]');
+      if (existingDesc) {
+        existingDesc.setAttribute('content', metaDescription);
+      } else {
+        const metaDesc = document.createElement('meta');
+        metaDesc.name = 'description';
+        metaDesc.content = metaDescription;
+        document.head.appendChild(metaDesc);
+      }
     }
   }, [title, metaDescription]);
 

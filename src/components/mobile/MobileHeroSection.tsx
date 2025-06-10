@@ -12,6 +12,32 @@ const MobileHeroSection = () => {
     img.onload = () => setIsImageLoaded(true);
   }, []);
 
+  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('contact');
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleAboutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('about');
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <section 
       id="home" 
@@ -53,6 +79,7 @@ const MobileHeroSection = () => {
           
           <a 
             href="#contact" 
+            onClick={handleContactClick}
             className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300"
           >
             <MessageCircle size={20} />
@@ -63,6 +90,7 @@ const MobileHeroSection = () => {
 
       <a 
         href="#about" 
+        onClick={handleAboutClick}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white animate-bounce" 
         aria-label="Scroll Down to About Section"
       >

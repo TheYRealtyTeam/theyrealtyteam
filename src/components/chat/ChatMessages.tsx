@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Bot, User, Loader } from 'lucide-react';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -16,7 +16,7 @@ interface ChatMessagesProps {
 }
 
 const ChatMessages = ({ messages, isLoading, messagesEndRef }: ChatMessagesProps) => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   return (
     <div className="flex-1 p-4 overflow-y-auto space-y-4">

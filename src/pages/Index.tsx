@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -13,10 +13,22 @@ import MobileBottomNavigation from '@/components/mobile/MobileBottomNavigation';
 import MobilePullToRefresh from '@/components/mobile/MobilePullToRefresh';
 import MobilePWAPrompt from '@/components/mobile/MobilePWAPrompt';
 import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
-  const { isMobile } = useIsMobileOptimized();
+  // Replace the problematic hook with direct useState
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
 
   // Debug logging
   console.log('Index component rendering, isMobile:', isMobile);

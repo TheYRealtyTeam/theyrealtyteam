@@ -1,5 +1,5 @@
 
-import React from 'react';
+import * as React from 'react';
 import { Home, Wrench, BookOpen, MessageCircle, Phone } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 

@@ -1,11 +1,12 @@
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import * as React from 'react'
+import React from 'react'
 import App from './App.tsx'
 import './styles/index.css'
 
 // Ensure React is globally available BEFORE any components load
+console.log('Setting up React globally:', React);
 if (typeof window !== 'undefined') {
   (window as any).React = React;
 }

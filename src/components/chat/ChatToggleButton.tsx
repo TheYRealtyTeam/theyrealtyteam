@@ -17,17 +17,17 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
         style={{
           position: 'fixed',
           bottom: '90px',
-          right: '16px',
+          right: '20px',
           backgroundColor: '#1e3a8a',
           color: 'white',
-          padding: '12px',
+          padding: '16px',
           borderRadius: '50%',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
           border: 'none',
           cursor: 'pointer',
-          zIndex: 999999,
-          width: '56px',
-          height: '56px',
+          zIndex: 9999,
+          width: '60px',
+          height: '60px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -41,7 +41,7 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
         onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         aria-label="Open AI Chat"
       >
-        <MessageCircle style={{ height: '24px', width: '24px' }} />
+        <MessageCircle style={{ height: '28px', width: '28px' }} />
       </button>
     );
   }

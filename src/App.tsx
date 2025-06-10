@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+
+// Import pages
 import Index from "./pages/Index";
 import FAQ from "./pages/FAQ";
 import Blog from "./pages/Blog";
@@ -17,6 +17,10 @@ import NotFound from "./pages/NotFound";
 import MicrosoftAuthCallback from "./components/appointment/MicrosoftAuthCallback";
 import Profile from "./pages/Profile";
 
+// Import toasters last to ensure React is available
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
@@ -25,8 +29,6 @@ const App: React.FC = () => {
       <AuthProvider>
         <BrowserRouter>
           <div>
-            <Toaster />
-            <Sonner />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/faq" element={<FAQ />} />
@@ -40,6 +42,8 @@ const App: React.FC = () => {
               <Route path="/auth/callback" element={<MicrosoftAuthCallback />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Toaster />
+            <Sonner />
           </div>
         </BrowserRouter>
       </AuthProvider>

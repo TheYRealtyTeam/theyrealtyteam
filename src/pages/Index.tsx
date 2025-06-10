@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import * as React from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -15,9 +16,9 @@ import MobilePWAPrompt from '@/components/mobile/MobilePWAPrompt';
 import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 
 const Index = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
       setIsMobile(width < 768);
@@ -31,7 +32,7 @@ const Index = () => {
 
   console.log('Index component rendering, isMobile:', isMobile);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
     
     const metaDescription = document.createElement('meta');

@@ -7,7 +7,7 @@ interface MobileMenuProps {
   closeMenu: () => void;
   navLinks: Array<{ name: string; href: string; isAnchorLink: boolean }>;
   isLinkActive: (link: { href: string; isAnchorLink: boolean }) => boolean;
-  handleNavigation: (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => void;
+  handleNavigation: (e: React.MouseEvent<HTMLButtonElement>, link: { href: string; isAnchorLink: boolean }) => void;
   user: any;
 }
 
@@ -22,7 +22,7 @@ const MobileMenu = ({
   console.log('MobileMenu rendering, React available:', !!React);
   const navigate = useNavigate();
   
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLButtonElement>, link: { href: string; isAnchorLink: boolean }) => {
     if (link.isAnchorLink) {
       handleNavigation(e, link);
     } else {
@@ -32,8 +32,7 @@ const MobileMenu = ({
     }
   };
 
-  const handleAppointmentClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
+  const handleAppointmentClick = () => {
     navigate('/appointment');
     closeMenu();
   };
@@ -58,10 +57,9 @@ const MobileMenu = ({
         <div className="pt-20 pb-8 px-6">
           <div className="space-y-6">
             {navLinks.map((link, index) => (
-              <a
+              <button
                 key={link.name}
-                href={link.href}
-                className={`block text-lg font-semibold text-gray-800 hover:text-yrealty-accent transition-all duration-200 transform hover:translate-x-2 ${
+                className={`block w-full text-left text-lg font-semibold text-gray-800 hover:text-yrealty-accent transition-all duration-200 transform hover:translate-x-2 bg-transparent border-none cursor-pointer ${
                   isLinkActive(link) ? 'text-yrealty-accent font-bold' : ''
                 }`}
                 style={{ animationDelay: `${index * 0.1}s` }}
@@ -69,18 +67,17 @@ const MobileMenu = ({
                 aria-current={isLinkActive(link) ? 'page' : undefined}
               >
                 {link.name}
-              </a>
+              </button>
             ))}
           </div>
           
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <a 
-              href="/appointment"
+            <button 
               onClick={handleAppointmentClick}
               className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300"
             >
               Get Started
-            </a>
+            </button>
           </div>
         </div>
       </nav>

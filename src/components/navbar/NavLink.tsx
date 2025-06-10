@@ -9,7 +9,7 @@ interface NavLinkProps {
     isAnchorLink: boolean;
   };
   isActive: boolean;
-  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
 }
 
@@ -17,7 +17,7 @@ export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProp
   console.log('NavLink rendering:', link.name, 'React available:', !!React);
   const navigate = useNavigate();
   
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     if (link.isAnchorLink) {
       onClick(e);
     } else {
@@ -28,13 +28,12 @@ export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProp
   };
 
   return (
-    <a
-      href={link.href}
-      className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className}`}
+    <button
+      className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className} bg-transparent border-none cursor-pointer`}
       onClick={handleClick}
       aria-current={isActive ? 'page' : undefined}
     >
       {link.name}
-    </a>
+    </button>
   );
 };

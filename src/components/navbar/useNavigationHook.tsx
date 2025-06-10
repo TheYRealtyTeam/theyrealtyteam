@@ -74,7 +74,7 @@ export const useNavigationHook = () => {
     }
   };
 
-  const handleNavigation = (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string, isAnchorLink: boolean }) => {
+  const handleNavigation = (e: React.MouseEvent<HTMLButtonElement>, link: { href: string, isAnchorLink: boolean }) => {
     closeMenu();
     
     if (link.isAnchorLink) {

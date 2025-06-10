@@ -19,12 +19,11 @@ const MobileBottomNavigation = () => {
     { icon: Phone, label: 'Call', href: 'tel:(845)734-3331', isExternal: true }
   ];
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal: boolean) => {
+  const handleNavClick = (href: string, isExternal: boolean) => {
     console.log('Navigation clicked:', href, isExternal);
     if (isExternal) {
       window.location.href = href;
     } else {
-      e.preventDefault();
       navigate(href);
     }
   };
@@ -61,73 +60,39 @@ const MobileBottomNavigation = () => {
           width: '100%'
         }}
       >
-        {navItems.map((item, index) => {
-          if (item.isExternal) {
-            return (
-              <button
-                key={index}
-                onClick={() => window.location.href = item.href}
-                style={{ 
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '8px',
-                  minHeight: '60px',
-                  minWidth: '60px',
-                  backgroundColor: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer'
-                }}
-                className="hover:bg-gray-100 transition-colors"
-              >
-                <item.icon style={{ height: '24px', width: '24px', color: '#374151' }} />
-                <span style={{ 
-                  fontSize: '12px', 
-                  color: '#374151', 
-                  marginTop: '4px',
-                  fontWeight: '500'
-                }}>
-                  {item.label}
-                </span>
-              </button>
-            );
-          }
-
-          return (
-            <a
-              key={index}
-              href={item.href}
-              onClick={(e) => handleNavClick(e, item.href, item.isExternal)}
-              style={{ 
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '8px',
-                minHeight: '60px',
-                minWidth: '60px',
-                textDecoration: 'none',
-                backgroundColor: isActive(item.href) ? '#eff6ff' : 'transparent'
-              }}
-              className="hover:bg-gray-100 transition-colors"
-            >
-              <item.icon style={{ 
-                height: '24px', 
-                width: '24px', 
-                color: isActive(item.href) ? '#2563eb' : '#374151'
-              }} />
-              <span style={{ 
-                fontSize: '12px', 
-                color: isActive(item.href) ? '#2563eb' : '#374151',
-                marginTop: '4px',
-                fontWeight: isActive(item.href) ? '600' : '500'
-              }}>
-                {item.label}
-              </span>
-            </a>
-          );
-        })}
+        {navItems.map((item, index) => (
+          <button
+            key={index}
+            onClick={() => handleNavClick(item.href, item.isExternal)}
+            style={{ 
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '8px',
+              minHeight: '60px',
+              minWidth: '60px',
+              backgroundColor: isActive(item.href) ? '#eff6ff' : 'transparent',
+              border: 'none',
+              cursor: 'pointer'
+            }}
+            className="hover:bg-gray-100 transition-colors"
+          >
+            <item.icon style={{ 
+              height: '24px', 
+              width: '24px', 
+              color: isActive(item.href) ? '#2563eb' : '#374151'
+            }} />
+            <span style={{ 
+              fontSize: '12px', 
+              color: isActive(item.href) ? '#2563eb' : '#374151',
+              marginTop: '4px',
+              fontWeight: isActive(item.href) ? '600' : '500'
+            }}>
+              {item.label}
+            </span>
+          </button>
+        ))}
       </div>
     </div>
   );

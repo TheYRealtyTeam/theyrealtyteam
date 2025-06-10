@@ -11,7 +11,6 @@ import Footer from '@/components/Footer';
 import AIChat from '@/components/chat/AIChat';
 import AnimationObserver from '@/utils/AnimationObserver';
 import MobileBottomNavigation from '@/components/mobile/MobileBottomNavigation';
-import MobilePullToRefresh from '@/components/mobile/MobilePullToRefresh';
 import MobilePWAPrompt from '@/components/mobile/MobilePWAPrompt';
 import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 
@@ -68,47 +67,28 @@ const Index = () => {
     };
   }, []);
 
-  const handleRefresh = async () => {
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        window.location.reload();
-        resolve();
-      }, 1000);
-    });
-  };
-
-  const mainContent = (
-    <div style={{ paddingBottom: isMobile ? '80px' : '0' }} className="min-h-screen flex flex-col bg-white">
-      <Navbar />
-      <main className="flex-1">
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <AreasSection />
-        <TestimonialsSection />
-        <ContactSection />
-      </main>
-      <Footer />
-      <AIChat />
-      <AnimationObserver />
-      {isMobile && (
-        <>
-          <MobilePWAPrompt />
-          <MobileOfflineIndicator />
-        </>
-      )}
-    </div>
-  );
-
-  const content = isMobile ? (
-    <MobilePullToRefresh onRefresh={handleRefresh}>
-      {mainContent}
-    </MobilePullToRefresh>
-  ) : mainContent;
-
   return (
     <>
-      {content}
+      <div style={{ paddingBottom: isMobile ? '80px' : '0' }} className="min-h-screen flex flex-col bg-white">
+        <Navbar />
+        <main className="flex-1">
+          <HeroSection />
+          <AboutSection />
+          <ServicesSection />
+          <AreasSection />
+          <TestimonialsSection />
+          <ContactSection />
+        </main>
+        <Footer />
+        <AIChat />
+        <AnimationObserver />
+        {isMobile && (
+          <>
+            <MobilePWAPrompt />
+            <MobileOfflineIndicator />
+          </>
+        )}
+      </div>
       {isMobile && <MobileBottomNavigation />}
     </>
   );

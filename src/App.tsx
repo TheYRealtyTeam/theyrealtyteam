@@ -26,21 +26,23 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
-          <Toaster />
-          <Sonner />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/blog-admin" element={<BlogAdmin />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/appointment" element={<Appointment />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/auth/callback" element={<MicrosoftAuthCallback />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <div>
+            <Toaster />
+            <Sonner />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/blog-admin" element={<BlogAdmin />} />
+              <Route path="/tools" element={<Tools />} />
+              <Route path="/appointment" element={<Appointment />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/auth/callback" element={<MicrosoftAuthCallback />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>

@@ -3,9 +3,15 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calendar, Download, Share2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ActionButtons = () => {
+  const navigate = useNavigate();
+
+  const handleAppointmentClick = () => {
+    navigate('/appointment');
+  };
+
   return (
     <Card>
       <CardContent className="pt-6">
@@ -16,11 +22,12 @@ const ActionButtons = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button asChild className="bg-yrealty-navy hover:bg-yrealty-navy/90 text-white px-8 py-3">
-              <Link to="/appointment">
-                <Calendar className="h-4 w-4 mr-2" />
-                Schedule Consultation
-              </Link>
+            <Button 
+              onClick={handleAppointmentClick}
+              className="bg-yrealty-navy hover:bg-yrealty-navy/90 text-white px-8 py-3"
+            >
+              <Calendar className="h-4 w-4 mr-2" />
+              Schedule Consultation
             </Button>
             
             <Button variant="outline" className="border-yrealty-navy text-yrealty-navy hover:bg-yrealty-navy hover:text-white px-8 py-3">

@@ -29,6 +29,45 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleServicesClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('services');
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('contact');
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  const handleAboutClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('about');
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   // Return mobile-optimized version for mobile devices
   if (isMobile) {
     return <MobileHeroSection />;
@@ -67,17 +106,17 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-6 animate-fade-in" style={{
             animationDelay: '0.4s'
           }}>
-            <a href="#services" className="btn-accent text-lg px-8 py-4 font-bold">
+            <a href="#services" onClick={handleServicesClick} className="btn-accent text-lg px-8 py-4 font-bold">
               Our Services
             </a>
-            <a href="#contact" className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy text-lg px-8 py-4 font-bold">
+            <a href="#contact" onClick={handleContactClick} className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy text-lg px-8 py-4 font-bold">
               Contact Us
             </a>
           </div>
         </div>
       </div>
 
-      <a href="#about" className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce" aria-label="Scroll Down to About Section">
+      <a href="#about" onClick={handleAboutClick} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce" aria-label="Scroll Down to About Section">
         <ArrowDown size={32} />
       </a>
     </section>

@@ -9,7 +9,7 @@ import DesktopNav from './navbar/DesktopNav';
 import MobileMenu from './navbar/MobileMenu';
 
 const Navbar = () => {
-  console.log('Navbar component rendering');
+  console.log('Navbar component rendering, React available:', !!React);
   
   const { user } = useAuth();
   const { 

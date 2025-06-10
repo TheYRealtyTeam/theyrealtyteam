@@ -31,7 +31,19 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
-  console.log('App component rendering');
+  console.log('App component rendering, React available:', !!React);
+  console.log('React useContext available:', !!React?.useContext);
+  
+  // Verify React is properly available before proceeding
+  if (!React || !React.useContext) {
+    console.error('React or React.useContext not available in App component');
+    return (
+      <div style={{ padding: '20px', textAlign: 'center' }}>
+        <h1>Application Error</h1>
+        <p>React is not properly loaded. Please refresh the page.</p>
+      </div>
+    );
+  }
   
   return (
     <QueryClientProvider client={queryClient}>

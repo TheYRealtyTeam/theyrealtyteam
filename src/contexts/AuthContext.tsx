@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -14,21 +14,21 @@ type AuthContextType = {
   setSessionAndUser: (session: Session | null) => void;
 };
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Ensure React is available before using hooks
-  if (!React || typeof useState !== 'function') {
+  if (!React || !React.useState || !React.useEffect || !React.useContext) {
     console.error('React hooks not available');
-    return <div>Loading...</div>;
+    return React.createElement('div', null, 'Loading...');
   }
 
-  // Use standard React hooks with destructured imports
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  // Use React hooks directly from React object
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let mounted = true;
 
     // Set up auth state listener FIRST
@@ -130,9 +130,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(newSession?.user ?? null);
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
+  return React.createElement(
+    AuthContext.Provider,
+    {
+      value: {
         session,
         user,
         loading,
@@ -140,15 +141,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signUp,
         signOut,
         setSessionAndUser
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+      }
+    },
+    children
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context = React.useContext(AuthContext);
   
   if (context === undefined) {
     // Return a default context instead of throwing an error

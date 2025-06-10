@@ -3,7 +3,7 @@ import React from 'react';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 import { useAuth } from '@/contexts/AuthContext';
-import { useNavigation } from './navbar/useNavigation';
+import { useNavigationHook } from './navbar/useNavigationHook';
 import { navLinks } from './navbar/navLinks';
 import DesktopNav from './navbar/DesktopNav';
 import MobileMenu from './navbar/MobileMenu';
@@ -19,7 +19,7 @@ const Navbar = () => {
     closeMenu, 
     isLinkActive, 
     handleNavigation 
-  } = useNavigation();
+  } = useNavigationHook();
 
   console.log('Navbar navigation state:', { isMenuOpen, isScrolled });
 

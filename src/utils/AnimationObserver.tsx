@@ -1,7 +1,9 @@
 
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
+  console.log('AnimationObserver component rendering');
+  
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Element[]>([]);
   const mutationObserverRef = useRef<MutationObserver | null>(null);
@@ -26,6 +28,8 @@ export const AnimationObserver = () => {
   };
 
   useEffect(() => {
+    console.log('AnimationObserver useEffect running');
+    
     if (!window.IntersectionObserver) {
       console.warn('IntersectionObserver not supported in this browser');
       return;
@@ -83,6 +87,8 @@ export const AnimationObserver = () => {
     }
 
     return () => {
+      console.log('AnimationObserver cleanup running');
+      
       if (observerRef.current) {
         elementsRef.current.forEach((el) => {
           try {

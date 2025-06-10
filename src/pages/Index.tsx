@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react';
+import React from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -17,9 +17,9 @@ import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 
 const Index = () => {
   // Replace the problematic hook with direct useState
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
       setIsMobile(width < 768);
@@ -34,7 +34,7 @@ const Index = () => {
   // Debug logging
   console.log('Index component rendering, isMobile:', isMobile);
 
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
     
     const metaDescription = document.createElement('meta');

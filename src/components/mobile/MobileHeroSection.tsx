@@ -1,12 +1,12 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { ArrowDown, Phone, MessageCircle } from 'lucide-react';
 
 const MobileHeroSection = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const heroRef = React.useRef<HTMLDivElement>(null);
+  const [isImageLoaded, setIsImageLoaded] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const img = new Image();
     img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
     img.onload = () => setIsImageLoaded(true);

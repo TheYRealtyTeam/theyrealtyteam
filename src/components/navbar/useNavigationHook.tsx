@@ -1,18 +1,18 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 
 export const useNavigationHook = () => {
   console.log('useNavigationHook called');
   
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [activeSection, setActiveSection] = React.useState('home');
   const location = useLocation();
 
   console.log('useNavigationHook state:', { isMenuOpen, isScrolled, activeSection });
 
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
       
@@ -36,7 +36,7 @@ export const useNavigationHook = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const pathname = location.pathname;
     if (pathname === '/') {
       setActiveSection('home');
@@ -46,7 +46,7 @@ export const useNavigationHook = () => {
     }
   }, [location.pathname]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {

@@ -1,12 +1,12 @@
 
-import { useEffect, useRef } from 'react';
+import React from 'react';
 
 export const AnimationObserver = () => {
   console.log('AnimationObserver component rendering');
   
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const elementsRef = useRef<Element[]>([]);
-  const mutationObserverRef = useRef<MutationObserver | null>(null);
+  const observerRef = React.useRef<IntersectionObserver | null>(null);
+  const elementsRef = React.useRef<Element[]>([]);
+  const mutationObserverRef = React.useRef<MutationObserver | null>(null);
 
   const observeElements = () => {
     try {
@@ -27,7 +27,7 @@ export const AnimationObserver = () => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     console.log('AnimationObserver useEffect running');
     
     if (!window.IntersectionObserver) {

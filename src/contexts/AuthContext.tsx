@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -14,14 +14,14 @@ type AuthContextType = {
   setSessionAndUser: (session: Session | null) => void;
 };
 
-export const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState<boolean>(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
@@ -29,13 +29,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Show toast message on successful sign in/out (only when not loading)
-        if (!loading) {
-          if (event === 'SIGNED_IN') {
-            toast.success('Successfully signed in!');
-          } else if (event === 'SIGNED_OUT') {
-            toast.success('Successfully signed out!');
-          }
+        // Show toast message on successful sign in/out
+        if (event === 'SIGNED_IN') {
+          toast.success('Successfully signed in!');
+        } else if (event === 'SIGNED_OUT') {
+          toast.success('Successfully signed out!');
         }
       }
     );
@@ -44,18 +42,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const initializeAuth = async () => {
       try {
         setLoading(true);
-        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Error getting session:', error);
-          // Don't throw error, just log it and continue
-        }
-        
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
       } catch (error) {
         console.error('Error initializing auth:', error);
-        // Continue without auth if there's an error
       } finally {
         setLoading(false);
       }
@@ -131,21 +122,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useAuth = () => {
-  const context = React.useContext(AuthContext);
+  const context = useContext(AuthContext);
   
   if (context === undefined) {
-    // Return a default context instead of throwing an error
-    // This allows the app to function without authentication
-    console.warn('useAuth used outside of AuthProvider - returning default values');
-    return {
-      session: null,
-      user: null,
-      loading: false,
-      signIn: async () => ({ error: new Error('Auth not available') }),
-      signUp: async () => ({ error: new Error('Auth not available') }),
-      signOut: async () => {},
-      setSessionAndUser: () => {}
-    };
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   
   return context;

@@ -1,13 +1,14 @@
 
 import React, { useState } from 'react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast } from "@/components/ui/use-toast";
+import { Send } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
 const ContactForm = () => {
+  const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,128 +18,48 @@ const ContactForm = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Enhanced input sanitization function
-  const sanitizeInput = (input: string): string => {
-    return input
-      .trim()
-      .replace(/[<>]/g, '') // Remove potential XSS characters
-      .replace(/javascript:/gi, '') // Remove javascript: protocol
-      .replace(/data:/gi, '') // Remove data: protocol
-      .replace(/vbscript:/gi, ''); // Remove vbscript: protocol
-  };
-
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email) && email.length <= 254; // RFC 5321 limit
-  };
-
-  const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^[\d\s\-\+\(\)\.]+$/;
-    return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10 && phone.length <= 20;
-  };
-
-  const validateName = (name: string): boolean => {
-    const nameRegex = /^[a-zA-Z\s\-\.\']+$/;
-    return nameRegex.test(name) && name.length >= 2 && name.length <= 100;
-  };
-
-  const validateMessage = (message: string): boolean => {
-    return message.length >= 10 && message.length <= 2000;
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (isSubmitting) return;
-
-    // Validate required fields
-    if (!formData.name || !formData.email || !formData.propertyType || !formData.message) {
-      toast({
-        title: "Missing Required Fields",
-        description: "Please fill in all required fields.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Validate name format
-    if (!validateName(formData.name)) {
-      toast({
-        title: "Invalid Name",
-        description: "Please enter a valid name (2-100 characters, letters only).",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Validate email format
-    if (!validateEmail(formData.email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Validate phone if provided
-    if (formData.phone && !validatePhone(formData.phone)) {
-      toast({
-        title: "Invalid Phone Number",
-        description: "Please enter a valid phone number (10-20 digits).",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    // Validate message length and content
-    if (!validateMessage(formData.message)) {
-      toast({
-        title: "Invalid Message",
-        description: "Message must be between 10 and 2000 characters.",
-        variant: "destructive"
-      });
-      return;
-    }
-
     setIsSubmitting(true);
-
+    
     try {
-      // Sanitize inputs
-      const sanitizedData = {
-        name: sanitizeInput(formData.name),
-        email: sanitizeInput(formData.email),
-        phone: formData.phone ? sanitizeInput(formData.phone) : null,
-        property_type: sanitizeInput(formData.propertyType),
-        message: sanitizeInput(formData.message)
-      };
-
-      // Store in database using Supabase client
-      const { error: dbError } = await supabase
-        .from('contact_submissions')
-        .insert([sanitizedData]);
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        throw new Error('Failed to save contact submission');
+      // Send the form data to our edge function
+      const response = await fetch(
+        'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone || null,
+            property_type: formData.propertyType,
+            message: formData.message
+          })
+        }
+      );
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send message');
       }
-
-      // Send notification email using edge function
-      const { error: emailError } = await supabase.functions.invoke('contact-notification', {
-        body: sanitizedData
-      });
-
-      if (emailError) {
-        console.error('Email notification error:', emailError);
-        // Don't throw here - the form was still submitted successfully
-      }
-
+      
+      const responseData = await response.json();
+      
       toast({
-        title: "Message Sent Successfully",
-        description: "Thank you for your inquiry. We'll get back to you soon!",
+        title: "Message Sent!",
+        description: `We'll get back to you as soon as possible${responseData.emailSent ? ' at ' + formData.email : ''}.`,
+        duration: 5000,
       });
-
-      // Reset form
+      
+      // Reset form data after successful submission
       setFormData({
         name: '',
         email: '',
@@ -146,135 +67,120 @@ const ContactForm = () => {
         propertyType: '',
         message: ''
       });
-
-    } catch (error: any) {
-      console.error('Contact form submission error:', error);
+    } catch (error) {
+      console.error('Error submitting form:', error);
       toast({
-        title: "Submission Failed",
-        description: "There was an error sending your message. Please try again.",
-        variant: "destructive"
+        title: "Something went wrong",
+        description: "We couldn't send your message. Please try again.",
+        variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    // Basic input filtering during typing
-    let filteredValue = value;
-    
-    // Remove potential malicious content during input
-    if (field === 'name') {
-      filteredValue = value.replace(/[^a-zA-Z\s\-\.']/g, '');
-    } else if (field === 'phone') {
-      filteredValue = value.replace(/[^0-9\s\-\+\(\)\.]/g, '');
-    }
-    
-    setFormData(prev => ({
-      ...prev,
-      [field]: filteredValue
-    }));
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label htmlFor="name" className="text-sm font-medium text-gray-700">
-            Full Name *
-          </label>
+    <form onSubmit={handleSubmit} className="bg-white rounded-xl p-8 shadow-lg border border-gray-100">
+      <h3 className="text-2xl font-bold mb-6 text-yrealty-navy">Send Us a Message</h3>
+      
+      <div className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
           <Input
-            id="name"
             type="text"
+            id="name"
+            name="name"
             value={formData.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            placeholder="Enter your full name"
+            onChange={handleChange}
             required
-            maxLength={100}
-            className="w-full"
+            className="input-field"
+            placeholder="Your name"
           />
         </div>
-
-        <div className="space-y-2">
-          <label htmlFor="email" className="text-sm font-medium text-gray-700">
-            Email Address *
-          </label>
-          <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
-            placeholder="Enter your email address"
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="input-field"
+              placeholder="Your email"
+            />
+          </div>
+          
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <Input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="input-field"
+              placeholder="Your phone (optional)"
+            />
+          </div>
+        </div>
+        
+        <div>
+          <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+          <select
+            id="propertyType"
+            name="propertyType"
+            value={formData.propertyType}
+            onChange={handleChange}
             required
-            maxLength={254}
-            className="w-full"
+            className="input-field w-full rounded-md border border-gray-300 px-4 py-3"
+          >
+            <option value="">Select property type</option>
+            <option value="residential">Residential</option>
+            <option value="multi-family">Multi-Family</option>
+            <option value="commercial">Commercial</option>
+            <option value="mixed-use">Mixed-Use</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+          <Textarea
+            id="message"
+            name="message"
+            rows={4}
+            value={formData.message}
+            onChange={handleChange}
+            required
+            className="input-field resize-none"
+            placeholder="Tell us about your property and management needs"
           />
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label htmlFor="phone" className="text-sm font-medium text-gray-700">
-            Phone Number
-          </label>
-          <Input
-            id="phone"
-            type="tel"
-            value={formData.phone}
-            onChange={(e) => handleInputChange('phone', e.target.value)}
-            placeholder="Enter your phone number"
-            maxLength={20}
-            className="w-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label htmlFor="propertyType" className="text-sm font-medium text-gray-700">
-            Property Type *
-          </label>
-          <Select value={formData.propertyType} onValueChange={(value) => handleInputChange('propertyType', value)}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select property type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="single-family">Single Family Home</SelectItem>
-              <SelectItem value="multi-family">Multi-Family Property</SelectItem>
-              <SelectItem value="condo">Condominium</SelectItem>
-              <SelectItem value="townhouse">Townhouse</SelectItem>
-              <SelectItem value="commercial">Commercial Property</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-            </SelectContent>
-          </Select>
+        
+        <div className="pt-2">
+          <Button 
+            type="submit" 
+            className="w-full bg-yrealty-navy hover:bg-opacity-90"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Send className="h-5 w-5 mr-2 animate-pulse" />
+                Sending...
+              </>
+            ) : (
+              <>
+                <Send className="h-5 w-5 mr-2" />
+                Send Message
+              </>
+            )}
+          </Button>
         </div>
       </div>
-
-      <div className="space-y-2">
-        <label htmlFor="message" className="text-sm font-medium text-gray-700">
-          Message *
-        </label>
-        <Textarea
-          id="message"
-          value={formData.message}
-          onChange={(e) => handleInputChange('message', e.target.value)}
-          placeholder="Tell us about your property management needs..."
-          required
-          maxLength={2000}
-          minLength={10}
-          rows={5}
-          className="w-full resize-none"
-        />
-        <p className="text-xs text-gray-500">
-          {formData.message.length}/2000 characters (minimum 10)
-        </p>
-      </div>
-
-      <Button 
-        type="submit" 
-        className="w-full bg-yrealty-navy hover:bg-yrealty-navy/90 text-white py-3"
-        disabled={isSubmitting}
-      >
-        {isSubmitting ? 'Sending...' : 'Send Message'}
-      </Button>
     </form>
   );
 };

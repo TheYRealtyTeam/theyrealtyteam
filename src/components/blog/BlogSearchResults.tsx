@@ -9,9 +9,6 @@ interface BlogSearchResultsProps {
 }
 
 const BlogSearchResults = ({ searchTerm, resultsCount, isSearching }: BlogSearchResultsProps) => {
-  // Sanitize search term to prevent XSS
-  const sanitizedSearchTerm = searchTerm.replace(/[<>]/g, '');
-
   if (isSearching) {
     return (
       <div className="text-center py-4 mb-6">
@@ -21,11 +18,11 @@ const BlogSearchResults = ({ searchTerm, resultsCount, isSearching }: BlogSearch
     );
   }
 
-  if (sanitizedSearchTerm.trim() !== '') {
+  if (searchTerm.trim() !== '') {
     return (
       <div className="text-center py-4 mb-6">
         <p className="text-sm text-gray-500">
-          Found {resultsCount} results for "<span className="font-medium text-yrealty-navy">{sanitizedSearchTerm}</span>"
+          Found {resultsCount} results for "<span className="font-medium text-yrealty-navy">{searchTerm}</span>"
         </p>
       </div>
     );

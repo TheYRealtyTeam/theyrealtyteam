@@ -13,119 +13,18 @@ const ContactSection = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
-
-  // Rate limiting: 1 submission per 60 seconds
-  const RATE_LIMIT_MS = 60000;
-
-  // Enhanced input sanitization
-  const sanitizeInput = (input: string): string => {
-    return input
-      .trim()
-      .replace(/[<>]/g, '')
-      .replace(/javascript:/gi, '')
-      .replace(/data:/gi, '')
-      .replace(/vbscript:/gi, '');
-  };
-
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email) && email.length <= 254;
-  };
-
-  const validatePhone = (phone: string): boolean => {
-    const phoneRegex = /^[\d\s\-\+\(\)\.]+$/;
-    return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10 && phone.length <= 20;
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
-    // Apply input filtering based on field type
-    let filteredValue = value;
-    if (name === 'name') {
-      filteredValue = value.replace(/[^a-zA-Z\s\-\.']/g, '');
-    } else if (name === 'phone') {
-      filteredValue = value.replace(/[^0-9\s\-\+\(\)\.]/g, '');
-    }
-    
-    setFormData(prev => ({ ...prev, [name]: filteredValue }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (isSubmitting) return;
-
-    // Rate limiting check
-    const now = Date.now();
-    if (now - lastSubmissionTime < RATE_LIMIT_MS) {
-      toast({
-        title: "Please Wait",
-        description: "Please wait before submitting another message.",
-        variant: "destructive",
-        duration: 5000,
-      });
-      return;
-    }
-
-    // Validate required fields
-    if (!formData.name || !formData.email || !formData.propertyType || !formData.message) {
-      toast({
-        title: "Missing Required Fields",
-        description: "Please fill in all required fields.",
-        variant: "destructive",
-        duration: 5000,
-      });
-      return;
-    }
-
-    // Validate email
-    if (!validateEmail(formData.email)) {
-      toast({
-        title: "Invalid Email",
-        description: "Please enter a valid email address.",
-        variant: "destructive",
-        duration: 5000,
-      });
-      return;
-    }
-
-    // Validate phone if provided
-    if (formData.phone && !validatePhone(formData.phone)) {
-      toast({
-        title: "Invalid Phone Number",
-        description: "Please enter a valid phone number.",
-        variant: "destructive",
-        duration: 5000,
-      });
-      return;
-    }
-
-    // Validate message length
-    if (formData.message.length < 10 || formData.message.length > 2000) {
-      toast({
-        title: "Invalid Message",
-        description: "Message must be between 10 and 2000 characters.",
-        variant: "destructive",
-        duration: 5000,
-      });
-      return;
-    }
-
     setIsSubmitting(true);
     
     try {
-      // Sanitize all inputs
-      const sanitizedData = {
-        name: sanitizeInput(formData.name),
-        email: sanitizeInput(formData.email),
-        phone: formData.phone ? sanitizeInput(formData.phone) : null,
-        property_type: sanitizeInput(formData.propertyType),
-        message: sanitizeInput(formData.message)
-      };
-
-      // Use direct fetch to the edge function with proper error handling
+      // Use direct fetch to the edge function instead of using supabase.from
       const response = await fetch(
         'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
         {
@@ -133,17 +32,19 @@ const ContactSection = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(sanitizedData)
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone || null,
+            property_type: formData.propertyType,
+            message: formData.message
+          })
         }
       );
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to send message');
+        throw new Error('Failed to send message');
       }
-      
-      // Update rate limiting timestamp
-      setLastSubmissionTime(now);
       
       toast({
         title: "Message Sent!",
@@ -242,7 +143,7 @@ const ContactSection = () => {
               
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                   <input
                     type="text"
                     id="name"
@@ -250,7 +151,6 @@ const ContactSection = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    maxLength={100}
                     className="input-field"
                     placeholder="Your name"
                   />
@@ -258,7 +158,7 @@ const ContactSection = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                     <input
                       type="email"
                       id="email"
@@ -266,7 +166,6 @@ const ContactSection = () => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      maxLength={254}
                       className="input-field"
                       placeholder="Your email"
                     />
@@ -280,7 +179,6 @@ const ContactSection = () => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      maxLength={20}
                       className="input-field"
                       placeholder="Your phone (optional)"
                     />
@@ -288,7 +186,7 @@ const ContactSection = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-1">Property Type *</label>
+                  <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
                   <select
                     id="propertyType"
                     name="propertyType"
@@ -307,7 +205,7 @@ const ContactSection = () => {
                 </div>
                 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
                   <textarea
                     id="message"
                     name="message"
@@ -315,14 +213,9 @@ const ContactSection = () => {
                     value={formData.message}
                     onChange={handleChange}
                     required
-                    minLength={10}
-                    maxLength={2000}
                     className="input-field resize-none"
                     placeholder="Tell us about your property and management needs"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
-                    {formData.message.length}/2000 characters (minimum 10)
-                  </p>
                 </div>
                 
                 <div className="pt-2">

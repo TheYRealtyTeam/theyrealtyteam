@@ -16,12 +16,12 @@ type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let mounted = true;
 
     // Set up auth state listener FIRST
@@ -141,7 +141,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context = React.useContext(AuthContext);
   
   if (context === undefined) {
     // Return a default context instead of throwing an error

@@ -1,4 +1,5 @@
-import React from 'react';
+
+import * as React from 'react';
 import { Building, Users, Award, TrendingUp, Shield, Clock, Star, CheckCircle } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileAboutSection from './mobile/MobileAboutSection';

@@ -1,18 +1,18 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export const useSimpleNavigation = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [activeSection, setActiveSection] = React.useState('home');
   const location = useLocation();
   const navigate = useNavigate();
 
   console.log('useSimpleNavigation - Current location:', location.pathname);
 
   // Handle scroll effects
-  useEffect(() => {
+  React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
       
@@ -38,7 +38,7 @@ export const useSimpleNavigation = () => {
   }, [location.pathname]);
 
   // Set active section based on current path
-  useEffect(() => {
+  React.useEffect(() => {
     if (location.pathname === '/') {
       setActiveSection('home');
     } else {
@@ -48,7 +48,7 @@ export const useSimpleNavigation = () => {
   }, [location.pathname]);
 
   // Prevent body scroll when menu is open
-  useEffect(() => {
+  React.useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -60,15 +60,15 @@ export const useSimpleNavigation = () => {
     };
   }, [isMenuOpen]);
 
-  const toggleMenu = useCallback(() => {
+  const toggleMenu = React.useCallback(() => {
     setIsMenuOpen(!isMenuOpen);
   }, [isMenuOpen]);
 
-  const closeMenu = useCallback(() => {
+  const closeMenu = React.useCallback(() => {
     setIsMenuOpen(false);
   }, []);
 
-  const navigateToPage = useCallback((href: string) => {
+  const navigateToPage = React.useCallback((href: string) => {
     try {
       if (href.startsWith('http') || href.startsWith('tel:') || href.startsWith('mailto:')) {
         window.location.href = href;
@@ -83,7 +83,7 @@ export const useSimpleNavigation = () => {
     }
   }, [navigate, closeMenu]);
 
-  const scrollToSection = useCallback((sectionId: string) => {
+  const scrollToSection = React.useCallback((sectionId: string) => {
     try {
       const element = document.getElementById(sectionId);
       if (element) {
@@ -100,7 +100,7 @@ export const useSimpleNavigation = () => {
     }
   }, [closeMenu]);
 
-  const isLinkActive = useCallback((link: { href: string, isAnchorLink: boolean }) => {
+  const isLinkActive = React.useCallback((link: { href: string, isAnchorLink: boolean }) => {
     if (link.isAnchorLink) {
       const anchorId = link.href.split('#')[1];
       return activeSection === anchorId;

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import MobileHeroSection from './mobile/MobileHeroSection';

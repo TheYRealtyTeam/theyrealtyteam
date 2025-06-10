@@ -17,13 +17,15 @@ import NotFound from "./pages/NotFound";
 import MicrosoftAuthCallback from "./components/appointment/MicrosoftAuthCallback";
 import Profile from "./pages/Profile";
 
-// Import toasters last to ensure React is available
+// Import toasters
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 
 const queryClient = new QueryClient();
 
 const App: React.FC = () => {
+  console.log('App component rendering');
+  
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

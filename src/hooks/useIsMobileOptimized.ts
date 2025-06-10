@@ -1,7 +1,12 @@
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export const useIsMobileOptimized = () => {
+  // Add debugging to check if React hooks are available
+  console.log('useIsMobileOptimized called, React available:', !!React);
+  console.log('useState available:', !!useState);
+  console.log('useEffect available:', !!useEffect);
+
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });

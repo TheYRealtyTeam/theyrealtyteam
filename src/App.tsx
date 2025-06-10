@@ -31,12 +31,12 @@ const queryClient = new QueryClient({
 });
 
 const App: React.FC = () => {
-  console.log('App component rendering');
+  console.log('App component rendering - React version:', React.version);
   
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <AuthProvider>
           <div className="min-h-screen">
             <Routes>
               <Route path="/" element={<Index />} />
@@ -54,8 +54,8 @@ const App: React.FC = () => {
             <Toaster />
             <Sonner />
           </div>
-        </BrowserRouter>
-      </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };

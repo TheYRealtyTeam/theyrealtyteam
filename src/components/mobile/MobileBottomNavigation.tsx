@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Home, Wrench, BookOpen, MessageCircle, Phone } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useSimpleNavigation } from '@/hooks/useSimpleNavigation';
 
 const MobileBottomNavigation = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const { navigateToPage } = useSimpleNavigation();
   
-  console.log('MobileBottomNavigation rendering');
+  console.log('MobileBottomNavigation rendering - Current path:', location.pathname);
   
   const navItems = [
     { icon: Home, label: 'Home', href: '/', isExternal: false },
@@ -23,11 +24,10 @@ const MobileBottomNavigation = () => {
       if (isExternal) {
         window.location.href = href;
       } else {
-        navigate(href);
+        navigateToPage(href);
       }
     } catch (error) {
       console.error('Navigation error:', error);
-      // Fallback to window.location for problematic routes
       window.location.href = href;
     }
   };

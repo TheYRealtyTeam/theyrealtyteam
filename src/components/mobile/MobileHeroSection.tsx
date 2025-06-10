@@ -12,9 +12,8 @@ const MobileHeroSection = () => {
     img.onload = () => setIsImageLoaded(true);
   }, []);
 
-  const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const element = document.getElementById('contact');
+  const scrollToElement = (elementId: string) => {
+    const element = document.getElementById(elementId);
     if (element) {
       const yOffset = -80;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -25,19 +24,8 @@ const MobileHeroSection = () => {
     }
   };
 
-  const handleAboutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const element = document.getElementById('about');
-    if (element) {
-      const yOffset = -80;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-    }
-  };
-
+  const handleContactClick = () => scrollToElement('contact');
+  const handleAboutClick = () => scrollToElement('about');
   const handleCallClick = () => {
     window.location.href = 'tel:(845)734-3331';
   };
@@ -76,6 +64,7 @@ const MobileHeroSection = () => {
           <button 
             onClick={handleCallClick}
             className="w-full bg-yrealty-accent hover:bg-yrealty-accent/90 text-white text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all duration-300 transform hover:scale-105"
+            type="button"
           >
             <Phone size={20} />
             Call Now
@@ -84,6 +73,7 @@ const MobileHeroSection = () => {
           <button 
             onClick={handleContactClick}
             className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300"
+            type="button"
           >
             <MessageCircle size={20} />
             Get Started
@@ -95,6 +85,7 @@ const MobileHeroSection = () => {
         onClick={handleAboutClick}
         className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white animate-bounce" 
         aria-label="Scroll Down to About Section"
+        type="button"
       >
         <ArrowDown size={24} />
       </button>

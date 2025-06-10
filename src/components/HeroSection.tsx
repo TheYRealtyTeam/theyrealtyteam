@@ -29,9 +29,8 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleServicesClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const element = document.getElementById('services');
+  const scrollToElement = (elementId: string) => {
+    const element = document.getElementById(elementId);
     if (element) {
       const yOffset = -80;
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -42,31 +41,9 @@ const HeroSection = () => {
     }
   };
 
-  const handleContactClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const element = document.getElementById('contact');
-    if (element) {
-      const yOffset = -80;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  const handleAboutClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const element = document.getElementById('about');
-    if (element) {
-      const yOffset = -80;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({
-        top: y,
-        behavior: 'smooth'
-      });
-    }
-  };
+  const handleServicesClick = () => scrollToElement('services');
+  const handleContactClick = () => scrollToElement('contact');
+  const handleAboutClick = () => scrollToElement('about');
 
   // Return mobile-optimized version for mobile devices
   if (isMobile) {
@@ -106,17 +83,30 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-6 animate-fade-in" style={{
             animationDelay: '0.4s'
           }}>
-            <button onClick={handleServicesClick} className="btn-accent text-lg px-8 py-4 font-bold">
+            <button 
+              onClick={handleServicesClick} 
+              className="btn-accent text-lg px-8 py-4 font-bold"
+              type="button"
+            >
               Our Services
             </button>
-            <button onClick={handleContactClick} className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy text-lg px-8 py-4 font-bold">
+            <button 
+              onClick={handleContactClick} 
+              className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy text-lg px-8 py-4 font-bold"
+              type="button"
+            >
               Contact Us
             </button>
           </div>
         </div>
       </div>
 
-      <button onClick={handleAboutClick} className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce" aria-label="Scroll Down to About Section">
+      <button 
+        onClick={handleAboutClick} 
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white animate-bounce" 
+        aria-label="Scroll Down to About Section"
+        type="button"
+      >
         <ArrowDown size={32} />
       </button>
     </section>

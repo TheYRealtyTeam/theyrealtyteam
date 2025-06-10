@@ -5,9 +5,11 @@ import React from 'react';
 import App from './App';
 import './styles/index.css';
 
-console.log('Main.tsx loading, React version:', React?.version || 'React not available');
+console.log('Main.tsx loading, React version check:', React?.version || 'React not available');
+console.log('React object keys:', Object.keys(React || {}));
+console.log('React.useContext available:', !!React?.useContext);
 
-// Add error boundary for debugging
+// Add comprehensive error boundary
 window.addEventListener('error', (event) => {
   console.error('Global error caught:', {
     message: event.message,

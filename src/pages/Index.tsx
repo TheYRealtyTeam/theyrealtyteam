@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -17,10 +16,6 @@ import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
-  // Add debugging before calling the hook
-  console.log('Index component rendering, React available:', !!React);
-  console.log('About to call useIsMobileOptimized hook');
-  
   const { isMobile } = useIsMobileOptimized();
 
   // Debug logging

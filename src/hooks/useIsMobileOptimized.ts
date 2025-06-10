@@ -1,12 +1,12 @@
 
-import React from 'react';
+import { useState, useEffect } from 'react';
 
 export const useIsMobileOptimized = () => {
-  const [isMobile, setIsMobile] = React.useState(false);
-  const [isTablet, setIsTablet] = React.useState(false);
-  const [screenSize, setScreenSize] = React.useState({ width: 0, height: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkDevice = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;

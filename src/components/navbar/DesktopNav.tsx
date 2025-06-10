@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { NavLink } from './NavLink';
 
 interface DesktopNavProps {
@@ -13,7 +13,18 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user }: DesktopNavProps) => {
   console.log('DesktopNav rendering, React available:', !!React);
+  const navigate = useNavigate();
   
+  const handleProfileClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/profile');
+  };
+
+  const handleAppointmentClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/appointment');
+  };
+
   return (
     <nav className="hidden md:flex items-center space-x-2" aria-label="Main Navigation">
       {navLinks.map((link) => (
@@ -26,13 +37,13 @@ const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user 
       ))}
       
       {user ? (
-        <Link to="/profile" className="ml-4 btn-primary font-bold">
+        <a href="/profile" onClick={handleProfileClick} className="ml-4 btn-primary font-bold">
           Profile
-        </Link>
+        </a>
       ) : (
-        <Link to="/appointment" className="ml-1 btn-primary font-bold">
+        <a href="/appointment" onClick={handleAppointmentClick} className="ml-1 btn-primary font-bold">
           Get Started
-        </Link>
+        </a>
       )}
     </nav>
   );

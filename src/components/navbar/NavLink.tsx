@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface NavLinkProps {
   link: {
@@ -15,28 +15,26 @@ interface NavLinkProps {
 
 export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProps) => {
   console.log('NavLink rendering:', link.name, 'React available:', !!React);
+  const navigate = useNavigate();
   
-  if (link.isAnchorLink) {
-    return (
-      <a
-        href={link.href}
-        className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className}`}
-        onClick={onClick}
-        aria-current={isActive ? 'page' : undefined}
-      >
-        {link.name}
-      </a>
-    );
-  }
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (link.isAnchorLink) {
+      onClick(e);
+    } else {
+      e.preventDefault();
+      navigate(link.href);
+      onClick(e);
+    }
+  };
 
   return (
-    <Link
-      to={link.href}
+    <a
+      href={link.href}
       className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className}`}
-      onClick={onClick}
+      onClick={handleClick}
       aria-current={isActive ? 'page' : undefined}
     >
       {link.name}
-    </Link>
+    </a>
   );
 };

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -20,7 +20,24 @@ const MobileMenu = ({
   user 
 }: MobileMenuProps) => {
   console.log('MobileMenu rendering, React available:', !!React);
+  const navigate = useNavigate();
   
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => {
+    if (link.isAnchorLink) {
+      handleNavigation(e, link);
+    } else {
+      e.preventDefault();
+      navigate(link.href);
+      closeMenu();
+    }
+  };
+
+  const handleAppointmentClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    navigate('/appointment');
+    closeMenu();
+  };
+
   // Mobile-optimized slide-down menu
   return (
     <div 
@@ -41,44 +58,29 @@ const MobileMenu = ({
         <div className="pt-20 pb-8 px-6">
           <div className="space-y-6">
             {navLinks.map((link, index) => (
-              link.isAnchorLink ? (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className={`block text-lg font-semibold text-gray-800 hover:text-yrealty-accent transition-all duration-200 transform hover:translate-x-2 ${
-                    isLinkActive(link) ? 'text-yrealty-accent font-bold' : ''
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={(e) => handleNavigation(e, link)}
-                  aria-current={isLinkActive(link) ? 'page' : undefined}
-                >
-                  {link.name}
-                </a>
-              ) : (
-                <Link
-                  key={link.name}
-                  to={link.href}
-                  className={`block text-lg font-semibold text-gray-800 hover:text-yrealty-accent transition-all duration-200 transform hover:translate-x-2 ${
-                    isLinkActive(link) ? 'text-yrealty-accent font-bold' : ''
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  onClick={closeMenu}
-                  aria-current={isLinkActive(link) ? 'page' : undefined}
-                >
-                  {link.name}
-                </Link>
-              )
+              <a
+                key={link.name}
+                href={link.href}
+                className={`block text-lg font-semibold text-gray-800 hover:text-yrealty-accent transition-all duration-200 transform hover:translate-x-2 ${
+                  isLinkActive(link) ? 'text-yrealty-accent font-bold' : ''
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={(e) => handleLinkClick(e, link)}
+                aria-current={isLinkActive(link) ? 'page' : undefined}
+              >
+                {link.name}
+              </a>
             ))}
           </div>
           
           <div className="mt-8 pt-6 border-t border-gray-200">
-            <Link 
-              to="/appointment" 
-              className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300" 
-              onClick={closeMenu}
+            <a 
+              href="/appointment"
+              onClick={handleAppointmentClick}
+              className="w-full bg-gradient-to-r from-yrealty-navy to-yrealty-accent text-white py-4 rounded-xl font-bold text-center block hover:shadow-lg transition-all duration-300"
             >
               Get Started
-            </Link>
+            </a>
           </div>
         </div>
       </nav>

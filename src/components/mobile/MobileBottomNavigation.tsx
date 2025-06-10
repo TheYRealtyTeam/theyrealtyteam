@@ -1,10 +1,11 @@
 
 import React from 'react';
 import { Home, Wrench, BookOpen, MessageCircle, Phone } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const MobileBottomNavigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Debug logging
   console.log('MobileBottomNavigation is rendering, React available:', !!React);
@@ -18,10 +19,13 @@ const MobileBottomNavigation = () => {
     { icon: Phone, label: 'Call', href: 'tel:(845)734-3331', isExternal: true }
   ];
 
-  const handleNavClick = (href: string, isExternal: boolean) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isExternal: boolean) => {
     console.log('Navigation clicked:', href, isExternal);
     if (isExternal) {
       window.location.href = href;
+    } else {
+      e.preventDefault();
+      navigate(href);
     }
   };
 
@@ -62,7 +66,7 @@ const MobileBottomNavigation = () => {
             return (
               <button
                 key={index}
-                onClick={() => handleNavClick(item.href, item.isExternal)}
+                onClick={() => window.location.href = item.href}
                 style={{ 
                   display: 'flex',
                   flexDirection: 'column',
@@ -91,9 +95,10 @@ const MobileBottomNavigation = () => {
           }
 
           return (
-            <Link
+            <a
               key={index}
-              to={item.href}
+              href={item.href}
+              onClick={(e) => handleNavClick(e, item.href, item.isExternal)}
               style={{ 
                 display: 'flex',
                 flexDirection: 'column',
@@ -120,7 +125,7 @@ const MobileBottomNavigation = () => {
               }}>
                 {item.label}
               </span>
-            </Link>
+            </a>
           );
         })}
       </div>

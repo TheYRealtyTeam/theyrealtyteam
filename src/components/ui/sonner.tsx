@@ -1,9 +1,16 @@
 
+import React from "react"
 import { Toaster as Sonner } from "sonner"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => {
+  // Add safety check for React availability
+  if (!React) {
+    console.warn('React not available for Sonner Toaster');
+    return null;
+  }
+
   return (
     <Sonner
       theme="light"

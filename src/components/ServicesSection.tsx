@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
 import { Building, Home } from 'lucide-react';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MobileServicesSection from './mobile/MobileServicesSection';
 import ValueProposition from './services/ValueProposition';
 import CaseStudies from './services/CaseStudies';
@@ -8,7 +9,7 @@ import TechnologyStack from './services/TechnologyStack';
 import ServicesTabContent from './services/ServicesTabContent';
 
 const ServicesSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("residential");
   const [isLoading, setIsLoading] = useState(false);
 

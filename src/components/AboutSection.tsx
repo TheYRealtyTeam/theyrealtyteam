@@ -1,10 +1,10 @@
 import React from 'react';
 import { Building, Users, Award, TrendingUp, Shield, Clock, Star, CheckCircle } from 'lucide-react';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MobileAboutSection from './mobile/MobileAboutSection';
 
 const AboutSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   // Return mobile-optimized version for mobile devices
   if (isMobile) {

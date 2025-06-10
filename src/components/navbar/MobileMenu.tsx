@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -20,7 +20,7 @@ const MobileMenu = ({
   handleNavigation,
   user 
 }: MobileMenuProps) => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   if (!isMobile) {
     return (

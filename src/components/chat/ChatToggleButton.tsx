@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ChatToggleButtonProps {
   onClick: () => void;
 }
 
 const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   if (isMobile) {
     return (

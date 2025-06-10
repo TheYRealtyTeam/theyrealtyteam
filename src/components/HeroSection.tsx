@@ -1,12 +1,13 @@
+
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MobileHeroSection from './mobile/MobileHeroSection';
 
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const img = new Image();

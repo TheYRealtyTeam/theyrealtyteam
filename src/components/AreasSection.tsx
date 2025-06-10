@@ -1,5 +1,5 @@
 import React from 'react';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MobileAreasSection from './mobile/MobileAreasSection';
 import StatesCoverage from './areas/StatesCoverage';
 import TeamPresence from './areas/TeamPresence';
@@ -7,7 +7,7 @@ import ProcessSteps from './areas/ProcessSteps';
 import CommitmentSection from './areas/CommitmentSection';
 
 const AreasSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   // Return mobile-optimized version for mobile devices
   if (isMobile) {

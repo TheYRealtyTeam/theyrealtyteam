@@ -1,11 +1,11 @@
 import React from 'react';
 import { Star, Quote } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 import MobileTestimonialsSection from './mobile/MobileTestimonialsSection';
 
 const TestimonialsSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   // Return mobile-optimized version for mobile devices
   if (isMobile) {

@@ -3,10 +3,10 @@ import React from 'react';
 import ContactInfo from '@/components/contact/ContactInfo';
 import ContactSectionForm from '@/components/contact/ContactSectionForm';
 import MobileContactForm from './mobile/MobileContactForm';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ContactSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const isMobile = useIsMobile();
 
   return (
     <section id="contact" className="section-padding bg-white">

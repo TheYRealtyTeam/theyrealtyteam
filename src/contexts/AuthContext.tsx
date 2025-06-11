@@ -4,6 +4,8 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+console.log('AuthContext: Loading with React:', React);
+
 type AuthContextType = {
   session: Session | null;
   user: User | null;
@@ -17,11 +19,20 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  console.log('AuthProvider: Initializing with React:', React);
+  
+  if (!React) {
+    console.error('AuthProvider: React is null/undefined!');
+    return <div>Error: React not available</div>;
+  }
+
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    console.log('AuthProvider: Setting up auth state listener');
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {

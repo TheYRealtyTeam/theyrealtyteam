@@ -67,8 +67,8 @@ const MobileMenu = ({
               Profile
             </Link>
           ) : (
-            <Link to="/appointment" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
-              Get Started
+            <Link to="/auth" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
+              Sign In
             </Link>
           )}
         </div>

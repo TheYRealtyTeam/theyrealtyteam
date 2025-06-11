@@ -28,8 +28,8 @@ const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user 
           Profile
         </Link>
       ) : (
-        <Link to="/appointment" className="ml-1 btn-primary font-bold">
-          Get Started
+        <Link to="/auth" className="ml-1 btn-primary font-bold">
+          Sign In
         </Link>
       )}
     </nav>

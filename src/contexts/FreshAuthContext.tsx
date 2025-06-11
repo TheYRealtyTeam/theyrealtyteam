@@ -1,10 +1,11 @@
 
+import * as React from 'react';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-console.log('FreshAuthContext: Loading auth context');
+console.log('FreshAuthContext: Loading auth context, React available:', !!React);
 
 type AuthContextType = {
   session: Session | null;
@@ -18,7 +19,7 @@ type AuthContextType = {
 const FreshAuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const FreshAuthProvider = ({ children }: { children: ReactNode }) => {
-  console.log('FreshAuthProvider: Initializing provider');
+  console.log('FreshAuthProvider: Initializing provider, React available:', !!React);
   
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);

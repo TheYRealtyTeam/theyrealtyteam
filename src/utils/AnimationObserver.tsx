@@ -1,7 +1,10 @@
 
-import React, { useEffect, useRef } from 'react';
+import * as React from 'react';
+import { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
+  console.log('AnimationObserver: Component called, React available:', !!React);
+  
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Element[]>([]);
   const mutationObserverRef = useRef<MutationObserver | null>(null);

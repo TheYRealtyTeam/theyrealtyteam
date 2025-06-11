@@ -2,7 +2,7 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
-import { useSimpleAuth } from '@/contexts/SimpleAuthContext';
+import { useFreshAuth } from '@/contexts/FreshAuthContext';
 import { useNavigation } from './navbar/useNavigation';
 import { navLinks } from './navbar/navLinks';
 import DesktopNav from './navbar/DesktopNav';
@@ -13,8 +13,8 @@ console.log('Navbar: Component loading');
 const Navbar = () => {
   console.log('Navbar: Starting to render Navbar component');
   
-  const { user } = useSimpleAuth();
-  console.log('Navbar: Got user from SimpleAuth:', user ? 'User logged in' : 'No user');
+  const { user } = useFreshAuth();
+  console.log('Navbar: Got user from FreshAuth:', user ? 'User logged in' : 'No user');
   
   const { 
     isMenuOpen, 

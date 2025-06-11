@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { SimpleAuthProvider } from '@/contexts/SimpleAuthContext';
+import { FreshAuthProvider } from '@/contexts/FreshAuthContext';
 import { Toaster } from 'sonner';
 import Auth from '@/pages/Auth';
 import Profile from '@/pages/Profile';
@@ -45,10 +45,10 @@ const HomePage = () => {
 };
 
 const App = () => {
-  console.log('App: Starting to render App component with SimpleAuthProvider');
+  console.log('App: Starting to render App component with FreshAuthProvider');
   
   return (
-    <SimpleAuthProvider>
+    <FreshAuthProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/auth" element={<Auth />} />
@@ -56,7 +56,7 @@ const App = () => {
         <Route path="/home" element={<Index />} />
       </Routes>
       <Toaster />
-    </SimpleAuthProvider>
+    </FreshAuthProvider>
   );
 };
 

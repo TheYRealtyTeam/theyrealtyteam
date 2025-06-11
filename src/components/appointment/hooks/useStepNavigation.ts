@@ -1,4 +1,5 @@
 
+import React from 'react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { AppointmentStep } from '../types';

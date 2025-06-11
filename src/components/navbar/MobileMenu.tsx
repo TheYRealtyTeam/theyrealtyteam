@@ -1,8 +1,7 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { NavLink } from './NavLink';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -21,6 +20,8 @@ const MobileMenu = ({
   handleNavigation,
   user 
 }: MobileMenuProps) => {
+  const isMobile = useIsMobileOptimized();
+  
   return (
     <div 
       id="mobile-menu"

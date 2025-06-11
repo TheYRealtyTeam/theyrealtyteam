@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -9,7 +8,6 @@ interface MobileMenuProps {
   navLinks: Array<{ name: string; href: string; isAnchorLink: boolean }>;
   isLinkActive: (link: { href: string; isAnchorLink: boolean }) => boolean;
   handleNavigation: (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => void;
-  user: any;
 }
 
 const MobileMenu = ({ 
@@ -17,10 +15,8 @@ const MobileMenu = ({
   closeMenu, 
   navLinks, 
   isLinkActive, 
-  handleNavigation,
-  user 
+  handleNavigation
 }: MobileMenuProps) => {
-  const isMobile = useIsMobileOptimized();
   
   return (
     <div 
@@ -62,16 +58,6 @@ const MobileMenu = ({
               </Link>
             )
           ))}
-          
-          {user ? (
-            <Link to="/profile" className="mx-4 mt-4 btn-primary text-center font-bold" onClick={closeMenu}>
-              Profile
-            </Link>
-          ) : (
-            <Link to="/auth" className="mx-4 mt-2 btn-primary text-center font-bold" onClick={closeMenu}>
-              Sign In
-            </Link>
-          )}
         </div>
       </nav>
     </div>

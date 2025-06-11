@@ -1,4 +1,5 @@
-import React, { useState, ChangeEvent } from 'react';
+
+import { useState, ChangeEvent } from 'react';
 import { AppointmentFormData, FormErrors } from '../types';
 import { validateEmail, validatePhone } from '../utils/validationUtils';
 

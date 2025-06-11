@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+
+import { useEffect } from 'react';
 import { useAppointmentForm } from './hooks/useAppointmentForm';
 import { useDateTimeSelection } from './hooks/useDateTimeSelection';
 import { useStepNavigation } from './hooks/useStepNavigation';

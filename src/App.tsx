@@ -42,6 +42,8 @@ const HomePage = () => {
 };
 
 const App = () => {
+  console.log('App component rendering with SimpleAuthProvider');
+  
   return (
     <SimpleAuthProvider>
       <Routes>

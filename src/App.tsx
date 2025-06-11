@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from 'sonner';
 
 const HomePage = () => {
@@ -14,9 +13,9 @@ const HomePage = () => {
           <p className="text-green-600 mb-4">✅ React is working correctly</p>
           <p className="text-green-600 mb-4">✅ React Router is working</p>
           <p className="text-green-600 mb-4">✅ Tailwind CSS is working</p>
-          <p className="text-green-600 mb-4">✅ AuthProvider is working</p>
+          <p className="text-orange-600 mb-4">⚠️ AuthProvider temporarily disabled for debugging</p>
           <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-800 font-medium">All systems operational!</p>
+            <p className="text-green-800 font-medium">Core systems operational!</p>
           </div>
         </div>
       </div>
@@ -26,12 +25,12 @@ const HomePage = () => {
 
 const App = () => {
   return (
-    <AuthProvider>
+    <>
       <Routes>
         <Route path="/" element={<HomePage />} />
       </Routes>
       <Toaster />
-    </AuthProvider>
+    </>
   );
 };
 

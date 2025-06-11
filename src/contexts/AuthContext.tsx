@@ -4,6 +4,10 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+console.log('AuthContext module loading...');
+console.log('React:', React);
+console.log('useState:', useState);
+
 type AuthContextType = {
   session: Session | null;
   user: User | null;
@@ -17,11 +21,20 @@ type AuthContextType = {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  console.log('AuthProvider rendering...');
+  console.log('React in AuthProvider:', React);
+  console.log('useState in AuthProvider:', useState);
+  
+  // Add debug logging before useState calls
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
-  useEffect(() => {
+  console.log('State initialized successfully');
+
+  React.useEffect(() => {
+    console.log('AuthProvider useEffect running...');
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
@@ -103,6 +116,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setSession(newSession);
     setUser(newSession?.user ?? null);
   };
+
+  console.log('AuthProvider about to render context provider');
 
   return (
     <AuthContext.Provider

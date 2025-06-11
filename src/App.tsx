@@ -2,7 +2,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-console.log("App.tsx: Loading App component with routing");
+console.log("App.tsx: Loading App component");
 
 const HomePage = () => {
   console.log("HomePage: Rendering home page component");
@@ -26,7 +26,7 @@ const HomePage = () => {
 };
 
 const App = () => {
-  console.log("App: About to render Routes component");
+  console.log("App: Rendering Routes component");
   
   return (
     <Routes>

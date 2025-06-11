@@ -26,13 +26,18 @@ const HomePage = () => {
 };
 
 const App = () => {
-  console.log("App: Rendering app with basic routing");
+  console.log("App: About to render Routes component");
   
-  return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-    </Routes>
-  );
+  try {
+    return (
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    );
+  } catch (error) {
+    console.error("Error in App component:", error);
+    return <div>Error occurred: {error.message}</div>;
+  }
 };
 
 export default App;

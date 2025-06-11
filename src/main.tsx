@@ -14,7 +14,7 @@ if (!container) {
 console.log("main.tsx: Creating React root with BrowserRouter");
 const root = createRoot(container);
 
-console.log("main.tsx: Rendering App with Router");
+console.log("main.tsx: About to render with BrowserRouter");
 root.render(
   <StrictMode>
     <BrowserRouter>

@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
-  console.log('AnimationObserver: Component called, React available:', !!React);
+  console.log('AnimationObserver: Component called');
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Element[]>([]);

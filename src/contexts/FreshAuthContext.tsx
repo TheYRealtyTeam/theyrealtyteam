@@ -4,7 +4,7 @@ import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
-console.log('FreshAuthContext: Loading auth context, React available:', !!React);
+console.log('FreshAuthContext: Loading auth context');
 
 type AuthContextType = {
   session: Session | null;
@@ -18,7 +18,7 @@ type AuthContextType = {
 const FreshAuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const FreshAuthProvider = ({ children }: { children: ReactNode }) => {
-  console.log('FreshAuthProvider: Initializing provider, React available:', !!React);
+  console.log('FreshAuthProvider: Initializing provider');
   
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);

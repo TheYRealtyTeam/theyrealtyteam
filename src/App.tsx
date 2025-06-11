@@ -3,6 +3,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { SimpleAuthProvider } from '@/contexts/SimpleAuthContext';
 import { Toaster } from 'sonner';
+import Auth from '@/pages/Auth';
+import Profile from '@/pages/Profile';
+import Index from '@/pages/Index';
 
 const HomePage = () => {
   return (
@@ -43,6 +46,9 @@ const App = () => {
     <SimpleAuthProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/home" element={<Index />} />
       </Routes>
       <Toaster />
     </SimpleAuthProvider>

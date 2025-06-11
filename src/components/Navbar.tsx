@@ -2,14 +2,14 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSimpleAuth } from '@/contexts/SimpleAuthContext';
 import { useNavigation } from './navbar/useNavigation';
 import { navLinks } from './navbar/navLinks';
 import DesktopNav from './navbar/DesktopNav';
 import MobileMenu from './navbar/MobileMenu';
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user } = useSimpleAuth();
   const { 
     isMenuOpen, 
     isScrolled, 

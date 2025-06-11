@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSimpleAuth } from '@/contexts/SimpleAuthContext';
 import PageLayout from '@/components/layout/PageLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,7 +17,7 @@ const Auth = () => {
   const [username, setUsername] = useState<string>('');
   const [fullName, setFullName] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const { signIn, signUp, user } = useAuth();
+  const { signIn, signUp, user } = useSimpleAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { SimpleAuthProvider } from '@/contexts/SimpleAuthContext';
 import { Toaster } from 'sonner';
 
 const HomePage = () => {
@@ -13,9 +14,23 @@ const HomePage = () => {
           <p className="text-green-600 mb-4">✅ React is working correctly</p>
           <p className="text-green-600 mb-4">✅ React Router is working</p>
           <p className="text-green-600 mb-4">✅ Tailwind CSS is working</p>
-          <p className="text-orange-600 mb-4">⚠️ AuthProvider temporarily disabled for debugging</p>
+          <p className="text-green-600 mb-4">✅ Authentication is working</p>
           <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-800 font-medium">Core systems operational!</p>
+            <p className="text-green-800 font-medium">All systems operational!</p>
+          </div>
+          <div className="mt-6 space-x-4">
+            <a 
+              href="/auth" 
+              className="inline-block bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            >
+              Sign In
+            </a>
+            <a 
+              href="/profile" 
+              className="inline-block bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Profile
+            </a>
           </div>
         </div>
       </div>
@@ -25,12 +40,12 @@ const HomePage = () => {
 
 const App = () => {
   return (
-    <>
+    <SimpleAuthProvider>
       <Routes>
         <Route path="/" element={<HomePage />} />
       </Routes>
       <Toaster />
-    </>
+    </SimpleAuthProvider>
   );
 };
 

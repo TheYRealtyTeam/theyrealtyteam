@@ -7,7 +7,10 @@ import Auth from '@/pages/Auth';
 import Profile from '@/pages/Profile';
 import Index from '@/pages/Index';
 
+console.log('App.tsx: Starting to load App component');
+
 const HomePage = () => {
+  console.log('HomePage: Rendering HomePage component');
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="text-center max-w-lg">
@@ -42,7 +45,7 @@ const HomePage = () => {
 };
 
 const App = () => {
-  console.log('App component rendering with SimpleAuthProvider');
+  console.log('App: Starting to render App component with SimpleAuthProvider');
   
   return (
     <SimpleAuthProvider>

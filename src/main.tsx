@@ -5,16 +5,18 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './styles/index.css'
 
-console.log('Main.tsx loading...');
+console.log('main.tsx: Starting application initialization');
 
 const container = document.getElementById("root");
 if (!container) {
+  console.error('main.tsx: Root element not found');
   throw new Error("Root element not found");
 }
 
+console.log('main.tsx: Root element found, creating React root');
 const root = createRoot(container);
 
-console.log('About to render App with SimpleAuthProvider...');
+console.log('main.tsx: About to render App with BrowserRouter');
 
 root.render(
   <StrictMode>
@@ -23,3 +25,5 @@ root.render(
     </BrowserRouter>
   </StrictMode>
 );
+
+console.log('main.tsx: App rendered successfully');

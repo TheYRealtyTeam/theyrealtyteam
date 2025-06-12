@@ -1,5 +1,5 @@
 
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { CheckCircle } from 'lucide-react';
 
 const AboutSection = () => {

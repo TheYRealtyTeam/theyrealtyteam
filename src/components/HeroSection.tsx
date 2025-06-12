@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowDown } from 'lucide-react';
 
 const HeroSection = () => {

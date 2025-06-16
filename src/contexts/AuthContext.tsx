@@ -28,13 +28,16 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  console.log('AuthProvider: Initializing...');
+  
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);
+
+  console.log('AuthProvider: State initialized');
 
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // Mock login - replace with actual authentication logic
       console.log('Login attempt:', { email, password });
       setUser({ id: '1', email });
     } catch (error) {
@@ -54,6 +57,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     logout,
     loading,
   };
+
+  console.log('AuthProvider: Rendering with value:', value);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

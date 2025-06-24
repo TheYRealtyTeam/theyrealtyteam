@@ -28,18 +28,20 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  console.log('AuthProvider: Initializing...');
+  console.log('AuthProvider: Component initializing...');
   
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  console.log('AuthProvider: State initialized');
+  console.log('AuthProvider: State hooks initialized successfully');
 
   const login = async (email: string, password: string) => {
+    console.log('AuthProvider: Login attempt starting');
     setLoading(true);
     try {
       console.log('Login attempt:', { email, password });
       setUser({ id: '1', email });
+      console.log('AuthProvider: Login successful');
     } catch (error) {
       console.error('Login error:', error);
     } finally {
@@ -48,6 +50,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
+    console.log('AuthProvider: Logout called');
     setUser(null);
   };
 

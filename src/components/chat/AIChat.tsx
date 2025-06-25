@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, X, MessageCircle, Loader, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,6 +25,7 @@ const AIChat = () => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const scrollToBottom = () => {
@@ -35,6 +35,16 @@ const AIChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Auto-focus input when chat opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      // Small delay to ensure the chat is fully rendered
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [isOpen]);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -250,6 +260,7 @@ const AIChat = () => {
       <div className="p-4 border-t border-gray-200">
         <div className="flex gap-2">
           <Input
+            ref={inputRef}
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}

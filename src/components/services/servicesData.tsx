@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
@@ -53,7 +54,7 @@ const coreServices: Service[] = [
     description: "24/7 maintenance coordination with our vetted contractor network, preventative maintenance scheduling, and emergency response protocols.",
     icon: <Wrench className="h-12 w-12 text-yrealty-accent" />,
     features: ["24/7 emergency response", "Vetted contractor network", "Preventive scheduling", "Cost optimization"],
-    pricing: "Maintenance at cost + coordination fee"
+    pricing: "Maintenance at cost"
   },
   {
     title: "Professional Lease Management",

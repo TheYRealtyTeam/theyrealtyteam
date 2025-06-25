@@ -11,10 +11,10 @@ import Contact from '@/pages/Contact';
 
 console.log('App.tsx: Starting to load App component');
 
-// Error Boundary Component
+// Enhanced Error Boundary Component
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
-  { hasError: boolean; error?: Error }
+  { hasError: boolean; error?: Error; errorInfo?: React.ErrorInfo }
 > {
   constructor(props: { children: React.ReactNode }) {
     super(props);
@@ -22,25 +22,42 @@ class ErrorBoundary extends React.Component<
   }
 
   static getDerivedStateFromError(error: Error) {
+    console.error('ErrorBoundary: Error caught:', error);
     return { hasError: true, error };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
+    console.error('ErrorBoundary: Component error:', error, errorInfo);
+    this.setState({ error, errorInfo });
   }
 
   render() {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
-          <div className="text-center">
+          <div className="text-center max-w-md p-8">
             <h1 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h1>
-            <p className="text-gray-600 mb-4">Please refresh the page to try again.</p>
+            <p className="text-gray-600 mb-4">
+              We encountered an error while loading the application.
+            </p>
+            {this.state.error && (
+              <details className="mb-4 text-left">
+                <summary className="cursor-pointer text-sm text-gray-500 mb-2">
+                  Error Details
+                </summary>
+                <pre className="text-xs bg-gray-50 p-2 rounded overflow-auto">
+                  {this.state.error.toString()}
+                </pre>
+              </details>
+            )}
             <button 
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={() => {
+                this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+                window.location.reload();
+              }}
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
             >
-              Refresh Page
+              Reload Application
             </button>
           </div>
         </div>
@@ -57,15 +74,17 @@ const App = () => {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/home" element={<Index />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/tools" element={<Tools />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-        <Toaster />
+        <div className="app-container">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/home" element={<Index />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+          <Toaster position="top-right" />
+        </div>
       </AuthProvider>
     </ErrorBoundary>
   );

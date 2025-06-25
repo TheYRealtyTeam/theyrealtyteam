@@ -32,25 +32,30 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     let mounted = true;
 
-    const getSession = async () => {
+    const initializeAuth = async () => {
       try {
+        console.log('AuthProvider: Initializing auth...');
         const { data: { session }, error } = await supabase.auth.getSession();
+        
         if (error) {
-          console.error('Error getting session:', error);
+          console.error('Auth initialization error:', error);
         }
+        
         if (mounted) {
           setUser(session?.user ?? null);
           setLoading(false);
+          console.log('AuthProvider: Auth initialized', { hasUser: !!session?.user });
         }
       } catch (error) {
-        console.error('Error in getSession:', error);
+        console.error('Auth initialization failed:', error);
         if (mounted) {
+          setUser(null);
           setLoading(false);
         }
       }
     };
 
-    getSession();
+    initializeAuth();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -63,6 +68,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     );
 
     return () => {
+      console.log('AuthProvider: Cleaning up...');
       mounted = false;
       subscription.unsubscribe();
     };
@@ -120,6 +126,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signUp,
     signOut,
   };
+
+  console.log('AuthProvider: Rendering with state', { hasUser: !!user, loading });
 
   return (
     <AuthContext.Provider value={value}>

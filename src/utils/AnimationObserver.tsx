@@ -2,42 +2,43 @@
 import React, { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
-  console.log('AnimationObserver: Component called');
+  console.log('AnimationObserver: Component initialized');
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Element[]>([]);
   const mutationObserverRef = useRef<MutationObserver | null>(null);
   const isInitializedRef = useRef(false);
+  const mountedRef = useRef(true);
 
-  // Function to observe elements with the 'reveal' class
+  // Safe function to observe elements with the 'reveal' class
   const observeElements = () => {
+    if (!mountedRef.current || !observerRef.current) return;
+    
     try {
-      if (!observerRef.current) return;
-      
       const revealElements = document.querySelectorAll('.reveal:not(.active)');
       
       if (revealElements.length > 0) {
-        console.log(`Found ${revealElements.length} unobserved reveal elements`);
+        console.log(`AnimationObserver: Found ${revealElements.length} unobserved reveal elements`);
       }
       
       revealElements.forEach((el) => {
-        // Only observe if not already observed
-        if (!elementsRef.current.includes(el)) {
+        if (!elementsRef.current.includes(el) && mountedRef.current) {
           elementsRef.current.push(el);
           observerRef.current?.observe(el);
         }
       });
     } catch (error) {
-      console.error('Error finding reveal elements:', error);
+      console.error('AnimationObserver: Error finding reveal elements:', error);
     }
   };
 
   useEffect(() => {
     // Prevent multiple initializations
-    if (isInitializedRef.current) return;
+    if (isInitializedRef.current || !mountedRef.current) return;
     
-    if (!window.IntersectionObserver) {
-      console.warn('IntersectionObserver not supported in this browser');
+    // Check for browser support
+    if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      console.warn('AnimationObserver: IntersectionObserver not supported');
       return;
     }
 
@@ -48,15 +49,19 @@ export const AnimationObserver = () => {
     };
 
     try {
+      console.log('AnimationObserver: Setting up observers');
+      
       // Create the IntersectionObserver
       observerRef.current = new IntersectionObserver((entries) => {
+        if (!mountedRef.current) return;
+        
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            console.log('Element is now visible:', entry.target);
+          if (entry.isIntersecting && mountedRef.current) {
+            console.log('AnimationObserver: Element revealed:', entry.target.className);
             entry.target.classList.add('active');
-            // Once element is revealed, stop observing it
+            
+            // Stop observing this element
             observerRef.current?.unobserve(entry.target);
-            // Remove from tracked elements
             elementsRef.current = elementsRef.current.filter(el => el !== entry.target);
           }
         });
@@ -65,65 +70,90 @@ export const AnimationObserver = () => {
       // Mark as initialized
       isInitializedRef.current = true;
 
-      // Initial observation with a delay to ensure DOM is ready
-      setTimeout(observeElements, 100);
+      // Initial observation with delay for DOM readiness
+      const initialTimeout = setTimeout(() => {
+        if (mountedRef.current) {
+          observeElements();
+        }
+      }, 200);
       
-      // Set up MutationObserver to detect DOM changes (like tab switching)
-      mutationObserverRef.current = new MutationObserver((mutations) => {
-        let shouldCheck = false;
-        
-        mutations.forEach((mutation) => {
-          if (
-            mutation.type === 'attributes' && 
-            mutation.attributeName === 'data-state' && 
-            (mutation.target as Element).getAttribute('data-state') === 'active'
-          ) {
-            shouldCheck = true;
-          }
+      // Set up MutationObserver for dynamic content
+      if (window.MutationObserver) {
+        mutationObserverRef.current = new MutationObserver((mutations) => {
+          if (!mountedRef.current) return;
           
-          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            shouldCheck = true;
+          let shouldCheck = false;
+          
+          mutations.forEach((mutation) => {
+            if (!mountedRef.current) return;
+            
+            if (
+              mutation.type === 'attributes' && 
+              mutation.attributeName === 'data-state' && 
+              (mutation.target as Element).getAttribute('data-state') === 'active'
+            ) {
+              shouldCheck = true;
+            }
+            
+            if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+              shouldCheck = true;
+            }
+          });
+          
+          if (shouldCheck && mountedRef.current) {
+            setTimeout(() => {
+              if (mountedRef.current) {
+                observeElements();
+              }
+            }, 150);
           }
         });
         
-        if (shouldCheck) {
-          // Wait a bit for the DOM to settle
-          setTimeout(observeElements, 100);
-        }
-      });
+        // Observe document changes
+        mutationObserverRef.current.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['data-state', 'class'],
+        });
+      }
+
+      return () => {
+        clearTimeout(initialTimeout);
+      };
       
-      // Observe the entire document for changes
-      mutationObserverRef.current.observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['data-state', 'class'],
-      });
     } catch (error) {
-      console.error('Error setting up IntersectionObserver:', error);
+      console.error('AnimationObserver: Error setting up observers:', error);
     }
 
     return () => {
+      console.log('AnimationObserver: Cleaning up observers');
+      mountedRef.current = false;
+      
       try {
         if (observerRef.current) {
           elementsRef.current.forEach((el) => {
             observerRef.current?.unobserve(el);
           });
           observerRef.current.disconnect();
+          observerRef.current = null;
         }
         
         if (mutationObserverRef.current) {
           mutationObserverRef.current.disconnect();
+          mutationObserverRef.current = null;
         }
         
-        // Reset initialization flag
+        // Reset state
+        elementsRef.current = [];
         isInitializedRef.current = false;
       } catch (error) {
-        console.error('Error cleaning up observers:', error);
+        console.error('AnimationObserver: Error during cleanup:', error);
       }
     };
   }, []);
 
+  // This component doesn't render anything
   return null;
 };
 

@@ -1,11 +1,10 @@
 
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAppointmentForm } from './hooks/useAppointmentForm';
 import { useDateTimeSelection } from './hooks/useDateTimeSelection';
 import { useStepNavigation } from './hooks/useStepNavigation';
 import { useAppointmentSubmission } from './hooks/useAppointmentSubmission';
 import { isDateDisabled, formatDate } from './utils/validationUtils';
-import { toast } from '@/components/ui/use-toast';
 
 const useAppointment = () => {
   // Combine the smaller hooks
@@ -45,10 +44,10 @@ const useAppointment = () => {
   } = useAppointmentSubmission();
 
   // Format the date for display
-  const formattedDate = formatDate(date);
+  const formattedDate = date ? formatDate(date) : '';
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (currentStep === 'personalInfo') {
@@ -60,17 +59,17 @@ const useAppointment = () => {
         // This success callback will now be called in handleConfirmationClose
       });
     }
-  };
+  }, [currentStep, date, selectedTime, callType, formData, goToNextStep, submitAppointment]);
 
   // New function to reset form after confirmation is closed
-  const handleConfirmationAndReset = () => {
+  const handleConfirmationAndReset = useCallback(() => {
     handleConfirmationClose(() => {
       // Reset form after dialog is closed
       resetFormData();
       resetDateTimeSelection();
       setCurrentStep('dateSelection');
     });
-  };
+  }, [handleConfirmationClose, resetFormData, resetDateTimeSelection, setCurrentStep]);
 
   // Check if the form is valid to enable "Review" button
   const isFormValid = checkFormValidity(date, selectedTime, callType);
@@ -103,8 +102,7 @@ const useAppointment = () => {
     
     // Confirmation dialog
     showConfirmation,
-    // Update this line to call handleConfirmationAndReset directly without arguments
-    setShowConfirmation: () => handleConfirmationAndReset(),
+    setShowConfirmation: handleConfirmationAndReset,
     
     // Formatted date for display
     formattedDate,

@@ -1,8 +1,14 @@
 
-export interface ToastOptions {
-  title: string;
-  description: string;
-  variant?: "default" | "destructive";
+export interface ToastFunction {
+  (props: {
+    title?: string;
+    description?: string;
+    variant?: 'default' | 'destructive';
+  }): void;
 }
 
-export type ToastFunction = (options: ToastOptions) => void;
+export interface ToastProps {
+  title?: string;
+  description?: string;
+  variant?: 'default' | 'destructive';
+}

@@ -1,5 +1,5 @@
 
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useCallback } from 'react';
 import { AppointmentFormData, FormErrors } from '../types';
 import { validateEmail, validatePhone } from '../utils/validationUtils';
 
@@ -9,7 +9,7 @@ export const useAppointmentForm = () => {
     email: '',
     phone: '',
     propertyType: '',
-    message: '' // Initialize with empty string instead of undefined
+    message: ''
   });
   
   const [formErrors, setFormErrors] = useState<FormErrors>({
@@ -17,7 +17,7 @@ export const useAppointmentForm = () => {
     phone: ''
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
@@ -41,12 +41,9 @@ export const useAppointmentForm = () => {
         setFormErrors(prev => ({ ...prev, phone: '' }));
       }
     }
-  };
+  }, []);
 
-  /**
-   * Check if form is valid (required fields and format validation)
-   */
-  const checkFormValidity = (date: Date | undefined, selectedTime: string, callType: string): boolean => {
+  const checkFormValidity = useCallback((date: Date | undefined, selectedTime: string, callType: string): boolean => {
     const { name, email, phone, propertyType } = formData;
     
     // Basic required field validation
@@ -60,17 +57,21 @@ export const useAppointmentForm = () => {
     }
     
     return true;
-  };
+  }, [formData]);
 
-  const resetFormData = () => {
+  const resetFormData = useCallback(() => {
     setFormData({
       name: '',
       email: '',
       phone: '',
       propertyType: '',
-      message: '' // Make sure to reset with empty string
+      message: ''
     });
-  };
+    setFormErrors({
+      email: '',
+      phone: ''
+    });
+  }, []);
 
   return {
     formData,

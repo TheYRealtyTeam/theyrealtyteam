@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, X, MessageCircle, Loader, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -32,29 +33,53 @@ const AIChat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Function to focus input with retry mechanism
+  const focusInput = () => {
+    if (inputRef.current && isOpen) {
+      inputRef.current.focus();
+    }
+  };
+
   useEffect(() => {
     scrollToBottom();
+    // Focus input after messages update
+    setTimeout(focusInput, 100);
   }, [messages]);
 
   // Auto-focus input when chat opens
   useEffect(() => {
     if (isOpen && inputRef.current) {
       // Small delay to ensure the chat is fully rendered
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
+      setTimeout(focusInput, 100);
     }
   }, [isOpen]);
 
   // Auto-focus input after AI responses (when loading stops)
   useEffect(() => {
-    if (!isLoading && isOpen && inputRef.current) {
-      // Small delay to ensure the response is fully rendered
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 200);
+    if (!isLoading && isOpen) {
+      // Multiple attempts to ensure focus
+      setTimeout(focusInput, 100);
+      setTimeout(focusInput, 300);
+      setTimeout(focusInput, 500);
     }
   }, [isLoading, isOpen]);
+
+  // Maintain focus on any interaction
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      // If clicking inside the chat but not on a button or input, refocus the input
+      const target = e.target as HTMLElement;
+      const chatContainer = document.querySelector('[data-chat-container]');
+      if (chatContainer?.contains(target) && !target.closest('button') && target !== inputRef.current) {
+        setTimeout(focusInput, 10);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('click', handleClick);
+      return () => document.removeEventListener('click', handleClick);
+    }
+  }, [isOpen]);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -180,7 +205,10 @@ const AIChat = () => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-50">
+    <div 
+      className="fixed bottom-6 right-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-50"
+      data-chat-container
+    >
       {/* Chat Header */}
       <div className="bg-yrealty-navy text-white p-4 rounded-t-xl flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -278,6 +306,12 @@ const AIChat = () => {
             disabled={isLoading}
             className="flex-1"
             maxLength={4000}
+            onBlur={() => {
+              // Refocus after a short delay if chat is still open
+              setTimeout(() => {
+                if (isOpen) focusInput();
+              }, 50);
+            }}
           />
           <Button
             onClick={sendMessage}

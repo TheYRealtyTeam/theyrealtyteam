@@ -46,6 +46,16 @@ const AIChat = () => {
     }
   }, [isOpen]);
 
+  // Auto-focus input after AI responses (when loading stops)
+  useEffect(() => {
+    if (!isLoading && isOpen && inputRef.current) {
+      // Small delay to ensure the response is fully rendered
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 200);
+    }
+  }, [isLoading, isOpen]);
+
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
 

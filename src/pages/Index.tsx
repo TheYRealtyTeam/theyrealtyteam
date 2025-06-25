@@ -11,8 +11,14 @@ import Footer from '@/components/Footer';
 import AIChat from '@/components/chat/AIChat';
 import AnimationObserver from '@/utils/AnimationObserver';
 
+console.log('Index: Component loading');
+
 const Index = () => {
+  console.log('Index: Component rendering');
+  
   useEffect(() => {
+    console.log('Index: useEffect running');
+    
     document.title = "Y Realty Team | Premium Property Management Nationwide";
     
     const metaDescription = document.createElement('meta');

@@ -1,12 +1,19 @@
 
 import React, { useEffect, useRef } from 'react';
 
+console.log('AnimationObserver: Component loading');
+
 export const AnimationObserver = () => {
+  console.log('AnimationObserver: Component rendering');
+  
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Element[]>([]);
 
   useEffect(() => {
+    console.log('AnimationObserver: useEffect running');
+    
     if (typeof window === 'undefined' || !window.IntersectionObserver) {
+      console.log('AnimationObserver: IntersectionObserver not available');
       return;
     }
 
@@ -41,6 +48,7 @@ export const AnimationObserver = () => {
     const timer = setTimeout(observeElements, 100);
 
     return () => {
+      console.log('AnimationObserver: Cleaning up');
       clearTimeout(timer);
       if (observerRef.current) {
         elementsRef.current.forEach((el) => {

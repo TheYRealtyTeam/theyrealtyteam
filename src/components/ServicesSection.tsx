@@ -6,7 +6,11 @@ import CaseStudies from './services/CaseStudies';
 import TechnologyStack from './services/TechnologyStack';
 import ServicesTabContent from './services/ServicesTabContent';
 
+console.log('ServicesSection: Component loading');
+
 const ServicesSection = () => {
+  console.log('ServicesSection: Component rendering');
+  
   const [activeTab, setActiveTab] = useState("residential");
   const [isLoading, setIsLoading] = useState(false);
 

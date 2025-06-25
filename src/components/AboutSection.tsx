@@ -2,7 +2,11 @@
 import React, { useRef } from 'react';
 import { CheckCircle } from 'lucide-react';
 
+console.log('AboutSection: Component loading');
+
 const AboutSection = () => {
+  console.log('AboutSection: Component rendering');
+  
   const sectionRef = useRef<HTMLElement>(null);
 
   return (

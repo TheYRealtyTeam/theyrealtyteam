@@ -32,9 +32,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     // Get initial session
     const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      setLoading(false);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error getting session:', error);
+        setLoading(false);
+      }
     };
 
     getSession();
@@ -51,24 +56,39 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (error) throw error;
+    } catch (error) {
+      console.error('Sign in error:', error);
+      throw error;
+    }
   };
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) throw error;
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (error) throw error;
+    } catch (error) {
+      console.error('Sign up error:', error);
+      throw error;
+    }
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+    } catch (error) {
+      console.error('Sign out error:', error);
+      throw error;
+    }
   };
 
   const value = {

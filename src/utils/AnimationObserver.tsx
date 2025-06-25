@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef } from 'react';
 
 export const AnimationObserver = () => {
@@ -6,10 +7,13 @@ export const AnimationObserver = () => {
   const observerRef = useRef<IntersectionObserver | null>(null);
   const elementsRef = useRef<Element[]>([]);
   const mutationObserverRef = useRef<MutationObserver | null>(null);
+  const isInitializedRef = useRef(false);
 
   // Function to observe elements with the 'reveal' class
   const observeElements = () => {
     try {
+      if (!observerRef.current) return;
+      
       const revealElements = document.querySelectorAll('.reveal:not(.active)');
       
       if (revealElements.length > 0) {
@@ -29,6 +33,9 @@ export const AnimationObserver = () => {
   };
 
   useEffect(() => {
+    // Prevent multiple initializations
+    if (isInitializedRef.current) return;
+    
     if (!window.IntersectionObserver) {
       console.warn('IntersectionObserver not supported in this browser');
       return;
@@ -49,12 +56,17 @@ export const AnimationObserver = () => {
             entry.target.classList.add('active');
             // Once element is revealed, stop observing it
             observerRef.current?.unobserve(entry.target);
+            // Remove from tracked elements
+            elementsRef.current = elementsRef.current.filter(el => el !== entry.target);
           }
         });
       }, observerOptions);
 
-      // Initial observation
-      observeElements();
+      // Mark as initialized
+      isInitializedRef.current = true;
+
+      // Initial observation with a delay to ensure DOM is ready
+      setTimeout(observeElements, 100);
       
       // Set up MutationObserver to detect DOM changes (like tab switching)
       mutationObserverRef.current = new MutationObserver((mutations) => {
@@ -76,7 +88,7 @@ export const AnimationObserver = () => {
         
         if (shouldCheck) {
           // Wait a bit for the DOM to settle
-          setTimeout(observeElements, 50);
+          setTimeout(observeElements, 100);
         }
       });
       
@@ -92,19 +104,22 @@ export const AnimationObserver = () => {
     }
 
     return () => {
-      if (observerRef.current) {
-        elementsRef.current.forEach((el) => {
-          try {
+      try {
+        if (observerRef.current) {
+          elementsRef.current.forEach((el) => {
             observerRef.current?.unobserve(el);
-          } catch (error) {
-            console.error('Error cleaning up observer:', error);
-          }
-        });
-        observerRef.current.disconnect();
-      }
-      
-      if (mutationObserverRef.current) {
-        mutationObserverRef.current.disconnect();
+          });
+          observerRef.current.disconnect();
+        }
+        
+        if (mutationObserverRef.current) {
+          mutationObserverRef.current.disconnect();
+        }
+        
+        // Reset initialization flag
+        isInitializedRef.current = false;
+      } catch (error) {
+        console.error('Error cleaning up observers:', error);
       }
     };
   }, []);

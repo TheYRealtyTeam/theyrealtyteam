@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
@@ -89,10 +90,10 @@ const coreServices: Service[] = [
 export const getResidentialServices = (): Service[] => [
   {
     title: "Residential Property Management",
-    description: "Comprehensive management for single-family homes, condos, and apartments with focus on maximizing rental income and maintaining property value.",
+    description: "Comprehensive management for single-family homes, condos, apartments, and multifamily properties. We excel at managing multifamily complexes with specialized expertise in tenant relations, maintenance coordination, and maximizing rental income across all unit types.",
     icon: <Home className="h-12 w-12 text-yrealty-accent" />,
-    features: ["Single-family homes", "Condos & apartments", "HOA coordination", "Residential compliance"],
-    pricing: "8-12% of monthly rent"
+    features: ["Single-family homes", "Multifamily properties", "Condos & apartments", "HOA coordination", "Residential compliance"],
+    pricing: "Competitive flat fee structure"
   },
   ...coreServices
 ];
@@ -107,3 +108,4 @@ export const getCommercialServices = (): Service[] => [
   },
   ...coreServices
 ];
+

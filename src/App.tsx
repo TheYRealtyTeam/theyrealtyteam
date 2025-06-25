@@ -2,6 +2,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
+import { AuthProvider } from '@/contexts/AuthContext';
 import Index from '@/pages/Index';
 import FAQ from '@/pages/FAQ';
 import Blog from '@/pages/Blog';
@@ -14,7 +15,7 @@ const App = () => {
   console.log('App: Starting to render App component');
   
   return (
-    <>
+    <AuthProvider>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/home" element={<Index />} />
@@ -24,7 +25,7 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
       </Routes>
       <Toaster />
-    </>
+    </AuthProvider>
   );
 };
 

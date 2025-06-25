@@ -15,11 +15,11 @@ const StatesCoverage = () => {
   return (
     <div className="text-center mb-16 reveal">
       <h3 className="text-3xl font-bold mb-8 text-yrealty-navy">
-        Operating in All 50 States
+        Expanding Our Reach Nationwide
       </h3>
       <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-        From coast to coast, we provide the same exceptional level of service and expertise. 
-        Our nationwide presence ensures consistent quality regardless of your property location.
+        We're actively expanding our property management services across the country. 
+        Our goal is to bring our exceptional level of service and expertise to property owners nationwide.
       </p>
       
       <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-200">

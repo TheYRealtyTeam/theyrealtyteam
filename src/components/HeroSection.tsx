@@ -45,14 +45,14 @@ const HeroSection = () => {
         <div className="max-w-4xl text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in leading-tight">
             Premier Property Management 
-            <span className="block text-yrealty-accent">Nationwide</span>
+            <span className="block text-yrealty-accent">Excellence</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 animate-fade-in leading-relaxed max-w-3xl" style={{
             animationDelay: '0.2s'
           }}>
-            Elevating property management to new heights across all 50 states with 
-            exceptional service, innovative solutions, and a client-first approach.
+            Elevating property management to new heights with exceptional service, 
+            innovative solutions, and a client-first approach wherever we serve.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 animate-fade-in" style={{

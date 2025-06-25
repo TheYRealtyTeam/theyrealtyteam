@@ -1,13 +1,9 @@
 
-import React, { useRef } from 'react';
-import { CheckCircle } from 'lucide-react';
-
-console.log('AboutSection: Component loading');
+import React, { useRef } from 'react'
+import { CheckCircle } from 'lucide-react'
 
 const AboutSection = () => {
-  console.log('AboutSection: Component rendering');
-  
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLElement>(null)
 
   return (
     <section id="about" className="section-padding bg-gradient-to-b from-yrealty-blue to-white" ref={sectionRef}>
@@ -58,7 +54,7 @@ const AboutSection = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default AboutSection;
+export default AboutSection

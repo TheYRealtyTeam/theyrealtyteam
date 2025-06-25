@@ -1,30 +1,30 @@
 
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowDown } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react'
+import { ArrowDown } from 'lucide-react'
 
 const HeroSection = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const heroRef = useRef<HTMLDivElement>(null)
+  const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   useEffect(() => {
-    const img = new Image();
-    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
-    img.onload = () => setIsImageLoaded(true);
+    const img = new Image()
+    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920"
+    img.onload = () => setIsImageLoaded(true)
 
     const handleScroll = () => {
-      if (!heroRef.current) return;
-      const scrollTop = window.scrollY;
-      const parallaxOffset = scrollTop * 0.4;
+      if (!heroRef.current) return
+      const scrollTop = window.scrollY
+      const parallaxOffset = scrollTop * 0.4
       requestAnimationFrame(() => {
         if (heroRef.current) {
-          heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
+          heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`
         }
-      });
-    };
+      })
+    }
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <section 
@@ -72,7 +72,7 @@ const HeroSection = () => {
         <ArrowDown size={32} />
       </a>
     </section>
-  );
-};
+  )
+}
 
-export default HeroSection;
+export default HeroSection

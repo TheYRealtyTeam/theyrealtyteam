@@ -1,20 +1,16 @@
 
-import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from 'sonner';
-import { AuthProvider } from '@/contexts/AuthContext';
-import Index from '@/pages/Index';
-import FAQ from '@/pages/FAQ';
-import Blog from '@/pages/Blog';
-import Tools from '@/pages/Tools';
-import Contact from '@/pages/Contact';
-
-console.log('App.tsx: Starting to load App component');
+import React, { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from 'sonner'
+import { AuthProvider } from './contexts/AuthContext'
+import Index from './pages/Index'
+import FAQ from './pages/FAQ'
+import Blog from './pages/Blog'
+import Tools from './pages/Tools'
+import Contact from './pages/Contact'
 
 const App = () => {
-  console.log('App: Starting to render App component');
-  
   const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
@@ -22,27 +18,25 @@ const App = () => {
         refetchOnWindowFocus: false,
       },
     },
-  }));
+  }))
 
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <div className="app-container">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/home" element={<Index />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/tools" element={<Tools />} />
-              <Route path="/contact" element={<Contact />} />
-            </Routes>
-            <Toaster position="top-right" />
-          </div>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/home" element={<Index />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+          <Toaster position="top-right" />
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App

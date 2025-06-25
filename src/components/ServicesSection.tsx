@@ -1,24 +1,20 @@
 
-import React, { useState } from 'react';
-import { Building, Home } from 'lucide-react';
-import ValueProposition from './services/ValueProposition';
-import CaseStudies from './services/CaseStudies';
-import TechnologyStack from './services/TechnologyStack';
-import ServicesTabContent from './services/ServicesTabContent';
-
-console.log('ServicesSection: Component loading');
+import React, { useState } from 'react'
+import { Building, Home } from 'lucide-react'
+import ValueProposition from './services/ValueProposition'
+import CaseStudies from './services/CaseStudies'
+import TechnologyStack from './services/TechnologyStack'
+import ServicesTabContent from './services/ServicesTabContent'
 
 const ServicesSection = () => {
-  console.log('ServicesSection: Component rendering');
-  
-  const [activeTab, setActiveTab] = useState("residential");
-  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("residential")
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleTabChange = (tabName: string) => {
-    setIsLoading(true);
-    setActiveTab(tabName);
-    setTimeout(() => setIsLoading(false), 300);
-  };
+    setIsLoading(true)
+    setActiveTab(tabName)
+    setTimeout(() => setIsLoading(false), 300)
+  }
 
   return (
     <section id="services" className="section-padding bg-gradient-to-b from-white to-gray-50">
@@ -95,7 +91,7 @@ const ServicesSection = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default ServicesSection;
+export default ServicesSection

@@ -11,14 +11,39 @@ interface AuthContextType {
   signOut: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Create context with a default value to prevent null reference errors
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  signIn: async () => {},
+  signUp: async () => {},
+  signOut: async () => {},
+});
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+  try {
+    const context = useContext(AuthContext);
+    if (!context) {
+      console.warn('useAuth called outside of AuthProvider, returning default values');
+      return {
+        user: null,
+        loading: false,
+        signIn: async () => {},
+        signUp: async () => {},
+        signOut: async () => {},
+      };
+    }
+    return context;
+  } catch (error) {
+    console.error('Error in useAuth:', error);
+    return {
+      user: null,
+      loading: false,
+      signIn: async () => {},
+      signUp: async () => {},
+      signOut: async () => {},
+    };
   }
-  return context;
 };
 
 interface AuthProviderProps {
@@ -28,13 +53,20 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     let mounted = true;
 
     const initializeAuth = async () => {
       try {
-        console.log('AuthProvider: Initializing auth...');
+        console.log('AuthProvider: Starting initialization...');
+        
+        // Add a small delay to ensure React is fully ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        if (!mounted) return;
+
         const { data: { session }, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -44,25 +76,31 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         if (mounted) {
           setUser(session?.user ?? null);
           setLoading(false);
-          console.log('AuthProvider: Auth initialized', { hasUser: !!session?.user });
+          setIsInitialized(true);
+          console.log('AuthProvider: Initialization complete', { hasUser: !!session?.user });
         }
       } catch (error) {
         console.error('Auth initialization failed:', error);
         if (mounted) {
           setUser(null);
           setLoading(false);
+          setIsInitialized(true);
         }
       }
     };
 
+    // Start initialization
     initializeAuth();
 
+    // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
         if (mounted) {
           setUser(session?.user ?? null);
-          setLoading(false);
+          if (isInitialized) {
+            setLoading(false);
+          }
         }
       }
     );
@@ -127,7 +165,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     signOut,
   };
 
-  console.log('AuthProvider: Rendering with state', { hasUser: !!user, loading });
+  // Don't render children until context is initialized
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Initializing application...</p>
+        </div>
+      </div>
+    );
+  }
+
+  console.log('AuthProvider: Rendering with initialized state', { hasUser: !!user, loading, isInitialized });
 
   return (
     <AuthContext.Provider value={value}>

@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
+import MainNavbar from '@/components/navbar/MainNavbar';
 import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
 
@@ -43,7 +43,7 @@ const PageLayout = ({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <MainNavbar />
       <main className="flex-grow">
         <div className="pt-28 md:pt-32 pb-8 md:pb-12 bg-yrealty-blue">
           <div className="container-custom">

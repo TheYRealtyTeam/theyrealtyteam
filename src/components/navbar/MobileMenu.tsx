@@ -1,9 +1,11 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
+  toggleMenu: () => void;
   closeMenu: () => void;
   navLinks: Array<{ name: string; href: string; isAnchorLink: boolean }>;
   isLinkActive: (link: { href: string; isAnchorLink: boolean }) => boolean;
@@ -12,6 +14,7 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ 
   isMenuOpen, 
+  toggleMenu,
   closeMenu, 
   navLinks, 
   isLinkActive, 
@@ -19,6 +22,17 @@ const MobileMenu = ({
 }: MobileMenuProps) => {
   
   return (
+    <>
+      {/* Mobile Menu Button */}
+      <button 
+        className="md:hidden text-black z-50"
+        onClick={toggleMenu}
+        aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
+      >
+        {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Mobile Menu Overlay */}
     <div 
       id="mobile-menu"
       className={`fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden transition-opacity duration-300 ${
@@ -61,6 +75,7 @@ const MobileMenu = ({
         </div>
       </nav>
     </div>
+    </>
   );
 };
 

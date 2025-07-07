@@ -1,53 +1,25 @@
+import { useEffect } from 'react'
 
-import React, { useEffect, useRef } from 'react'
-
-export const AnimationObserver = () => {
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const elementsRef = useRef<Element[]>([])
-
+const AnimationObserver = () => {
   useEffect(() => {
-    if (typeof window === 'undefined' || !window.IntersectionObserver) {
-      return
-    }
+    // Simple animation observer without complex hooks
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active')
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
 
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1,
-    }
-
-    observerRef.current = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active')
-          observerRef.current?.unobserve(entry.target)
-          elementsRef.current = elementsRef.current.filter(el => el !== entry.target)
-        }
-      })
-    }, observerOptions)
-
-    const observeElements = () => {
-      const revealElements = document.querySelectorAll('.reveal:not(.active)')
-      
-      revealElements.forEach((el) => {
-        if (!elementsRef.current.includes(el)) {
-          elementsRef.current.push(el)
-          observerRef.current?.observe(el)
-        }
-      })
-    }
-
-    // Initial observation
-    const timer = setTimeout(observeElements, 100)
+    // Observe all elements with the 'reveal' class
+    const revealElements = document.querySelectorAll('.reveal')
+    revealElements.forEach((el) => observer.observe(el))
 
     return () => {
-      clearTimeout(timer)
-      if (observerRef.current) {
-        elementsRef.current.forEach((el) => {
-          observerRef.current?.unobserve(el)
-        })
-        observerRef.current.disconnect()
-      }
+      revealElements.forEach((el) => observer.unobserve(el))
     }
   }, [])
 

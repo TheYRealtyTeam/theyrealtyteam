@@ -36,6 +36,11 @@
     --ring: 222 47% 15%;
 
     --radius: 0.5rem;
+
+    /* Y Realty custom colors */
+    --yrealty-blue: 195 42% 97%;
+    --yrealty-navy: 222 47% 15%;
+    --yrealty-accent: 217 91% 60%;
   }
 
   * {

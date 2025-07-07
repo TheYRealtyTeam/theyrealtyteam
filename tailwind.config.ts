@@ -65,9 +65,9 @@ export default {
 				},
 				// Custom colors for Y Realty
 				yrealty: {
-					blue: '#e0f2f7', 
-					navy: '#1A1F2C', 
-					accent: '#3b82f6'
+					blue: 'hsl(var(--yrealty-blue))', 
+					navy: 'hsl(var(--yrealty-navy))', 
+					accent: 'hsl(var(--yrealty-accent))'
 				}
 			},
 			fontFamily: {

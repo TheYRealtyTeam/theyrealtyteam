@@ -1,15 +1,5 @@
 
 import React, { useEffect } from 'react'
-import Navbar from '../components/Navbar'
-import HeroSection from '../components/HeroSection'
-import AboutSection from '../components/AboutSection'
-import ServicesSection from '../components/ServicesSection'
-import AreasSection from '../components/AreasSection'
-import TestimonialsSection from '../components/TestimonialsSection'
-import ContactSection from '../components/ContactSection'
-import Footer from '../components/Footer'
-import AIChat from '../components/chat/AIChat'
-import AnimationObserver from '../utils/AnimationObserver'
 
 const Index = () => {
   console.log('Index: Rendering Index component')
@@ -36,19 +26,17 @@ const Index = () => {
   }, [])
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <AreasSection />
-        <TestimonialsSection />
-        <ContactSection />
-      </main>
-      <Footer />
-      <AIChat />
-      <AnimationObserver />
+    <div className="min-h-screen flex flex-col bg-white">
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Y Realty Team
+          </h1>
+          <p className="text-xl text-gray-600">
+            Premium Property Management Services
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

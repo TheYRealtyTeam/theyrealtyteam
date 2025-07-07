@@ -117,7 +117,7 @@ const TestimonialsSection = () => {
     }, 300);
   };
 
-  const goToTestimonial = (index) => {
+  const goToTestimonial = (index: number) => {
     if (isAnimating || index === activeIndex) return;
     
     setIsAnimating(true);
@@ -131,14 +131,14 @@ const TestimonialsSection = () => {
     <section id="testimonials" className="section-padding bg-gradient-to-b from-white via-yrealty-blue/10 to-white">
       <div className="container-custom">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-yrealty-navy reveal">Client Success Stories</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto reveal leading-relaxed">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-yrealty-navy">Client Success Stories</h2>
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
             Don't just take our word for it - hear what our satisfied clients have to say
             about their experience with Y Realty Team and the results they've achieved
           </p>
           
           {/* Trust indicators */}
-          <div className="flex flex-wrap justify-center gap-8 mb-12 reveal">
+          <div className="flex flex-wrap justify-center gap-8 mb-12">
             <div className="flex items-center gap-2 bg-white px-6 py-3 rounded-full shadow-md">
               <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
               <span className="font-bold text-yrealty-navy">4.9/5 Average Rating</span>
@@ -257,7 +257,7 @@ const TestimonialsSection = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center mt-16 reveal">
+        <div className="text-center mt-16">
           <div className="bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-8 rounded-2xl text-white max-w-4xl mx-auto">
             <h3 className="text-2xl md:text-3xl font-bold mb-4">
               Ready to Join Our Success Stories?

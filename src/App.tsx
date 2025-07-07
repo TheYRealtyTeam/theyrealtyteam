@@ -27,19 +27,17 @@ const App = () => {
 
   return (
     <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/home" element={<Index />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-          <Toaster position="top-right" />
-        </BrowserRouter>
-      </QueryClientProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/home" element={<Index />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+        <Toaster position="top-right" />
+      </BrowserRouter>
     </ErrorBoundary>
   )
 }

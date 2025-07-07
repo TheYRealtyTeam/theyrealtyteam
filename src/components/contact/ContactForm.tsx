@@ -4,11 +4,11 @@ import { Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
+// import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
 const ContactForm = () => {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,11 +53,7 @@ const ContactForm = () => {
       
       const responseData = await response.json();
       
-      toast({
-        title: "Message Sent!",
-        description: `We'll get back to you as soon as possible${responseData.emailSent ? ' at ' + formData.email : ''}.`,
-        duration: 5000,
-      });
+      alert(`Message sent! We'll get back to you as soon as possible${responseData.emailSent ? ' at ' + formData.email : ''}.`);
       
       // Reset form data after successful submission
       setFormData({
@@ -69,12 +65,7 @@ const ContactForm = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast({
-        title: "Something went wrong",
-        description: "We couldn't send your message. Please try again.",
-        variant: "destructive",
-        duration: 5000,
-      });
+      alert("We couldn't send your message. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

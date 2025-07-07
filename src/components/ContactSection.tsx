@@ -1,10 +1,10 @@
 
 import React, { useState } from 'react';
 import { Phone, Mail, Send } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+// import { useToast } from '@/hooks/use-toast';
 
 const ContactSection = () => {
-  const { toast } = useToast();
+  // const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -46,11 +46,8 @@ const ContactSection = () => {
         throw new Error('Failed to send message');
       }
       
-      toast({
-        title: "Message Sent!",
-        description: "We'll get back to you as soon as possible.",
-        duration: 5000,
-      });
+      console.log('Message sent successfully!');
+      alert('Message sent! We\'ll get back to you as soon as possible.');
       
       // Reset form data after successful submission
       setFormData({
@@ -62,12 +59,7 @@ const ContactSection = () => {
       });
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast({
-        title: "Something went wrong",
-        description: "We couldn't send your message. Please try again.",
-        variant: "destructive",
-        duration: 5000,
-      });
+      alert('Something went wrong. Please try again or call us directly.');
     } finally {
       setIsSubmitting(false);
     }

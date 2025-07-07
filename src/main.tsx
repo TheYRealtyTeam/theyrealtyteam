@@ -9,9 +9,13 @@ if (!container) {
   throw new Error('Root container missing in index.html')
 }
 
+console.log('Main: Starting React app render')
+
 const root = createRoot(container)
 root.render(
   <StrictMode>
     <App />
   </StrictMode>
 )
+
+console.log('Main: React app render completed')

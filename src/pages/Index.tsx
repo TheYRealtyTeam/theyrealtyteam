@@ -12,6 +12,8 @@ import AIChat from '../components/chat/AIChat'
 import AnimationObserver from '../utils/AnimationObserver'
 
 const Index = () => {
+  console.log('Index: Rendering Index component')
+  
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Services"
     

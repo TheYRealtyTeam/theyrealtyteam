@@ -1,32 +1,13 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'sonner'
-import ErrorBoundary from './components/ErrorBoundary'
-import Index from './pages/Index'
-import Areas from './pages/Areas'
-import FAQ from './pages/FAQ'
-import Blog from './pages/Blog'
-import Tools from './pages/Tools'
-import Contact from './pages/Contact'
-import NotFound from './pages/NotFound'
 
 const App = () => {
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/home" element={<Index />} />
-          <Route path="/areas" element={<Areas />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/tools" element={<Tools />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Toaster position="top-right" />
-      </BrowserRouter>
-    </ErrorBoundary>
+    <div className="min-h-screen bg-white">
+      <h1 className="text-3xl font-bold text-center py-10">Y Realty Team</h1>
+      <p className="text-center text-gray-600">Loading...</p>
+      <Toaster position="top-right" />
+    </div>
   )
 }
 

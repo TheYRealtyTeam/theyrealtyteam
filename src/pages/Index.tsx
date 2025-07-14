@@ -9,11 +9,8 @@ import ContactSection from '../components/ContactSection'
 import Footer from '../components/Footer'
 
 const Index = () => {
-  console.log('Index component rendering');
-  
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Services"
-    console.log('Index component mounted');
   }, [])
 
   return (

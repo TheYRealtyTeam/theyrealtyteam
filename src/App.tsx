@@ -8,6 +8,7 @@ import FAQ from './pages/FAQ'
 import Blog from './pages/Blog'
 import Tools from './pages/Tools'
 import Contact from './pages/Contact'
+import NotFound from './pages/NotFound'
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/blog" element={<Blog />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster position="top-right" />
       </BrowserRouter>

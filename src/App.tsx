@@ -10,6 +10,7 @@ import Tools from './pages/Tools'
 import Contact from './pages/Contact'
 
 const App = () => {
+  console.log('App component rendering');
   return (
     <ErrorBoundary>
       <BrowserRouter>

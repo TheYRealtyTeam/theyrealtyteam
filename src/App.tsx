@@ -1,10 +1,12 @@
-import React from 'react'
-
 const App = () => {
   return (
-    <div className="min-h-screen bg-white">
-      <h1 className="text-3xl font-bold text-center py-10">Y Realty Team</h1>
-      <p className="text-center text-gray-600">Application is loading...</p>
+    <div style={{ minHeight: '100vh', backgroundColor: 'white', padding: '40px 20px', textAlign: 'center' }}>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '20px', color: '#1a365d' }}>
+        Y Realty Team
+      </h1>
+      <p style={{ color: '#666666' }}>
+        Application is loading...
+      </p>
     </div>
   )
 }

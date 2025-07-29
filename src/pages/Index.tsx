@@ -10,7 +10,7 @@ import Footer from '../components/Footer'
 
 const Index = () => {
   useEffect(() => {
-    document.title = "Y Realty Team | Premium Property Management Services"
+    document.title = "Y Realty Team | Property Management Nationwide"
   }, [])
 
   return (

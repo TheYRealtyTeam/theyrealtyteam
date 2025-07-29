@@ -1,14 +1,4 @@
-import React from 'react'
-import { Toaster } from '@/components/ui/toaster'
-import Index from './pages/Index'
-
-const App = () => {
-  return (
-    <>
-      <Index />
-      <Toaster />
-    </>
-  )
+// This file has been cleared to break cache cycles
+export default function EmptyApp() {
+  return null
 }
-
-export default App

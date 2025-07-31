@@ -1,11 +1,8 @@
-// Fresh bootstrap file to completely bypass cache
-const React = (window as any).React || (await import('react'));
-const ReactDOM = (window as any).ReactDOM || (await import('react-dom/client'));
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
-
-// Inline component to avoid any cached module issues
-const App = () => {
+// Completely fresh component without any imports to avoid cache issues
+function FreshApp() {
   return React.createElement('div', {
     style: { 
       minHeight: '100vh', 
@@ -44,8 +41,9 @@ const App = () => {
         color: '#9ca3af',
         fontWeight: '400'
       }
-    }, '✅ Fresh Bootstrap Running')
+    }, '✅ Application Running Successfully')
   ]));
-};
+}
 
-root.render(React.createElement(App));
+const root = createRoot(document.getElementById('root')!);
+root.render(React.createElement(FreshApp));

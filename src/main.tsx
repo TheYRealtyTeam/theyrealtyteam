@@ -1,49 +1,39 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './index.css';
 
-// Fresh restart - completely bypassing any cached modules
-function SimpleApp() {
-  return React.createElement('div', {
-    style: { 
-      minHeight: '100vh', 
-      backgroundColor: '#ffffff', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }
-  }, React.createElement('div', {
-    style: { textAlign: 'center', padding: '2rem' }
-  }, [
-    React.createElement('h1', {
-      key: 'title',
-      style: { 
-        fontSize: '3rem', 
-        fontWeight: '700', 
-        color: '#111827', 
-        marginBottom: '1rem',
-        lineHeight: '1.2'
-      }
-    }, 'Y Realty Team'),
-    React.createElement('p', {
-      key: 'subtitle',
-      style: { 
-        fontSize: '1.5rem', 
-        color: '#6b7280', 
-        marginBottom: '1rem',
-        fontWeight: '400'
-      }
-    }, 'Property Management Nationwide'),
-    React.createElement('p', {
-      key: 'status',
-      style: { 
-        fontSize: '1rem', 
-        color: '#9ca3af',
-        fontWeight: '400'
-      }
-    }, '✅ Cache-Free Application Running')
-  ]));
-}
+import Index from './pages/Index';
+import Areas from './pages/Areas';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import Tools from './pages/Tools';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import BlogAdmin from './pages/BlogAdmin';
+import Appointment from './pages/Appointment';
+import NotFound from './pages/NotFound';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const root = createRoot(document.getElementById('root')!);
-root.render(React.createElement(SimpleApp));
+
+root.render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/areas" element={<Areas />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/blog-admin" element={<BlogAdmin />} />
+          <Route path="/appointment" element={<Appointment />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
+  </React.StrictMode>
+);

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ArrowDown } from 'lucide-react'
 
+console.log('[HeroSection] module v2 loaded')
+
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null)
   const [isImageLoaded, setIsImageLoaded] = useState(false)

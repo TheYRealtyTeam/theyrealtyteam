@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense, lazy } from 'react'
 import MainNavbar from '../components/navbar/MainNavbar'
-import HeroSection from '../components/HeroSection'
-import AboutSection from '../components/AboutSection'
-import ServicesSection from '../components/ServicesSection'
-import AreasSection from '../components/AreasSection'
-import TestimonialsSection from '../components/TestimonialsSection'
-import ContactSection from '../components/ContactSection'
 import Footer from '../components/Footer'
+
+// Component-level code splitting for home sections
+const HeroSection = lazy(() => import('../components/HeroSection'))
+const AboutSection = lazy(() => import('../components/AboutSection'))
+const ServicesSection = lazy(() => import('../components/ServicesSection'))
+const AreasSection = lazy(() => import('../components/AreasSection'))
+const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'))
+const ContactSection = lazy(() => import('../components/ContactSection'))
 
 const Index = () => {
   useEffect(() => {
@@ -17,12 +19,14 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <MainNavbar />
       <main>
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <AreasSection />
-        <TestimonialsSection />
-        <ContactSection />
+        <Suspense fallback={<div className="p-6 text-center">Loading…</div>}>
+          <HeroSection />
+          <AboutSection />
+          <ServicesSection />
+          <AreasSection />
+          <TestimonialsSection />
+          <ContactSection />
+        </Suspense>
       </main>
       <Footer />
     </div>

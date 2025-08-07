@@ -13,6 +13,7 @@ const ContactSection = lazy(() => import('../components/ContactSection'))
 const Index = () => {
   useEffect(() => {
     document.title = "Y Realty Team | Property Management Nationwide"
+    console.log('[Index] loaded v2')
   }, [])
 
   return (

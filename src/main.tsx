@@ -4,18 +4,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
-// Route-based code splitting with cache-busting
-const bust = 'v2025-08-07-1'
-const Index = lazy(() => import(`./pages/Index?${bust}`));
-const Areas = lazy(() => import(`./pages/Areas?${bust}`));
-const Contact = lazy(() => import(`./pages/Contact?${bust}`));
-const FAQ = lazy(() => import(`./pages/FAQ?${bust}`));
-const Tools = lazy(() => import(`./pages/Tools?${bust}`));
-const Blog = lazy(() => import(`./pages/Blog?${bust}`));
-const BlogPost = lazy(() => import(`./pages/BlogPost?${bust}`));
-const BlogAdmin = lazy(() => import(`./pages/BlogAdmin?${bust}`));
-const Appointment = lazy(() => import(`./pages/Appointment?${bust}`));
-const NotFound = lazy(() => import(`./pages/NotFound?${bust}`));
+// Route-based code splitting without per-import cache busting to avoid duplicate React contexts
+const Index = lazy(() => import('./pages/Index'));
+const Areas = lazy(() => import('./pages/Areas'));
+const Contact = lazy(() => import('./pages/Contact'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const Tools = lazy(() => import('./pages/Tools'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const BlogAdmin = lazy(() => import('./pages/BlogAdmin'));
+const Appointment = lazy(() => import('./pages/Appointment'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const root = createRoot(document.getElementById('root')!);
 

@@ -1,15 +1,14 @@
 import React, { useEffect, Suspense, lazy } from 'react'
 
-// Component-level code splitting for home sections with cache-busting
-const bust = 'v2025-08-07-1'
-const MainNavbar = lazy(() => import(`../components/navbar/MainNavbar?${bust}`))
-const Footer = lazy(() => import(`../components/Footer?${bust}`))
-const HeroSection = lazy(() => import(`../components/HeroSection?${bust}`))
-const AboutSection = lazy(() => import(`../components/AboutSection?${bust}`))
-const ServicesSection = lazy(() => import(`../components/ServicesSection?${bust}`))
-const AreasSection = lazy(() => import(`../components/AreasSection?${bust}`))
-const TestimonialsSection = lazy(() => import(`../components/TestimonialsSection?${bust}`))
-const ContactSection = lazy(() => import(`../components/ContactSection?${bust}`))
+// Component-level code splitting for home sections (no per-import cache-bust)
+const MainNavbar = lazy(() => import('../components/navbar/MainNavbar'))
+const Footer = lazy(() => import('../components/Footer'))
+const HeroSection = lazy(() => import('../components/HeroSection'))
+const AboutSection = lazy(() => import('../components/AboutSection'))
+const ServicesSection = lazy(() => import('../components/ServicesSection'))
+const AreasSection = lazy(() => import('../components/AreasSection'))
+const TestimonialsSection = lazy(() => import('../components/TestimonialsSection'))
+const ContactSection = lazy(() => import('../components/ContactSection'))
 
 const Index = () => {
   useEffect(() => {

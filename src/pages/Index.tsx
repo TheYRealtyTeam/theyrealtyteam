@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 // Eager imports to avoid multiple React instances during lazy chunking
 import MainNavbar from '../components/navbar/MainNavbar'
@@ -11,7 +11,7 @@ import TestimonialsSection from '../components/TestimonialsSection'
 import ContactSection from '../components/ContactSection'
 import Map from '../components/Map'
 const Index = () => {
-  useEffect(() => {
+  React.useEffect(() => {
     document.title = "Y Realty Team | Property Management Nationwide"
     console.log('[Index] loaded v4')
   }, [])

@@ -1,6 +1,6 @@
 
-import React, { useEffect } from 'react';
-import MainNavbar from '@/components/navbar/MainNavbar';
+import React from 'react';
+import MainNavbar from '@/components/navbar/MainNavbarV2';
 import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
 
@@ -21,7 +21,7 @@ const PageLayout = ({
 }: PageLayoutProps) => {
   
   // Set page title and meta description
-  useEffect(() => {
+  React.useEffect(() => {
     // Set page title
     document.title = `${title} | Y Realty Team`;
     

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Logo from '../Logo';
 import DesktopNav from './DesktopNav';
 import MobileNavMenu from './MobileNavMenu';
@@ -6,7 +6,7 @@ import { navLinks } from './navLinks';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const MainNavbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const MainNavbar = () => {
     setIsMenuOpen(false);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     // Close mobile menu on route/hash change
     setIsMenuOpen(false);
   }, [location.pathname, location.hash]);

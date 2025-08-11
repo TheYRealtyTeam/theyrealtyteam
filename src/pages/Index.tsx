@@ -1,15 +1,15 @@
 import React from 'react'
 
 // Eager imports to avoid multiple React instances during lazy chunking
-import MainNavbar from '../components/navbar/MainNavbar'
+import MainNavbar from '../components/navbar/MainNavbarV2'
 import Footer from '../components/Footer'
-import HeroSection from '../components/HeroSection'
-import AboutSection from '../components/AboutSection'
+import HeroSection from '../components/HeroSectionV2'
+import AboutSection from '../components/AboutSectionV2'
 import ServicesSection from '../components/ServicesSection'
 import AreasSection from '../components/AreasSection'
 import TestimonialsSection from '../components/TestimonialsSection'
 import ContactSection from '../components/ContactSection'
-import Map from '../components/Map'
+import Map from '../components/MapV2'
 const Index = () => {
   React.useEffect(() => {
     document.title = "Y Realty Team | Property Management Nationwide"

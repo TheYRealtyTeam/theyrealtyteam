@@ -15,20 +15,18 @@ export default defineConfig(({ mode }) => ({
     componentTagger(),
   ].filter(Boolean),
   optimizeDeps: {
-    // Exclude React from pre-bundling to prevent multiple copies
-    exclude: [
+    include: [
       'react',
       'react-dom',
       'react-dom/client',
       'react/jsx-runtime',
-      'react/jsx-dev-runtime'
+      'react/jsx-dev-runtime',
+      'react-router-dom'
     ],
   },
   resolve: {
     dedupe: ["react", "react-dom", "react-dom/client", "react/jsx-runtime", "react/jsx-dev-runtime"],
     alias: {
-      react: path.resolve(__dirname, "node_modules/react"),
-      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
       "@": path.resolve(__dirname, "./src"),
     },
   },

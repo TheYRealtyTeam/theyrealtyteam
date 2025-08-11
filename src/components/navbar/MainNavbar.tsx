@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Logo from '../Logo';
 import DesktopNav from './DesktopNav';
-import MobileMenu from './MobileMenu';
+import MobileNavMenu from './MobileNavMenu';
 import { navLinks } from './navLinks';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -60,7 +60,7 @@ const MainNavbar = () => {
             closeMenu={() => setIsMenuOpen(false)}
           />
 
-          <MobileMenu 
+          <MobileNavMenu 
             isMenuOpen={isMenuOpen}
             toggleMenu={() => setIsMenuOpen(!isMenuOpen)}
             closeMenu={() => setIsMenuOpen(false)}

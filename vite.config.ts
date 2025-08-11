@@ -14,6 +14,15 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-dom/client',
+      'react/jsx-runtime',
+      'react-router-dom'
+    ],
+  },
   resolve: {
     dedupe: ["react", "react-dom", "react-dom/client", "react/jsx-runtime"],
     alias: {

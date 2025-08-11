@@ -2,8 +2,8 @@ import React, { useEffect, Suspense, lazy } from 'react'
 
 // Component-level code splitting for home sections with cache-busting
 const bust = 'v2025-08-07-1'
-const MainNavbar = lazy(() => import('../components/navbar/MainNavbar'))
-const Footer = lazy(() => import('../components/Footer'))
+const MainNavbar = lazy(() => import(`../components/navbar/MainNavbar?${bust}`))
+const Footer = lazy(() => import(`../components/Footer?${bust}`))
 const HeroSection = lazy(() => import(`../components/HeroSection?${bust}`))
 const AboutSection = lazy(() => import(`../components/AboutSection?${bust}`))
 const ServicesSection = lazy(() => import(`../components/ServicesSection?${bust}`))

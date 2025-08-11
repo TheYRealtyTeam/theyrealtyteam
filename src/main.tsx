@@ -1,20 +1,20 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
-// Route-based code splitting without per-import cache busting to avoid duplicate React contexts
-const Index = lazy(() => import('./pages/Index'));
-const Areas = lazy(() => import('./pages/Areas'));
-const Contact = lazy(() => import('./pages/Contact'));
-const FAQ = lazy(() => import('./pages/FAQ'));
-const Tools = lazy(() => import('./pages/Tools'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
-const BlogAdmin = lazy(() => import('./pages/BlogAdmin'));
-const Appointment = lazy(() => import('./pages/Appointment'));
-const NotFound = lazy(() => import('./pages/NotFound'));
+// Eager page imports to avoid duplicate React contexts from dynamic chunks
+import Index from './pages/Index';
+import Areas from './pages/Areas';
+import Contact from './pages/Contact';
+import FAQ from './pages/FAQ';
+import Tools from './pages/Tools';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import BlogAdmin from './pages/BlogAdmin';
+import Appointment from './pages/Appointment';
+import NotFound from './pages/NotFound';
 
 const root = createRoot(document.getElementById('root')!);
 
@@ -22,7 +22,6 @@ root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
-        <Suspense fallback={<div style={{padding:'2rem',textAlign:'center'}}>Loading…</div>}>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/areas" element={<Areas />} />
@@ -35,7 +34,6 @@ root.render(
             <Route path="/appointment" element={<Appointment />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Suspense>
       </BrowserRouter>
     </ErrorBoundary>
   </React.StrictMode>

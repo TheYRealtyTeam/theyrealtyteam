@@ -10,7 +10,9 @@ export function isMobileOptimized(): boolean {
   }
 }
 
-// Backward compatibility: keep the old export name without being a real Hook
-export const useIsMobileOptimized = isMobileOptimized;
+// Backward compatibility: keep the old export name but as a plain function (no React hooks)
+export function useIsMobileOptimized(): boolean {
+  return isMobileOptimized();
+}
 
 export default isMobileOptimized;

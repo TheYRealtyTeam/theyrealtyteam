@@ -1,7 +1,7 @@
 const MOBILE_BREAKPOINT = 768;
 
-// Safe utility (NOT a React hook): can be called anywhere without React context
-export function useIsMobileOptimized(): boolean {
+// Pure utility (NOT a React hook) - safe to call anywhere
+export function isMobileOptimized(): boolean {
   if (typeof window === 'undefined') return false;
   try {
     return window.innerWidth < MOBILE_BREAKPOINT;
@@ -10,4 +10,7 @@ export function useIsMobileOptimized(): boolean {
   }
 }
 
-export default useIsMobileOptimized;
+// Backward compatibility: keep the old export name without being a real Hook
+export const useIsMobileOptimized = isMobileOptimized;
+
+export default isMobileOptimized;

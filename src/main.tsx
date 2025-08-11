@@ -2,6 +2,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
+
+// Debug: ensure single React instance
+// eslint-disable-next-line no-console
+console.log('[main] React version:', React.version);
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Eager page imports to avoid duplicate React contexts from dynamic chunks

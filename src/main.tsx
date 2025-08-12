@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
-import './hooks/useIsMobileOptimized'; // preload shim
+import './hooks/useIsMobileOptimized?ver=4.3'; // preload shim with version to bust cache
 
 // Debug: ensure single React instance
 // eslint-disable-next-line no-console

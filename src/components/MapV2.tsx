@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { Input } from '@/components/ui/input';
@@ -8,14 +8,14 @@ import { Button } from '@/components/ui/button';
 const STORAGE_KEY = 'mapbox_public_token';
 
 const Map: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<mapboxgl.Map | null>(null);
-  const [token, setToken] = useState<string>('');
-  const [editingToken, setEditingToken] = useState<string>('');
-  const [ready, setReady] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const mapRef = React.useRef<mapboxgl.Map | null>(null);
+  const [token, setToken] = React.useState<string>('');
+  const [editingToken, setEditingToken] = React.useState<string>('');
+  const [ready, setReady] = React.useState(false);
 
   // Load token from localStorage
-  useEffect(() => {
+  React.useEffect(() => {
     if (typeof window === 'undefined') return;
     const saved = localStorage.getItem(STORAGE_KEY) || '';
     setToken(saved);
@@ -23,7 +23,7 @@ const Map: React.FC = () => {
   }, []);
 
   // Initialize map when token available
-  useEffect(() => {
+  React.useEffect(() => {
     if (!containerRef.current) return;
     if (!token) return;
 

@@ -15,15 +15,8 @@ export default defineConfig(({ mode }) => ({
     componentTagger(),
   ].filter(Boolean),
   optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-dom/client',
-      'react/jsx-runtime',
-      'react/jsx-dev-runtime',
-      'react-router-dom'
-    ],
-    exclude: ['react', 'react-dom', 'react-router', 'react-router-dom'],
+    include: [],
+    exclude: ['react', 'react-dom', 'react-router', 'react-router-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
     force: true,
   },
   resolve: {

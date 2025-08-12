@@ -10,7 +10,7 @@ console.log('[main] React version:', React.version);
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Eager page imports to avoid duplicate React contexts from dynamic chunks
-import Index from './pages/Index';
+import Index from './pages/IndexV2';
 import Areas from './pages/Areas';
 import Contact from './pages/Contact';
 import FAQ from './pages/FAQ';

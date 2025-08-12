@@ -1,5 +1,9 @@
 // Hard shim: provide a non-React implementation to eliminate invalid hook calls.
-// Version: v4
+// Version: v4.1
+if (typeof window !== 'undefined') {
+  // Ensure we can verify the latest shim loaded
+  console.debug('[useIsMobileOptimized shim] module loaded v4.1')
+}
 
 // Returns true if viewport is under the mobile breakpoint.
 export function isMobileOptimized(): boolean {

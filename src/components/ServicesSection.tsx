@@ -1,9 +1,9 @@
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Building, Home, CheckCircle, Wrench, Users, FileText, DollarSign, Shield } from 'lucide-react'
 
 const ServicesSection = () => {
-  const [activeTab, setActiveTab] = useState("residential")
+  const [activeTab, setActiveTab] = React.useState("residential")
 
   const services = [
     {

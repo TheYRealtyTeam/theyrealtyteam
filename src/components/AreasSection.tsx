@@ -1,5 +1,5 @@
 
-import React from 'react';
+import * as React from 'react';
 import TechnologyFeatures from './areas/TechnologyFeatures';
 import ProcessSteps from './areas/ProcessSteps';
 import TeamPresence from './areas/TeamPresence';

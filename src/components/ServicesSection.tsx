@@ -1,5 +1,5 @@
 
-import React from 'react'
+import * as React from 'react'
 import { Building, Home, CheckCircle, Wrench, Users, FileText, DollarSign, Shield } from 'lucide-react'
 
 const ServicesSection = () => {

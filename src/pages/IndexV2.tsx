@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 
 // Eager imports to avoid multiple React instances during lazy chunking
 import MainNavbar from '../components/navbar/MainNavbarV2'

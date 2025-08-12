@@ -6,6 +6,11 @@ import { navLinks } from './navLinks';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const MainNavbar = () => {
+  // instance check
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line no-console
+    console.log('[MainNavbar] React instance same?', React === (window as any).__reactInstance)
+  }
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const location = useLocation();
   const navigate = useNavigate();

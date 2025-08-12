@@ -8,6 +8,8 @@ import './index.css';
 // Debug: ensure single React instance
 // eslint-disable-next-line no-console
 console.log('[main] React version:', React.version);
+// expose for instance checks
+;(globalThis as any).__reactInstance = React;
 import ErrorBoundary from './components/ErrorBoundary';
 
 // Eager page imports to avoid duplicate React contexts from dynamic chunks

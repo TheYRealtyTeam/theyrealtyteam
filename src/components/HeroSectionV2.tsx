@@ -1,7 +1,11 @@
 import React from 'react'
 import { ArrowDown } from 'lucide-react'
 
-console.log('[HeroSection] module v2 loaded')
+if (typeof window !== 'undefined') {
+  // eslint-disable-next-line no-console
+  console.log('[HeroSection] React instance same?', React === (window as any).__reactInstance)
+}
+
 
 const HeroSection = () => {
   const heroRef = React.useRef<HTMLDivElement>(null)

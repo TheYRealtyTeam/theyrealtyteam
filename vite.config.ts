@@ -36,6 +36,9 @@ export default defineConfig(({ mode }) => ({
     ],
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // React default export shim to prevent ESM default import errors
+      "react-original": path.resolve(__dirname, "./node_modules/react"),
+      "react": path.resolve(__dirname, "./src/shims/react-compat.ts"),
     },
   },
 }));

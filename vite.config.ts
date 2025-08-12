@@ -23,6 +23,8 @@ export default defineConfig(({ mode }) => ({
       'react/jsx-dev-runtime',
       'react-router-dom'
     ],
+    exclude: ['react', 'react-dom', 'react-router', 'react-router-dom'],
+    force: true,
   },
   resolve: {
     dedupe: [

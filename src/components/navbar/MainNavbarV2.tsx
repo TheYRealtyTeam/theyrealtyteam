@@ -3,7 +3,7 @@ import Logo from '../Logo';
 import DesktopNav from './DesktopNav';
 import MobileNavMenu from './MobileNavMenu';
 import { navLinks } from './navLinks';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const MainNavbar = () => {
   // instance check
@@ -54,9 +54,9 @@ const MainNavbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 backdrop-blur shadow-sm">
       <div className="container-custom">
         <div className="flex items-center justify-between py-3">
-          <a href="/" aria-label="Y Realty Team Home" className="flex items-center gap-3">
+          <Link to="/" aria-label="Y Realty Team Home" className="flex items-center gap-3">
             <Logo />
-          </a>
+          </Link>
 
           <DesktopNav 
             navLinks={navLinks}

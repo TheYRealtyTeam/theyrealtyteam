@@ -1,19 +1,34 @@
 import '@testing-library/jest-dom';
 
-// Mock IntersectionObserver
+// Mock IntersectionObserver with proper implementation
 global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  readonly root: Element | null = null;
+  readonly rootMargin: string = '';
+  readonly thresholds: ReadonlyArray<number> = [];
+
+  constructor(
+    callback: IntersectionObserverCallback,
+    options?: IntersectionObserverInit
+  ) {
+    // Mock implementation
+  }
+
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
 };
 
-// Mock ResizeObserver  
+// Mock ResizeObserver with proper implementation
 global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  constructor(callback: ResizeObserverCallback) {
+    // Mock implementation
+  }
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
 };
 
 // Mock window.matchMedia

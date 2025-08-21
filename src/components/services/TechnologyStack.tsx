@@ -6,12 +6,12 @@ const TechnologyStack = () => {
   const technologies = [
     {
       icon: <Building className="h-10 w-10 text-yrealty-navy" />,
-      title: "AppFolio",
+      title: "Property Management Software",
       description: "Industry-leading property management software for comprehensive operations management"
     },
     {
       icon: <Search className="h-10 w-10 text-yrealty-navy" />,
-      title: "Site Audit Pro",
+      title: "Inspection Technology",
       description: "Advanced property inspection technology with detailed reporting and photo documentation"
     },
     {

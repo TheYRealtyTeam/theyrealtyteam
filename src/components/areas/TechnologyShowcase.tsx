@@ -13,7 +13,7 @@ const TechnologyShowcase = () => {
           <div className="bg-gradient-to-br from-yrealty-accent to-yrealty-navy rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-6">
             <Monitor className="h-12 w-12 text-white" />
           </div>
-          <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">AppFolio Platform</h4>
+          <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">Management Platform</h4>
           <p className="text-gray-600 mb-4">Industry-leading property management software providing comprehensive operational management, financial reporting, and tenant communication tools.</p>
           <ul className="text-sm text-gray-600 space-y-1">
             <li>• Automated rent collection</li>
@@ -27,7 +27,7 @@ const TechnologyShowcase = () => {
           <div className="bg-gradient-to-br from-yrealty-accent to-yrealty-navy rounded-2xl w-24 h-24 flex items-center justify-center mx-auto mb-6">
             <Smartphone className="h-12 w-12 text-white" />
           </div>
-          <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">Site Audit Pro</h4>
+          <h4 className="text-2xl font-bold mb-4 text-yrealty-navy">Inspection Technology</h4>
           <p className="text-gray-600 mb-4">Advanced property inspection technology with detailed photo documentation, condition reports, and preventive maintenance alerts.</p>
           <ul className="text-sm text-gray-600 space-y-1">
             <li>• Digital inspection reports</li>

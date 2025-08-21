@@ -6,7 +6,7 @@ const ProcessSteps = () => {
     {
       step: "1",
       title: "Property Assessment",
-      description: "Remote and local evaluation using Site Audit Pro technology and local experts"
+      description: "Remote and local evaluation using advanced inspection technology and local experts"
     },
     {
       step: "2", 
@@ -21,7 +21,7 @@ const ProcessSteps = () => {
     {
       step: "4",
       title: "Technology Setup",
-      description: "AppFolio integration and proprietary platform configuration for your property"
+      description: "Advanced technology integration and proprietary platform configuration for your property"
     },
     {
       step: "5",

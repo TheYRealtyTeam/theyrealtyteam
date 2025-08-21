@@ -22,14 +22,14 @@ const coreServices: Service[] = [
   },
   {
     title: "Comprehensive Property Inspections",
-    description: "Monthly detailed inspections using Site Audit Pro technology, identifying maintenance issues before they become costly problems and ensuring tenant compliance.",
+    description: "Monthly detailed inspections using advanced digital technology, identifying maintenance issues before they become costly problems and ensuring tenant compliance.",
     icon: <ClipboardCheck className="h-12 w-12 text-yrealty-accent" />,
     features: ["Monthly detailed reports", "Photo documentation", "Preventive maintenance alerts", "Code compliance monitoring"],
     pricing: "Included in management fee"
   },
   {
     title: "Advanced Rent Collection",
-    description: "Automated rent collection system with online payments, late fee management, and detailed financial tracking through AppFolio integration.",
+    description: "Automated rent collection system with online payments, late fee management, and detailed financial tracking through our integrated technology platform.",
     icon: <Wallet className="h-12 w-12 text-yrealty-accent" />,
     features: ["Online payment portal", "Automated late fees", "Real-time tracking", "99.2% collection rate"],
     pricing: "No additional fees"

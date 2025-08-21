@@ -9,7 +9,7 @@ const TechnologyFeatures = () => {
     {
       icon: <Monitor className="h-8 w-8 text-yrealty-accent" />,
       title: "Advanced Technology Stack",
-      description: "AppFolio property management software, Site Audit Pro inspections, and our proprietary platform ensure seamless remote management across all states.",
+      description: "Advanced property management software, digital inspection technology, and our proprietary platform ensure seamless remote management across all states.",
       details: [
         "Real-time property monitoring",
         "Digital inspection reports",

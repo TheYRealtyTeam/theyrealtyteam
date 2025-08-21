@@ -117,10 +117,25 @@ const CalculatorsSection = () => {
       <div className="container-custom">
         <Tabs defaultValue="rental" className="w-full">
           <div className="flex justify-center mb-8">
-            <TabsList className={`flex flex-wrap ${isMobile ? 'flex-col w-full' : 'grid-cols-3'} max-w-2xl w-full`}>
-              <TabsTrigger value="rental" className="flex-1">Enhanced Rental Calculator</TabsTrigger>
-              <TabsTrigger value="mortgage" className="flex-1">Mortgage Calculator</TabsTrigger>
-              <TabsTrigger value="roi" className="flex-1">ROI Calculator</TabsTrigger>
+            <TabsList className={`${isMobile ? 'flex-col w-full space-y-1' : 'inline-flex'} h-auto p-2 bg-gradient-to-r from-yrealty-navy/5 to-yrealty-blue/5 border border-yrealty-navy/20 rounded-xl shadow-lg`}>
+              <TabsTrigger 
+                value="rental" 
+                className="flex-1 px-6 py-4 rounded-lg font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yrealty-navy data-[state=active]:to-yrealty-blue data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/50 border-0"
+              >
+                Enhanced Rental Calculator
+              </TabsTrigger>
+              <TabsTrigger 
+                value="mortgage" 
+                className="flex-1 px-6 py-4 rounded-lg font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yrealty-navy data-[state=active]:to-yrealty-blue data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/50 border-0"
+              >
+                Mortgage Calculator
+              </TabsTrigger>
+              <TabsTrigger 
+                value="roi" 
+                className="flex-1 px-6 py-4 rounded-lg font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yrealty-navy data-[state=active]:to-yrealty-blue data-[state=active]:text-white data-[state=active]:shadow-md hover:bg-white/50 border-0"
+              >
+                ROI Calculator
+              </TabsTrigger>
             </TabsList>
           </div>
 

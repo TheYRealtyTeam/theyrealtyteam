@@ -16,7 +16,13 @@ interface MortgageLoanDetailsStepProps {
 }
 
 const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDetailsStepProps) => {
+  const [displayValues, setDisplayValues] = React.useState<{[key: string]: string}>({});
+
   const handleNumberChange = (field: keyof MortgageCalculatorState, value: string) => {
+    // Store the display value to preserve user typing (like trailing zeros)
+    setDisplayValues(prev => ({ ...prev, [field]: value }));
+    
+    // Parse for calculations
     const numericValue = parseInputValue(value);
     updateState({ [field]: numericValue });
   };
@@ -35,7 +41,7 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                 <Input
                   id="propertyValue"
                   type="number"
-                  value={formatInputValue(state.propertyValue)}
+                  value={formatInputValue(state.propertyValue, displayValues.propertyValue)}
                   onChange={(e) => handleNumberChange('propertyValue', e.target.value)}
                   className="text-lg"
                 />
@@ -66,7 +72,7 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                   min="0"
                   max="100"
                   step="0.5"
-                  value={formatInputValue(state.downPaymentPercent)}
+                  value={formatInputValue(state.downPaymentPercent, displayValues.downPaymentPercent)}
                   onChange={(e) => handleNumberChange('downPaymentPercent', e.target.value)}
                   className="text-lg"
                 />
@@ -77,7 +83,7 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                 <Input
                   id="downPaymentAmount"
                   type="number"
-                  value={formatInputValue(state.downPaymentAmount)}
+                  value={formatInputValue(state.downPaymentAmount, displayValues.downPaymentAmount)}
                   onChange={(e) => handleNumberChange('downPaymentAmount', e.target.value)}
                   className="text-lg"
                 />

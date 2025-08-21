@@ -1,12 +1,25 @@
 
-// Enhanced input sanitization function
+// Enhanced input sanitization function with comprehensive XSS protection
 export const sanitizeInput = (input: string): string => {
   return input
     .trim()
-    .replace(/[<>]/g, '') // Remove potential XSS characters
-    .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/data:/gi, '') // Remove data: protocol
-    .replace(/vbscript:/gi, ''); // Remove vbscript: protocol
+    // Remove HTML tags and dangerous characters
+    .replace(/<[^>]*>/g, '')
+    // Remove script-related protocols
+    .replace(/javascript:/gi, '')
+    .replace(/data:/gi, '')
+    .replace(/vbscript:/gi, '')
+    .replace(/onload=/gi, '')
+    .replace(/onerror=/gi, '')
+    .replace(/onclick=/gi, '')
+    .replace(/onmouseover=/gi, '')
+    // Remove SQL injection attempts
+    .replace(/('|(\\')|(;)|(%27)|(%3B)|(")|(\\"))/gi, '')
+    // Remove potential script tags in various encodings
+    .replace(/(%3C)|(%3E)|(%22)|(%27)|(%2F)/gi, '')
+    // Remove null bytes and other control characters
+    .replace(/\0/g, '')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
 };
 
 export const validateEmail = (email: string): boolean => {

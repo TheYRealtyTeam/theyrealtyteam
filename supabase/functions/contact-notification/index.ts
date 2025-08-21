@@ -1,138 +1,312 @@
-
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { Resend } from "npm:resend@2.0.0";
 
+// CORS headers
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Content-Type': 'application/json',
 };
 
-// Handle CORS preflight requests
-function handleCors(req: Request) {
-  if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: corsHeaders,
-    });
+// Security utilities
+class EdgeSecurityUtils {
+  static async checkRateLimit(
+    supabaseClient: any,
+    identifier: string,
+    maxRequests: number,
+    windowMs: number
+  ): Promise<{ allowed: boolean; remaining: number }> {
+    const now = Date.now();
+    const windowStart = now - windowMs;
+    
+    try {
+      const { data: recentRequests } = await supabaseClient
+        .from('rate_limit_log')
+        .select('*')
+        .eq('identifier', identifier)
+        .gte('created_at', new Date(windowStart).toISOString());
+
+      const requestCount = recentRequests?.length || 0;
+      const allowed = requestCount < maxRequests;
+      
+      if (allowed) {
+        await supabaseClient
+          .from('rate_limit_log')
+          .insert({ identifier, created_at: new Date().toISOString() });
+      }
+
+      return { allowed, remaining: Math.max(0, maxRequests - requestCount - 1) };
+    } catch (error) {
+      console.error('Rate limiting error:', error);
+      return { allowed: true, remaining: maxRequests };
+    }
+  }
+
+  static sanitizeInput(input: string): string {
+    if (!input || typeof input !== 'string') return '';
+    
+    return input
+      .trim()
+      .replace(/<[^>]*>/g, '')
+      .replace(/javascript:/gi, '')
+      .replace(/data:/gi, '')
+      .replace(/vbscript:/gi, '')
+      .replace(/onload=/gi, '')
+      .replace(/onerror=/gi, '')
+      .replace(/onclick=/gi, '')
+      .replace(/onmouseover=/gi, '')
+      .replace(/('|(\\')|(;)|(%27)|(%3B)|(")|(\\"))/gi, '')
+      .replace(/(%3C)|(%3E)|(%22)|(%27)|(%2F)/gi, '')
+      .replace(/\0/g, '')
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '');
+  }
+
+  static async logSecurityEvent(
+    supabaseClient: any,
+    event: string,
+    details: Record<string, any>,
+    severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'
+  ): Promise<void> {
+    try {
+      await supabaseClient
+        .from('security_logs')
+        .insert({
+          event,
+          details,
+          severity,
+          created_at: new Date().toISOString()
+        });
+    } catch (error) {
+      console.error('Failed to log security event:', error);
+    }
   }
 }
 
-// Initialize Supabase client with environment variables
-const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-const resendApiKey = Deno.env.get("RESEND_API_KEY") || "";
+// Handle CORS preflight requests
+const handleCors = (req: Request) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+};
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
-const resend = new Resend(resendApiKey);
+// Initialize Supabase and Resend clients
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+);
 
-// Input sanitization function
-function sanitizeInput(input: string): string {
-  return input.trim().replace(/[<>]/g, '');
+const resend = new Resend(Deno.env.get('RESEND_API_KEY') ?? '');
+
+interface ContactSubmissionData {
+  name: string;
+  email: string;
+  phone?: string;
+  property_type: string;
+  message: string;
 }
 
-// Function to send an email notification using Resend
-async function sendEmailNotification(submissionData: any) {
-  const recipientEmail = "info@theYteam.co";
-  const subject = `New Contact Form Submission from ${submissionData.name}`;
-  
-  // Create HTML email body with submission details
+// Utility function to sanitize input
+function sanitizeInput(input: string): string {
+  return EdgeSecurityUtils.sanitizeInput(input);
+}
+
+// Send email notification
+async function sendEmailNotification(submissionData: ContactSubmissionData) {
+  if (!Deno.env.get('RESEND_API_KEY')) {
+    console.log('No Resend API key configured, skipping email notification');
+    return { success: false, reason: 'No API key' };
+  }
+
+  const sanitizedData = {
+    name: sanitizeInput(submissionData.name),
+    email: sanitizeInput(submissionData.email),
+    phone: submissionData.phone ? sanitizeInput(submissionData.phone) : 'Not provided',
+    property_type: sanitizeInput(submissionData.property_type),
+    message: sanitizeInput(submissionData.message)
+  };
+
   const htmlBody = `
     <h2>New Contact Form Submission</h2>
-    <p><strong>Name:</strong> ${submissionData.name}</p>
-    <p><strong>Email:</strong> ${submissionData.email}</p>
-    <p><strong>Phone:</strong> ${submissionData.phone || "Not provided"}</p>
-    <p><strong>Property Type:</strong> ${submissionData.property_type}</p>
+    <p><strong>Name:</strong> ${sanitizedData.name}</p>
+    <p><strong>Email:</strong> ${sanitizedData.email}</p>
+    <p><strong>Phone:</strong> ${sanitizedData.phone}</p>
+    <p><strong>Property Type:</strong> ${sanitizedData.property_type}</p>
     <p><strong>Message:</strong></p>
-    <p>${submissionData.message}</p>
+    <p>${sanitizedData.message}</p>
     <p><small>Submitted on: ${new Date().toLocaleString()}</small></p>
   `;
-  
+
   try {
-    // Send email using Resend
-    const emailResponse = await resend.emails.send({
-      from: "Y Realty Team <no-reply@theYteam.co>",
-      to: [recipientEmail],
-      subject,
+    const { data, error } = await resend.emails.send({
+      from: 'Y Realty Team <no-reply@theYteam.co>',
+      to: ['info@theYteam.co'],
+      subject: `New Contact Form Submission from ${sanitizedData.name}`,
       html: htmlBody,
     });
-    
-    console.log("Email notification sent successfully:", emailResponse);
-    return { success: true, data: emailResponse };
+
+    if (error) {
+      console.error('Error sending email:', error);
+      return { success: false, error };
+    }
+
+    console.log('Email sent successfully:', data);
+    return { success: true, data };
   } catch (error) {
-    console.error("Failed to send email notification:", error);
-    return { success: false, error: error.message };
+    console.error('Email sending error:', error);
+    return { success: false, error };
   }
 }
 
 serve(async (req) => {
-  // Handle CORS
+  // Handle CORS preflight requests
   const corsResponse = handleCors(req);
   if (corsResponse) return corsResponse;
 
   try {
-    // Get the form data from the request
-    const formData = await req.json();
-
-    // Validate required fields
-    if (!formData.name || !formData.email || !formData.property_type || !formData.message) {
-      throw new Error("Missing required fields");
+    console.log('Processing contact form submission...');
+    
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    
+    // Rate limiting - 3 requests per 15 minutes per IP
+    const rateLimit = await EdgeSecurityUtils.checkRateLimit(
+      supabase, 
+      `contact-${clientIP}`, 
+      3, 
+      15 * 60 * 1000 // 15 minutes
+    );
+    
+    if (!rateLimit.allowed) {
+      await EdgeSecurityUtils.logSecurityEvent(
+        supabase,
+        'rate_limit_exceeded',
+        { ip: clientIP, endpoint: 'contact-notification' },
+        'medium'
+      );
+      
+      return new Response(
+        JSON.stringify({ 
+          error: 'Rate limit exceeded. Please wait before submitting again.',
+          remaining: rateLimit.remaining 
+        }),
+        { 
+          status: 429, 
+          headers: { ...corsHeaders, 'X-RateLimit-Remaining': rateLimit.remaining.toString() } 
+        }
+      );
     }
 
-    // Sanitize inputs
-    const submissionData = {
-      name: sanitizeInput(formData.name),
-      email: sanitizeInput(formData.email),
-      phone: formData.phone ? sanitizeInput(formData.phone) : null,
-      property_type: sanitizeInput(formData.property_type),
-      message: sanitizeInput(formData.message),
-      created_at: new Date().toISOString(),
+    // Parse request body
+    let requestData: ContactSubmissionData;
+    try {
+      requestData = await req.json();
+    } catch (parseError) {
+      console.error('JSON parsing error:', parseError);
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    const { name, email, property_type, message, phone } = requestData;
+
+    // Validate required fields
+    if (!name || !email || !property_type || !message) {
+      await EdgeSecurityUtils.logSecurityEvent(
+        supabase,
+        'invalid_contact_submission',
+        { ip: clientIP, missing_fields: { name: !name, email: !email, property_type: !property_type, message: !message } },
+        'low'
+      );
+      
+      return new Response(
+        JSON.stringify({ error: 'Missing required fields: name, email, property_type, and message are required' }),
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Sanitize input data
+    const sanitizedData = {
+      name: sanitizeInput(name),
+      email: sanitizeInput(email),
+      phone: phone ? sanitizeInput(phone) : null,
+      property_type: sanitizeInput(property_type),
+      message: sanitizeInput(message)
     };
 
-    console.log("Contact form submission received:", submissionData);
+    console.log('Sanitized submission data:', { 
+      ...sanitizedData, 
+      email: sanitizedData.email.substring(0, 3) + '***' 
+    });
 
-    // Store the submission in Supabase
+    // Insert the sanitized data into Supabase
     const { data, error } = await supabase
-      .from("contact_submissions")
-      .insert([submissionData])
+      .from('contact_submissions')
+      .insert(sanitizedData)
       .select();
 
     if (error) {
-      console.error("Error storing contact submission:", error);
-      throw new Error("Failed to store contact submission");
+      console.error('Supabase insertion error:', error);
+      
+      await EdgeSecurityUtils.logSecurityEvent(
+        supabase,
+        'database_error',
+        { ip: clientIP, error: error.message },
+        'high'
+      );
+      
+      return new Response(
+        JSON.stringify({ error: 'Failed to save contact submission' }),
+        { status: 500, headers: corsHeaders }
+      );
     }
 
-    // Send email notification if Resend API key is available
-    let emailResult = { success: false, error: "Resend API key not configured" };
-    if (resendApiKey) {
-      emailResult = await sendEmailNotification(submissionData);
-    }
+    console.log('Contact submission saved to database:', data);
+
+    // Send email notification if Resend API key is configured
+    const emailResult = await sendEmailNotification(sanitizedData);
     
+    // Log successful submission
+    await EdgeSecurityUtils.logSecurityEvent(
+      supabase,
+      'contact_form_submitted',
+      { 
+        ip: clientIP, 
+        email_sent: emailResult.success, 
+        submission_id: data[0]?.id 
+      },
+      'low'
+    );
+
     return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: "Contact message received and stored",
-        emailSent: emailResult.success,
+      JSON.stringify({
+        success: true,
+        message: 'Contact form submitted successfully',
         data: data,
-        recipientEmail: "info@theYteam.co" 
+        email_sent: emailResult.success,
+        recipientEmail: 'info@theYteam.co'
       }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
+      { 
+        status: 200, 
+        headers: { ...corsHeaders, 'X-RateLimit-Remaining': rateLimit.remaining.toString() } 
       }
     );
+
   } catch (error) {
-    console.error("Error processing contact form:", error);
+    console.error('Unexpected error:', error);
+    
+    // Log critical error
+    await EdgeSecurityUtils.logSecurityEvent(
+      supabase,
+      'unexpected_error',
+      { error: error instanceof Error ? error.message : 'Unknown error' },
+      'critical'
+    );
     
     return new Response(
-      JSON.stringify({ 
-        error: error.message || "Internal server error",
-        success: false 
-      }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
-      }
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: corsHeaders }
     );
   }
 });

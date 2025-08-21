@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { SecurityUtils, RATE_LIMITS } from '@/utils/security';
 import { 
   sanitizeInput, 
   validateEmail, 
@@ -27,15 +28,19 @@ export const useContactSectionForm = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
-    // Apply input filtering based on field type
-    let filteredValue = value;
-    if (name === 'name') {
-      filteredValue = value.replace(/[^a-zA-Z\s\-\.']/g, '');
-    } else if (name === 'phone') {
-      filteredValue = value.replace(/[^0-9\s\-\+\(\)\.]/g, '');
+    // Apply advanced security validation during input
+    const securityResult = SecurityUtils.validateSecureInput(value, {
+      maxLength: name === 'message' ? 2000 : name === 'email' ? 254 : 100,
+      allowSpecialChars: name === 'message' || name === 'email' || name === 'phone',
+      allowHtml: false
+    });
+    
+    if (!securityResult.isValid && securityResult.errors.length > 0) {
+      // Log security concerns but don't block typing completely
+      console.warn('Input security validation:', securityResult.errors);
     }
     
-    setFormData(prev => ({ ...prev, [name]: filteredValue }));
+    setFormData(prev => ({ ...prev, [name]: securityResult.sanitized }));
   };
 
   const validateForm = () => {
@@ -102,7 +107,21 @@ export const useContactSectionForm = () => {
     
     if (isSubmitting) return;
 
-    // Rate limiting check
+    // Enhanced client-side rate limiting with user identification
+    const clientId = await SecurityUtils.hashSensitiveData(formData.email || 'anonymous');
+    const rateLimitCheck = SecurityUtils.checkRateLimit(clientId, RATE_LIMITS.CONTACT_FORM);
+    
+    if (!rateLimitCheck) {
+      toast({
+        title: "Rate limit exceeded",
+        description: "Please wait before submitting another message. This helps us prevent spam.",
+        variant: "destructive",
+        duration: 5000,
+      });
+      return;
+    }
+
+    // Additional rate limiting check
     const now = Date.now();
     if (now - lastSubmissionTime < RATE_LIMIT_MS) {
       toast({
@@ -119,7 +138,7 @@ export const useContactSectionForm = () => {
     setIsSubmitting(true);
     
     try {
-      // Sanitize all inputs
+      // Comprehensive input sanitization
       const sanitizedData = {
         name: sanitizeInput(formData.name),
         email: sanitizeInput(formData.email),
@@ -128,7 +147,9 @@ export const useContactSectionForm = () => {
         message: sanitizeInput(formData.message)
       };
 
-      // Use direct fetch to the edge function with proper error handling
+      console.log('Submitting contact form with enhanced security');
+
+      // Submit to secure edge function
       const response = await fetch(
         'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
         {
@@ -140,9 +161,14 @@ export const useContactSectionForm = () => {
         }
       );
       
+      const result = await response.json();
+      
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'Failed to send message');
+        // Handle specific error types
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please wait before submitting again.');
+        }
+        throw new Error(result.error || 'Failed to send message');
       }
       
       // Update rate limiting timestamp
@@ -162,11 +188,23 @@ export const useContactSectionForm = () => {
         propertyType: '',
         message: ''
       });
-    } catch (error) {
+
+    } catch (error: any) {
       console.error('Error submitting form:', error);
+      
+      let errorMessage = "We couldn't send your message. Please try again.";
+      
+      if (error.message.includes('Rate limit')) {
+        errorMessage = "Too many requests. Please wait before submitting again.";
+      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+        errorMessage = "Network error. Please check your connection and try again.";
+      } else if (error.message.includes('validation')) {
+        errorMessage = "Please check your input and try again.";
+      }
+      
       toast({
         title: "Something went wrong",
-        description: "We couldn't send your message. Please try again.",
+        description: errorMessage,
         variant: "destructive",
         duration: 5000,
       });

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Home, MapPin, DollarSign, TrendingUp } from 'lucide-react';
 import { CalculatorState, CalculatorResults } from '../types';
 import QuickInsightCard from '../components/QuickInsightCard';
+import { formatInputValue, parseInputValue } from '../../utils/numberInputUtils';
 
 interface PropertyDetailsStepProps {
   state: CalculatorState;
@@ -15,7 +16,12 @@ interface PropertyDetailsStepProps {
 }
 
 const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsStepProps) => {
-  const handleChange = (field: keyof CalculatorState, value: string | number) => {
+  const handleNumberChange = (field: keyof CalculatorState, value: string) => {
+    const numericValue = parseInputValue(value);
+    updateState({ [field]: numericValue });
+  };
+
+  const handleTextChange = (field: keyof CalculatorState, value: string) => {
     updateState({ [field]: value });
   };
 
@@ -40,8 +46,8 @@ const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsSte
                   <Input
                     id="propertyValue"
                     type="number"
-                    value={state.propertyValue}
-                    onChange={(e) => handleChange('propertyValue', parseFloat(e.target.value) || 0)}
+                    value={formatInputValue(state.propertyValue)}
+                    onChange={(e) => handleNumberChange('propertyValue', e.target.value)}
                     className="pl-10"
                     placeholder="300,000"
                   />
@@ -54,7 +60,7 @@ const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsSte
                 </Label>
                 <Select 
                   value={state.propertyType} 
-                  onValueChange={(value) => handleChange('propertyType', value)}
+                  onValueChange={(value) => handleTextChange('propertyType', value)}
                 >
                   <SelectTrigger className="mt-1">
                     <SelectValue placeholder="Select property type" />
@@ -80,7 +86,7 @@ const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsSte
                   id="location"
                   type="text"
                   value={state.location}
-                  onChange={(e) => handleChange('location', e.target.value)}
+                  onChange={(e) => handleTextChange('location', e.target.value)}
                   className="pl-10"
                   placeholder="e.g., Atlanta, GA"
                 />

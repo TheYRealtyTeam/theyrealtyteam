@@ -7,6 +7,7 @@ import { Slider } from '@/components/ui/slider';
 import { Calculator, Percent, Calendar, DollarSign } from 'lucide-react';
 import { CalculatorState, CalculatorResults } from '../types';
 import QuickInsightCard from '../components/QuickInsightCard';
+import { formatInputValue, parseInputValue } from '../../utils/numberInputUtils';
 
 interface FinancingStepProps {
   state: CalculatorState;
@@ -15,7 +16,12 @@ interface FinancingStepProps {
 }
 
 const FinancingStep = ({ state, updateState, results }: FinancingStepProps) => {
-  const handleChange = (field: keyof CalculatorState, value: string | number) => {
+  const handleNumberChange = (field: keyof CalculatorState, value: string) => {
+    const numericValue = parseInputValue(value);
+    updateState({ [field]: numericValue });
+  };
+
+  const handleSliderChange = (field: keyof CalculatorState, value: number) => {
     updateState({ [field]: value });
   };
 
@@ -43,7 +49,7 @@ const FinancingStep = ({ state, updateState, results }: FinancingStepProps) => {
               </div>
               <Slider
                 value={[state.downPaymentPercent]}
-                onValueChange={(value) => handleChange('downPaymentPercent', value[0])}
+                onValueChange={(value) => handleSliderChange('downPaymentPercent', value[0])}
                 max={50}
                 min={5}
                 step={1}
@@ -67,8 +73,8 @@ const FinancingStep = ({ state, updateState, results }: FinancingStepProps) => {
                     id="interestRate"
                     type="number"
                     step="0.1"
-                    value={state.interestRate}
-                    onChange={(e) => handleChange('interestRate', parseFloat(e.target.value) || 0)}
+                    value={formatInputValue(state.interestRate)}
+                    onChange={(e) => handleNumberChange('interestRate', e.target.value)}
                     className="pl-10"
                     placeholder="4.5"
                   />
@@ -84,8 +90,8 @@ const FinancingStep = ({ state, updateState, results }: FinancingStepProps) => {
                   <Input
                     id="loanTerm"
                     type="number"
-                    value={state.loanTerm}
-                    onChange={(e) => handleChange('loanTerm', parseFloat(e.target.value) || 0)}
+                    value={formatInputValue(state.loanTerm)}
+                    onChange={(e) => handleNumberChange('loanTerm', e.target.value)}
                     className="pl-10"
                     placeholder="30"
                   />

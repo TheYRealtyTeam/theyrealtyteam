@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DollarSign, Home, TrendingUp } from 'lucide-react';
 import QuickInsightCard from '../../components/QuickInsightCard';
 import { MortgageCalculatorState, MortgageResults } from '../../types/mortgageTypes';
+import { formatInputValue, parseInputValue } from '../../../utils/numberInputUtils';
 
 interface MortgageLoanDetailsStepProps {
   state: MortgageCalculatorState;
@@ -15,8 +16,8 @@ interface MortgageLoanDetailsStepProps {
 }
 
 const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDetailsStepProps) => {
-  const handleChange = (field: keyof MortgageCalculatorState, value: string | number) => {
-    const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value;
+  const handleNumberChange = (field: keyof MortgageCalculatorState, value: string) => {
+    const numericValue = parseInputValue(value);
     updateState({ [field]: numericValue });
   };
 
@@ -34,8 +35,8 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                 <Input
                   id="propertyValue"
                   type="number"
-                  value={state.propertyValue}
-                  onChange={(e) => handleChange('propertyValue', e.target.value)}
+                  value={formatInputValue(state.propertyValue)}
+                  onChange={(e) => handleNumberChange('propertyValue', e.target.value)}
                   className="text-lg"
                 />
               </div>
@@ -65,8 +66,8 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                   min="0"
                   max="100"
                   step="0.5"
-                  value={state.downPaymentPercent}
-                  onChange={(e) => handleChange('downPaymentPercent', e.target.value)}
+                  value={formatInputValue(state.downPaymentPercent)}
+                  onChange={(e) => handleNumberChange('downPaymentPercent', e.target.value)}
                   className="text-lg"
                 />
               </div>
@@ -76,8 +77,8 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                 <Input
                   id="downPaymentAmount"
                   type="number"
-                  value={state.downPaymentAmount}
-                  onChange={(e) => handleChange('downPaymentAmount', e.target.value)}
+                  value={formatInputValue(state.downPaymentAmount)}
+                  onChange={(e) => handleNumberChange('downPaymentAmount', e.target.value)}
                   className="text-lg"
                 />
               </div>

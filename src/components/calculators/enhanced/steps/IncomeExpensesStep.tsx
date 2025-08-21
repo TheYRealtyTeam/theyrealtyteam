@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { DollarSign, TrendingDown, Home, Wrench } from 'lucide-react';
 import { CalculatorState, CalculatorResults } from '../types';
 import QuickInsightCard from '../components/QuickInsightCard';
+import { formatInputValue, parseInputValue } from '../../utils/numberInputUtils';
 
 interface IncomeExpensesStepProps {
   state: CalculatorState;
@@ -15,7 +16,12 @@ interface IncomeExpensesStepProps {
 }
 
 const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepProps) => {
-  const handleChange = (field: keyof CalculatorState, value: string | number | boolean) => {
+  const handleNumberChange = (field: keyof CalculatorState, value: string) => {
+    const numericValue = parseInputValue(value);
+    updateState({ [field]: numericValue });
+  };
+
+  const handleBooleanChange = (field: keyof CalculatorState, value: boolean) => {
     updateState({ [field]: value });
   };
 
@@ -41,7 +47,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <span className="text-xs text-gray-500">Monthly</span>
                     <Switch 
                       checked={state.isYearly}
-                      onCheckedChange={(checked) => handleChange('isYearly', checked)}
+                      onCheckedChange={(checked) => handleBooleanChange('isYearly', checked)}
                       className="data-[state=checked]:bg-yrealty-navy"
                     />
                     <span className="text-xs text-gray-500">Annual</span>
@@ -51,8 +57,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="number"
-                    value={state.monthlyRent}
-                    onChange={(e) => handleChange('monthlyRent', parseFloat(e.target.value) || 0)}
+                    value={formatInputValue(state.monthlyRent)}
+                    onChange={(e) => handleNumberChange('monthlyRent', e.target.value)}
                     className="pl-10"
                     placeholder={state.isYearly ? "24,000" : "2,000"}
                   />
@@ -77,8 +83,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={state.propertyTax}
-                      onChange={(e) => handleChange('propertyTax', parseFloat(e.target.value) || 0)}
+                      value={formatInputValue(state.propertyTax)}
+                      onChange={(e) => handleNumberChange('propertyTax', e.target.value)}
                       className="pl-10"
                       placeholder="3,000"
                     />
@@ -91,8 +97,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={state.insurance}
-                      onChange={(e) => handleChange('insurance', parseFloat(e.target.value) || 0)}
+                      value={formatInputValue(state.insurance)}
+                      onChange={(e) => handleNumberChange('insurance', e.target.value)}
                       className="pl-10"
                       placeholder="1,200"
                     />
@@ -105,8 +111,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <Wrench className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={state.maintenanceCost}
-                      onChange={(e) => handleChange('maintenanceCost', parseFloat(e.target.value) || 0)}
+                      value={formatInputValue(state.maintenanceCost)}
+                      onChange={(e) => handleNumberChange('maintenanceCost', e.target.value)}
                       className="pl-10"
                       placeholder="100"
                     />
@@ -119,8 +125,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={state.vacancyRate}
-                      onChange={(e) => handleChange('vacancyRate', parseFloat(e.target.value) || 0)}
+                      value={formatInputValue(state.vacancyRate)}
+                      onChange={(e) => handleNumberChange('vacancyRate', e.target.value)}
                       className="pl-10"
                       placeholder="5"
                     />
@@ -137,7 +143,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <span className="text-xs text-gray-500">Percentage</span>
                     <Switch 
                       checked={state.isFlatFee}
-                      onCheckedChange={(checked) => handleChange('isFlatFee', checked)}
+                      onCheckedChange={(checked) => handleBooleanChange('isFlatFee', checked)}
                       className="data-[state=checked]:bg-yrealty-navy"
                     />
                     <span className="text-xs text-gray-500">Flat Fee</span>
@@ -147,8 +153,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="number"
-                    value={state.managementFee}
-                    onChange={(e) => handleChange('managementFee', parseFloat(e.target.value) || 0)}
+                    value={formatInputValue(state.managementFee)}
+                    onChange={(e) => handleNumberChange('managementFee', e.target.value)}
                     className="pl-10"
                     placeholder={state.isFlatFee ? "200" : "8"}
                   />
@@ -161,8 +167,8 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="number"
-                    value={state.otherExpenses}
-                    onChange={(e) => handleChange('otherExpenses', parseFloat(e.target.value) || 0)}
+                    value={formatInputValue(state.otherExpenses)}
+                    onChange={(e) => handleNumberChange('otherExpenses', e.target.value)}
                     className="pl-10"
                     placeholder="100"
                   />

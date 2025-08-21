@@ -20,4 +20,26 @@ export default defineConfig(({ mode }) => ({
     },
     dedupe: ["react", "react-dom"],
   },
+  build: {
+    // Optimize chunks for better caching
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
+          supabase: ['@supabase/supabase-js'],
+          query: ['@tanstack/react-query'],
+          forms: ['react-hook-form', '@hookform/resolvers', 'zod'],
+          charts: ['recharts'],
+          dates: ['date-fns', 'react-day-picker'],
+          utils: ['clsx', 'tailwind-merge', 'class-variance-authority']
+        }
+      }
+    },
+    // Improve build performance
+    target: 'esnext',
+    minify: 'esbuild',
+    sourcemap: mode === 'development'
+  }
 }));

@@ -17,7 +17,7 @@ export const formatInputValue = (value: number | string | undefined, displayValu
     return '';
   }
   
-  // Show zero values as "0" so users can see and modify them
+  // Show zero values as "0" so users can see them, but allow clearing
   return String(value);
 };
 
@@ -43,9 +43,9 @@ export const handleNumberInputChange = (
   updateFunction: (updates: any) => void,
   setDisplayValues?: (updates: any) => void
 ) => {
-  // Store the raw display value for the input
+  // Store the raw display value for the input (including empty string)
   if (setDisplayValues) {
-    setDisplayValues({ [field]: value });
+    setDisplayValues((prev: any) => ({ ...prev, [field]: value }));
   }
   
   // Convert to number for calculations

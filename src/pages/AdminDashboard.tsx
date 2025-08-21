@@ -25,7 +25,7 @@ import SystemMonitoring from '@/components/admin/SystemMonitoring';
 import ResourceManagement from '@/components/admin/ResourceManagement';
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [dashboardStats, setDashboardStats] = useState([
     { title: "Total Blog Posts", value: "Loading...", icon: FileText, trend: "Calculating..." },
@@ -34,7 +34,14 @@ const AdminDashboard = () => {
     { title: "Resources", value: "Loading...", icon: Upload, trend: "Calculating..." },
   ]);
 
-  // Redirect if not authenticated
+  // Wait for auth to finish, then redirect if needed
+  if (loading) {
+    return (
+      <PageLayout title="Admin Dashboard" subtitle="Loading admin access...">
+        <div className="py-12 text-center text-muted-foreground">Checking permissions...</div>
+      </PageLayout>
+    );
+  }
   if (!user) {
     return <Navigate to="/admin-login" replace />;
   }

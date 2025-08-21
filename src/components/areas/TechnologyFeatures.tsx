@@ -20,11 +20,11 @@ const TechnologyFeatures = () => {
     {
       icon: <Users className="h-8 w-8 text-yrealty-accent" />,
       title: "Boots on the Ground Everywhere",
-      description: "We always have our own trained Y Realty Team members in every state providing direct oversight and quality control. When additional support is needed, we supplement with carefully vetted third-party partners while maintaining our high standards.",
+      description: "We have our own trained Y Realty Team members providing direct oversight and quality control. When additional support is needed, we supplement with carefully vetted professional partners while maintaining our high standards.",
       details: [
         "Own trained team members nationwide",
         "Direct Y Realty oversight and control",
-        "Vetted third-party support when needed",
+        "Vetted professional support when needed",
         "Consistent quality standards nationwide"
       ]
     },

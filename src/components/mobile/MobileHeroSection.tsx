@@ -37,7 +37,7 @@ const MobileHeroSection = () => {
         <p className="text-base mb-8 text-white/90 animate-fade-in leading-relaxed px-2" style={{
           animationDelay: '0.2s'
         }}>
-          Exceptional service across all 50 states with a client-first approach.
+          Exceptional service nationwide with a client-first approach.
         </p>
         
         <div className="space-y-4 animate-fade-in" style={{

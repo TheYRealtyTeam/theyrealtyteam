@@ -17,7 +17,7 @@ const AboutSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">About Y Realty Team</h2>
           <p className="section-subtitle reveal">
-            Your trusted partner in professional property management across all 50 states
+            Your trusted partner in professional property management nationwide
           </p>
         </div>
 
@@ -35,7 +35,7 @@ const AboutSection = () => {
             <div className="grid grid-cols-2 gap-6 mb-8">
               <div className="bg-yrealty-blue/10 p-6 rounded-xl">
                 <Building className="h-10 w-10 text-yrealty-accent mb-4" />
-                <h4 className="font-bold text-yrealty-navy mb-2">50+ States</h4>
+                <h4 className="font-bold text-yrealty-navy mb-2">Nationwide</h4>
                 <p className="text-gray-600 text-sm">Nationwide coverage with local expertise</p>
               </div>
               <div className="bg-yrealty-blue/10 p-6 rounded-xl">

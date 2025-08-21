@@ -20,7 +20,7 @@ const AreasSection = () => {
         <div className="text-center mb-16">
           <h2 className="section-title reveal">Service Areas</h2>
           <p className="section-subtitle reveal">
-            Professional property management services available across all 50 states with local expertise and national standards
+            Professional property management services available nationwide with local expertise and national standards
           </p>
         </div>
 

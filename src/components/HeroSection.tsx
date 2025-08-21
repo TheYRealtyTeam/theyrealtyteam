@@ -59,7 +59,7 @@ const HeroSection = () => {
           <p className="text-xl md:text-2xl mb-8 animate-fade-in leading-relaxed max-w-3xl" style={{
             animationDelay: '0.2s'
           }}>
-            Elevating property management to new heights across all 50 states with 
+            Elevating property management to new heights nationwide with 
             exceptional service, innovative solutions, and a client-first approach.
           </p>
           

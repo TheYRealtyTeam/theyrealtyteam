@@ -24,7 +24,7 @@ const Index = () => {
     
     const metaDescription = document.createElement('meta');
     metaDescription.name = 'description';
-    metaDescription.content = 'Y Realty Team offers premium property management services across all 50 states. Expert tenant placement, maintenance coordination, and financial reporting for residential and commercial properties.';
+    metaDescription.content = 'Y Realty Team offers premium property management services nationwide. Expert tenant placement, maintenance coordination, and financial reporting for residential and commercial properties.';
     document.head.appendChild(metaDescription);
     
     const canonicalLink = document.createElement('link');

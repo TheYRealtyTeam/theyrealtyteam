@@ -15,7 +15,7 @@ const StatesCoverage = () => {
   return (
     <div className="text-center mb-16 reveal">
       <h3 className="text-3xl font-bold mb-8 text-yrealty-navy">
-        Operating in All 50 States
+        Expanding Nationwide Coverage
       </h3>
       <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
         From coast to coast, we provide the same exceptional level of service and expertise. 

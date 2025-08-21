@@ -28,7 +28,7 @@ const MobileAreasSection = () => {
             Service Areas
           </h2>
           <p className="text-lg text-gray-600 leading-relaxed">
-            Professional property management across all 50 states
+            Professional property management nationwide
           </p>
         </div>
 
@@ -51,8 +51,8 @@ const MobileAreasSection = () => {
 
         {/* Stats */}
         <div className="bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-6 rounded-2xl text-white text-center mb-8">
-          <h3 className="text-3xl font-bold mb-2">50 States</h3>
-          <p className="text-lg opacity-95">One team, nationwide coverage</p>
+          <h3 className="text-3xl font-bold mb-2">Nationwide</h3>
+          <p className="text-lg opacity-95">One team, expanding coverage</p>
         </div>
 
         {/* States Grid */}

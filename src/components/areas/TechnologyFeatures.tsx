@@ -9,7 +9,7 @@ const TechnologyFeatures = () => {
     {
       icon: <Monitor className="h-8 w-8 text-yrealty-accent" />,
       title: "Advanced Technology Stack",
-      description: "Advanced property management software, digital inspection technology, and our proprietary platform ensure seamless remote management across all states.",
+      description: "Advanced property management software, digital inspection technology, and our proprietary platform ensure seamless remote management nationwide.",
       details: [
         "Real-time property monitoring",
         "Digital inspection reports",
@@ -22,7 +22,7 @@ const TechnologyFeatures = () => {
       title: "Boots on the Ground Everywhere",
       description: "We always have our own trained Y Realty Team members in every state providing direct oversight and quality control. When additional support is needed, we supplement with carefully vetted third-party partners while maintaining our high standards.",
       details: [
-        "Own trained team members in all 50 states",
+        "Own trained team members nationwide",
         "Direct Y Realty oversight and control",
         "Vetted third-party support when needed",
         "Consistent quality standards nationwide"

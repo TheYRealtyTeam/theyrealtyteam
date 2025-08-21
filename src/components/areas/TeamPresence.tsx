@@ -20,7 +20,7 @@ const TeamPresence = () => {
           <ul className="space-y-3">
             <li className="flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
-              <span><strong>Primary:</strong> Our own Y Realty Team members in all 50 states</span>
+              <span><strong>Primary:</strong> Our own Y Realty Team members nationwide</span>
             </li>
             <li className="flex items-center gap-3">
               <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />

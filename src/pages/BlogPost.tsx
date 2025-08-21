@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageLayout from '@/components/layout/PageLayout';
 import { supabase, BlogPostData } from '@/integrations/supabase/client';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 import BlogPostLoading from '@/components/blog/BlogPostLoading';
 import BlogPostError from '@/components/blog/BlogPostError';
 import BlogPostHeader from '@/components/blog/BlogPostHeader';

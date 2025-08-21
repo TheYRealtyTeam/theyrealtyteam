@@ -1,7 +1,8 @@
 
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+// Removed TooltipProvider due to invalid hook call in Radix during dev
+// import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -38,28 +39,27 @@ const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider delayDuration={0}>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/faq" element={<Suspense fallback={<PageLoading />}><FAQ /></Suspense>} />
-              <Route path="/blog" element={<Suspense fallback={<PageLoading />}><Blog /></Suspense>} />
-              <Route path="/blog/:slug" element={<Suspense fallback={<PageLoading />}><BlogPost /></Suspense>} />
-              <Route path="/blog-admin" element={<Suspense fallback={<PageLoading />}><BlogAdmin /></Suspense>} />
-              <Route path="/tools" element={<Suspense fallback={<PageLoading />}><Tools /></Suspense>} />
-              <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
-              <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
-              <Route path="/profile" element={<Suspense fallback={<PageLoading />}><Profile /></Suspense>} />
-              <Route path="/admin-login" element={<Suspense fallback={<PageLoading />}><AdminLogin /></Suspense>} />
-              <Route path="/admin-dashboard" element={<Suspense fallback={<PageLoading />}><AdminDashboard /></Suspense>} />
-              <Route path="/auth/callback" element={<Suspense fallback={<PageLoading />}><MicrosoftAuthCallback /></Suspense>} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        {/* TooltipProvider temporarily removed to resolve invalid hook call */}
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/faq" element={<Suspense fallback={<PageLoading />}><FAQ /></Suspense>} />
+            <Route path="/blog" element={<Suspense fallback={<PageLoading />}><Blog /></Suspense>} />
+            <Route path="/blog/:slug" element={<Suspense fallback={<PageLoading />}><BlogPost /></Suspense>} />
+            <Route path="/blog-admin" element={<Suspense fallback={<PageLoading />}><BlogAdmin /></Suspense>} />
+            <Route path="/tools" element={<Suspense fallback={<PageLoading />}><Tools /></Suspense>} />
+            <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
+            <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
+            <Route path="/profile" element={<Suspense fallback={<PageLoading />}><Profile /></Suspense>} />
+            <Route path="/admin-login" element={<Suspense fallback={<PageLoading />}><AdminLogin /></Suspense>} />
+            <Route path="/admin-dashboard" element={<Suspense fallback={<PageLoading />}><AdminDashboard /></Suspense>} />
+            <Route path="/auth/callback" element={<Suspense fallback={<PageLoading />}><MicrosoftAuthCallback /></Suspense>} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>

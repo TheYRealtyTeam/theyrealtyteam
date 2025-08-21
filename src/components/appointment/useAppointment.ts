@@ -5,7 +5,7 @@ import { useDateTimeSelection } from './hooks/useDateTimeSelection';
 import { useStepNavigation } from './hooks/useStepNavigation';
 import { useAppointmentSubmission } from './hooks/useAppointmentSubmission';
 import { isDateDisabled, formatDate } from './utils/validationUtils';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const useAppointment = () => {
   // Combine the smaller hooks

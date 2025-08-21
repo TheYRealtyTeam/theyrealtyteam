@@ -1,6 +1,6 @@
 import { BlogPostData } from '@/integrations/supabase/client';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 // Categories to choose from
 const categories = [

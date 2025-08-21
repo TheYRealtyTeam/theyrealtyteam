@@ -44,7 +44,11 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
                   value={formatInputValue(state.propertyValue, displayValues.propertyValue)}
                   onChange={(e) => handleNumberChange('propertyValue', e.target.value)}
                   className="text-lg"
+                  placeholder="2250000"
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter full amount (e.g., 2250000 for $2.25 million)
+                </p>
               </div>
               
               <div className="space-y-2">

@@ -46,14 +46,17 @@ const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsSte
                 </Label>
                 <div className="relative mt-1">
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
+                <Input
                     id="propertyValue"
                     type="number"
                     value={formatInputValue(state.propertyValue, displayValues.propertyValue)}
                     onChange={(e) => handleNumberChange('propertyValue', e.target.value)}
-                    className="pl-10"
-                    placeholder="300,000"
+                    className="pl-10 text-lg"
+                    placeholder="2250000"
                   />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Enter full amount (e.g., 2250000 for $2.25 million)
+                  </p>
                 </div>
               </div>
 

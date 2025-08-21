@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { TrendingDown, Home, Wrench, Users } from 'lucide-react';
 import QuickInsightCard from '../../components/QuickInsightCard';
 import { ROICalculatorState, ROIResults } from '../../types/roiTypes';
+import { formatInputValue, parseInputValue } from '../../../utils/numberInputUtils';
 
 interface ROIOperatingExpensesStepProps {
   state: ROICalculatorState;
@@ -15,8 +16,16 @@ interface ROIOperatingExpensesStepProps {
 }
 
 const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingExpensesStepProps) => {
-  const handleChange = (field: keyof ROICalculatorState, value: string | number | boolean) => {
-    updateState({ [field]: typeof value === 'string' ? parseFloat(value) || 0 : value });
+  const [displayValues, setDisplayValues] = React.useState<{[key: string]: string}>({});
+
+  const handleNumberChange = (field: keyof ROICalculatorState, value: string) => {
+    setDisplayValues(prev => ({ ...prev, [field]: value }));
+    const numericValue = parseInputValue(value);
+    updateState({ [field]: numericValue });
+  };
+
+  const handleBooleanChange = (field: keyof ROICalculatorState, value: boolean) => {
+    updateState({ [field]: value });
   };
 
   const totalMonthlyExpenses = (state.propertyTax / 12) + 
@@ -41,8 +50,8 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
                 <Input
                   id="propertyTax"
                   type="number"
-                  value={state.propertyTax}
-                  onChange={(e) => handleChange('propertyTax', e.target.value)}
+                  value={formatInputValue(state.propertyTax, displayValues.propertyTax)}
+                  onChange={(e) => handleNumberChange('propertyTax', e.target.value)}
                   className="text-lg"
                 />
               </div>
@@ -52,8 +61,8 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
                 <Input
                   id="insurance"
                   type="number"
-                  value={state.insurance}
-                  onChange={(e) => handleChange('insurance', e.target.value)}
+                  value={formatInputValue(state.insurance, displayValues.insurance)}
+                  onChange={(e) => handleNumberChange('insurance', e.target.value)}
                   className="text-lg"
                 />
               </div>
@@ -65,8 +74,8 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
                 <Input
                   id="maintenanceCost"
                   type="number"
-                  value={state.maintenanceCost}
-                  onChange={(e) => handleChange('maintenanceCost', e.target.value)}
+                  value={formatInputValue(state.maintenanceCost, displayValues.maintenanceCost)}
+                  onChange={(e) => handleNumberChange('maintenanceCost', e.target.value)}
                   className="text-lg"
                 />
                 <p className="text-xs text-gray-500">Repairs, landscaping, etc.</p>
@@ -80,8 +89,8 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
                   step="0.5"
                   min="0"
                   max="50"
-                  value={state.vacancyRate}
-                  onChange={(e) => handleChange('vacancyRate', e.target.value)}
+                  value={formatInputValue(state.vacancyRate, displayValues.vacancyRate)}
+                  onChange={(e) => handleNumberChange('vacancyRate', e.target.value)}
                   className="text-lg"
                 />
                 <p className="text-xs text-gray-500">Expected vacancy percentage</p>
@@ -93,7 +102,7 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
                 <Switch
                   id="isFlatFee"
                   checked={state.isFlatFee}
-                  onCheckedChange={(checked) => handleChange('isFlatFee', checked)}
+                  onCheckedChange={(checked) => handleBooleanChange('isFlatFee', checked)}
                 />
                 <Label htmlFor="isFlatFee">Management fee is a flat amount (not percentage)</Label>
               </div>
@@ -106,8 +115,8 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
                   id="managementFee"
                   type="number"
                   step={state.isFlatFee ? "1" : "0.1"}
-                  value={state.managementFee}
-                  onChange={(e) => handleChange('managementFee', e.target.value)}
+                  value={formatInputValue(state.managementFee, displayValues.managementFee)}
+                  onChange={(e) => handleNumberChange('managementFee', e.target.value)}
                   className="text-lg"
                 />
                 <p className="text-xs text-gray-500">
@@ -121,8 +130,8 @@ const ROIOperatingExpensesStep = ({ state, updateState, results }: ROIOperatingE
               <Input
                 id="otherExpenses"
                 type="number"
-                value={state.otherExpenses}
-                onChange={(e) => handleChange('otherExpenses', e.target.value)}
+                value={formatInputValue(state.otherExpenses, displayValues.otherExpenses)}
+                onChange={(e) => handleNumberChange('otherExpenses', e.target.value)}
                 className="text-lg"
               />
               <p className="text-xs text-gray-500">HOA fees, utilities, etc.</p>

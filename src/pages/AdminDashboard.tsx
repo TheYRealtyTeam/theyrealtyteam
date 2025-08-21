@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   FileText, 
   Users, 
@@ -26,18 +27,87 @@ import ResourceManagement from '@/components/admin/ResourceManagement';
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+  const [dashboardStats, setDashboardStats] = useState([
+    { title: "Total Blog Posts", value: "Loading...", icon: FileText, trend: "Calculating..." },
+    { title: "Contact Submissions", value: "Loading...", icon: MessageSquare, trend: "Calculating..." },
+    { title: "Appointments", value: "Loading...", icon: Calendar, trend: "Calculating..." },
+    { title: "Resources", value: "Loading...", icon: Upload, trend: "Calculating..." },
+  ]);
 
   // Redirect if not authenticated
   if (!user) {
     return <Navigate to="/admin-login" replace />;
   }
 
-  const dashboardStats = [
-    { title: "Total Blog Posts", value: "45", icon: FileText, trend: "+12%" },
-    { title: "Contact Submissions", value: "28", icon: MessageSquare, trend: "+5%" },
-    { title: "Appointments", value: "12", icon: Calendar, trend: "+8%" },
-    { title: "Resources", value: "6", icon: Upload, trend: "0%" },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // Fetch all counts in parallel
+        const [blogPosts, contactSubmissions, appointments, resources] = await Promise.all([
+          supabase.from('blog_posts').select('id', { count: 'exact', head: true }),
+          supabase.from('contact_submissions').select('id', { count: 'exact', head: true }),
+          supabase.from('appointments').select('id', { count: 'exact', head: true }),
+          supabase.from('resources').select('id', { count: 'exact', head: true })
+        ]);
+
+        // Calculate trends based on last 30 days
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const [recentBlogPosts, recentContacts, recentAppts] = await Promise.all([
+          supabase.from('blog_posts').select('id', { count: 'exact', head: true })
+            .gte('created_at', thirtyDaysAgo.toISOString()),
+          supabase.from('contact_submissions').select('id', { count: 'exact', head: true })
+            .gte('created_at', thirtyDaysAgo.toISOString()),
+          supabase.from('appointments').select('id', { count: 'exact', head: true })
+            .gte('created_at', thirtyDaysAgo.toISOString())
+        ]);
+
+        const calculateTrend = (total: number, recent: number) => {
+          if (total === 0) return "0%";
+          const percentage = Math.round((recent / total) * 100);
+          return `+${percentage}% recent`;
+        };
+
+        setDashboardStats([
+          { 
+            title: "Total Blog Posts", 
+            value: (blogPosts.count || 0).toString(), 
+            icon: FileText, 
+            trend: calculateTrend(blogPosts.count || 0, recentBlogPosts.count || 0)
+          },
+          { 
+            title: "Contact Submissions", 
+            value: (contactSubmissions.count || 0).toString(), 
+            icon: MessageSquare, 
+            trend: calculateTrend(contactSubmissions.count || 0, recentContacts.count || 0)
+          },
+          { 
+            title: "Appointments", 
+            value: (appointments.count || 0).toString(), 
+            icon: Calendar, 
+            trend: calculateTrend(appointments.count || 0, recentAppts.count || 0)
+          },
+          { 
+            title: "Resources", 
+            value: (resources.count || 0).toString(), 
+            icon: Upload, 
+            trend: "Static files"
+          },
+        ]);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setDashboardStats([
+          { title: "Total Blog Posts", value: "Error", icon: FileText, trend: "Failed to load" },
+          { title: "Contact Submissions", value: "Error", icon: MessageSquare, trend: "Failed to load" },
+          { title: "Appointments", value: "Error", icon: Calendar, trend: "Failed to load" },
+          { title: "Resources", value: "Error", icon: Upload, trend: "Failed to load" },
+        ]);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
 
   return (
     <PageLayout 

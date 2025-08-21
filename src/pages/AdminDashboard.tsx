@@ -34,6 +34,10 @@ const AdminDashboard = () => {
     { title: "Resources", value: "Loading...", icon: Upload, trend: "Calculating..." },
   ]);
 
+  useEffect(() => {
+    console.log('[AdminDashboard] auth state', { loading, hasUser: !!user });
+  }, [user, loading]);
+
   // Wait for auth to finish, then redirect if needed
   if (loading) {
     return (

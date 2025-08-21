@@ -16,7 +16,10 @@ interface PropertyDetailsStepProps {
 }
 
 const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsStepProps) => {
+  const [displayValues, setDisplayValues] = React.useState<{ [key: string]: string }>({});
+
   const handleNumberChange = (field: keyof CalculatorState, value: string) => {
+    setDisplayValues(prev => ({ ...prev, [field]: value }));
     const numericValue = parseInputValue(value);
     updateState({ [field]: numericValue });
   };
@@ -46,7 +49,7 @@ const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsSte
                   <Input
                     id="propertyValue"
                     type="number"
-                    value={formatInputValue(state.propertyValue)}
+                    value={formatInputValue(state.propertyValue, displayValues.propertyValue)}
                     onChange={(e) => handleNumberChange('propertyValue', e.target.value)}
                     className="pl-10"
                     placeholder="300,000"

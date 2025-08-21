@@ -38,19 +38,10 @@ const AdminDashboard = () => {
     console.log('[AdminDashboard] auth state', { loading, hasUser: !!user });
   }, [user, loading]);
 
-  // Wait for auth to finish, then redirect if needed
-  if (loading) {
-    return (
-      <PageLayout title="Admin Dashboard" subtitle="Loading admin access...">
-        <div className="py-12 text-center text-muted-foreground">Checking permissions...</div>
-      </PageLayout>
-    );
-  }
-  if (!user) {
-    return <Navigate to="/admin-login" replace />;
-  }
-
   useEffect(() => {
+    // Only fetch data if user is authenticated
+    if (!user) return;
+    
     const fetchDashboardData = async () => {
       try {
         // Fetch all counts in parallel
@@ -118,10 +109,22 @@ const AdminDashboard = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [user]); // Run when user changes
+
+  // Wait for auth to finish, then redirect if needed
+  if (loading) {
+    return (
+      <PageLayout title="Admin Dashboard" subtitle="Loading admin access...">
+        <div className="py-12 text-center text-muted-foreground">Checking permissions...</div>
+      </PageLayout>
+    );
+  }
+  if (!user) {
+    return <Navigate to="/admin-login" replace />;
+  }
 
   return (
-    <PageLayout 
+    <PageLayout
       title="Admin Dashboard" 
       subtitle="Manage your property management platform"
     >

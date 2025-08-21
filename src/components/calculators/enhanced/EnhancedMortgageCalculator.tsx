@@ -113,8 +113,15 @@ const EnhancedMortgageCalculator = ({ sharedState, updateSharedState }: Enhanced
     setCalculatorState(prev => {
       const newState = { ...prev, ...updates };
       
+      // Handle bidirectional sync between down payment amount and percentage
       if (updates.propertyValue !== undefined || updates.downPaymentPercent !== undefined) {
+        // Calculate amount from percentage
         newState.downPaymentAmount = (newState.propertyValue * newState.downPaymentPercent) / 100;
+      } else if (updates.downPaymentAmount !== undefined) {
+        // Calculate percentage from amount
+        newState.downPaymentPercent = newState.propertyValue > 0 
+          ? (newState.downPaymentAmount / newState.propertyValue) * 100 
+          : 0;
       }
       
       return newState;

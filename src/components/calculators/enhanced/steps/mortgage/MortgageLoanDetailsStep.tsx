@@ -16,7 +16,8 @@ interface MortgageLoanDetailsStepProps {
 
 const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDetailsStepProps) => {
   const handleChange = (field: keyof MortgageCalculatorState, value: string | number) => {
-    updateState({ [field]: typeof value === 'string' ? parseFloat(value) || 0 : value });
+    const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value;
+    updateState({ [field]: numericValue });
   };
 
   return (

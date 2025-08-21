@@ -46,18 +46,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - serve from cache with network fallback
+// Fetch event - avoid hijacking document navigations
 self.addEventListener('fetch', (event) => {
   const { request } = event;
-  
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
-    return;
-  }
 
-  // Skip external requests
-  if (!request.url.startsWith(self.location.origin)) {
-    return;
+  // Only handle same-origin GET requests
+  if (request.method !== 'GET') return;
+  if (!request.url.startsWith(self.location.origin)) return;
+
+  // IMPORTANT: Let the browser handle document/navigation requests
+  // This prevents unexpected redirects to '/'
+  if (request.destination === 'document' || request.mode === 'navigate') {
+    return; // no respondWith -> default network behavior
   }
 
   event.respondWith(
@@ -91,11 +91,6 @@ self.addEventListener('fetch', (event) => {
             return response;
           })
           .catch(() => {
-            // Return offline page for navigation requests
-            if (request.destination === 'document') {
-              return caches.match('/');
-            }
-            
             // Return a placeholder for images
             if (request.destination === 'image') {
               return new Response('', {
@@ -106,6 +101,9 @@ self.addEventListener('fetch', (event) => {
                 })
               });
             }
+
+            // For other assets, fail softly
+            return Response.error();
           });
       })
   );

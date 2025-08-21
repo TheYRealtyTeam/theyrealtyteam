@@ -16,7 +16,10 @@ interface IncomeExpensesStepProps {
 }
 
 const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepProps) => {
+  const [displayValues, setDisplayValues] = React.useState<{ [key: string]: string }>({});
+
   const handleNumberChange = (field: keyof CalculatorState, value: string) => {
+    setDisplayValues(prev => ({ ...prev, [field]: value }));
     const numericValue = parseInputValue(value);
     updateState({ [field]: numericValue });
   };
@@ -24,7 +27,6 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
   const handleBooleanChange = (field: keyof CalculatorState, value: boolean) => {
     updateState({ [field]: value });
   };
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2">
@@ -57,7 +59,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="number"
-                    value={formatInputValue(state.monthlyRent)}
+                    value={formatInputValue(state.monthlyRent, displayValues.monthlyRent)}
                     onChange={(e) => handleNumberChange('monthlyRent', e.target.value)}
                     className="pl-10"
                     placeholder={state.isYearly ? "24,000" : "2,000"}
@@ -83,7 +85,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={formatInputValue(state.propertyTax)}
+                      value={formatInputValue(state.propertyTax, displayValues.propertyTax)}
                       onChange={(e) => handleNumberChange('propertyTax', e.target.value)}
                       className="pl-10"
                       placeholder="3,000"
@@ -97,7 +99,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={formatInputValue(state.insurance)}
+                      value={formatInputValue(state.insurance, displayValues.insurance)}
                       onChange={(e) => handleNumberChange('insurance', e.target.value)}
                       className="pl-10"
                       placeholder="1,200"
@@ -111,7 +113,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <Wrench className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={formatInputValue(state.maintenanceCost)}
+                      value={formatInputValue(state.maintenanceCost, displayValues.maintenanceCost)}
                       onChange={(e) => handleNumberChange('maintenanceCost', e.target.value)}
                       className="pl-10"
                       placeholder="100"
@@ -125,7 +127,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                     <Home className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="number"
-                      value={formatInputValue(state.vacancyRate)}
+                      value={formatInputValue(state.vacancyRate, displayValues.vacancyRate)}
                       onChange={(e) => handleNumberChange('vacancyRate', e.target.value)}
                       className="pl-10"
                       placeholder="5"
@@ -153,7 +155,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="number"
-                    value={formatInputValue(state.managementFee)}
+                    value={formatInputValue(state.managementFee, displayValues.managementFee)}
                     onChange={(e) => handleNumberChange('managementFee', e.target.value)}
                     className="pl-10"
                     placeholder={state.isFlatFee ? "200" : "8"}
@@ -167,7 +169,7 @@ const IncomeExpensesStep = ({ state, updateState, results }: IncomeExpensesStepP
                   <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="number"
-                    value={formatInputValue(state.otherExpenses)}
+                    value={formatInputValue(state.otherExpenses, displayValues.otherExpenses)}
                     onChange={(e) => handleNumberChange('otherExpenses', e.target.value)}
                     className="pl-10"
                     placeholder="100"

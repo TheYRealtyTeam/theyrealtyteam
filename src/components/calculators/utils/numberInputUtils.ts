@@ -12,16 +12,12 @@ export const formatInputValue = (value: number | string | undefined, displayValu
     return displayValue;
   }
   
-  // Otherwise, format the number but handle empty/zero cases
+  // Otherwise, format the number but handle empty/undefined cases
   if (value === undefined || value === null || value === '') {
     return '';
   }
   
-  // For zero values, show empty to allow easy input
-  if (value === 0) {
-    return '';
-  }
-  
+  // Show zero values as "0" so users can see and modify them
   return String(value);
 };
 

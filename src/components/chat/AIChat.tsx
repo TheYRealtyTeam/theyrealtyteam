@@ -66,8 +66,6 @@ const AIChat = () => {
     setMessages(prev => [...prev, newUserMessage]);
 
     try {
-      console.log('Sending message to AI chat function:', userMessage);
-      
       const conversationHistory = messages.slice(-8).map(msg => ({
         role: msg.role,
         content: msg.content
@@ -80,20 +78,15 @@ const AIChat = () => {
         }
       });
 
-      console.log('AI chat response received:', { data, error });
-
       if (error) {
-        console.error('Supabase function error:', error);
         throw new Error(`Function call failed: ${error.message || 'Unknown error'}`);
       }
 
       if (data?.error) {
-        console.error('AI chat function returned error:', data.error);
         throw new Error(data.error);
       }
 
       if (!data || !data.response) {
-        console.error('Invalid response structure:', data);
         throw new Error('Invalid response from AI service');
       }
 
@@ -104,10 +97,7 @@ const AIChat = () => {
       };
       setMessages(prev => [...prev, aiMessage]);
 
-      console.log('AI message added to chat successfully');
-
     } catch (error) {
-      console.error('Error in sendMessage:', error);
       
       let errorMessage = "I'm having trouble responding right now. Please try again.";
       

@@ -19,7 +19,6 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleRetry = () => {
-    console.log("Retrying blog posts fetch...");
     setRefreshTrigger(prev => prev + 1);
   };
 
@@ -28,8 +27,6 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
       try {
         setLoading(true);
         setError(null);
-        
-        console.log("Starting to fetch blog posts...");
         
         // First get count of total posts for pagination
         const countResponse = await supabase
@@ -41,7 +38,6 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         }
         
         setTotalPosts(countResponse.count || 0);
-        console.log(`Total posts count: ${countResponse.count}`);
         
         // Then fetch the current page of posts
         const { data, error } = await supabase
@@ -50,16 +46,7 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
           .order('created_at', { ascending: false })
           .range((currentPage - 1) * postsPerPage, currentPage * postsPerPage - 1);
         
-        console.log("Blog posts fetch complete:", { 
-          success: !error, 
-          count: data?.length || 0,
-          error: error?.message,
-          page: currentPage,
-          totalPosts: countResponse.count
-        });
-        
         if (error) {
-          console.error('Error fetching blog posts:', error);
           setError(error.message);
           toast({
             title: "Error fetching blog posts",
@@ -70,16 +57,13 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         }
         
         if (!data || data.length === 0) {
-          console.log("No blog posts found in the database");
           setError("No blog posts found");
           setBlogPosts([]);
           return;
         }
         
-        console.log("Blog posts fetched successfully. First post:", data[0]?.title);
         setBlogPosts(data as BlogPostData[]);
       } catch (error: any) {
-        console.error('Unexpected error in blog posts fetch:', error);
         setError("An unexpected error occurred: " + (error.message || "Unknown error"));
         toast({
           title: "Error fetching blog posts",
@@ -101,8 +85,6 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         setIsSearching(true);
         setError(null);
         
-        console.log("Searching blog posts for:", searchTerm);
-        
         const lowerSearchTerm = searchTerm.toLowerCase().trim();
         
         const { data, error } = await supabase
@@ -113,13 +95,7 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
           )
           .order('created_at', { ascending: false });
         
-        console.log("Search complete:", { 
-          success: !error, 
-          resultsCount: data?.length || 0 
-        });
-        
         if (error) {
-          console.error('Error searching blog posts:', error);
           setError(error.message);
           return;
         }
@@ -127,7 +103,6 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         setTotalPosts(data?.length || 0);
         setBlogPosts(data as BlogPostData[] || []);
       } catch (error: any) {
-        console.error('Unexpected error in blog post search:', error);
         setError("An unexpected error occurred during search: " + (error.message || "Unknown error"));
       } finally {
         setLoading(false);
@@ -144,7 +119,7 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
             await fetchBlogPosts();
             break;
           } catch (error) {
-            console.log(`Retry ${i + 1}/${retries} failed:`, error);
+            // Retry failed, continue to next attempt
             if (i < retries - 1) {
               await new Promise(resolve => setTimeout(resolve, delay));
             }

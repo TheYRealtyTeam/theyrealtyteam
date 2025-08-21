@@ -33,7 +33,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
   useEffect(() => {
     if (isOpen && initialAppointmentDetails.date) {
       setAppointmentDetails(initialAppointmentDetails);
-      console.log("Confirmation dialog opened with details:", initialAppointmentDetails);
       
       // Check if Microsoft Graph API is authenticated
       const isAuthenticated = microsoftGraphApi.init();
@@ -71,7 +70,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         }
       }
     } catch (error) {
-      console.error("Error adding to Microsoft Calendar:", error);
       toast({
         title: "Calendar Error",
         description: "Could not add to Microsoft Calendar. Please try again.",
@@ -99,9 +97,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
       const dateStr = appointmentDetails.date;
       const timeStr = appointmentDetails.time;
       
-      console.log("Parsing date:", dateStr);
-      console.log("Parsing time:", timeStr);
-      
       // For dates formatted by date-fns or from the Calendar component
       let startDate: Date;
       
@@ -110,7 +105,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         // Format like "May 18, 2025"
         const dateParts = dateStr.match(/([A-Za-z]+) (\d+), (\d+)/);
         if (!dateParts) {
-          console.error("Could not parse date:", dateStr);
           toast({
             title: "Calendar Error",
             description: "Could not process the appointment date. Please try again.",
@@ -131,7 +125,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         // Parse the time (assumes format like "10:00 AM")
         const timeParts = timeStr.match(/(\d+):(\d+) ([AP]M)/);
         if (!timeParts) {
-          console.error("Could not parse time:", timeStr);
           toast({
             title: "Calendar Error",
             description: "Could not process the appointment time. Please try again.",
@@ -151,7 +144,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         startDate = new Date(year, month, day, hour, minute);
       } else {
         // Fallback to current date and approximate time if format is unexpected
-        console.log("Using fallback date parsing");
         startDate = new Date();
         
         // Try to extract hours and minutes from timeStr
@@ -161,8 +153,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
           startDate.setMinutes(parseInt(timeMatch[2], 10));
         }
       }
-      
-      console.log("Parsed date object:", startDate);
       
       // Create end time (1 hour after start)
       const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
@@ -213,7 +203,6 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
         description: "Your appointment has been downloaded as an iCalendar file.",
       });
     } catch (error) {
-      console.error("Error creating calendar event:", error);
       toast({
         title: "Calendar Error",
         description: "Could not create calendar event. Please try again.",

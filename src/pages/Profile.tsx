@@ -47,7 +47,6 @@ const Profile = () => {
           .maybeSingle();
 
         if (error) {
-          console.error('Error fetching profile:', error);
           throw error;
         }
         
@@ -74,11 +73,10 @@ const Profile = () => {
             });
           
           if (insertError) {
-            console.error('Error creating profile:', insertError);
+            // Error creating profile - continue without profile data
           }
         }
       } catch (error: any) {
-        console.error('Error fetching profile:', error);
         toast.error('Failed to load profile data');
       } finally {
         setLoading(false);
@@ -105,7 +103,6 @@ const Profile = () => {
         .eq('id', user.id);
 
       if (error) {
-        console.error('Database error:', error);
         throw error;
       }
       
@@ -119,7 +116,6 @@ const Profile = () => {
       } : null);
       
     } catch (error: any) {
-      console.error('Error updating profile:', error);
       toast.error(error.message || 'Failed to update profile');
     } finally {
       setUpdating(false);

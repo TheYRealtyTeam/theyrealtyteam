@@ -26,8 +26,6 @@ const BlogPost = () => {
         setLoading(true);
         setError(null);
 
-        console.log("Fetching blog post with slug:", slug);
-
         // Find the post by slug
         const { data: postData, error: postError } = await supabase
           .from('blog_posts')
@@ -36,7 +34,6 @@ const BlogPost = () => {
           .maybeSingle();
 
         if (postError) {
-          console.error('Error fetching blog post:', postError);
           setError(postError.message);
           toast({
             title: "Error fetching blog post",
@@ -47,12 +44,10 @@ const BlogPost = () => {
         }
 
         if (!postData) {
-          console.log("No blog post found with slug:", slug);
           setPost(null);
           return;
         }
 
-        console.log("Blog post found:", postData.title);
         setPost(postData as BlogPostData);
 
         // Find related posts (same category, excluding current post)
@@ -64,7 +59,7 @@ const BlogPost = () => {
           .limit(3);
 
         if (relatedError) {
-          console.error('Error fetching related posts:', relatedError);
+          // Failed to fetch related posts - continue without them
         } else {
           setRelatedPosts(relatedData as BlogPostData[] || []);
         }
@@ -72,7 +67,6 @@ const BlogPost = () => {
         document.title = `${postData.title} | Y Realty Team Blog`;
         window.scrollTo(0, 0);
       } catch (error: any) {
-        console.error('Unexpected error fetching blog post:', error);
         setError("An unexpected error occurred: " + (error.message || "Unknown error"));
       } finally {
         setLoading(false);

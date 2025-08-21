@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
-        console.log('Auth state changed', event);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
@@ -47,14 +46,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
         if (error) {
-          console.error('Error getting session:', error);
           // Don't throw error, just log it and continue
         }
         
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
       } catch (error) {
-        console.error('Error initializing auth:', error);
         // Continue without auth if there's an error
       } finally {
         setLoading(false);
@@ -76,7 +73,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       return { error };
     } catch (error) {
-      console.error('Error signing in:', error);
       return { error };
     }
   };
@@ -96,7 +92,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       return { error };
     } catch (error) {
-      console.error('Error signing up:', error);
       return { error };
     }
   };
@@ -105,7 +100,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await supabase.auth.signOut();
     } catch (error) {
-      console.error('Error signing out:', error);
+      // Ignore sign out errors
     }
   };
 
@@ -137,7 +132,6 @@ export const useAuth = () => {
   if (context === undefined) {
     // Return a default context instead of throwing an error
     // This allows the app to function without authentication
-    console.warn('useAuth used outside of AuthProvider - returning default values');
     return {
       session: null,
       user: null,

@@ -11,10 +11,6 @@ export const AnimationObserver = () => {
     try {
       const revealElements = document.querySelectorAll('.reveal:not(.active)');
       
-      if (revealElements.length > 0) {
-        console.log(`Found ${revealElements.length} unobserved reveal elements`);
-      }
-      
       revealElements.forEach((el) => {
         // Only observe if not already observed
         if (!elementsRef.current.includes(el)) {
@@ -23,13 +19,13 @@ export const AnimationObserver = () => {
         }
       });
     } catch (error) {
-      console.error('Error finding reveal elements:', error);
+      // Error observing elements - continue without animation
     }
   };
 
   useEffect(() => {
     if (!window.IntersectionObserver) {
-      console.warn('IntersectionObserver not supported in this browser');
+      // Browser doesn't support IntersectionObserver
       return;
     }
 
@@ -44,7 +40,6 @@ export const AnimationObserver = () => {
       observerRef.current = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            console.log('Element is now visible:', entry.target);
             entry.target.classList.add('active');
             // Once element is revealed, stop observing it
             observerRef.current?.unobserve(entry.target);
@@ -87,7 +82,7 @@ export const AnimationObserver = () => {
         attributeFilter: ['data-state', 'class'],
       });
     } catch (error) {
-      console.error('Error setting up IntersectionObserver:', error);
+      // Error setting up IntersectionObserver - continue without animation
     }
 
     return () => {
@@ -96,7 +91,7 @@ export const AnimationObserver = () => {
           try {
             observerRef.current?.unobserve(el);
           } catch (error) {
-            console.error('Error cleaning up observer:', error);
+            // Error cleaning up observer element - continue
           }
         });
         observerRef.current.disconnect();

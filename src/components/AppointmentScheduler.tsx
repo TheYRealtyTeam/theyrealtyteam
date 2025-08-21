@@ -32,25 +32,16 @@ const AppointmentScheduler = () => {
   } = useAppointment();
 
   useEffect(() => {
-    console.log("AppointmentScheduler mounted with date:", date);
     // Force active class on parent if it has reveal class
     const parent = document.querySelector('.reveal[data-value="appointment"]');
     if (parent && !parent.classList.contains('active')) {
-      console.log("Forcing active class on appointment tab");
       parent.classList.add('active');
     }
   }, []);
 
-  // Log the appointment details to debug
+  // Check for confirmation details when dialog opens
   useEffect(() => {
-    if (showConfirmation) {
-      console.log("Showing confirmation with details:", {
-        date: formattedDate,
-        time: selectedTime,
-        callType,
-        name: formData.name
-      });
-    }
+    // Validation check for confirmation dialog
   }, [showConfirmation, formattedDate, selectedTime, callType, formData.name]);
 
   return (

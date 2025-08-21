@@ -19,7 +19,7 @@ const AdminLogin = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/admin-dashboard');
     }
   }, [user, navigate]);
 

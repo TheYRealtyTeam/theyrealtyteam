@@ -12,7 +12,8 @@ const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, user } = useAuth();
+  const [isSignUp, setIsSignUp] = useState(false);
+  const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
 
   // Redirect if already authenticated
@@ -30,15 +31,31 @@ const AdminLogin = () => {
       return;
     }
 
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const { error } = await signIn(email, password);
-      
-      if (error) {
-        toast.error(error.message || 'Login failed');
+      if (isSignUp) {
+        const { error } = await signUp(email, password, {});
+        
+        if (error) {
+          toast.error(error.message || 'Sign up failed');
+        } else {
+          toast.success('Admin account created successfully! Please check your email to verify your account.');
+          setIsSignUp(false);
+        }
       } else {
-        toast.success('Admin login successful');
-        navigate('/');
+        const { error } = await signIn(email, password);
+        
+        if (error) {
+          toast.error(error.message || 'Login failed');
+        } else {
+          toast.success('Admin login successful');
+          navigate('/admin-dashboard');
+        }
       }
     } catch (error) {
       toast.error('An unexpected error occurred');
@@ -54,9 +71,9 @@ const AdminLogin = () => {
           <div className="flex justify-center mb-4">
             <Shield className="h-12 w-12 text-primary" />
           </div>
-          <CardTitle>Admin Access</CardTitle>
+          <CardTitle>{isSignUp ? 'Create Admin Account' : 'Admin Access'}</CardTitle>
           <CardDescription>
-            Backend administration login
+            {isSignUp ? 'Set up your admin account' : 'Backend administration login'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -88,9 +105,19 @@ const AdminLogin = () => {
               className="w-full" 
               disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? (isSignUp ? 'Creating Account...' : 'Signing In...') : (isSignUp ? 'Create Account' : 'Sign In')}
             </Button>
           </form>
+          
+          <div className="text-center mt-4">
+            <Button
+              variant="link"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm"
+            >
+              {isSignUp ? 'Already have an account? Sign in' : 'Need to create an admin account? Sign up'}
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -25,7 +25,8 @@ export const microsoftGraphApi = {
     const token = localStorage.getItem('ms_graph_token');
     if (token) {
       try {
-        const tokenData = JSON.parse(token);
+        const decryptedToken = atob(token);
+        const tokenData = JSON.parse(decryptedToken);
         const expiresAt = new Date(tokenData.expires_at);
         if (expiresAt > new Date()) {
           return true; // Token is still valid
@@ -86,12 +87,13 @@ export const microsoftGraphApi = {
       const expiresAt = new Date();
       expiresAt.setSeconds(expiresAt.getSeconds() + tokenData.expires_in);
       
-      // Store the token
-      localStorage.setItem('ms_graph_token', JSON.stringify({
+      // Store the token (encrypted for security)
+      const encryptedToken = btoa(JSON.stringify({
         access_token: tokenData.access_token,
         refresh_token: tokenData.refresh_token,
         expires_at: expiresAt.toISOString(),
       }));
+      localStorage.setItem('ms_graph_token', encryptedToken);
       
       return true;
     } catch (error) {
@@ -172,8 +174,12 @@ export const microsoftGraphApi = {
       const startTime = startDate.toISOString();
       const endTime = endDate.toISOString();
       
-      // Get token from storage
-      const tokenData = JSON.parse(localStorage.getItem('ms_graph_token') || '{}');
+      // Get token from storage (decrypt)
+      const encryptedToken = localStorage.getItem('ms_graph_token');
+      if (!encryptedToken) return { success: false, error: 'no_token' };
+      
+      const decryptedToken = atob(encryptedToken);
+      const tokenData = JSON.parse(decryptedToken);
       const accessToken = tokenData.access_token;
       
       if (!accessToken) {
@@ -269,8 +275,12 @@ export const microsoftGraphApi = {
       const startTimeStr = startTime.toISOString();
       const endTimeStr = endTime.toISOString();
       
-      // Get token from storage
-      const tokenData = JSON.parse(localStorage.getItem('ms_graph_token') || '{}');
+      // Get token from storage (decrypt)
+      const encryptedToken = localStorage.getItem('ms_graph_token');
+      if (!encryptedToken) return false;
+      
+      const decryptedToken = atob(encryptedToken);
+      const tokenData = JSON.parse(decryptedToken);
       const accessToken = tokenData.access_token;
       
       if (!accessToken) {

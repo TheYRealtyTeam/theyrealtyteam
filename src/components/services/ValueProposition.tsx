@@ -20,7 +20,7 @@ const ValueProposition = () => {
         ONE Simple Price - EVERYTHING Included
       </h3>
       <p className="text-lg md:text-xl opacity-95 mb-6">
-        Unlike other property management companies that nickel and dime you with add-on fees, Y Realty Team includes <span className="font-bold">EVERYTHING</span> in one transparent management fee. Our comprehensive price covers ALL services, technology, inspections, marketing, and support with absolutely NO hidden costs or surprise charges.
+        Y Realty Team includes <span className="font-bold">EVERYTHING</span> in one transparent management fee. Our comprehensive price covers ALL services, technology, inspections, marketing, and support with absolutely NO hidden costs or surprise charges.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-base mb-6">
         {includedFeatures.map((feature, index) => (

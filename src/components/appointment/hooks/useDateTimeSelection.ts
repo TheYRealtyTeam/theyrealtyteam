@@ -1,6 +1,6 @@
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { filterAvailableTimes } from '../utils/validationUtils';
+import { useState, useEffect } from 'react';
+import { isToday, filterAvailableTimes } from '../utils/validationUtils';
 
 export const useDateTimeSelection = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -8,9 +8,9 @@ export const useDateTimeSelection = () => {
   const [callType, setCallType] = useState('');
 
   // Base available appointment times including 12:00 PM
-  const baseAvailableTimes = useMemo(() => [
+  const baseAvailableTimes = [
     '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
-  ], []);
+  ];
   
   // Filtered available times based on current time if date is today
   const [availableTimes, setAvailableTimes] = useState(baseAvailableTimes);
@@ -28,24 +28,24 @@ export const useDateTimeSelection = () => {
     } else {
       setAvailableTimes(baseAvailableTimes);
     }
-  }, [date, selectedTime, baseAvailableTimes]);
+  }, [date, selectedTime]);
 
-  const handleTimeSelect = useCallback((time: string) => {
+  const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-  }, []);
+  };
 
   /**
    * Check if first step is valid (date, time and call type are selected)
    */
-  const isFirstStepValid = useCallback((): boolean => {
+  const isFirstStepValid = (): boolean => {
     return !!date && !!selectedTime && !!callType;
-  }, [date, selectedTime, callType]);
+  };
 
-  const resetDateTimeSelection = useCallback(() => {
+  const resetDateTimeSelection = () => {
     setDate(undefined);
     setSelectedTime('');
     setCallType('');
-  }, []);
+  };
 
   return {
     date,

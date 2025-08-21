@@ -7,7 +7,7 @@ import {
   TabsTrigger 
 } from "@/components/ui/tabs";
 import { Button } from '@/components/ui/button';
-// import { useIsMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from 'react-router-dom';
 import EnhancedRentalCalculator from './calculators/enhanced/EnhancedRentalCalculator';
 import EnhancedMortgageCalculator from './calculators/enhanced/EnhancedMortgageCalculator';
@@ -44,7 +44,7 @@ interface SharedCalculatorState {
 }
 
 const CalculatorsSection = () => {
-  // const isMobile = useIsMobile();
+  const isMobile = useIsMobile();
 
   // Initialize shared state with default values - this persists across calculator switches
   const [sharedState, setSharedState] = useState<SharedCalculatorState>({
@@ -117,7 +117,7 @@ const CalculatorsSection = () => {
       <div className="container-custom">
         <Tabs defaultValue="rental" className="w-full">
           <div className="flex justify-center mb-8">
-            <TabsList className="flex flex-wrap grid-cols-3 max-w-2xl w-full">
+            <TabsList className={`flex flex-wrap ${isMobile ? 'flex-col w-full' : 'grid-cols-3'} max-w-2xl w-full`}>
               <TabsTrigger value="rental" className="flex-1">Enhanced Rental Calculator</TabsTrigger>
               <TabsTrigger value="mortgage" className="flex-1">Mortgage Calculator</TabsTrigger>
               <TabsTrigger value="roi" className="flex-1">ROI Calculator</TabsTrigger>

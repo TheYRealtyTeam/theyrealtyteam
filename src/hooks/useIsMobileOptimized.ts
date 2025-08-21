@@ -1,20 +1,33 @@
-// Safe, non-React compatibility shim for legacy imports
-// No React imports or hooks here; purely synchronous and side-effect free
 
-const MOBILE_BREAKPOINT = 768
+import { useState, useEffect } from 'react';
 
-export function isMobileOptimized(): boolean {
-  if (typeof window === 'undefined') return false
-  try {
-    return window.innerWidth < MOBILE_BREAKPOINT
-  } catch {
-    return false
-  }
-}
+export const useIsMobileOptimized = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
 
-// Back-compat export name used in older components; NOT a React hook
-export function useIsMobileOptimized(): boolean {
-  return isMobileOptimized()
-}
+  useEffect(() => {
+    const checkDevice = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      
+      setScreenSize({ width, height });
+      setIsMobile(width < 768);
+      setIsTablet(width >= 768 && width < 1024);
+    };
 
-export default isMobileOptimized
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  return {
+    isMobile,
+    isTablet,
+    isDesktop: !isMobile && !isTablet,
+    screenSize,
+    isSmallMobile: screenSize.width < 375,
+    isLargeMobile: screenSize.width >= 375 && screenSize.width < 768
+  };
+};

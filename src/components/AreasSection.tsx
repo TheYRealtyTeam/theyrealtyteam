@@ -1,42 +1,32 @@
-
-import * as React from 'react';
-import TechnologyFeatures from './areas/TechnologyFeatures';
-import ProcessSteps from './areas/ProcessSteps';
-import TeamPresence from './areas/TeamPresence';
-import TechnologyShowcase from './areas/TechnologyShowcase';
+import React from 'react';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import MobileAreasSection from './mobile/MobileAreasSection';
 import StatesCoverage from './areas/StatesCoverage';
+import TeamPresence from './areas/TeamPresence';
+import ProcessSteps from './areas/ProcessSteps';
 import CommitmentSection from './areas/CommitmentSection';
 
 const AreasSection = () => {
+  const { isMobile } = useIsMobileOptimized();
+
+  // Return mobile-optimized version for mobile devices
+  if (isMobile) {
+    return <MobileAreasSection />;
+  }
+
   return (
-    <section id="areas" className="section-padding bg-gradient-to-b from-white to-yrealty-blue/5">
+    <section id="areas" className="section-padding bg-gradient-to-b from-white to-gray-50">
       <div className="container-custom">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-yrealty-navy reveal">
-            Growing Excellence, Local Expertise
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-4xl mx-auto reveal leading-relaxed">
-            Building our property management network with trained team members, 
-            cutting-edge technology, and personalized service that delivers results wherever we serve.
+          <h2 className="section-title reveal">Service Areas</h2>
+          <p className="section-subtitle reveal">
+            Professional property management services available across all 50 states with local expertise and national standards
           </p>
         </div>
 
-        {/* Technology & Process Overview */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          <TechnologyFeatures />
-          <ProcessSteps />
-        </div>
-
-        {/* Enhanced Team Presence Section */}
-        <TeamPresence />
-
-        {/* Technology Stack Showcase */}
-        <TechnologyShowcase />
-
-        {/* States Coverage */}
         <StatesCoverage />
-
-        {/* Guarantees & Commitments */}
+        <TeamPresence />
+        <ProcessSteps />
         <CommitmentSection />
       </div>
     </section>

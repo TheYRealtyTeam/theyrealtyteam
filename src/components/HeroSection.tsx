@@ -1,36 +1,39 @@
-import * as React from 'react'
-import { ArrowDown } from 'lucide-react'
-
-if (typeof window !== 'undefined') {
-  // eslint-disable-next-line no-console
-  console.log('[HeroSection] React instance same?', React === (window as any).__reactInstance)
-}
-
+import React, { useEffect, useRef, useState } from 'react';
+import { ArrowDown } from 'lucide-react';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import MobileHeroSection from './mobile/MobileHeroSection';
 
 const HeroSection = () => {
-  const heroRef = React.useRef<HTMLDivElement>(null)
-  const [isImageLoaded, setIsImageLoaded] = React.useState(false)
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const { isMobile } = useIsMobileOptimized();
 
-  React.useEffect(() => {
-    const img = new Image()
-    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920"
-    img.onload = () => setIsImageLoaded(true)
+  useEffect(() => {
+    const img = new Image();
+    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
+    img.onload = () => setIsImageLoaded(true);
 
     const handleScroll = () => {
-      if (!heroRef.current) return
-      const scrollTop = window.scrollY
-      const parallaxOffset = scrollTop * 0.4
+      if (!heroRef.current) return;
+      const scrollTop = window.scrollY;
+      const parallaxOffset = scrollTop * 0.4;
       requestAnimationFrame(() => {
         if (heroRef.current) {
-          heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`
+          heroRef.current.style.backgroundPositionY = `-${parallaxOffset}px`;
         }
-      })
-    }
+      });
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
+  // Return mobile-optimized version for mobile devices
+  if (isMobile) {
+    return <MobileHeroSection />;
+  }
+
+  // Desktop version (keep existing code)
   return (
     <section 
       id="home" 
@@ -50,14 +53,14 @@ const HeroSection = () => {
         <div className="max-w-4xl text-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in leading-tight">
             Premier Property Management 
-            <span className="block text-yrealty-accent">Excellence</span>
+            <span className="block text-yrealty-accent">Nationwide</span>
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 animate-fade-in leading-relaxed max-w-3xl" style={{
             animationDelay: '0.2s'
           }}>
-            Elevating property management to new heights with exceptional service, 
-            innovative solutions, and a client-first approach wherever we serve.
+            Elevating property management to new heights across all 50 states with 
+            exceptional service, innovative solutions, and a client-first approach.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 animate-fade-in" style={{
@@ -77,7 +80,7 @@ const HeroSection = () => {
         <ArrowDown size={32} />
       </a>
     </section>
-  )
-}
+  );
+};
 
-export default HeroSection
+export default HeroSection;

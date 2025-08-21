@@ -14,26 +14,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
-  optimizeDeps: {
-    include: [
-      'react',
-      'react-dom',
-      'react-dom/client',
-      'react/jsx-runtime',
-      'react/jsx-dev-runtime',
-      'react-router-dom'
-    ],
-  },
   resolve: {
-    dedupe: [
-      "react",
-      "react-dom",
-      "react-dom/client",
-      "react/jsx-runtime",
-      "react/jsx-dev-runtime",
-      "react-router",
-      "react-router-dom"
-    ],
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },

@@ -1,6 +1,6 @@
 
-import React from 'react';
-import MainNavbar from '@/components/navbar/MainNavbarV2';
+import React, { useEffect } from 'react';
+import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
 
@@ -21,7 +21,7 @@ const PageLayout = ({
 }: PageLayoutProps) => {
   
   // Set page title and meta description
-  React.useEffect(() => {
+  useEffect(() => {
     // Set page title
     document.title = `${title} | Y Realty Team`;
     
@@ -43,7 +43,7 @@ const PageLayout = ({
 
   return (
     <div className="min-h-screen flex flex-col">
-      <MainNavbar />
+      <Navbar />
       <main className="flex-grow">
         <div className="pt-28 md:pt-32 pb-8 md:pb-12 bg-yrealty-blue">
           <div className="container-custom">

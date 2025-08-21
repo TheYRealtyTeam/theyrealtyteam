@@ -1,48 +1,6 @@
-import * as React from 'react';
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './index.css';
-// shim removed; no legacy mobile hook import
 
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import './styles/index.css'
 
-// Debug: ensure single React instance
-// eslint-disable-next-line no-console
-console.log('[main] React version:', React.version);
-// expose for instance checks
-;(globalThis as any).__reactInstance = React;
-import ErrorBoundary from './components/ErrorBoundary';
-
-// Eager page imports to avoid duplicate React contexts from dynamic chunks
-import Index from './pages/IndexV2';
-import Areas from './pages/Areas';
-import Contact from './pages/Contact';
-import FAQ from './pages/FAQ';
-import Tools from './pages/Tools';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
-import BlogAdmin from './pages/BlogAdmin';
-import Appointment from './pages/Appointment';
-import NotFound from './pages/NotFound';
-
-const root = createRoot(document.getElementById('root')!);
-
-root.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/areas" element={<Areas />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/blog-admin" element={<BlogAdmin />} />
-            <Route path="/appointment" element={<Appointment />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-      </BrowserRouter>
-    </ErrorBoundary>
-  </React.StrictMode>
-);
+createRoot(document.getElementById("root")!).render(<App />);

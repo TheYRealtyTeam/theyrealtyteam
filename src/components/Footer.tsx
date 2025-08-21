@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, Phone, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
 import Logo from './Logo';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -66,10 +66,10 @@ const Footer = () => {
                       {item.name}
                     </a>
                   ) : (
-                    <a href={item.path} className="text-gray-300 hover:text-white transition-colors flex items-center">
+                    <Link to={item.path} className="text-gray-300 hover:text-white transition-colors flex items-center">
                       <ArrowUp className="h-3 w-3 rotate-45 mr-2" />
                       {item.name}
-                    </a>
+                    </Link>
                   )}
                 </li>
               ))}
@@ -102,9 +102,9 @@ const Footer = () => {
                 <a href="mailto:info@theYteam.co" className="text-gray-300 hover:text-white transition-colors">info@theYteam.co</a>
               </li>
             </ul>
-            <a href="/contact" className="mt-6 inline-block px-5 py-2 bg-yrealty-accent text-white rounded-md hover:bg-opacity-90 transition-all">
+            <Link to="/contact" className="mt-6 inline-block px-5 py-2 bg-yrealty-accent text-white rounded-md hover:bg-opacity-90 transition-all">
               Contact Us
-            </a>
+            </Link>
           </div>
         </div>
         
@@ -112,11 +112,11 @@ const Footer = () => {
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
             &copy; {new Date().getFullYear()} Y Realty Team. All rights reserved. <a href="https://theYteam.co" className="hover:text-white transition-colors" rel="noopener noreferrer" target="_blank">theYteam.co</a>
           </p>
-            <div className="flex space-x-6 text-sm text-gray-400">
-              <a href="/" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="/" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="/" className="hover:text-white transition-colors">Sitemap</a>
-            </div>
+          <div className="flex space-x-6 text-sm text-gray-400">
+            <Link to="/" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link to="/" className="hover:text-white transition-colors">Sitemap</Link>
+          </div>
         </div>
       </div>
       

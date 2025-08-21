@@ -7,7 +7,14 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 
 export const supabase = createClient<Database>(
   supabaseUrl,
-  supabaseKey
+  supabaseKey,
+  {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  }
 )
 
 // Type definition for blog posts to use throughout the app

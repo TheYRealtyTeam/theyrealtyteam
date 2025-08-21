@@ -1,5 +1,5 @@
 
-import { serve } from "https://deno.land/std@0.208.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { corsHeaders, handleCorsPreflightRequest, createErrorResponse, createSuccessResponse } from './cors.ts';
 import { validateRequest } from './validation.ts';
 import { callOpenAI } from './openai.ts';

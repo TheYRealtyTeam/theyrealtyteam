@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { 
   Building, Home, User, ClipboardCheck, Wallet, LineChart, 
@@ -55,7 +53,7 @@ const coreServices: Service[] = [
     description: "24/7 maintenance coordination with our vetted contractor network, preventative maintenance scheduling, and emergency response protocols.",
     icon: <Wrench className="h-12 w-12 text-yrealty-accent" />,
     features: ["24/7 emergency response", "Vetted contractor network", "Preventive scheduling", "Cost optimization"],
-    pricing: "Maintenance at cost"
+    pricing: "Maintenance at cost + coordination fee"
   },
   {
     title: "Professional Lease Management",
@@ -90,10 +88,10 @@ const coreServices: Service[] = [
 export const getResidentialServices = (): Service[] => [
   {
     title: "Residential Property Management",
-    description: "Comprehensive management for single-family homes, condos, apartments, and multifamily properties. We excel at managing multifamily complexes with specialized expertise in tenant relations, maintenance coordination, and maximizing rental income across all unit types.",
+    description: "Comprehensive management for single-family homes, condos, and apartments with focus on maximizing rental income and maintaining property value.",
     icon: <Home className="h-12 w-12 text-yrealty-accent" />,
-    features: ["Single-family homes", "Multifamily properties", "Condos & apartments", "HOA coordination", "Residential compliance"],
-    pricing: "Competitive flat fee structure"
+    features: ["Single-family homes", "Condos & apartments", "HOA coordination", "Residential compliance"],
+    pricing: "8-12% of monthly rent"
   },
   ...coreServices
 ];
@@ -108,4 +106,3 @@ export const getCommercialServices = (): Service[] => [
   },
   ...coreServices
 ];
-

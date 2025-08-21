@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-// import { toast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/use-toast';
 import { BlogPostData } from '@/integrations/supabase/client';
 
 interface UseBlogPostsProps {
@@ -61,7 +61,11 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         if (error) {
           console.error('Error fetching blog posts:', error);
           setError(error.message);
-          console.error("Error fetching blog posts:", error.message);
+          toast({
+            title: "Error fetching blog posts",
+            description: error.message,
+            variant: "destructive"
+          });
           return;
         }
         
@@ -77,7 +81,11 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
       } catch (error: any) {
         console.error('Unexpected error in blog posts fetch:', error);
         setError("An unexpected error occurred: " + (error.message || "Unknown error"));
-        console.error("Error fetching blog posts: Please try again later.");
+        toast({
+          title: "Error fetching blog posts",
+          description: "Please try again later.",
+          variant: "destructive"
+        });
       } finally {
         setLoading(false);
       }

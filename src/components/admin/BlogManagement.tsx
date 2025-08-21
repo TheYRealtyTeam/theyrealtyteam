@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { BlogPost } from '@/types/admin';
 import { 
   Plus, 
   Edit, 
@@ -27,7 +28,7 @@ import AdminControls from '@/components/blog/AdminControls';
 const BlogManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [editingPost, setEditingPost] = useState<any>(null);
+  const [editingPost, setEditingPost] = useState<BlogPost | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -53,7 +54,7 @@ const BlogManagement = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const handleEdit = (post: any) => {
+  const handleEdit = (post: BlogPost) => {
     setEditingPost(post);
     setIsEditDialogOpen(true);
   };
@@ -79,8 +80,9 @@ const BlogManagement = () => {
       setIsEditDialogOpen(false);
       setEditingPost(null);
       setRefreshTrigger(prev => prev + 1);
-    } catch (error: any) {
-      toast.error('Failed to update blog post: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error('Failed to update blog post: ' + errorMessage);
     }
   };
 
@@ -97,8 +99,9 @@ const BlogManagement = () => {
 
       toast.success('Blog post deleted successfully');
       setRefreshTrigger(prev => prev + 1);
-    } catch (error: any) {
-      toast.error('Failed to delete blog post: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error('Failed to delete blog post: ' + errorMessage);
     }
   };
 

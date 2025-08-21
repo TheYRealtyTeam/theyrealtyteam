@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ContactSubmission } from '@/types/admin';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -18,17 +19,6 @@ import {
   Clock
 } from 'lucide-react';
 import { format } from 'date-fns';
-
-interface ContactSubmission {
-  id: string;
-  name: string;
-  email: string;
-  phone: string | null;
-  property_type: string;
-  message: string;
-  created_at: string;
-  updated_at: string;
-}
 
 const ContactManagement = () => {
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
@@ -50,8 +40,9 @@ const ContactManagement = () => {
 
       if (error) throw error;
       setContactSubmissions(data || []);
-    } catch (error: any) {
-      toast.error('Failed to fetch contact submissions: ' + error.message);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error('Failed to fetch contact submissions: ' + errorMessage);
     } finally {
       setLoading(false);
     }

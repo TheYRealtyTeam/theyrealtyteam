@@ -12,36 +12,7 @@ import { Link } from 'react-router-dom';
 import EnhancedRentalCalculator from './calculators/enhanced/EnhancedRentalCalculator';
 import EnhancedMortgageCalculator from './calculators/enhanced/EnhancedMortgageCalculator';
 import EnhancedROICalculator from './calculators/enhanced/EnhancedROICalculator';
-
-// Define shared state interface
-interface SharedCalculatorState {
-  // Property details
-  propertyValue: number;
-  downPaymentPercent: number;
-  downPaymentAmount: number;
-  
-  // Mortgage details
-  interestRate: number;
-  loanTerm: number;
-  mortgagePayment: number;
-  
-  // Rental details
-  monthlyRent: number;
-  propertyTax: number;
-  insurance: number;
-  maintenanceCost: number;
-  vacancyRate: number;
-  managementFee: number;
-  isFlatFee: boolean;
-  isYearly: boolean;
-  otherExpenses: number;
-
-  // ROI details
-  closingCosts: number;
-  renovationCosts: number;
-  annualAppreciation: number;
-  holdingPeriod: number;
-}
+import { SharedCalculatorState } from '@/types/calculator';
 
 const CalculatorsSection = () => {
   const isMobile = useIsMobile();
@@ -175,7 +146,7 @@ const CalculatorsSection = () => {
               </div>
               <EnhancedMortgageCalculator 
                 sharedState={sharedState} 
-                updateSharedState={updateSharedState} 
+                updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
               />
             </div>
           </TabsContent>
@@ -190,7 +161,7 @@ const CalculatorsSection = () => {
               </div>
               <EnhancedROICalculator 
                 sharedState={sharedState} 
-                updateSharedState={updateSharedState} 
+                updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
               />
             </div>
           </TabsContent>

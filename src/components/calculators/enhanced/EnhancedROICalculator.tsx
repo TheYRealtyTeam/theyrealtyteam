@@ -12,9 +12,11 @@ import ROIInvestmentTimelineStep from './steps/roi/ROIInvestmentTimelineStep';
 import ROIResultsDashboard from './ROIResultsDashboard';
 import { ROICalculatorState, ROIResults } from './types/roiTypes';
 
+import { SharedCalculatorState } from '@/types/calculator';
+
 interface EnhancedROICalculatorProps {
-  sharedState: any;
-  updateSharedState: (updates: any) => void;
+  sharedState: SharedCalculatorState;
+  updateSharedState: (updates: SharedCalculatorState) => void;
 }
 
 const steps = [
@@ -69,7 +71,23 @@ const EnhancedROICalculator = ({ sharedState, updateSharedState }: EnhancedROICa
   useEffect(() => {
     calculateResults();
     // Sync with shared state
-    updateSharedState(calculatorState);
+    updateSharedState({
+      propertyValue: calculatorState.propertyValue,
+      downPaymentPercent: calculatorState.downPaymentPercent,
+      downPaymentAmount: calculatorState.downPaymentAmount,
+      interestRate: calculatorState.interestRate,
+      loanTerm: calculatorState.loanTerm,
+      monthlyRent: calculatorState.monthlyRent,
+      closingCosts: calculatorState.closingCosts,
+      renovationCosts: calculatorState.renovationCosts,
+      maintenanceCost: calculatorState.maintenanceCost,
+      vacancyRate: calculatorState.vacancyRate,
+      managementFee: calculatorState.managementFee,
+      otherExpenses: calculatorState.otherExpenses,
+      isFlatFee: calculatorState.isFlatFee,
+      holdingPeriod: calculatorState.holdingPeriod,
+      annualAppreciation: calculatorState.annualAppreciation
+    });
   }, [calculatorState]);
 
   const calculateResults = () => {

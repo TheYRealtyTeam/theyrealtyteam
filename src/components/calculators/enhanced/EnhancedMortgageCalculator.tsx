@@ -11,9 +11,11 @@ import MortgageAdditionalCostsStep from './steps/mortgage/MortgageAdditionalCost
 import MortgageResultsDashboard from './MortgageResultsDashboard';
 import { MortgageCalculatorState, MortgageResults } from './types/mortgageTypes';
 
+import { SharedCalculatorState } from '@/types/calculator';
+
 interface EnhancedMortgageCalculatorProps {
-  sharedState: any;
-  updateSharedState: (updates: any) => void;
+  sharedState: SharedCalculatorState;
+  updateSharedState: (updates: SharedCalculatorState) => void;
 }
 
 const steps = [
@@ -26,13 +28,13 @@ const steps = [
 const EnhancedMortgageCalculator = ({ sharedState, updateSharedState }: EnhancedMortgageCalculatorProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [calculatorState, setCalculatorState] = useState<MortgageCalculatorState>({
-    propertyValue: sharedState.propertyValue || 300000,
-    downPaymentPercent: sharedState.downPaymentPercent || 20,
-    downPaymentAmount: sharedState.downPaymentAmount || 60000,
-    interestRate: sharedState.interestRate || 4.5,
-    loanTerm: sharedState.loanTerm || 30,
-    propertyTax: sharedState.propertyTax || 3000,
-    insurance: sharedState.insurance || 1200,
+    propertyValue: (typeof sharedState.propertyValue === 'number' ? sharedState.propertyValue : 300000),
+    downPaymentPercent: (typeof sharedState.downPaymentPercent === 'number' ? sharedState.downPaymentPercent : 20),
+    downPaymentAmount: (typeof sharedState.downPaymentAmount === 'number' ? sharedState.downPaymentAmount : 60000),
+    interestRate: (typeof sharedState.interestRate === 'number' ? sharedState.interestRate : 4.5),
+    loanTerm: (typeof sharedState.loanTerm === 'number' ? sharedState.loanTerm : 30),
+    propertyTax: (typeof sharedState.propertyTax === 'number' ? sharedState.propertyTax : 3000),
+    insurance: (typeof sharedState.insurance === 'number' ? sharedState.insurance : 1200),
     pmi: 150,
     hoaFees: 0,
     propertyType: 'single-family',
@@ -61,7 +63,15 @@ const EnhancedMortgageCalculator = ({ sharedState, updateSharedState }: Enhanced
 
   useEffect(() => {
     calculateResults();
-    updateSharedState(calculatorState);
+    updateSharedState({
+      propertyValue: calculatorState.propertyValue,
+      downPaymentPercent: calculatorState.downPaymentPercent,
+      downPaymentAmount: calculatorState.downPaymentAmount,
+      interestRate: calculatorState.interestRate,
+      loanTerm: calculatorState.loanTerm,
+      propertyTax: calculatorState.propertyTax,
+      insurance: calculatorState.insurance
+    });
   }, [calculatorState]);
 
   const calculateResults = () => {

@@ -8,7 +8,7 @@ import TechnologyStack from './services/TechnologyStack';
 import ServicesTabContent from './services/ServicesTabContent';
 
 const ServicesSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const { isMobileOnly } = useIsMobileOptimized();
   const [activeTab, setActiveTab] = useState("residential");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,8 +18,8 @@ const ServicesSection = () => {
     setTimeout(() => setIsLoading(false), 300);
   };
 
-  // Return mobile-optimized version for mobile devices
-  if (isMobile) {
+  // Return mobile-optimized version only for phones, not tablets
+  if (isMobileOnly) {
     return <MobileServicesSection />;
   }
 

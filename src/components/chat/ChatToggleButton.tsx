@@ -8,15 +8,15 @@ interface ChatToggleButtonProps {
 }
 
 const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
-  const { isMobile } = useIsMobileOptimized();
+  const { isMobileOnly } = useIsMobileOptimized();
 
   return (
     <button
       onClick={onClick}
-      className={`fixed ${isMobile ? 'bottom-24 right-4' : 'bottom-6 right-6'} bg-yrealty-navy hover:bg-yrealty-navy/90 text-white ${isMobile ? 'p-3' : 'p-4'} rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40`}
+      className={`fixed ${isMobileOnly ? 'bottom-24 right-4' : 'bottom-6 right-6'} bg-yrealty-navy hover:bg-yrealty-navy/90 text-white ${isMobileOnly ? 'p-3' : 'p-4'} rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40`}
       aria-label="Open AI Chat"
     >
-      <MessageCircle className={`${isMobile ? 'h-5 w-5' : 'h-6 w-6'}`} />
+      <MessageCircle className={`${isMobileOnly ? 'h-5 w-5' : 'h-6 w-6'}`} />
     </button>
   );
 };

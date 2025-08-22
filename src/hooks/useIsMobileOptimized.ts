@@ -12,6 +12,7 @@ export const useIsMobileOptimized = () => {
       const height = window.innerHeight;
       
       setScreenSize({ width, height });
+      // Only phones are considered mobile, not tablets
       setIsMobile(width < 768);
       setIsTablet(width >= 768 && width < 1024);
     };
@@ -28,6 +29,9 @@ export const useIsMobileOptimized = () => {
     isDesktop: !isMobile && !isTablet,
     screenSize,
     isSmallMobile: screenSize.width < 375,
-    isLargeMobile: screenSize.width >= 375 && screenSize.width < 768
+    isLargeMobile: screenSize.width >= 375 && screenSize.width < 768,
+    // Helper for components that need to distinguish between mobile and tablet
+    isMobileOnly: isMobile,
+    isTabletOrDesktop: !isMobile
   };
 };

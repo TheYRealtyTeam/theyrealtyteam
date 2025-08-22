@@ -6,7 +6,7 @@ import MobileHeroSection from './mobile/MobileHeroSection';
 const HeroSection = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const { isMobile } = useIsMobileOptimized();
+  const { isMobileOnly } = useIsMobileOptimized();
 
   useEffect(() => {
     const img = new Image();
@@ -28,8 +28,8 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Return mobile-optimized version for mobile devices
-  if (isMobile) {
+  // Return mobile-optimized version only for phones, not tablets
+  if (isMobileOnly) {
     return <MobileHeroSection />;
   }
 

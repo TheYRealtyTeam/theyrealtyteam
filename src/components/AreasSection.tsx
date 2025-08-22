@@ -7,10 +7,10 @@ import ProcessSteps from './areas/ProcessSteps';
 import CommitmentSection from './areas/CommitmentSection';
 
 const AreasSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const { isMobileOnly } = useIsMobileOptimized();
 
-  // Return mobile-optimized version for mobile devices
-  if (isMobile) {
+  // Return mobile-optimized version only for phones, not tablets
+  if (isMobileOnly) {
     return <MobileAreasSection />;
   }
 

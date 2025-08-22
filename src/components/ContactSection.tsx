@@ -6,7 +6,7 @@ import MobileContactForm from './mobile/MobileContactForm';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const ContactSection = () => {
-  const { isMobile } = useIsMobileOptimized();
+  const { isMobileOnly } = useIsMobileOptimized();
 
   return (
     <section id="contact" className="section-padding bg-white">
@@ -18,15 +18,15 @@ const ContactSection = () => {
           </p>
         </div>
 
-        <div className={`grid grid-cols-1 ${isMobile ? 'gap-8' : 'lg:grid-cols-2 gap-12'}`}>
-          {!isMobile && (
+        <div className={`grid grid-cols-1 ${isMobileOnly ? 'gap-8' : 'lg:grid-cols-2 gap-12'}`}>
+          {!isMobileOnly && (
             <div className="reveal">
               <ContactInfo />
             </div>
           )}
           
           <div className="reveal">
-            {isMobile ? <MobileContactForm /> : <ContactSectionForm />}
+            {isMobileOnly ? <MobileContactForm /> : <ContactSectionForm />}
           </div>
         </div>
       </div>

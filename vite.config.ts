@@ -17,6 +17,11 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // Force a single React instance across the app and all deps
+      react: path.resolve(__dirname, "./node_modules/react"),
+      "react/jsx-runtime": path.resolve(__dirname, "./node_modules/react/jsx-runtime"),
+      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
+      "@radix-ui/react-tooltip": path.resolve(__dirname, "./src/shims/radix-tooltip-shim.tsx"),
     },
     // Ensure only a single React instance is used across app and deps
     dedupe: ["react", "react-dom", "react/jsx-runtime"],

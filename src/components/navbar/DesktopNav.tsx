@@ -24,11 +24,11 @@ const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user 
       ))}
       
       {user ? (
-        <Link to="/profile" className="ml-4 btn-primary font-bold">
+        <Link to="/profile" className="ml-6 btn-primary font-bold">
           Profile
         </Link>
       ) : (
-        <Link to="/appointment" className="ml-1 btn-primary font-bold">
+        <Link to="/appointment" className="ml-6 btn-primary font-bold">
           Get Started
         </Link>
       )}

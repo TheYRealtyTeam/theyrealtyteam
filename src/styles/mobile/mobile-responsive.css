@@ -2,7 +2,7 @@
 /* Mobile responsive breakpoints */
 
 /* Large mobile devices (375px and up) */
-@media (min-width: 375px) and (max-width: 768px) {
+@media (min-width: 375px) and (max-width: 767px) {
   .large-mobile-text h1 {
     font-size: 2.5rem;
   }
@@ -39,7 +39,7 @@
 }
 
 /* Accessibility improvements for mobile */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Ensure sufficient contrast */
   .mobile-high-contrast {
     --tw-text-opacity: 1;

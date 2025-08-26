@@ -1,6 +1,6 @@
 
 /* Mobile base styles and foundations */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* Enhanced touch targets */
   .mobile-touch-target {
     min-height: 48px;

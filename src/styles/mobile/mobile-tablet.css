@@ -63,8 +63,8 @@
   }
 }
 
-/* iPad Landscape and larger tablets (1024px - 1200px) */
-@media (min-width: 1024px) and (max-width: 1200px) {
+/* iPad Landscape and larger tablets (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
   .tablet-landscape-container {
     padding-left: 3rem;
     padding-right: 3rem;
@@ -86,8 +86,8 @@
   }
 }
 
-/* General tablet optimizations (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
+/* General tablet optimizations (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
   /* Touch target optimization */
   .tablet-touch-target {
     min-height: 48px;
@@ -181,7 +181,7 @@
 }
 
 /* Tablet-specific animations */
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .tablet-hover:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);

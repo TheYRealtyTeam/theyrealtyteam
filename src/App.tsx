@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 // Eager load critical routes
 import Index from "./pages/Index";

@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 
 const Vacancies = () => {
   console.log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,13 +25,17 @@ const Vacancies = () => {
         // Check if Appfolio is available
         const AppfolioAPI = (window as any).Appfolio;
         if (AppfolioAPI && typeof AppfolioAPI.Listing === 'function') {
-          AppfolioAPI.Listing({
-            hostUrl: 'theyteam.appfolio.com',
-            themeColor: '#676767',
-            height: '500px',
-            width: '100%',
-            defaultOrder: 'date_posted'
-          });
+          // Ensure AppFolio renders in our container
+          if (containerRef.current) {
+            AppfolioAPI.Listing({
+              hostUrl: 'theyteam.appfolio.com',
+              themeColor: '#676767',
+              height: '600px',
+              width: '100%',
+              defaultOrder: 'date_posted',
+              containerId: 'appfolio-listings' // Try to contain it in our div
+            });
+          }
           setLoading(false);
         } else {
           throw new Error('AppFolio API not available');
@@ -72,6 +79,17 @@ const Vacancies = () => {
       metaDescription="View available rental properties managed by Y Realty Team. Find your next home from our curated selection of quality rental units."
     >
       <div className="w-full">
+        {/* Back Navigation */}
+        <div className="mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to previous page
+          </button>
+        </div>
+
         {loading && (
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mr-3"></div>

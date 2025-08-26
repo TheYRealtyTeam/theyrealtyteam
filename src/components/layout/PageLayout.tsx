@@ -3,6 +3,8 @@ import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import AnimationObserver from '@/utils/AnimationObserver';
+import MobileBottomNavigation from '@/components/mobile/MobileBottomNavigation';
+import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 interface PageLayoutProps {
   children: React.ReactNode;
@@ -19,6 +21,7 @@ const PageLayout = ({
   metaDescription,
   className = '' 
 }: PageLayoutProps) => {
+  const { isMobile } = useIsMobileOptimized();
   
   // Set page title and meta description
   useEffect(() => {
@@ -63,6 +66,7 @@ const PageLayout = ({
       </main>
       <Footer />
       <AnimationObserver />
+      {isMobile && <MobileBottomNavigation />}
     </div>
   );
 };

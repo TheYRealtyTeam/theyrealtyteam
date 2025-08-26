@@ -17,6 +17,7 @@ export const ROUTES = {
   BLOG_POST: '/blog/:slug',
   BLOG_ADMIN: '/blog-admin',
   TOOLS: '/tools',
+  VACANCIES: '/vacancies',
   APPOINTMENT: '/appointment',
   CONTACT: '/contact',
   PROFILE: '/profile',

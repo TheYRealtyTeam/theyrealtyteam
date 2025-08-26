@@ -20,6 +20,7 @@ const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const BlogAdmin = lazy(() => import("./pages/BlogAdmin"));
 const Tools = lazy(() => import("./pages/Tools"));
+const Vacancies = lazy(() => import("./pages/Vacancies"));
 const Appointment = lazy(() => import("./pages/Appointment"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Profile = lazy(() => import("./pages/Profile"));
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/blog/:slug" element={<Suspense fallback={<PageLoading />}><BlogPost /></Suspense>} />
             <Route path="/blog-admin" element={<Suspense fallback={<PageLoading />}><BlogAdmin /></Suspense>} />
             <Route path="/tools" element={<Suspense fallback={<PageLoading />}><Tools /></Suspense>} />
+            <Route path="/vacancies" element={<Suspense fallback={<PageLoading />}><Vacancies /></Suspense>} />
             <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
             <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
             <Route path="/profile" element={<Suspense fallback={<PageLoading />}><Profile /></Suspense>} />

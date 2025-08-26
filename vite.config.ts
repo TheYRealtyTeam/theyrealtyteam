@@ -15,19 +15,21 @@ export default defineConfig(({ mode }) => ({
     componentTagger(),
   ].filter(Boolean),
   resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+    alias: [
+      { find: "@", replacement: path.resolve(__dirname, "./src") },
       // Force a single React instance across the app and all deps
-      react: path.resolve(__dirname, "./node_modules/react"),
-      "react/jsx-runtime": path.resolve(__dirname, "./node_modules/react/jsx-runtime"),
-      "react-dom": path.resolve(__dirname, "./node_modules/react-dom"),
-      "@radix-ui/react-tooltip": path.resolve(__dirname, "./src/shims/radix-tooltip-shim.tsx"),
-    },
+      { find: "react", replacement: path.resolve(__dirname, "./node_modules/react") },
+      { find: "react/jsx-runtime", replacement: path.resolve(__dirname, "./node_modules/react/jsx-runtime") },
+      { find: "react-dom", replacement: path.resolve(__dirname, "./node_modules/react-dom") },
+      // Shim ALL imports of Radix Tooltip (including subpaths) to our local no-op shim
+      { find: /^@radix-ui\/react-tooltip(\/.*)?$/, replacement: path.resolve(__dirname, "./src/shims/radix-tooltip-shim.tsx") },
+    ],
     // Ensure only a single React instance is used across app and deps
     dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
   optimizeDeps: {
     include: ["react", "react-dom", "react/jsx-runtime"],
+    exclude: ["@radix-ui/react-tooltip"],
   },
   build: {
     // Optimize chunks for better caching

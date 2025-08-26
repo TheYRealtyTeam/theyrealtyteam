@@ -27,6 +27,23 @@ const ContactManagement = () => {
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
 
   useEffect(() => {
+    const fetchContactSubmissions = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('contact_submissions')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setContactSubmissions(data || []);
+      } catch (error: any) {
+        console.error('Failed to fetch contact submissions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
     fetchContactSubmissions();
   }, []);
 

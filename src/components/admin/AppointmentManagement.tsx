@@ -45,6 +45,23 @@ const AppointmentManagement = () => {
   const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('appointments')
+          .select('*')
+          .order('date', { ascending: true });
+
+        if (error) throw error;
+        setAppointments(data || []);
+      } catch (error: any) {
+        console.error('Failed to fetch appointments:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
     fetchAppointments();
   }, []);
 

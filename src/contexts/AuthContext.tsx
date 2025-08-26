@@ -22,14 +22,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
+    let initialLoadCompleted = false;
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Show toast message on successful sign in/out (only when not loading)
-        if (!loading) {
+        // Show toast message on successful sign in/out (only after initial load)
+        if (initialLoadCompleted) {
           if (event === 'SIGNED_IN') {
             toast.success('Successfully signed in!');
           } else if (event === 'SIGNED_OUT') {
@@ -46,15 +48,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
         if (error) {
-          // Don't throw error, just log it and continue
+          console.warn('Auth session error:', error);
         }
         
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
       } catch (error) {
-        // Continue without auth if there's an error
+        console.warn('Auth initialization error:', error);
       } finally {
         setLoading(false);
+        initialLoadCompleted = true;
       }
     };
 

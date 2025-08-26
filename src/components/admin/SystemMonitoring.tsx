@@ -45,6 +45,35 @@ const SystemMonitoring = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        setLoading(true);
+
+        // Fetch security logs
+        const securityLogsData = await Promise.all([
+          fetch('/api/logs/security'),
+          fetch('/api/logs/rate-limit')
+        ]);
+
+        const [securityResponse, rateLimitResponse] = securityLogsData;
+        
+        if (securityResponse.ok && rateLimitResponse.ok) {
+          const security = await securityResponse.json();
+          const rateLimit = await rateLimitResponse.json();
+          
+          setSecurityLogs(security);
+          setRateLimitLogs(rateLimit);
+        }
+      } catch (error) {
+        console.error('Failed to fetch logs:', error);
+        // Set mock data for development
+        setSecurityLogs([]);
+        setRateLimitLogs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchLogs();
   }, []);
 

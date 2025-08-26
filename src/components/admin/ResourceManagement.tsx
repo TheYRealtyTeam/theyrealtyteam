@@ -47,6 +47,23 @@ const ResourceManagement = () => {
   });
 
   useEffect(() => {
+    const fetchResources = async () => {
+      try {
+        setLoading(true);
+        const { data, error } = await supabase
+          .from('resources')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        setResources(data || []);
+      } catch (error: any) {
+        console.error('Failed to fetch resources:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
     fetchResources();
   }, []);
 

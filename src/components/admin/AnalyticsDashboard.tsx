@@ -27,110 +27,110 @@ const AnalyticsDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const getDateRange = () => {
+      const now = new Date();
+      const days = parseInt(timeRange.replace('d', ''));
+      return {
+        start: startOfDay(subDays(now, days)),
+        end: endOfDay(now)
+      };
+    };
+
+    const fetchAnalyticsData = async () => {
+      try {
+        setLoading(true);
+        const { start, end } = getDateRange();
+
+        // Fetch blog posts data
+        const { data: blogPosts, error: blogError } = await supabase
+          .from('blog_posts')
+          .select('category, created_at');
+
+        if (blogError) throw blogError;
+
+        // Fetch contact submissions data
+        const { data: contacts, error: contactError } = await supabase
+          .from('contact_submissions')
+          .select('created_at, name');
+
+        if (contactError) throw contactError;
+
+        // Fetch appointments data
+        const { data: appointments, error: appointmentError } = await supabase
+          .from('appointments')
+          .select('created_at, name, status');
+
+        if (appointmentError) throw appointmentError;
+
+        // Process data
+        const recentBlogPosts = blogPosts.filter(post => 
+          new Date(post.created_at) >= start && new Date(post.created_at) <= end
+        );
+
+        const recentContacts = contacts.filter(contact => 
+          new Date(contact.created_at) >= start && new Date(contact.created_at) <= end
+        );
+
+        const recentAppointments = appointments.filter(appointment => 
+          new Date(appointment.created_at) >= start && new Date(appointment.created_at) <= end
+        );
+
+        // Calculate category distribution
+        const categoryCount = blogPosts.reduce((acc: { [key: string]: number }, post) => {
+          acc[post.category] = (acc[post.category] || 0) + 1;
+          return acc;
+        }, {});
+
+        const topCategories = Object.entries(categoryCount)
+          .map(([category, count]) => ({ category, count: count as number }))
+          .sort((a, b) => b.count - a.count)
+          .slice(0, 5);
+
+        // Create recent activity timeline
+        const recentActivity = [
+          ...recentBlogPosts.map(post => ({
+            type: 'blog',
+            title: 'New blog post published',
+            date: post.created_at
+          })),
+          ...recentContacts.map(contact => ({
+            type: 'contact',
+            title: `Contact from ${contact.name}`,
+            date: contact.created_at
+          })),
+          ...recentAppointments.map(appointment => ({
+            type: 'appointment',
+            title: `Appointment with ${appointment.name}`,
+            date: appointment.created_at
+          }))
+        ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
+
+        setAnalyticsData({
+          blogPosts: {
+            total: blogPosts.length,
+            recent: recentBlogPosts.length
+          },
+          contacts: {
+            total: contacts.length,
+            recent: recentContacts.length
+          },
+          appointments: {
+            total: appointments.length,
+            recent: recentAppointments.length
+          },
+          topCategories,
+          recentActivity
+        });
+
+      } catch (error: any) {
+        console.error('Failed to fetch analytics data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchAnalyticsData();
   }, [timeRange]);
-
-  const getDateRange = () => {
-    const now = new Date();
-    const days = parseInt(timeRange.replace('d', ''));
-    return {
-      start: startOfDay(subDays(now, days)),
-      end: endOfDay(now)
-    };
-  };
-
-  const fetchAnalyticsData = async () => {
-    try {
-      setLoading(true);
-      const { start, end } = getDateRange();
-
-      // Fetch blog posts data
-      const { data: blogPosts, error: blogError } = await supabase
-        .from('blog_posts')
-        .select('category, created_at');
-
-      if (blogError) throw blogError;
-
-      // Fetch contact submissions data
-      const { data: contacts, error: contactError } = await supabase
-        .from('contact_submissions')
-        .select('created_at, name');
-
-      if (contactError) throw contactError;
-
-      // Fetch appointments data
-      const { data: appointments, error: appointmentError } = await supabase
-        .from('appointments')
-        .select('created_at, name, status');
-
-      if (appointmentError) throw appointmentError;
-
-      // Process data
-      const recentBlogPosts = blogPosts.filter(post => 
-        new Date(post.created_at) >= start && new Date(post.created_at) <= end
-      );
-
-      const recentContacts = contacts.filter(contact => 
-        new Date(contact.created_at) >= start && new Date(contact.created_at) <= end
-      );
-
-      const recentAppointments = appointments.filter(appointment => 
-        new Date(appointment.created_at) >= start && new Date(appointment.created_at) <= end
-      );
-
-      // Calculate category distribution
-      const categoryCount = blogPosts.reduce((acc: { [key: string]: number }, post) => {
-        acc[post.category] = (acc[post.category] || 0) + 1;
-        return acc;
-      }, {});
-
-      const topCategories = Object.entries(categoryCount)
-        .map(([category, count]) => ({ category, count: count as number }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 5);
-
-      // Create recent activity timeline
-      const recentActivity = [
-        ...recentBlogPosts.map(post => ({
-          type: 'blog',
-          title: 'New blog post published',
-          date: post.created_at
-        })),
-        ...recentContacts.map(contact => ({
-          type: 'contact',
-          title: `Contact from ${contact.name}`,
-          date: contact.created_at
-        })),
-        ...recentAppointments.map(appointment => ({
-          type: 'appointment',
-          title: `Appointment with ${appointment.name}`,
-          date: appointment.created_at
-        }))
-      ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10);
-
-      setAnalyticsData({
-        blogPosts: {
-          total: blogPosts.length,
-          recent: recentBlogPosts.length
-        },
-        contacts: {
-          total: contacts.length,
-          recent: recentContacts.length
-        },
-        appointments: {
-          total: appointments.length,
-          recent: recentAppointments.length
-        },
-        topCategories,
-        recentActivity
-      });
-
-    } catch (error: any) {
-      console.error('Failed to fetch analytics data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getActivityIcon = (type: string) => {
     switch (type) {

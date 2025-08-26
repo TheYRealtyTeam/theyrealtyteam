@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 
 const Vacancies = () => {
+  console.log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

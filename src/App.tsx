@@ -5,7 +5,7 @@ import { ThemeProvider } from "next-themes";
 // Removed TooltipProvider due to invalid hook call in Radix during dev
 // import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -43,7 +43,6 @@ const App = () => {
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/faq" element={<Suspense fallback={<PageLoading />}><FAQ /></Suspense>} />
@@ -64,7 +63,6 @@ const App = () => {
             {/* Toast systems mounted after routes to ensure React contexts are ready */}
             <Toaster />
             <Sonner />
-          </BrowserRouter>
         </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>

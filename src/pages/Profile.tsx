@@ -143,61 +143,63 @@ const Profile = () => {
       subtitle="Manage your account information and settings"
       metaDescription="Manage your Y Realty Team profile settings and account information"
     >
-      <div className="max-w-xl mx-auto py-8">
-        <Card className="mb-8">
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              <Avatar className="h-16 w-16 border-2 border-yrealty-accent">
+      <div className="max-w-xl mx-auto py-8 tablet-container tablet-section-padding">
+        <Card className="mb-8 tablet-card tablet-hover">
+          <CardHeader className="tablet-content-spacing">
+            <div className="flex items-center gap-6">
+              <Avatar className="h-20 w-20 md:h-24 md:w-24 border-2 border-yrealty-accent">
                 <AvatarImage src={profile?.avatar_url || ''} />
-                <AvatarFallback className="bg-yrealty-navy text-white text-xl">
+                <AvatarFallback className="bg-yrealty-navy text-white text-xl md:text-2xl">
                   {fullName ? fullName.substring(0, 2).toUpperCase() : user?.email?.substring(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <CardTitle>{fullName || 'Account User'}</CardTitle>
-                <CardDescription>{user?.email}</CardDescription>
+                <CardTitle className="tablet-text-scale text-2xl md:text-3xl">{fullName || 'Account User'}</CardTitle>
+                <CardDescription className="tablet-large-text text-lg">{user?.email}</CardDescription>
               </div>
             </div>
           </CardHeader>
           
           <form onSubmit={handleUpdateProfile}>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
+            <CardContent className="space-y-6 tablet-space-y-8">
+              <div className="space-y-3">
+                <Label htmlFor="fullName" className="tablet-large-text text-base font-semibold">Full Name</Label>
                 <Input
                   id="fullName"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your full name"
                   maxLength={100}
+                  className="tablet-form-input text-lg py-3"
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+              <div className="space-y-3">
+                <Label htmlFor="username" className="tablet-large-text text-base font-semibold">Username</Label>
                 <Input
                   id="username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Your username"
                   maxLength={50}
+                  className="tablet-form-input text-lg py-3"
                 />
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+              <div className="space-y-3">
+                <Label htmlFor="email" className="tablet-large-text text-base font-semibold">Email</Label>
                 <Input
                   id="email"
                   value={user?.email || ''}
                   disabled
-                  className="bg-gray-100"
+                  className="bg-gray-100 tablet-form-input text-lg py-3"
                 />
-                <p className="text-xs text-gray-500">Email cannot be changed</p>
+                <p className="text-sm text-gray-500 tablet-body-text">Email cannot be changed</p>
               </div>
             </CardContent>
             
-            <CardFooter className="flex justify-between">
-              <Button type="submit" disabled={updating}>
+            <CardFooter className="flex flex-col sm:flex-row justify-between gap-4 tablet-content-spacing pt-6">
+              <Button type="submit" disabled={updating} className="tablet-btn w-full sm:w-auto">
                 {updating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -208,7 +210,7 @@ const Profile = () => {
                 )}
               </Button>
               
-              <Button variant="outline" type="button" onClick={handleSignOut}>
+              <Button variant="outline" type="button" onClick={handleSignOut} className="tablet-btn w-full sm:w-auto">
                 Sign Out
               </Button>
             </CardFooter>

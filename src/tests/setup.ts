@@ -1,4 +1,8 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+
+// Make vi available globally for tests
+global.vi = vi;
 
 // Mock IntersectionObserver with proper implementation
 global.IntersectionObserver = class IntersectionObserver {

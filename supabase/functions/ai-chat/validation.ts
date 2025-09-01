@@ -6,7 +6,7 @@ export interface RequestData {
   conversationHistory?: Array<{ role: string; content: string }>;
 }
 
-export const validateRequest = async (req: Request): Promise<RequestData | Response> => {
+export const validateRequest = async (req: Request): Promise<{ message: string; conversationHistory?: Array<{ role: string; content: string }> } | Response> => {
   // Validate request method
   if (req.method !== 'POST') {
     return createErrorResponse("Method not allowed", 405);

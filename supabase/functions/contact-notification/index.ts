@@ -4,8 +4,10 @@ import { Resend } from "npm:resend@2.0.0";
 
 // CORS headers
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'https://theYteam.co https://www.theYteam.co http://localhost:3000',
+  'Vary': 'Origin',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
   'Content-Type': 'application/json',
 };
 
@@ -97,6 +99,7 @@ const supabase = createClient(
 );
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') ?? '');
+const FROM = Deno.env.get('RESEND_FROM') ?? 'Y Realty Team <no-reply@theYteam.co>';
 
 interface ContactSubmissionData {
   name: string;
@@ -139,7 +142,7 @@ async function sendEmailNotification(submissionData: ContactSubmissionData) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Y Realty Team <no-reply@theYteam.co>',
+      from: FROM,
       to: ['info@theYteam.co'],
       subject: `New Contact Form Submission from ${sanitizedData.name}`,
       html: htmlBody,

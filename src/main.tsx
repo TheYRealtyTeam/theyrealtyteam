@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { ThemeProvider } from 'next-themes'
 import App from './App.tsx'
 import './styles/index.css'
 import ErrorBoundary from '@/components/common/ErrorBoundary'
@@ -15,9 +16,11 @@ createRoot(document.getElementById("root")!).render(
       <Suspense fallback={null}>
         <ErrorBoundary>
           <QueryClientProvider client={queryClient}>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
               <AuthProvider>
                 <App />
               </AuthProvider>
+            </ThemeProvider>
           </QueryClientProvider>
         </ErrorBoundary>
       </Suspense>

@@ -22,18 +22,38 @@ const Vacancies = () => {
           containerRef.current.innerHTML = '';
         }
 
+        // Add styles to prevent AppFolio from taking over the page
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+          #appfolio-listings {
+            position: relative !important;
+            overflow: hidden !important;
+            max-width: 100% !important;
+            z-index: 1 !important;
+          }
+          #appfolio-listings * {
+            max-width: 100% !important;
+            position: relative !important;
+          }
+          /* Ensure site header stays visible */
+          header {
+            z-index: 50 !important;
+            position: fixed !important;
+          }
+        `;
+        document.head.appendChild(styleElement);
+
         // Check if Appfolio is available
         const AppfolioAPI = (window as any).Appfolio;
         if (AppfolioAPI && typeof AppfolioAPI.Listing === 'function') {
-          // Ensure AppFolio renders in our container
+          // Ensure AppFolio renders in our container with strict containment
           if (containerRef.current) {
             AppfolioAPI.Listing({
               hostUrl: 'theyteam.appfolio.com',
               themeColor: '#676767',
               height: '600px',
               width: '100%',
-              defaultOrder: 'date_posted',
-              containerId: 'appfolio-listings' // Try to contain it in our div
+              defaultOrder: 'date_posted'
             });
           }
           setLoading(false);

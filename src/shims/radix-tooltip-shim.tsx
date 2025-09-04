@@ -24,6 +24,10 @@ export const TooltipContent = React.forwardRef<HTMLDivElement, React.HTMLAttribu
 ));
 TooltipContent.displayName = "TooltipContent";
 
+// Additional named exports to match common Radix API usage
+export const TooltipProvider = Provider;
+export const TooltipArrow: React.FC<any> = () => null;
+
 // Back-compat named exports expected by Radix usage
 export default {
   Provider,
@@ -31,4 +35,6 @@ export default {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  TooltipProvider,
+  TooltipArrow,
 };

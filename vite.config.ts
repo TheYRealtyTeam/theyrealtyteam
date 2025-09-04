@@ -18,8 +18,10 @@ export default defineConfig(({ mode }) => ({
     alias: [
       { find: "@", replacement: path.resolve(__dirname, "./src") },
       // Force a single React instance across the app and all deps (cover subpaths too)
-      { find: /^react(\/.*)?$/, replacement: path.resolve(__dirname, "./node_modules/react") },
-      { find: /^react-dom(\/.*)?$/, replacement: path.resolve(__dirname, "./node_modules/react-dom") },
+      { find: "react", replacement: path.resolve(__dirname, "./node_modules/react") },
+      { find: "react/jsx-runtime", replacement: path.resolve(__dirname, "./node_modules/react/jsx-runtime") },
+      { find: "react/jsx-dev-runtime", replacement: path.resolve(__dirname, "./node_modules/react/jsx-dev-runtime") },
+      { find: "react-dom", replacement: path.resolve(__dirname, "./node_modules/react-dom") },
       // Shim Radix Tooltip to a no-op shim to avoid invalid hook calls during dev
       { find: /^@radix-ui\/react-tooltip(\/.*)?$/, replacement: path.resolve(__dirname, "src/shims/tooltip.tsx") },
     ],

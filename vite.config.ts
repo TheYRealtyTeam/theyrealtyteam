@@ -17,12 +17,16 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: [
       { find: "@", replacement: path.resolve(__dirname, "./src") },
+      // Route all Radix Tooltip imports to our local shim (avoids hook/provider issues)
+      { find: "@radix-ui/react-tooltip", replacement: path.resolve(__dirname, "src/components/ui/tooltip.tsx") },
+      { find: /^@radix-ui\/react-tooltip(\/.*)?$/, replacement: path.resolve(__dirname, "src/components/ui/tooltip.tsx") },
     ],
     // Ensure only a single React instance is used across app and deps
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   optimizeDeps: {
-    include: ["react", "react-dom"],
+    include: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+    exclude: ["@radix-ui/react-tooltip"],
   },
   build: {
     // Optimize chunks for better caching

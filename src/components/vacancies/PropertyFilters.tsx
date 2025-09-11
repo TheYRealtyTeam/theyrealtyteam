@@ -76,14 +76,14 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         <div className="space-y-3">
           <Label className="text-sm font-medium">Bedrooms</Label>
           <Select 
-            value={filters.bedrooms?.toString() || ''} 
-            onValueChange={(value) => updateFilter('bedrooms', value ? Number(value) : undefined)}
+            value={filters.bedrooms?.toString() || 'any'} 
+            onValueChange={(value) => updateFilter('bedrooms', value === 'any' ? undefined : Number(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any</SelectItem>
+              <SelectItem value="any">Any</SelectItem>
               <SelectItem value="0">Studio</SelectItem>
               <SelectItem value="1">1 Bedroom</SelectItem>
               <SelectItem value="2">2 Bedrooms</SelectItem>
@@ -97,14 +97,14 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         <div className="space-y-3">
           <Label className="text-sm font-medium">Bathrooms</Label>
           <Select 
-            value={filters.bathrooms?.toString() || ''} 
-            onValueChange={(value) => updateFilter('bathrooms', value ? Number(value) : undefined)}
+            value={filters.bathrooms?.toString() || 'any'} 
+            onValueChange={(value) => updateFilter('bathrooms', value === 'any' ? undefined : Number(value))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any</SelectItem>
+              <SelectItem value="any">Any</SelectItem>
               <SelectItem value="1">1+ Bathroom</SelectItem>
               <SelectItem value="2">2+ Bathrooms</SelectItem>
               <SelectItem value="3">3+ Bathrooms</SelectItem>
@@ -116,14 +116,14 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         <div className="space-y-3">
           <Label className="text-sm font-medium">Property Type</Label>
           <Select 
-            value={filters.propertyType || ''} 
-            onValueChange={(value) => updateFilter('propertyType', value as any || undefined)}
+            value={filters.propertyType || 'any'} 
+            onValueChange={(value) => updateFilter('propertyType', value === 'any' ? undefined : value as any)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Any Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any Type</SelectItem>
+              <SelectItem value="any">Any Type</SelectItem>
               <SelectItem value="apartment">Apartment</SelectItem>
               <SelectItem value="house">House</SelectItem>
               <SelectItem value="condo">Condo</SelectItem>
@@ -136,14 +136,14 @@ const PropertyFilters: React.FC<PropertyFiltersProps> = ({
         <div className="space-y-3">
           <Label className="text-sm font-medium">Pet Policy</Label>
           <Select 
-            value={filters.petPolicy || ''} 
-            onValueChange={(value) => updateFilter('petPolicy', value as any || undefined)}
+            value={filters.petPolicy || 'any'} 
+            onValueChange={(value) => updateFilter('petPolicy', value === 'any' ? undefined : value as any)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any</SelectItem>
+              <SelectItem value="any">Any</SelectItem>
               <SelectItem value="pets-allowed">Pets Allowed</SelectItem>
               <SelectItem value="cats-only">Cats Only</SelectItem>
               <SelectItem value="dogs-only">Dogs Only</SelectItem>

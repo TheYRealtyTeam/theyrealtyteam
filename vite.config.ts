@@ -17,26 +17,12 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: [
       { find: "@", replacement: path.resolve(__dirname, "./src") },
-      // Force a single React instance across the app and all deps (cover subpaths too)
-      { find: "react", replacement: path.resolve(__dirname, "./node_modules/react") },
-      { find: "react/jsx-runtime", replacement: path.resolve(__dirname, "./node_modules/react/jsx-runtime") },
-      { find: "react/jsx-dev-runtime", replacement: path.resolve(__dirname, "./node_modules/react/jsx-dev-runtime") },
-      { find: "react-dom", replacement: path.resolve(__dirname, "./node_modules/react-dom") },
-      // Shim Radix Tooltip to a no-op shim to avoid invalid hook calls during dev
-      { find: "@radix-ui/react-tooltip/dist/index.mjs", replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
-      { find: "@radix-ui/react-tooltip", replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
-      { find: /^@radix-ui\/react-tooltip(\/.*)?$/, replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
     ],
     // Ensure only a single React instance is used across app and deps
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
-    exclude: ["@radix-ui/react-tooltip", "@radix-ui/react-tooltip/dist/index.mjs"],
-  },
-  define: {
-    // Force disable tooltip provider to prevent hook issues
-    __RADIX_TOOLTIP_DISABLED__: true
+    include: ["react", "react-dom"],
   },
   build: {
     // Optimize chunks for better caching

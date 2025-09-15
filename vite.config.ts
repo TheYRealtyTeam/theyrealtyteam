@@ -20,6 +20,11 @@ export default defineConfig(({ mode }) => ({
       // Route all Radix Tooltip imports to a local shim to avoid runtime hook issues
       { find: "@radix-ui/react-tooltip", replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
       { find: /^@radix-ui\/react-tooltip(\/.*)?$/, replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
+      // Enforce a single React instance to prevent invalid hook calls
+      { find: "react", replacement: path.resolve(__dirname, "node_modules/react") },
+      { find: "react-dom", replacement: path.resolve(__dirname, "node_modules/react-dom") },
+      { find: "react/jsx-runtime", replacement: path.resolve(__dirname, "node_modules/react/jsx-runtime.js") },
+      { find: "react/jsx-dev-runtime", replacement: path.resolve(__dirname, "node_modules/react/jsx-dev-runtime.js") },
     ],
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },

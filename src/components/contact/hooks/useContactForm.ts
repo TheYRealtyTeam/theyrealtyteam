@@ -9,6 +9,7 @@ import {
   validateName, 
   validateMessage 
 } from '../validation/formValidation';
+import { securityLogger } from '@/services/securityLogger';
 
 export const useContactForm = () => {
   const [formData, setFormData] = useState({
@@ -50,6 +51,7 @@ export const useContactForm = () => {
 
     // Validate name format
     if (!validateName(formData.name)) {
+      securityLogger.logValidationFailure('name', formData.name, 'Invalid format or suspicious content');
       toast({
         title: "Invalid Name",
         description: "Please enter a valid name (2-100 characters, letters only).",
@@ -60,6 +62,7 @@ export const useContactForm = () => {
 
     // Validate email format
     if (!validateEmail(formData.email)) {
+      securityLogger.logValidationFailure('email', formData.email, 'Invalid format or suspicious content');
       toast({
         title: "Invalid Email",
         description: "Please enter a valid email address.",
@@ -70,6 +73,7 @@ export const useContactForm = () => {
 
     // Validate phone if provided
     if (formData.phone && !validatePhone(formData.phone)) {
+      securityLogger.logValidationFailure('phone', formData.phone, 'Invalid format or suspicious content');
       toast({
         title: "Invalid Phone Number",
         description: "Please enter a valid phone number (10-20 digits).",
@@ -80,9 +84,10 @@ export const useContactForm = () => {
 
     // Validate message length and content
     if (!validateMessage(formData.message)) {
+      securityLogger.logValidationFailure('message', formData.message, 'Invalid content, length, or suspicious patterns');
       toast({
         title: "Invalid Message",
-        description: "Message must be between 10 and 2000 characters.",
+        description: "Message contains invalid content or is not within the required length.",
         variant: "destructive"
       });
       return false;

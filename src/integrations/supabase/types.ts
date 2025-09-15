@@ -269,6 +269,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      log_security_violation: {
+        Args: {
+          details?: Json
+          severity_level?: string
+          violation_type: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

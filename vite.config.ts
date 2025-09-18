@@ -23,12 +23,13 @@ export default defineConfig(({ mode }) => ({
       // Force a single React instance
       { find: "react", replacement: path.resolve(__dirname, "node_modules/react") },
       { find: "react-dom", replacement: path.resolve(__dirname, "node_modules/react-dom") },
+      { find: "react/jsx-runtime", replacement: path.resolve(__dirname, "node_modules/react/jsx-runtime.js") },
+      { find: "react/jsx-dev-runtime", replacement: path.resolve(__dirname, "node_modules/react/jsx-dev-runtime.js") },
     ],
     dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   optimizeDeps: {
-    include: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
-    exclude: ["@radix-ui/react-tooltip"],
+    exclude: ["@radix-ui/react-tooltip", "react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
   },
   build: {
     // Optimize chunks for better caching

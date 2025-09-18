@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, QrCode, Smartphone } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import qrCodeImage from '@/assets/vacancy-qr-code.png';
 
 const Vacancies = () => {
   console.log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
@@ -119,6 +121,30 @@ const Vacancies = () => {
           </button>
         </div>
 
+        {/* Quick Access QR Code - Mobile Friendly */}
+        <div className="mb-8 lg:hidden">
+          <Card className="mx-auto max-w-sm">
+            <CardHeader className="text-center pb-3">
+              <CardTitle className="flex items-center justify-center gap-2 text-lg">
+                <Smartphone className="h-5 w-5" />
+                Quick Mobile Access
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-center">
+              <div className="bg-white p-4 rounded-lg inline-block mb-3">
+                <img 
+                  src={qrCodeImage} 
+                  alt="QR Code for Vacancy Listings" 
+                  className="w-32 h-32 mx-auto"
+                />
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Scan to view listings on your mobile device
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
         {/* AppFolio Listings Container */}
         <div className="mb-8">
           {isLoading && (
@@ -140,6 +166,35 @@ const Vacancies = () => {
           
           {/* AppFolio will render the listings here */}
           <div id="appfolio-listings" className="w-full min-h-[500px] rounded-lg overflow-hidden"></div>
+        </div>
+
+        {/* Desktop QR Code Section */}
+        <div className="hidden lg:block mt-12 mb-8">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h3 className="text-xl font-semibold mb-2 flex items-center gap-2">
+                <QrCode className="h-6 w-6" />
+                Mobile Quick Access
+              </h3>
+              <p className="text-muted-foreground mb-4">
+                Scan this QR code with your mobile device to quickly access our vacancy listings on the go. 
+                Perfect for showing properties to clients or viewing listings while out in the field.
+              </p>
+              <div className="flex gap-2 text-sm text-muted-foreground">
+                <Smartphone className="h-4 w-4 mt-0.5" />
+                <span>Optimized for mobile viewing</span>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <img 
+                  src={qrCodeImage} 
+                  alt="QR Code for Vacancy Listings" 
+                  className="w-40 h-40"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Call to Action */}

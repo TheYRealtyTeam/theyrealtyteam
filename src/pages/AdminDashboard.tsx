@@ -23,15 +23,16 @@ import AppointmentManagement from '@/components/admin/AppointmentManagement';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 import SystemMonitoring from '@/components/admin/SystemMonitoring';
 import ResourceManagement from '@/components/admin/ResourceManagement';
+import PropertyManagement from '@/components/admin/PropertyManagement';
 
 const AdminDashboard = () => {
   const { user, loading } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [dashboardStats, setDashboardStats] = useState([
+    { title: "Total Properties", value: "Loading...", icon: Database, trend: "Calculating..." },
     { title: "Total Blog Posts", value: "Loading...", icon: FileText, trend: "Calculating..." },
     { title: "Contact Submissions", value: "Loading...", icon: MessageSquare, trend: "Calculating..." },
     { title: "Appointments", value: "Loading...", icon: Calendar, trend: "Calculating..." },
-    { title: "Resources", value: "Loading...", icon: Upload, trend: "Calculating..." },
   ]);
 
   useEffect(() => {
@@ -45,18 +46,20 @@ const AdminDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         // Fetch all counts in parallel
-        const [blogPosts, contactSubmissions, appointments, resources] = await Promise.all([
+        const [properties, blogPosts, contactSubmissions, appointments] = await Promise.all([
+          supabase.from('properties').select('id', { count: 'exact', head: true }),
           supabase.from('blog_posts').select('id', { count: 'exact', head: true }),
           supabase.from('contact_submissions').select('id', { count: 'exact', head: true }),
-          supabase.from('appointments').select('id', { count: 'exact', head: true }),
-          supabase.from('resources').select('id', { count: 'exact', head: true })
+          supabase.from('appointments').select('id', { count: 'exact', head: true })
         ]);
 
         // Calculate trends based on last 30 days
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-        const [recentBlogPosts, recentContacts, recentAppts] = await Promise.all([
+        const [recentProperties, recentBlogPosts, recentContacts, recentAppts] = await Promise.all([
+          supabase.from('properties').select('id', { count: 'exact', head: true })
+            .gte('created_at', thirtyDaysAgo.toISOString()),
           supabase.from('blog_posts').select('id', { count: 'exact', head: true })
             .gte('created_at', thirtyDaysAgo.toISOString()),
           supabase.from('contact_submissions').select('id', { count: 'exact', head: true })
@@ -72,6 +75,12 @@ const AdminDashboard = () => {
         };
 
         setDashboardStats([
+          { 
+            title: "Total Properties", 
+            value: (properties.count || 0).toString(), 
+            icon: Database, 
+            trend: calculateTrend(properties.count || 0, recentProperties.count || 0)
+          },
           { 
             title: "Total Blog Posts", 
             value: (blogPosts.count || 0).toString(), 
@@ -90,20 +99,14 @@ const AdminDashboard = () => {
             icon: Calendar, 
             trend: calculateTrend(appointments.count || 0, recentAppts.count || 0)
           },
-          { 
-            title: "Resources", 
-            value: (resources.count || 0).toString(), 
-            icon: Upload, 
-            trend: "Static files"
-          },
         ]);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
         setDashboardStats([
+          { title: "Total Properties", value: "Error", icon: Database, trend: "Failed to load" },
           { title: "Total Blog Posts", value: "Error", icon: FileText, trend: "Failed to load" },
           { title: "Contact Submissions", value: "Error", icon: MessageSquare, trend: "Failed to load" },
           { title: "Appointments", value: "Error", icon: Calendar, trend: "Failed to load" },
-          { title: "Resources", value: "Error", icon: Upload, trend: "Failed to load" },
         ]);
       }
     };
@@ -130,10 +133,14 @@ const AdminDashboard = () => {
     >
       <div className="max-w-7xl mx-auto space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
+          <TabsList className="grid w-full grid-cols-7">
             <TabsTrigger value="overview" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
               Overview
+            </TabsTrigger>
+            <TabsTrigger value="properties" className="flex items-center gap-2">
+              <Database className="h-4 w-4" />
+              Properties
             </TabsTrigger>
             <TabsTrigger value="content" className="flex items-center gap-2">
               <FileText className="h-4 w-4" />
@@ -235,6 +242,12 @@ const AdminDashboard = () => {
                 <CardContent>
                   <div className="space-y-2">
                     <button 
+                      onClick={() => setActiveTab("properties")}
+                      className="w-full text-left text-sm bg-muted hover:bg-muted/80 px-3 py-2 rounded-md transition-colors"
+                    >
+                      Manage Properties
+                    </button>
+                    <button 
                       onClick={() => setActiveTab("content")}
                       className="w-full text-left text-sm bg-muted hover:bg-muted/80 px-3 py-2 rounded-md transition-colors"
                     >
@@ -256,6 +269,10 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="properties">
+            <PropertyManagement />
           </TabsContent>
 
           <TabsContent value="content">

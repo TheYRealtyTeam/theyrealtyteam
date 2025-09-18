@@ -1,6 +1,11 @@
 import React from 'react';
 import { Property } from '@/types/property';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { 
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -8,14 +13,15 @@ import {
   MapPin, 
   Bed, 
   Bath, 
-  Square, 
-  Calendar, 
-  Car, 
+  Square,
+  Calendar,
+  Car,
+  Wifi,
+  Zap,
   Phone,
   Mail,
   ExternalLink,
-  Wifi,
-  Zap
+  X
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -26,11 +32,11 @@ interface PropertyModalProps {
   onContact: (property: Property) => void;
 }
 
-const PropertyModal: React.FC<PropertyModalProps> = ({
-  property,
-  isOpen,
-  onClose,
-  onContact
+const PropertyModal: React.FC<PropertyModalProps> = ({ 
+  property, 
+  isOpen, 
+  onClose, 
+  onContact 
 }) => {
   if (!property) return null;
 
@@ -43,25 +49,19 @@ const PropertyModal: React.FC<PropertyModalProps> = ({
   };
 
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), 'EEEE, MMMM dd, yyyy');
+    return format(new Date(dateString), 'MMM dd, yyyy');
   };
 
-  const getPetPolicyLabel = (policy: string) => {
-    switch (policy) {
-      case 'pets-allowed': return 'Pets Allowed';
-      case 'cats-only': return 'Cats Only';
-      case 'dogs-only': return 'Dogs Only';
-      case 'no-pets': return 'No Pets';
-      default: return policy;
-    }
-  };
-
-  const getLaundryLabel = (laundry: string) => {
-    switch (laundry) {
-      case 'in-unit': return 'In-Unit Laundry';
-      case 'on-site': return 'On-Site Laundry';
-      case 'none': return 'No Laundry';
-      default: return laundry;
+  const getUtilityIcon = (utility: string) => {
+    switch (utility.toLowerCase()) {
+      case 'internet':
+      case 'wifi':
+        return <Wifi className="h-4 w-4" />;
+      case 'electricity':
+      case 'electric':
+        return <Zap className="h-4 w-4" />;
+      default:
+        return null;
     }
   };
 
@@ -69,29 +69,35 @@ const PropertyModal: React.FC<PropertyModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl">{property.title}</DialogTitle>
+          <DialogTitle className="text-2xl font-bold">{property.title}</DialogTitle>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute right-4 top-4"
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Image Gallery */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {property.images.map((image, index) => (
-              <div key={index} className="aspect-[4/3] overflow-hidden rounded-lg">
-                <img 
-                  src={image} 
-                  alt={`${property.title} - Image ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
-          </div>
+          {/* Hero Image */}
+          {property.images && property.images.length > 0 && (
+            <div className="aspect-[16/9] overflow-hidden rounded-lg">
+              <img 
+                src={property.images[0]} 
+                alt={property.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
 
-          {/* Basic Info */}
+          {/* Property Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <div className="flex items-center gap-2 text-muted-foreground mb-2">
                 <MapPin className="h-4 w-4" />
-                <span>{property.address}, {property.city}, {property.state} {property.zipCode}</span>
+                <span>{property.address}, {property.city}, {property.state} {property.zip_code}</span>
               </div>
               
               <div className="text-3xl font-bold text-primary mb-4">
@@ -99,59 +105,63 @@ const PropertyModal: React.FC<PropertyModalProps> = ({
                 <span className="text-lg font-normal text-muted-foreground">/month</span>
               </div>
 
+              {/* Room Details */}
               <div className="grid grid-cols-3 gap-4 mb-4">
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <Bed className="h-5 w-5 mx-auto mb-1 text-muted-foreground" />
                   <div className="font-semibold">{property.bedrooms}</div>
                   <div className="text-xs text-muted-foreground">
-                    {property.bedrooms === 0 ? 'Studio' : property.bedrooms === 1 ? 'Bed' : 'Beds'}
+                    {property.bedrooms === 1 ? 'Bedroom' : 'Bedrooms'}
                   </div>
                 </div>
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <Bath className="h-5 w-5 mx-auto mb-1 text-muted-foreground" />
                   <div className="font-semibold">{property.bathrooms}</div>
                   <div className="text-xs text-muted-foreground">
-                    {property.bathrooms === 1 ? 'Bath' : 'Baths'}
+                    {property.bathrooms === 1 ? 'Bathroom' : 'Bathrooms'}
                   </div>
                 </div>
                 <div className="text-center p-3 bg-muted rounded-lg">
                   <Square className="h-5 w-5 mx-auto mb-1 text-muted-foreground" />
-                  <div className="font-semibold">{property.squareFootage}</div>
+                  <div className="font-semibold">{property.square_footage || 'N/A'}</div>
                   <div className="text-xs text-muted-foreground">Sq Ft</div>
                 </div>
               </div>
             </div>
 
             <div className="space-y-4">
+              {/* Property Features */}
               <div>
-                <h3 className="font-semibold mb-2">Property Details</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Property Type:</span>
-                    <span className="capitalize">{property.propertyType}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Pet Policy:</span>
-                    <span>{getPetPolicyLabel(property.petPolicy)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Parking:</span>
-                    <span>{property.parking ? 'Available' : 'Not Available'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Laundry:</span>
-                    <span>{getLaundryLabel(property.laundry)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Furnished:</span>
-                    <span>{property.furnished ? 'Yes' : 'No'}</span>
-                  </div>
+                <h4 className="font-semibold mb-2">Property Type & Features</h4>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  <Badge variant="secondary">
+                    {property.property_type.charAt(0).toUpperCase() + property.property_type.slice(1)}
+                  </Badge>
+                  
+                  {property.pet_policy && (
+                    <Badge variant="outline">
+                      {property.pet_policy === 'pets-allowed' ? 'Pets Allowed' :
+                       property.pet_policy === 'cats-only' ? 'Cats Only' :
+                       property.pet_policy === 'dogs-only' ? 'Dogs Only' : 'No Pets'}
+                    </Badge>
+                  )}
+                  
+                  {property.furnished && (
+                    <Badge variant="outline">Furnished</Badge>
+                  )}
+                  
+                  {property.parking && (
+                    <Badge variant="outline">
+                      <Car className="h-3 w-3 mr-1" />
+                      Parking
+                    </Badge>
+                  )}
                 </div>
               </div>
 
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="h-4 w-4 text-muted-foreground" />
-                <span>Available: {formatDate(property.availableDate)}</span>
+                <span>Available: {formatDate(property.available_date)}</span>
               </div>
             </div>
           </div>
@@ -159,31 +169,38 @@ const PropertyModal: React.FC<PropertyModalProps> = ({
           <Separator />
 
           {/* Description */}
-          <div>
-            <h3 className="font-semibold mb-3">Description</h3>
-            <p className="text-muted-foreground leading-relaxed">{property.description}</p>
-          </div>
+          {property.description && (
+            <div>
+              <h4 className="font-semibold mb-2">Description</h4>
+              <p className="text-muted-foreground leading-relaxed">
+                {property.description}
+              </p>
+            </div>
+          )}
 
           {/* Amenities */}
-          <div>
-            <h3 className="font-semibold mb-3">Amenities & Features</h3>
-            <div className="flex flex-wrap gap-2">
-              {property.amenities.map((amenity) => (
-                <Badge key={amenity} variant="secondary">
-                  {amenity}
-                </Badge>
-              ))}
+          {property.amenities && property.amenities.length > 0 && (
+            <div>
+              <h4 className="font-semibold mb-3">Amenities</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {property.amenities.map((amenity, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm">
+                    <div className="h-1.5 w-1.5 bg-primary rounded-full" />
+                    {amenity}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Utilities */}
-          {property.utilities.length > 0 && (
+          {property.utilities && property.utilities.length > 0 && (
             <div>
-              <h3 className="font-semibold mb-3">Utilities Included</h3>
+              <h4 className="font-semibold mb-3">Utilities Included</h4>
               <div className="flex flex-wrap gap-2">
-                {property.utilities.map((utility) => (
-                  <Badge key={utility} variant="outline">
-                    <Zap className="h-3 w-3 mr-1" />
+                {property.utilities.map((utility, index) => (
+                  <Badge key={index} variant="outline" className="flex items-center gap-1">
+                    {getUtilityIcon(utility)}
                     {utility}
                   </Badge>
                 ))}
@@ -195,21 +212,21 @@ const PropertyModal: React.FC<PropertyModalProps> = ({
 
           {/* Contact Information */}
           <div>
-            <h3 className="font-semibold mb-3">Contact Information</h3>
-            <div className="flex flex-wrap gap-4">
+            <h4 className="font-semibold mb-3">Contact Information</h4>
+            <div className="space-y-2">
               <a 
-                href={`tel:${property.contactInfo.phone}`}
+                href={`tel:${property.contact_phone || '(555) 123-4567'}`}
                 className="flex items-center gap-2 text-primary hover:underline"
               >
                 <Phone className="h-4 w-4" />
-                {property.contactInfo.phone}
+                {property.contact_phone || '(555) 123-4567'}
               </a>
               <a 
-                href={`mailto:${property.contactInfo.email}`}
+                href={`mailto:${property.contact_email || 'info@yrealty.com'}`}
                 className="flex items-center gap-2 text-primary hover:underline"
               >
                 <Mail className="h-4 w-4" />
-                {property.contactInfo.email}
+                {property.contact_email || 'info@yrealty.com'}
               </a>
             </div>
           </div>
@@ -223,12 +240,12 @@ const PropertyModal: React.FC<PropertyModalProps> = ({
               Contact About This Property
             </Button>
             
-            {property.virtualTourUrl && (
+            {property.virtual_tour_url && (
               <Button 
                 variant="outline" 
                 asChild
               >
-                <a href={property.virtualTourUrl} target="_blank" rel="noopener noreferrer">
+                <a href={property.virtual_tour_url} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="h-4 w-4 mr-2" />
                   Virtual Tour
                 </a>

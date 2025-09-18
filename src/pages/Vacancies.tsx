@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, SlidersHorizontal } from 'lucide-react';
+import { ArrowLeft, Search, SlidersHorizontal, Plus } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import PropertyCard from '@/components/vacancies/PropertyCard';
 import PropertyFilters from '@/components/vacancies/PropertyFilters';
 import PropertyModal from '@/components/vacancies/PropertyModal';
-import { sampleProperties } from '@/data/properties';
+import { useProperties } from '@/hooks/useProperties';
 import { Property, PropertyFilters as Filters, PropertySearchParams } from '@/types/property';
+import { useAuth } from '@/contexts/AuthContext';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -17,6 +18,8 @@ const Vacancies = () => {
   console.log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
+  const { properties, loading, error } = useProperties();
   
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<Filters>({});
@@ -25,7 +28,7 @@ const Vacancies = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filteredAndSortedProperties = useMemo(() => {
-    let filtered = sampleProperties;
+    let filtered = properties;
 
     // Apply search query
     if (searchQuery.trim()) {
@@ -52,10 +55,10 @@ const Vacancies = () => {
       filtered = filtered.filter(p => p.bathrooms >= filters.bathrooms!);
     }
     if (filters.propertyType) {
-      filtered = filtered.filter(p => p.propertyType === filters.propertyType);
+      filtered = filtered.filter(p => p.property_type === filters.propertyType);
     }
     if (filters.petPolicy) {
-      filtered = filtered.filter(p => p.petPolicy === filters.petPolicy);
+      filtered = filtered.filter(p => p.pet_policy === filters.petPolicy);
     }
     if (filters.parking !== undefined) {
       filtered = filtered.filter(p => p.parking === filters.parking);
@@ -73,15 +76,15 @@ const Vacancies = () => {
         filtered.sort((a, b) => b.price - a.price);
         break;
       case 'date-newest':
-        filtered.sort((a, b) => new Date(b.datePosted).getTime() - new Date(a.datePosted).getTime());
+        filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
         break;
       case 'date-oldest':
-        filtered.sort((a, b) => new Date(a.datePosted).getTime() - new Date(b.datePosted).getTime());
+        filtered.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
         break;
     }
 
     return filtered;
-  }, [searchQuery, filters, sortBy]);
+  }, [searchQuery, filters, sortBy, properties]);
 
   const handlePropertyDetails = (property: Property) => {
     setSelectedProperty(property);
@@ -89,9 +92,11 @@ const Vacancies = () => {
   };
 
   const handlePropertyContact = (property: Property) => {
+    const phone = property.contact_phone || '(555) 123-4567';
+    const email = property.contact_email || 'info@yrealty.com';
     toast({
       title: "Contact Information",
-      description: `Call ${property.contactInfo.phone} or email ${property.contactInfo.email} to inquire about ${property.title}`,
+      description: `Call ${phone} or email ${email} to inquire about ${property.title}`,
     });
   };
 
@@ -168,7 +173,7 @@ const Vacancies = () => {
           </div>
 
           <div className="text-sm text-muted-foreground">
-            Showing {filteredAndSortedProperties.length} of {sampleProperties.length} properties
+            Showing {filteredAndSortedProperties.length} of {properties.length} properties
           </div>
         </div>
 
@@ -183,15 +188,39 @@ const Vacancies = () => {
           </div>
           
           <div className="lg:col-span-3">
-            {filteredAndSortedProperties.length === 0 ? (
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading properties...</p>
+              </div>
+            ) : error ? (
+              <div className="text-center py-12">
+                <h3 className="text-lg font-semibold mb-2 text-destructive">Error Loading Properties</h3>
+                <p className="text-muted-foreground mb-4">{error}</p>
+                <Button onClick={() => window.location.reload()} variant="outline">
+                  Retry
+                </Button>
+              </div>
+            ) : filteredAndSortedProperties.length === 0 ? (
               <div className="text-center py-12">
                 <h3 className="text-lg font-semibold mb-2">No properties found</h3>
                 <p className="text-muted-foreground mb-4">
-                  Try adjusting your search criteria or filters
+                  {properties.length === 0 
+                    ? "No properties have been added yet. Add your first property to get started!"
+                    : "Try adjusting your search criteria or filters"
+                  }
                 </p>
-                <Button onClick={clearFilters} variant="outline">
-                  Clear Filters
-                </Button>
+                {properties.length === 0 && user ? (
+                  <Button onClick={() => navigate('/admin')} className="mr-2">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Property
+                  </Button>
+                ) : null}
+                {properties.length > 0 && (
+                  <Button onClick={clearFilters} variant="outline">
+                    Clear Filters
+                  </Button>
+                )}
               </div>
             ) : (
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
@@ -210,15 +239,39 @@ const Vacancies = () => {
 
         {/* Mobile Layout */}
         <div className="lg:hidden">
-          {filteredAndSortedProperties.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+              <p className="text-muted-foreground">Loading properties...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-12">
+              <h3 className="text-lg font-semibold mb-2 text-destructive">Error Loading Properties</h3>
+              <p className="text-muted-foreground mb-4">{error}</p>
+              <Button onClick={() => window.location.reload()} variant="outline">
+                Retry
+              </Button>
+            </div>
+          ) : filteredAndSortedProperties.length === 0 ? (
             <div className="text-center py-12">
               <h3 className="text-lg font-semibold mb-2">No properties found</h3>
               <p className="text-muted-foreground mb-4">
-                Try adjusting your search criteria or filters
+                {properties.length === 0 
+                  ? "No properties have been added yet. Add your first property to get started!"
+                  : "Try adjusting your search criteria or filters"
+                }
               </p>
-              <Button onClick={clearFilters} variant="outline">
-                Clear Filters
-              </Button>
+              {properties.length === 0 && user ? (
+                <Button onClick={() => navigate('/admin')} className="mr-2">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Property
+                </Button>
+              ) : null}
+              {properties.length > 0 && (
+                <Button onClick={clearFilters} variant="outline">
+                  Clear Filters
+                </Button>
+              )}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -167,6 +167,99 @@ export type Database = {
         }
         Relationships: []
       }
+      properties: {
+        Row: {
+          active: boolean | null
+          address: string
+          amenities: string[] | null
+          available_date: string
+          bathrooms: number
+          bedrooms: number
+          city: string
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          description: string | null
+          featured: boolean | null
+          furnished: boolean | null
+          id: string
+          images: string[] | null
+          laundry: string | null
+          parking: boolean | null
+          pet_policy: string | null
+          price: number
+          property_type: string
+          square_footage: number | null
+          state: string
+          title: string
+          updated_at: string
+          user_id: string
+          utilities: string[] | null
+          virtual_tour_url: string | null
+          zip_code: string
+        }
+        Insert: {
+          active?: boolean | null
+          address: string
+          amenities?: string[] | null
+          available_date: string
+          bathrooms?: number
+          bedrooms?: number
+          city: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean | null
+          furnished?: boolean | null
+          id?: string
+          images?: string[] | null
+          laundry?: string | null
+          parking?: boolean | null
+          pet_policy?: string | null
+          price: number
+          property_type: string
+          square_footage?: number | null
+          state: string
+          title: string
+          updated_at?: string
+          user_id: string
+          utilities?: string[] | null
+          virtual_tour_url?: string | null
+          zip_code: string
+        }
+        Update: {
+          active?: boolean | null
+          address?: string
+          amenities?: string[] | null
+          available_date?: string
+          bathrooms?: number
+          bedrooms?: number
+          city?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          description?: string | null
+          featured?: boolean | null
+          furnished?: boolean | null
+          id?: string
+          images?: string[] | null
+          laundry?: string | null
+          parking?: boolean | null
+          pet_policy?: string | null
+          price?: number
+          property_type?: string
+          square_footage?: number | null
+          state?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          utilities?: string[] | null
+          virtual_tour_url?: string | null
+          zip_code?: string
+        }
+        Relationships: []
+      }
       rate_limit_log: {
         Row: {
           created_at: string | null

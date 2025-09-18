@@ -91,7 +91,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           </div>
           <div className="flex items-center gap-1">
             <Square className="h-4 w-4 text-muted-foreground" />
-            <span>{property.squareFootage} sq ft</span>
+            <span>{property.square_footage || 'N/A'} sq ft</span>
           </div>
         </div>
 
@@ -112,7 +112,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="h-3 w-3" />
-              <span>Available {formatDate(property.availableDate)}</span>
+              <span>Available {formatDate(property.available_date)}</span>
             </div>
             
             {property.parking && (
@@ -140,13 +140,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({
           </Button>
         </div>
 
-        {property.virtualTourUrl && (
+        {property.virtual_tour_url && (
           <Button 
             variant="ghost" 
             className="w-full mt-2 text-sm"
             asChild
           >
-            <a href={property.virtualTourUrl} target="_blank" rel="noopener noreferrer">
+            <a href={property.virtual_tour_url} target="_blank" rel="noopener noreferrer">
               <ExternalLink className="h-4 w-4 mr-2" />
               Virtual Tour
             </a>

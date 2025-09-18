@@ -1,31 +1,32 @@
 export interface Property {
   id: string;
+  user_id: string;
   title: string;
   address: string;
   city: string;
   state: string;
-  zipCode: string;
+  zip_code: string;
   price: number;
   bedrooms: number;
   bathrooms: number;
-  squareFootage: number;
-  propertyType: 'apartment' | 'house' | 'condo' | 'townhouse';
+  square_footage?: number;
+  property_type: 'apartment' | 'house' | 'condo' | 'townhouse' | 'studio';
   images: string[];
   amenities: string[];
-  description: string;
-  availableDate: string;
-  petPolicy: 'no-pets' | 'cats-only' | 'dogs-only' | 'pets-allowed';
+  description?: string;
+  available_date: string;
+  pet_policy?: 'pets-allowed' | 'cats-only' | 'dogs-only' | 'no-pets';
   parking: boolean;
-  laundry: 'in-unit' | 'on-site' | 'none';
+  laundry?: 'in-unit' | 'on-site' | 'none';
   furnished: boolean;
   utilities: string[];
-  contactInfo: {
-    phone: string;
-    email: string;
-  };
-  virtualTourUrl?: string;
+  contact_phone?: string;
+  contact_email?: string;
+  virtual_tour_url?: string;
   featured: boolean;
-  datePosted: string;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface PropertyFilters {
@@ -33,8 +34,8 @@ export interface PropertyFilters {
   maxPrice?: number;
   bedrooms?: number;
   bathrooms?: number;
-  propertyType?: Property['propertyType'];
-  petPolicy?: Property['petPolicy'];
+  propertyType?: Property['property_type'];
+  petPolicy?: Property['pet_policy'];
   parking?: boolean;
   furnished?: boolean;
   availableDate?: string;

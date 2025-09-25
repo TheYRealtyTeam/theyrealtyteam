@@ -13,7 +13,6 @@ const queryClient = new QueryClient()
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <Suspense fallback={null}>
         <ErrorBoundary>
           <QueryClientProvider client={queryClient}>
             <AuthProvider>
@@ -21,7 +20,6 @@ createRoot(document.getElementById("root")!).render(
             </AuthProvider>
           </QueryClientProvider>
         </ErrorBoundary>
-      </Suspense>
     </BrowserRouter>
   </React.StrictMode>
 );

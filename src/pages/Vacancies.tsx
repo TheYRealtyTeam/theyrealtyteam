@@ -60,9 +60,9 @@ const Vacancies = () => {
         log('Initializing AppFolio with config:', {
           hostUrl: 'theyteam.appfolio.com',
           themeColor: '#676767',
-          height: '800px',
+          height: 'auto',
           width: '100%',
-          defaultOrder: 'bedrooms'
+          defaultOrder: 'date_posted'
         });
         
         // Clear the container first
@@ -71,13 +71,25 @@ const Vacancies = () => {
           container.innerHTML = '';
         }
         
+        // Initialize AppFolio - it will render into the page
         window.Appfolio.Listing({
           hostUrl: 'theyteam.appfolio.com',
           themeColor: '#676767',
-          height: '800px',
+          height: 'auto',
           width: '100%',
-          defaultOrder: 'bedrooms'
+          defaultOrder: 'date_posted'
         });
+        
+        // Wait a bit and check if widget rendered outside our container
+        setTimeout(() => {
+          const appfolioWidget = document.querySelector('.appfolio-widget-container');
+          const targetContainer = document.getElementById('appfolio-listings');
+          
+          if (appfolioWidget && targetContainer && !targetContainer.contains(appfolioWidget)) {
+            log('Moving AppFolio widget into designated container');
+            targetContainer.appendChild(appfolioWidget);
+          }
+        }, 500);
         
         setIsLoading(false);
         setError(null);

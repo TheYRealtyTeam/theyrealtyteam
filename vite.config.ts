@@ -22,7 +22,7 @@ export default defineConfig(({ mode }) => ({
       { find: "@radix-ui/react-tooltip", replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
       { find: /^@radix-ui\/react-tooltip(\/.*)?$/, replacement: path.resolve(__dirname, "src/shims/radix-tooltip-shim.tsx") },
     ],
-    dedupe: ["react", "react-dom"],
+    dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
   optimizeDeps: {
     force: true, // Force Vite to re-bundle dependencies

@@ -8,8 +8,8 @@ type AuthContextType = {
   session: Session | null;
   user: User | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any | null }>;
-  signUp: (email: string, password: string, userData: { full_name?: string, username?: string }) => Promise<{ error: any | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, userData: { full_name?: string, username?: string }) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   setSessionAndUser: (session: Session | null) => void;
 };

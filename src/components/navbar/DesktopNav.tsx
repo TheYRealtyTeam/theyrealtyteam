@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
 import { NavLink } from './NavLink';
 
 interface DesktopNavProps {
@@ -8,7 +8,7 @@ interface DesktopNavProps {
   isLinkActive: (link: { href: string; isAnchorLink: boolean }) => boolean;
   handleNavigation: (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => void;
   closeMenu: () => void;
-  user: any;
+  user: User | null;
 }
 
 const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user }: DesktopNavProps) => {

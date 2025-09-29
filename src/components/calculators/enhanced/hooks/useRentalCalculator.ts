@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { CalculatorState, CalculatorResults } from '../types';
 
-export const useRentalCalculator = (sharedState: any, updateSharedState: (updates: any) => void) => {
+export const useRentalCalculator = (sharedState: Partial<CalculatorState>, updateSharedState: (updates: Partial<CalculatorState>) => void) => {
   const [calculatorState, setCalculatorState] = useState<CalculatorState>({
     propertyValue: sharedState.propertyValue || 300000,
     downPaymentPercent: sharedState.downPaymentPercent || 20,

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import PropertyDetailsStep from './steps/PropertyDetailsStep';
 import FinancingStep from './steps/FinancingStep';
@@ -8,10 +7,11 @@ import CalculatorProgressHeader from './components/CalculatorProgressHeader';
 import CalculatorNavigation from './components/CalculatorNavigation';
 import { useRentalCalculator } from './hooks/useRentalCalculator';
 import { useStepNavigation } from './hooks/useStepNavigation';
+import { CalculatorState } from './types';
 
 interface EnhancedRentalCalculatorProps {
-  sharedState: any;
-  updateSharedState: (updates: any) => void;
+  sharedState: Partial<CalculatorState>;
+  updateSharedState: (updates: Partial<CalculatorState>) => void;
 }
 
 const TOTAL_STEPS = 4;

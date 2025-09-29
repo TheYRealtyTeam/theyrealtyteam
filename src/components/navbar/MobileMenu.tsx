@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 interface MobileMenuProps {
@@ -9,7 +9,7 @@ interface MobileMenuProps {
   navLinks: Array<{ name: string; href: string; isAnchorLink: boolean }>;
   isLinkActive: (link: { href: string; isAnchorLink: boolean }) => boolean;
   handleNavigation: (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => void;
-  user: any;
+  user: User | null;
 }
 
 const MobileMenu = ({ 

@@ -54,7 +54,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         error: "An unexpected error occurred. Please try again.",
-        details: error.message 
+        details: error instanceof Error ? error.message : 'Unknown error'
       }),
       { 
         status: 500, 

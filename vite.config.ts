@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    force: true, // Force Vite to re-optimize dependencies
   },
   plugins: [
     react(),
@@ -24,8 +25,12 @@ export default defineConfig(({ mode }) => ({
     dedupe: ["react", "react-dom"],
   },
   optimizeDeps: {
+    force: true, // Force Vite to re-bundle dependencies
     include: ["react", "react-dom", "react/jsx-runtime"],
     exclude: ["@radix-ui/react-tooltip"],
+    esbuildOptions: {
+      target: 'esnext',
+    },
   },
   build: {
     // Optimize chunks for better caching

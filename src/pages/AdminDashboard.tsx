@@ -27,7 +27,7 @@ import ResourceManagement from '@/components/admin/ResourceManagement';
 import PropertyManagement from '@/components/admin/PropertyManagement';
 
 const AdminDashboard = () => {
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [dashboardStats, setDashboardStats] = useState([
     { title: "Total Properties", value: "Loading...", icon: Database, trend: "Calculating..." },
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
       </PageLayout>
     );
   }
-  if (!user) {
+  if (!user || !isAdmin) {
     return <Navigate to="/admin-login" replace />;
   }
 

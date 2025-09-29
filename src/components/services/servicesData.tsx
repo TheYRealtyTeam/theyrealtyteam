@@ -53,7 +53,7 @@ const coreServices: Service[] = [
     description: "24/7 maintenance coordination with our vetted contractor network, preventative maintenance scheduling, and emergency response protocols.",
     icon: <Wrench className="h-12 w-12 text-yrealty-accent" />,
     features: ["24/7 emergency response", "Vetted contractor network", "Preventive scheduling", "Cost optimization"],
-    pricing: "Maintenance at cost + coordination fee"
+    pricing: "Maintenance at cost"
   },
   {
     title: "Professional Lease Management",
@@ -91,7 +91,7 @@ export const getResidentialServices = (): Service[] => [
     description: "Comprehensive management for single-family homes, condos, and apartments with focus on maximizing rental income and maintaining property value.",
     icon: <Home className="h-12 w-12 text-yrealty-accent" />,
     features: ["Single-family homes", "Condos & apartments", "HOA coordination", "Residential compliance"],
-    pricing: "8-12% of monthly rent"
+    pricing: "Flat monthly fee"
   },
   ...coreServices
 ];
@@ -102,7 +102,7 @@ export const getCommercialServices = (): Service[] => [
     description: "Expert management of office buildings, retail spaces, industrial properties, and mixed-use developments to maximize ROI and tenant satisfaction.",
     icon: <Building className="h-12 w-12 text-yrealty-accent" />,
     features: ["Office buildings", "Retail spaces", "Industrial properties", "Mixed-use developments"],
-    pricing: "Custom commercial pricing"
+    pricing: "Flat monthly fee"
   },
   ...coreServices
 ];

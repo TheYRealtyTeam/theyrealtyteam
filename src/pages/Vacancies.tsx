@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Home, QrCode, Smartphone, ChevronRight, ArrowUp } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import qrCodeImage from '@/assets/vacancy-qr-code.png';
 import { log, error as logError } from '@/lib/logger';
 import { diagnoseAppfolioRendering, generateMarkdownReport } from '@/features/vacancies/appfolio/diagnose';
+import { initAppFolio } from '@/features/vacancies/appfolio/init';
 
 const Vacancies = () => {
   log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
@@ -16,18 +17,11 @@ const Vacancies = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const h1Ref = useRef<HTMLHeadingElement>(null);
 
-  const loadAppfolioScript = useCallback(() => {
-    // Check if AppFolio is already available
-    if (window.Appfolio) {
-      log('AppFolio already loaded, initializing...');
-      initializeAppfolio();
-      return;
-    }
-
+  const loadAppfolioScript = () => {
     // Check if script is already loaded
     const existingScript = document.querySelector('script[src*="theyteam.appfolio.com"]');
     if (existingScript) {
-      log('AppFolio script already exists, waiting for load...');
+      log('AppFolio script already exists');
       return;
     }
 
@@ -42,10 +36,6 @@ const Vacancies = () => {
     
     script.onload = () => {
       log('AppFolio script loaded successfully');
-      // Small delay to ensure the script is fully initialized
-      setTimeout(() => {
-        initializeAppfolio();
-      }, 100);
     };
     
     script.onerror = (err) => {
@@ -55,61 +45,9 @@ const Vacancies = () => {
     };
 
     document.head.appendChild(script);
-  }, []);
+  };
 
-  const initializeAppfolio = useCallback(() => {
-    try {
-      if (window.Appfolio && window.Appfolio.Listing) {
-        log('Initializing AppFolio with config:', {
-          hostUrl: 'theyteam.appfolio.com',
-          themeColor: '#676767',
-          height: 'auto',
-          width: '100%',
-          defaultOrder: 'date_posted'
-        });
-        
-        // Clear the container first
-        const container = document.getElementById('appfolio-root');
-        if (container) {
-          container.innerHTML = '';
-        }
-        
-        // Initialize AppFolio - it will render into the page
-        window.Appfolio.Listing({
-          hostUrl: 'theyteam.appfolio.com',
-          themeColor: '#676767',
-          height: 'auto',
-          width: '100%',
-          defaultOrder: 'date_posted'
-        });
-        
-        // Wait a bit and check if widget rendered outside our container
-        setTimeout(() => {
-          const appfolioWidget = document.querySelector('.appfolio-widget-container');
-          const targetContainer = document.getElementById('appfolio-root');
-          
-          if (appfolioWidget && targetContainer && !targetContainer.contains(appfolioWidget)) {
-            log('Moving AppFolio widget into designated container');
-            targetContainer.appendChild(appfolioWidget);
-          }
-
-          // Run diagnostics after widget has loaded
-          runDiagnostics();
-        }, 500);
-        
-        setIsLoading(false);
-        setError(null);
-      } else {
-        throw new Error('AppFolio.Listing not available');
-      }
-    } catch (err) {
-      logError('Error initializing AppFolio:', err);
-      setError('Failed to initialize property listings. Please refresh the page.');
-      setIsLoading(false);
-    }
-  }, []);
-
-  const runDiagnostics = useCallback(async () => {
+  const runDiagnostics = async () => {
     // Wait a bit more to ensure widget is fully rendered
     setTimeout(async () => {
       try {
@@ -131,10 +69,27 @@ const Vacancies = () => {
         logError('Error running diagnostics:', err);
       }
     }, 1000);
-  }, []);
+  };
 
   useEffect(() => {
-    loadAppfolioScript();
+    let cancelled = false;
+
+    const init = async () => {
+      // Load the script first
+      loadAppfolioScript();
+      
+      // Give the external script a moment to attach, then init
+      await new Promise((r) => setTimeout(r, 300));
+      
+      if (!cancelled) {
+        await initAppFolio();
+        setIsLoading(false);
+        // Run diagnostics after initialization
+        runDiagnostics();
+      }
+    };
+
+    init();
     
     // Focus on H1 for accessibility
     if (h1Ref.current) {
@@ -150,6 +105,7 @@ const Vacancies = () => {
     
     // Cleanup function
     return () => {
+      cancelled = true;
       window.removeEventListener('scroll', handleScroll);
       // Clear the AppFolio container when component unmounts
       const container = document.getElementById('appfolio-root');
@@ -157,7 +113,7 @@ const Vacancies = () => {
         container.innerHTML = '';
       }
     };
-  }, [loadAppfolioScript]);
+  }, []);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });

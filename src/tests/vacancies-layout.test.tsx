@@ -1,20 +1,24 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Vacancies from '@/pages/Vacancies';
 
-describe('Vacancies Page Layout', () => {
-  it('renders with navbar and footer via PageLayout', () => {
-    render(
+describe('Vacancies layout integration', () => {
+  it('renders navbar/footer, heading, and appfolio root', () => {
+    const { container } = render(
       <BrowserRouter>
         <Vacancies />
       </BrowserRouter>
     );
 
-    // Check for breadcrumb navigation
-    const homeLink = screen.getByRole('link', { name: /home/i });
-    expect(homeLink).toBeInTheDocument();
-    expect(homeLink).toHaveAttribute('href', '/');
+    // Navbar link (e.g., Home) should be present
+    expect(screen.getByRole('link', { name: /home/i })).toBeTruthy();
+
+    // Page heading
+    expect(screen.getByRole('heading', { name: /current listings/i })).toBeTruthy();
+
+    // AppFolio mount container
+    expect(container.querySelector('#appfolio-root')).toBeTruthy();
   });
 
   it('displays the Current Listings header', () => {

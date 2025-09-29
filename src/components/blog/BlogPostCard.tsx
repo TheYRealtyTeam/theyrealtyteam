@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { log } from '@/lib/logger';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tag, Clock, ChevronRight } from 'lucide-react';
@@ -41,7 +41,7 @@ const BlogPostCard = ({ post }: BlogPostCardProps) => {
             alt={post.title} 
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
-              console.log("Image load error, using fallback");
+              log("Image load error, using fallback");
               (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
             }}
           />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { log } from '@/lib/logger';
 import PageLayout from '@/components/layout/PageLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
   ]);
 
   useEffect(() => {
-    console.log('[AdminDashboard] auth state', { loading, hasUser: !!user });
+    log('[AdminDashboard] auth state', { loading, hasUser: !!user });
   }, [user, loading]);
 
   useEffect(() => {

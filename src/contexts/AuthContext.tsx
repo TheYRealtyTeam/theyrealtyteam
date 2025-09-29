@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { Session, User } from '@supabase/supabase-js';
+import { warn } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -47,13 +48,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
         if (error) {
-          console.warn('Auth session error:', error);
+          warn('Auth session error:', error);
         }
         
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
-      } catch (error) {
-        console.warn('Auth initialization error:', error);
+      } catch (err) {
+        warn('Auth initialization error:', err);
       } finally {
         setLoading(false);
         initialLoadCompleted = true;

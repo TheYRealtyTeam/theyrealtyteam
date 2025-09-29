@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from "react";
+import { log } from '@/lib/logger';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ContactForm from "./ContactForm";
 import AppointmentScheduler from "../AppointmentScheduler";
@@ -19,14 +19,14 @@ const ContactTabs = () => {
       const activeTabContent = document.querySelector(`[data-value="${value}"]`);
       if (activeTabContent && activeTabContent.classList.contains('reveal')) {
         activeTabContent.classList.add('active');
-        console.log(`Activated tab content: ${value}`);
+        log(`Activated tab content: ${value}`);
       }
       
       // Force any calendar inside this tab to be visible and interactive
       if (value === 'appointment') {
         const calendar = document.querySelector('.rdp');
         if (calendar) {
-          console.log('Ensuring calendar is interactive');
+          log('Ensuring calendar is interactive');
         }
       }
       

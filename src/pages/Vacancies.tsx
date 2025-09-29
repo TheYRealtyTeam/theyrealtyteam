@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Home, QrCode, Smartphone, ChevronRight } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import qrCodeImage from '@/assets/vacancy-qr-code.png';
+import { log, error as logError } from '@/lib/logger';
 
 const Vacancies = () => {
-  console.log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
+  log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +16,7 @@ const Vacancies = () => {
   const loadAppfolioScript = useCallback(() => {
     // Check if AppFolio is already available
     if (window.Appfolio) {
-      console.log('AppFolio already loaded, initializing...');
+      log('AppFolio already loaded, initializing...');
       initializeAppfolio();
       return;
     }
@@ -23,7 +24,7 @@ const Vacancies = () => {
     // Check if script is already loaded
     const existingScript = document.querySelector('script[src*="theyteam.appfolio.com"]');
     if (existingScript) {
-      console.log('AppFolio script already exists, waiting for load...');
+      log('AppFolio script already exists, waiting for load...');
       return;
     }
 
@@ -37,15 +38,15 @@ const Vacancies = () => {
     script.charset = 'utf-8';
     
     script.onload = () => {
-      console.log('AppFolio script loaded successfully');
+      log('AppFolio script loaded successfully');
       // Small delay to ensure the script is fully initialized
       setTimeout(() => {
         initializeAppfolio();
       }, 100);
     };
     
-    script.onerror = (error) => {
-      console.error('Failed to load AppFolio script:', error);
+    script.onerror = (err) => {
+      logError('Failed to load AppFolio script:', err);
       setError('Failed to load property listings. Please try again later.');
       setIsLoading(false);
     };
@@ -56,10 +57,10 @@ const Vacancies = () => {
   const initializeAppfolio = useCallback(() => {
     try {
       if (window.Appfolio && window.Appfolio.Listing) {
-        console.log('Initializing AppFolio with config:', {
+        log('Initializing AppFolio with config:', {
           hostUrl: 'theyteam.appfolio.com',
           themeColor: '#676767',
-          height: '500px',
+          height: '800px',
           width: '100%',
           defaultOrder: 'bedrooms'
         });
@@ -84,7 +85,7 @@ const Vacancies = () => {
         throw new Error('AppFolio.Listing not available');
       }
     } catch (err) {
-      console.error('Error initializing AppFolio:', err);
+      logError('Error initializing AppFolio:', err);
       setError('Failed to initialize property listings. Please refresh the page.');
       setIsLoading(false);
     }

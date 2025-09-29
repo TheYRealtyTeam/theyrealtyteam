@@ -1,5 +1,5 @@
-
 import { useState } from 'react';
+import { log, warn } from '@/lib/logger';
 import { useToast } from '@/hooks/use-toast';
 import { SecurityUtils, RATE_LIMITS } from '@/utils/security';
 import { 
@@ -37,7 +37,7 @@ export const useContactSectionForm = () => {
     
     if (!securityResult.isValid && securityResult.errors.length > 0) {
       // Log security concerns but don't block typing completely
-      console.warn('Input security validation:', securityResult.errors);
+      warn('Input security validation:', securityResult.errors);
     }
     
     setFormData(prev => ({ ...prev, [name]: securityResult.sanitized }));
@@ -147,7 +147,7 @@ export const useContactSectionForm = () => {
         message: sanitizeInput(formData.message)
       };
 
-      console.log('Submitting contact form with enhanced security');
+      log('Submitting contact form with enhanced security');
 
       // Submit to secure edge function
       const response = await fetch(

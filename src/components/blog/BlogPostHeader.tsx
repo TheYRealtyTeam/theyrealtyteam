@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { log } from '@/lib/logger';
 import { Calendar, User, Clock } from 'lucide-react';
 import { BlogPostData } from '@/integrations/supabase/client';
 
@@ -42,7 +42,7 @@ const BlogPostHeader = ({ post }: BlogPostHeaderProps) => {
         alt={post.title} 
         className="w-full h-[400px] md:h-[500px] object-cover rounded-xl mb-8"
         onError={(e) => {
-          console.log("Image load error, using fallback");
+          log("Image load error, using fallback");
           (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';
         }}
       />

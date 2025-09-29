@@ -1,5 +1,5 @@
-
 import React, { useEffect } from 'react';
+import { log } from '@/lib/logger';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
 import AboutSection from '@/components/AboutSection';
@@ -17,7 +17,7 @@ import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
-  console.log('INDEX COMPONENT RENDERING - Route: /', window.location.pathname);
+  log('INDEX COMPONENT RENDERING - Route: /', window.location.pathname);
   const { isMobile } = useIsMobileOptimized();
 
   useEffect(() => {

@@ -26,9 +26,23 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-explicit-any": "warn", // Changed from error to warn for flexibility
+      "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-non-null-assertion": "error",
       "no-console": "warn",
+    },
+  },
+  // Allow console in specific files
+  {
+    files: [
+      "**/*.test.{ts,tsx}",
+      "**/__tests__/**/*.{ts,tsx}",
+      "**/tests/**/*.{ts,tsx}",
+      "src/lib/logger.ts",
+      "vite.config.ts",
+      "vitest.config.ts",
+    ],
+    rules: {
+      "no-console": "off",
     },
   }
 );

@@ -1,5 +1,5 @@
-
 import { useState, useEffect } from 'react';
+import { log } from '@/lib/logger';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -47,10 +47,10 @@ export const usePWA = () => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then((registration) => {
-          console.log('SW registered: ', registration);
+          log('SW registered: ', registration);
         })
         .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
+          log('SW registration failed: ', registrationError);
         });
     }
 

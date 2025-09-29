@@ -1,5 +1,5 @@
-
 import { useEffect } from 'react';
+import { log } from '@/lib/logger';
 import { useAppointmentForm } from './hooks/useAppointmentForm';
 import { useDateTimeSelection } from './hooks/useDateTimeSelection';
 import { useStepNavigation } from './hooks/useStepNavigation';
@@ -77,7 +77,7 @@ const useAppointment = () => {
 
   // Check if the first step is valid to enable "Continue" button
   useEffect(() => {
-    console.log("Date selection state:", { date, selectedTime, callType });
+    log("Date selection state:", { date, selectedTime, callType });
   }, [date, selectedTime, callType]);
 
   return {

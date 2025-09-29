@@ -69,7 +69,7 @@ const HeroSection = () => {
             <a href="#services" className="btn-accent text-lg px-8 py-4 font-bold">
               Our Services
             </a>
-            <a href="#contact" className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy bg-white/10 backdrop-blur-sm text-lg px-8 py-4 font-bold">
+            <a href="#contact" className="btn-outline border-white text-white hover:bg-white hover:text-yrealty-navy bg-white/20 backdrop-blur-md shadow-lg text-lg px-8 py-4 font-bold">
               Contact Us
             </a>
           </div>

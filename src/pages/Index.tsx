@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { log } from '@/lib/logger';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';

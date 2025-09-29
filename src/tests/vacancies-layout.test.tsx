@@ -135,4 +135,22 @@ describe('Vacancies nested in PageLayout', () => {
     const backButton = screen.getByRole('button', { name: /navigate back to home page/i });
     expect(backButton).toBeInTheDocument();
   });
+
+  it('renders footer with site chrome', () => {
+    render(
+      <MemoryRouter initialEntries={['/vacancies']}>
+        <Routes>
+          <Route element={<PageLayout />}>
+            <Route path="/vacancies" element={<Vacancies />} />
+          </Route>
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Footer should contain copyright text
+    expect(screen.getByText(/Y Realty Team. All rights reserved/i)).toBeInTheDocument();
+    
+    // Footer should have contact information
+    expect(screen.getByText(/info@theYteam.co/i)).toBeInTheDocument();
+  });
 });

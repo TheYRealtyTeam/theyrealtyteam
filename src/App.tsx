@@ -1,6 +1,5 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import PageLayout from "./components/layout/PageLayout";
 
 // Eager load critical routes
 import Index from "./pages/Index";
@@ -32,33 +31,20 @@ const PageLoading = () => (
 const App = () => {
   return (
     <Routes>
-      <Route element={<PageLayout />}>
-        <Route path="/" element={<Index />} />
-        <Route path="/faq" element={<Suspense fallback={<PageLoading />}><FAQ /></Suspense>} />
-        <Route path="/blog" element={<Suspense fallback={<PageLoading />}><Blog /></Suspense>} />
-        <Route path="/blog/:slug" element={<Suspense fallback={<PageLoading />}><BlogPost /></Suspense>} />
-        <Route path="/blog-admin" element={<Suspense fallback={<PageLoading />}><BlogAdmin /></Suspense>} />
-        <Route path="/tools" element={<Suspense fallback={<PageLoading />}><Tools /></Suspense>} />
-        <Route 
-          path="/vacancies" 
-          element={
-            <PageLayout 
-              title="Available Rental Units"
-              subtitle="Browse our current rental listings managed through AppFolio"
-              metaDescription="View available rental properties managed by Y Realty Team. Find your next home from our live inventory of quality rental units."
-            >
-              <Suspense fallback={<PageLoading />}><Vacancies /></Suspense>
-            </PageLayout>
-          } 
-        />
-        <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
-        <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
-        <Route path="/profile" element={<Suspense fallback={<PageLoading />}><Profile /></Suspense>} />
-        <Route path="/admin-login" element={<Suspense fallback={<PageLoading />}><AdminLogin /></Suspense>} />
-        <Route path="/admin-dashboard" element={<Suspense fallback={<PageLoading />}><AdminDashboard /></Suspense>} />
-        <Route path="/auth/callback" element={<Suspense fallback={<PageLoading />}><MicrosoftAuthCallback /></Suspense>} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
+      <Route path="/" element={<Index />} />
+      <Route path="/faq" element={<Suspense fallback={<PageLoading />}><FAQ /></Suspense>} />
+      <Route path="/blog" element={<Suspense fallback={<PageLoading />}><Blog /></Suspense>} />
+      <Route path="/blog/:slug" element={<Suspense fallback={<PageLoading />}><BlogPost /></Suspense>} />
+      <Route path="/blog-admin" element={<Suspense fallback={<PageLoading />}><BlogAdmin /></Suspense>} />
+      <Route path="/tools" element={<Suspense fallback={<PageLoading />}><Tools /></Suspense>} />
+      <Route path="/vacancies" element={<Suspense fallback={<PageLoading />}><Vacancies /></Suspense>} />
+      <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
+      <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
+      <Route path="/profile" element={<Suspense fallback={<PageLoading />}><Profile /></Suspense>} />
+      <Route path="/admin-login" element={<Suspense fallback={<PageLoading />}><AdminLogin /></Suspense>} />
+      <Route path="/admin-dashboard" element={<Suspense fallback={<PageLoading />}><AdminDashboard /></Suspense>} />
+      <Route path="/auth/callback" element={<Suspense fallback={<PageLoading />}><MicrosoftAuthCallback /></Suspense>} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

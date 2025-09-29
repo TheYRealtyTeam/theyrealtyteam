@@ -1,26 +1,13 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import PageLayout from '@/components/layout/PageLayout';
+import { MemoryRouter } from 'react-router-dom';
 import Vacancies from '@/pages/Vacancies';
 
 describe('Vacancies nested in PageLayout', () => {
   it('renders navbar/footer, heading, and appfolio root', () => {
     const { container } = render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout 
-                title="Available Rental Units"
-                subtitle="Browse our current rental listings managed through AppFolio"
-              >
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -36,17 +23,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('displays the Current Listings subheader', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -56,17 +34,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('contains the appfolio-root container', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -77,17 +46,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('displays breadcrumb trail', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -96,17 +56,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('shows loading state initially', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -115,17 +66,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('focuses on subheading on mount for accessibility', async () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -138,17 +80,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('wraps AppFolio content in a card with proper styling', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -161,17 +94,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('includes aria-labels on interactive elements', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 
@@ -181,17 +105,8 @@ describe('Vacancies nested in PageLayout', () => {
 
   it('renders footer with site chrome', () => {
     render(
-      <MemoryRouter initialEntries={['/vacancies']}>
-        <Routes>
-          <Route 
-            path="/vacancies" 
-            element={
-              <PageLayout title="Available Rental Units">
-                <Vacancies />
-              </PageLayout>
-            } 
-          />
-        </Routes>
+      <MemoryRouter>
+        <Vacancies />
       </MemoryRouter>
     );
 

@@ -7,6 +7,7 @@ import qrCodeImage from '@/assets/vacancy-qr-code.png';
 import { log, error as logError } from '@/lib/logger';
 import { diagnoseAppfolioRendering, generateMarkdownReport } from '@/features/vacancies/appfolio/diagnose';
 import { initAppFolio } from '@/features/vacancies/appfolio/init';
+import PageLayout from '@/components/layout/PageLayout';
 
 const Vacancies = () => {
   log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
@@ -120,7 +121,11 @@ const Vacancies = () => {
 
 
   return (
-    <>
+    <PageLayout
+      title="Available Rental Units"
+      subtitle="Browse our current rental listings managed through AppFolio"
+      metaDescription="View available rental properties managed by Y Realty Team. Find your next home from our live inventory of quality rental units."
+    >
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6" aria-label="Breadcrumb">
         <Link 
@@ -336,7 +341,7 @@ const Vacancies = () => {
           </button>
         )}
       </div>
-    </>
+    </PageLayout>
   );
 };
 

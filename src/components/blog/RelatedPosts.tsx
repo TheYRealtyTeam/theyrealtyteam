@@ -26,7 +26,10 @@ const RelatedPosts = ({ relatedPosts }: RelatedPostsProps) => {
             <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <img 
                 src={relatedPost.image_url} 
-                alt={relatedPost.title} 
+                alt={relatedPost.title}
+                width="400"
+                height="200"
+                loading="lazy"
                 className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cmVhbCUyMGVzdGF0ZXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=60';

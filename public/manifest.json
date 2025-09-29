@@ -30,7 +30,31 @@
       "name": "Contact Us",
       "short_name": "Contact",
       "description": "Get in touch with Y Realty Team",
-      "url": "/#contact",
+      "url": "/contact",
+      "icons": [
+        {
+          "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Available Properties",
+      "short_name": "Vacancies",
+      "description": "Browse available rental properties",
+      "url": "/vacancies",
+      "icons": [
+        {
+          "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Investment Tools",
+      "short_name": "Tools",
+      "description": "Access property investment calculators",
+      "url": "/tools",
       "icons": [
         {
           "src": "/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png",

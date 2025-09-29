@@ -204,6 +204,7 @@ const BlogManagement = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleEdit(post)}
+                          aria-label={`Edit blog post: ${post.title}`}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -212,6 +213,7 @@ const BlogManagement = () => {
                           size="sm"
                           onClick={() => handleDelete(post.id)}
                           className="text-red-600 hover:text-red-700"
+                          aria-label={`Delete blog post: ${post.title}`}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

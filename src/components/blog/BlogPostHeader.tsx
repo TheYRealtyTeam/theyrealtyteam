@@ -39,7 +39,9 @@ const BlogPostHeader = ({ post }: BlogPostHeaderProps) => {
     <div className="mb-8">
       <img 
         src={post.image_url} 
-        alt={post.title} 
+        alt={post.title}
+        width="1200"
+        height="600"
         className="w-full h-[400px] md:h-[500px] object-cover rounded-xl mb-8"
         onError={(e) => {
           log("Image load error, using fallback");

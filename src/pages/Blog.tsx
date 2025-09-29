@@ -11,6 +11,18 @@ const Blog = () => {
 
   useEffect(() => {
     document.title = "Property Management Blog | Y Realty Team";
+    
+    const metaDescription = document.createElement('meta');
+    metaDescription.name = 'description';
+    metaDescription.content = 'Expert property management insights, market trends, and investment tips from Y Realty Team. Stay informed with practical advice for property owners and real estate investors.';
+    document.head.appendChild(metaDescription);
+    
+    return () => {
+      const existingDesc = document.querySelector('meta[name="description"]');
+      if (existingDesc) {
+        document.head.removeChild(existingDesc);
+      }
+    };
   }, []);
 
   return (
@@ -24,8 +36,9 @@ const Blog = () => {
           <Link 
             to="/blog-admin" 
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-yrealty-navy transition-colors"
+            aria-label="Go to blog admin dashboard"
           >
-            <Settings className="h-4 w-4" />
+            <Settings className="h-4 w-4" aria-hidden="true" />
             Admin
           </Link>
         </div>

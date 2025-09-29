@@ -38,7 +38,10 @@ const BlogPostCard = ({ post }: BlogPostCardProps) => {
         <div className="h-56 w-full overflow-hidden relative">
           <img 
             src={post.image_url} 
-            alt={post.title} 
+            alt={post.title}
+            width="800"
+            height="600"
+            loading="lazy"
             className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
             onError={(e) => {
               log("Image load error, using fallback");

@@ -11,13 +11,13 @@ import { AuthProvider } from '@/contexts/AuthContext'
 const queryClient = new QueryClient()
 
 createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-        <ErrorBoundary>
-          <QueryClientProvider client={queryClient}>
-            <App />
-          </QueryClientProvider>
-        </ErrorBoundary>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  </BrowserRouter>
 );

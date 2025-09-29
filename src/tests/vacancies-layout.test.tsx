@@ -9,9 +9,17 @@ describe('Vacancies nested in PageLayout', () => {
     const { container } = render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout 
+                title="Available Rental Units"
+                subtitle="Browse our current rental listings managed through AppFolio"
+              >
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -19,7 +27,7 @@ describe('Vacancies nested in PageLayout', () => {
     // Navbar link (e.g., Home) should be present
     expect(screen.getByRole('link', { name: /home/i })).toBeTruthy();
 
-    // Page heading (h1 "Available Rental Units" from PageLayout wrapper)
+    // Page heading (h1 "Available Rental Units" from PageLayout)
     expect(screen.getByRole('heading', { name: /available rental units/i, level: 1 })).toBeTruthy();
 
     // AppFolio mount container
@@ -30,9 +38,14 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -45,25 +58,35 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
 
     const appfolioContainer = document.getElementById('appfolio-root');
     expect(appfolioContainer).toBeInTheDocument();
-    expect(appfolioContainer).toHaveClass('z-0'); // Ensure z-index is set
+    expect(appfolioContainer).toHaveClass('z-0');
   });
 
   it('displays breadcrumb trail', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -75,9 +98,14 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -89,9 +117,14 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -107,9 +140,14 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -125,9 +163,14 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );
@@ -140,9 +183,14 @@ describe('Vacancies nested in PageLayout', () => {
     render(
       <MemoryRouter initialEntries={['/vacancies']}>
         <Routes>
-          <Route element={<PageLayout />}>
-            <Route path="/vacancies" element={<Vacancies />} />
-          </Route>
+          <Route 
+            path="/vacancies" 
+            element={
+              <PageLayout title="Available Rental Units">
+                <Vacancies />
+              </PageLayout>
+            } 
+          />
         </Routes>
       </MemoryRouter>
     );

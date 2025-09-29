@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, QrCode, Smartphone } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { ArrowLeft, Home, QrCode, Smartphone, ChevronRight } from 'lucide-react';
 import PageLayout from '@/components/layout/PageLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -73,7 +73,7 @@ const Vacancies = () => {
         window.Appfolio.Listing({
           hostUrl: 'theyteam.appfolio.com',
           themeColor: '#676767',
-          height: '500px',
+          height: '800px',
           width: '100%',
           defaultOrder: 'bedrooms'
         });
@@ -109,16 +109,27 @@ const Vacancies = () => {
       subtitle="Browse our current rental listings managed through AppFolio"
       metaDescription="View available rental properties managed by Y Realty Team. Find your next home from our live inventory of quality rental units."
     >
-      <div className="w-full">
-        {/* Back Navigation */}
-        <div className="mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      <div className="w-full max-w-7xl mx-auto">
+        {/* Breadcrumbs */}
+        <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
+          <Link to="/" className="hover:text-foreground transition-colors flex items-center gap-1">
+            <Home className="h-4 w-4" />
+            Home
+          </Link>
+          <ChevronRight className="h-4 w-4" />
+          <span className="text-foreground font-medium">Vacancies</span>
+        </nav>
+
+        {/* Mobile Back to Home Button */}
+        <div className="mb-6 lg:hidden">
+          <Button
+            onClick={() => navigate('/')}
+            variant="outline"
+            className="w-full sm:w-auto"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Back to previous page
-          </button>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
         </div>
 
         {/* Quick Access QR Code - Mobile Friendly */}
@@ -148,24 +159,38 @@ const Vacancies = () => {
         {/* AppFolio Listings Container */}
         <div className="mb-8">
           {isLoading && (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-              <p className="text-muted-foreground">Loading available units...</p>
+            <div className="flex items-center justify-center min-h-[80vh] py-12">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-lg text-muted-foreground">Loading available units...</p>
+                <p className="text-sm text-muted-foreground mt-2">Please wait while we fetch our latest listings</p>
+              </div>
             </div>
           )}
           
           {error && (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-semibold mb-2 text-destructive">Error Loading Listings</h3>
-              <p className="text-muted-foreground mb-4">{error}</p>
-              <Button onClick={() => window.location.reload()} variant="outline">
-                Retry
-              </Button>
+            <div className="flex items-center justify-center min-h-[80vh] py-12">
+              <div className="text-center max-w-md">
+                <h3 className="text-lg font-semibold mb-2 text-destructive">Error Loading Listings</h3>
+                <p className="text-muted-foreground mb-4">{error}</p>
+                <div className="flex gap-3 justify-center">
+                  <Button onClick={() => window.location.reload()} variant="outline">
+                    Retry
+                  </Button>
+                  <Button onClick={() => navigate('/contact')}>
+                    Contact Support
+                  </Button>
+                </div>
+              </div>
             </div>
           )}
           
           {/* AppFolio will render the listings here */}
-          <div id="appfolio-listings" className="w-full min-h-[500px] rounded-lg overflow-hidden"></div>
+          <div 
+            id="appfolio-listings" 
+            className="w-full min-h-[80vh] overflow-auto rounded-lg border border-border bg-background"
+            style={{ minHeight: isLoading || error ? '0' : '80vh' }}
+          ></div>
         </div>
 
         {/* Desktop QR Code Section */}
@@ -198,14 +223,21 @@ const Vacancies = () => {
         </div>
 
         {/* Call to Action */}
-        <div className="mt-12 text-center bg-muted rounded-lg p-8">
-          <h3 className="text-xl font-semibold mb-2">Need Help Finding the Right Property?</h3>
-          <p className="text-muted-foreground mb-4">
-            Our experienced team can help you find the perfect rental property that meets your specific needs and budget.
+        <div className="mt-12 text-center bg-gradient-to-br from-primary/5 to-primary/10 rounded-xl p-8 border border-primary/20">
+          <h3 className="text-2xl font-semibold mb-3">Need Help Finding the Right Property?</h3>
+          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+            Our experienced team can help you find the perfect rental property that meets your specific needs and budget. 
+            We're here to make your search easier.
           </p>
-          <Button onClick={() => navigate('/contact')}>
-            Contact Our Team
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Button onClick={() => navigate('/contact')} size="lg">
+              Contact Our Team
+            </Button>
+            <Button onClick={() => navigate('/')} variant="outline" size="lg">
+              <Home className="mr-2 h-4 w-4" />
+              Back to Home
+            </Button>
+          </div>
         </div>
       </div>
     </PageLayout>

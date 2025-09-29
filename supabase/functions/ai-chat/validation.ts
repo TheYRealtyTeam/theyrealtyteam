@@ -1,10 +1,17 @@
-
-import { createErrorResponse } from './cors.ts';
-
 export interface RequestData {
   message: string;
   conversationHistory?: Array<{ role: string; content: string }>;
 }
+
+const createErrorResponse = (error: string, status: number) => {
+  return new Response(
+    JSON.stringify({ error }),
+    { 
+      status,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+};
 
 export const validateRequest = async (req: Request): Promise<{ message: string; conversationHistory?: Array<{ role: string; content: string }> } | Response> => {
   // Validate request method

@@ -1,11 +1,19 @@
-
-import { createErrorResponse } from './cors.ts';
 import { getSystemPrompt } from './systemPrompt.ts';
 
 export interface ChatMessage {
   role: string;
   content: string;
 }
+
+const createErrorResponse = (error: string, status: number) => {
+  return new Response(
+    JSON.stringify({ error }),
+    { 
+      status,
+      headers: { "Content-Type": "application/json" }
+    }
+  );
+};
 
 export const callOpenAI = async (
   message: string, 

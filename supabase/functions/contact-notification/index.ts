@@ -1,15 +1,7 @@
-import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "npm:resend@2.0.0";
-
-// CORS headers
-const corsHeaders = {
-  'Access-Control-Allow-Origin': 'https://theYteam.co https://www.theYteam.co http://localhost:3000',
-  'Vary': 'Origin',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Content-Type': 'application/json',
-};
+import { makeCorsHeaders } from '../_shared/cors.ts';
 
 // Security utilities
 class EdgeSecurityUtils {
@@ -18,7 +10,7 @@ class EdgeSecurityUtils {
     identifier: string,
     maxRequests: number,
     windowMs: number
-  ): Promise<{ allowed: boolean; remaining: number }> {
+  ): Promise<{ allowed: boolean; remaining: number; resetTime: number }> {
     const now = Date.now();
     const windowStart = now - windowMs;
     
@@ -38,10 +30,14 @@ class EdgeSecurityUtils {
           .insert({ identifier, created_at: new Date().toISOString() });
       }
 
-      return { allowed, remaining: Math.max(0, maxRequests - requestCount - 1) };
+      return { 
+        allowed, 
+        remaining: Math.max(0, maxRequests - requestCount - 1),
+        resetTime: windowStart + windowMs
+      };
     } catch (error) {
       console.error('Rate limiting error:', error);
-      return { allowed: true, remaining: maxRequests };
+      return { allowed: true, remaining: maxRequests, resetTime: now + windowMs };
     }
   }
 
@@ -84,13 +80,6 @@ class EdgeSecurityUtils {
     }
   }
 }
-
-// Handle CORS preflight requests
-const handleCors = (req: Request) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
-};
 
 // Initialize Supabase and Resend clients
 const supabase = createClient(
@@ -162,9 +151,12 @@ async function sendEmailNotification(submissionData: ContactSubmissionData) {
 }
 
 serve(async (req) => {
+  const corsHeaders = makeCorsHeaders(req);
+
   // Handle CORS preflight requests
-  const corsResponse = handleCors(req);
-  if (corsResponse) return corsResponse;
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
 
   try {
     console.log('Processing contact form submission...');
@@ -173,14 +165,14 @@ serve(async (req) => {
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     
     // Rate limiting - 3 requests per 15 minutes per IP
-    const rateLimit = await EdgeSecurityUtils.checkRateLimit(
+    const rateLimitCheck = await EdgeSecurityUtils.checkRateLimit(
       supabase, 
       `contact-${clientIP}`, 
       3, 
       15 * 60 * 1000 // 15 minutes
     );
     
-    if (!rateLimit.allowed) {
+    if (!rateLimitCheck.allowed) {
       await EdgeSecurityUtils.logSecurityEvent(
         supabase,
         'rate_limit_exceeded',
@@ -190,12 +182,12 @@ serve(async (req) => {
       
       return new Response(
         JSON.stringify({ 
-          error: 'Rate limit exceeded. Please wait before submitting again.',
-          remaining: rateLimit.remaining 
+          error: 'Rate limit exceeded. Please try again later.',
+          resetTime: new Date(rateLimitCheck.resetTime).toISOString()
         }),
         { 
           status: 429, 
-          headers: { ...corsHeaders, 'X-RateLimit-Remaining': rateLimit.remaining.toString() } 
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
         }
       );
     }
@@ -208,24 +200,36 @@ serve(async (req) => {
       console.error('JSON parsing error:', parseError);
       return new Response(
         JSON.stringify({ error: 'Invalid JSON in request body' }),
-        { status: 400, headers: corsHeaders }
+        { 
+          status: 400, 
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
+        }
       );
     }
 
     const { name, email, property_type, message, phone } = requestData;
 
     // Validate required fields
-    if (!name || !email || !property_type || !message) {
+    const errors: string[] = [];
+    if (!name) errors.push('name');
+    if (!email) errors.push('email');
+    if (!property_type) errors.push('property_type');
+    if (!message) errors.push('message');
+
+    if (errors.length > 0) {
       await EdgeSecurityUtils.logSecurityEvent(
         supabase,
         'invalid_contact_submission',
-        { ip: clientIP, missing_fields: { name: !name, email: !email, property_type: !property_type, message: !message } },
+        { ip: clientIP, missing_fields: errors },
         'low'
       );
       
       return new Response(
-        JSON.stringify({ error: 'Missing required fields: name, email, property_type, and message are required' }),
-        { status: 400, headers: corsHeaders }
+        JSON.stringify({ error: "Invalid request data", details: errors }),
+        { 
+          status: 400, 
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
+        }
       );
     }
 
@@ -261,7 +265,10 @@ serve(async (req) => {
       
       return new Response(
         JSON.stringify({ error: 'Failed to save contact submission' }),
-        { status: 500, headers: corsHeaders }
+        { 
+          status: 500, 
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
+        }
       );
     }
 
@@ -283,16 +290,13 @@ serve(async (req) => {
     );
 
     return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Contact form submitted successfully',
-        data: data,
-        email_sent: emailResult.success,
-        recipientEmail: 'info@theYteam.co'
+      JSON.stringify({ 
+        success: true, 
+        message: "Contact form submitted successfully" 
       }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'X-RateLimit-Remaining': rateLimit.remaining.toString() } 
+      {
+        status: 200,
+        headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
       }
     );
 
@@ -308,8 +312,11 @@ serve(async (req) => {
     );
     
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { status: 500, headers: corsHeaders }
+      JSON.stringify({ error: "Internal server error" }),
+      {
+        status: 500,
+        headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
+      }
     );
   }
 });

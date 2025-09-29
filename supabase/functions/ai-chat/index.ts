@@ -1,13 +1,14 @@
-
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-import { corsHeaders, handleCorsPreflightRequest, createErrorResponse, createSuccessResponse } from './cors.ts';
+import { makeCorsHeaders } from '../_shared/cors.ts';
 import { validateRequest } from './validation.ts';
 import { callOpenAI } from './openai.ts';
 
 serve(async (req) => {
+  const corsHeaders = makeCorsHeaders(req);
+
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return handleCorsPreflightRequest();
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
@@ -16,7 +17,11 @@ serve(async (req) => {
     
     // If validation failed, return the error response
     if (validationResult instanceof Response) {
-      return validationResult;
+      const body = await validationResult.text();
+      return new Response(body, {
+        status: validationResult.status,
+        headers: corsHeaders
+      });
     }
 
     const { message, conversationHistory } = validationResult;
@@ -26,11 +31,21 @@ serve(async (req) => {
     
     // If OpenAI call failed, return the error response
     if (openAiResult instanceof Response) {
-      return openAiResult;
+      const body = await openAiResult.text();
+      return new Response(body, {
+        status: openAiResult.status,
+        headers: corsHeaders
+      });
     }
 
     // Return successful response
-    return createSuccessResponse(openAiResult);
+    return new Response(
+      JSON.stringify({ response: openAiResult }),
+      {
+        status: 200,
+        headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
+      }
+    );
 
   } catch (error) {
     console.error("Unexpected error in AI chat function:", error);
@@ -43,7 +58,7 @@ serve(async (req) => {
       }),
       { 
         status: 500, 
-        headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
       }
     );
   }

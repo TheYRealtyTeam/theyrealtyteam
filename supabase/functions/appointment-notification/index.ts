@@ -1,227 +1,165 @@
-
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
+import { makeCorsHeaders } from '../_shared/cors.ts';
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
-};
-
 interface AppointmentDetails {
-  date: string;
-  time: string;
-  callType: string;
   name: string;
   email: string;
   phone: string;
-  propertyType: string;
-  message?: string;
+  property_address: string;
+  property_type: string;
+  date: string;
+  time: string;
+  notes?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  // Handle CORS preflight requests
+  const corsHeaders = makeCorsHeaders(req);
+
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const appointmentDetails: AppointmentDetails = await req.json();
-    const { name, email, date, time, callType, propertyType, message, phone } = appointmentDetails;
-
-    console.log("Received appointment details:", appointmentDetails);
-
+    
     // Generate iCal content
     const icalContent = generateICalContent(appointmentDetails);
+    const icalBase64 = btoa(icalContent);
 
     // Send confirmation email to client
-    const clientEmailResponse = await resend.emails.send({
-      from: "Y Realty Team <appointments@theyteam.co>",
-      to: [email],
-      subject: "Your Appointment Confirmation with Y Realty Team",
+    await resend.emails.send({
+      from: "Y Realty Team <no-reply@theYteam.co>",
+      to: [appointmentDetails.email],
+      subject: "Property Viewing Appointment Confirmation",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2c3e50;">Appointment Confirmed!</h2>
-          <p>Dear ${name},</p>
-          <p>Thank you for scheduling a consultation with Y Realty Team. Your appointment has been confirmed:</p>
-          <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-            <p><strong>Date:</strong> ${date}</p>
-            <p><strong>Time:</strong> ${time}</p>
-            <p><strong>Format:</strong> ${callType.charAt(0).toUpperCase() + callType.slice(1)} Call</p>
-            <p><strong>Property Type:</strong> ${propertyType}</p>
-          </div>
-          <p>Our team will contact you shortly before the scheduled time. If you need to reschedule, please contact us at appointments@theyteam.co or call (555) 123-4567.</p>
-          <p>We look forward to helping you with your property management needs!</p>
-          <p>Best regards,<br>Y Realty Team</p>
-        </div>
+        <h2>Appointment Confirmed!</h2>
+        <p>Hi ${appointmentDetails.name},</p>
+        <p>Your property viewing appointment has been confirmed for:</p>
+        <ul>
+          <li><strong>Date:</strong> ${appointmentDetails.date}</li>
+          <li><strong>Time:</strong> ${appointmentDetails.time}</li>
+          <li><strong>Property:</strong> ${appointmentDetails.property_address}</li>
+          <li><strong>Type:</strong> ${appointmentDetails.property_type}</li>
+        </ul>
+        ${appointmentDetails.notes ? `<p><strong>Notes:</strong> ${appointmentDetails.notes}</p>` : ''}
+        <p>We look forward to seeing you!</p>
+        <p>Best regards,<br>Y Realty Team</p>
       `,
       attachments: [
         {
-          filename: "appointment.ics",
-          content: icalContent,
+          filename: 'appointment.ics',
+          content: icalBase64,
         },
       ],
     });
 
     // Send notification email to business
-    const businessEmailResponse = await resend.emails.send({
-      from: "Y Realty Team <appointments@theyteam.co>",
-      to: ["appointments@theyteam.co"], // Replace with your actual business email
-      subject: `New Appointment: ${name} on ${date} at ${time}`,
+    await resend.emails.send({
+      from: "Y Realty Team <no-reply@theYteam.co>",
+      to: ["info@theYteam.co"],
+      subject: "New Appointment Scheduled",
       html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2c3e50;">New Appointment Scheduled</h2>
-          <p>A new appointment has been scheduled:</p>
-          <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
-            <p><strong>Client Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Date:</strong> ${date}</p>
-            <p><strong>Time:</strong> ${time}</p>
-            <p><strong>Format:</strong> ${callType.charAt(0).toUpperCase() + callType.slice(1)} Call</p>
-            <p><strong>Property Type:</strong> ${propertyType}</p>
-            ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
-          </div>
-          <p>Remember to prepare for this appointment and contact the client to confirm.</p>
-        </div>
+        <h2>New Appointment</h2>
+        <ul>
+          <li><strong>Client:</strong> ${appointmentDetails.name}</li>
+          <li><strong>Email:</strong> ${appointmentDetails.email}</li>
+          <li><strong>Phone:</strong> ${appointmentDetails.phone}</li>
+          <li><strong>Date:</strong> ${appointmentDetails.date}</li>
+          <li><strong>Time:</strong> ${appointmentDetails.time}</li>
+          <li><strong>Property:</strong> ${appointmentDetails.property_address}</li>
+          <li><strong>Type:</strong> ${appointmentDetails.property_type}</li>
+          ${appointmentDetails.notes ? `<li><strong>Notes:</strong> ${appointmentDetails.notes}</li>` : ''}
+        </ul>
       `,
       attachments: [
         {
-          filename: "appointment.ics",
-          content: icalContent,
+          filename: 'appointment.ics',
+          content: icalBase64,
         },
       ],
     });
 
-    console.log("Client email sent:", clientEmailResponse);
-    console.log("Business email sent:", businessEmailResponse);
-
-    return new Response(
-      JSON.stringify({ 
-        clientEmail: clientEmailResponse, 
-        businessEmail: businessEmailResponse 
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          ...corsHeaders,
-        },
-      }
-    );
-  } catch (error: any) {
-    console.error("Error in appointment-notification function:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { 
-          "Content-Type": "application/json", 
-          ...corsHeaders 
-        },
-      }
-    );
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error in appointment notification:", error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
+      status: 500,
+    });
   }
 };
 
-// Function to generate iCal content
-function generateICalContent(appointment: AppointmentDetails): string {
-  const { date, time, callType, name } = appointment;
+// Generate iCalendar content for calendar integration
+function generateICalContent(details: AppointmentDetails): string {
+  const dateStr = details.date;
+  const timeStr = details.time;
   
-  // Parse date and time
-  let startDate: Date;
+  let appointmentDate: Date;
   
-  try {
-    // For dates formatted by date-fns or from the Calendar component
-    // Try to parse different date formats
-    if (date.includes(',')) {
-      // Format like "May 18, 2025"
-      const dateParts = date.match(/([A-Za-z]+) (\d+), (\d+)/);
-      if (!dateParts) {
-        throw new Error("Could not parse date format");
-      }
-      
-      const months: Record<string, number> = {
-        'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
-        'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
-      };
-      
-      const month = months[dateParts[1] as keyof typeof months];
-      const day = parseInt(dateParts[2], 10);
-      const year = parseInt(dateParts[3], 10);
-      
-      // Parse the time (assumes format like "10:00 AM")
-      const timeParts = time.match(/(\d+):(\d+) ([AP]M)/);
-      if (!timeParts) {
-        throw new Error("Could not parse time format");
-      }
-      
-      let hour = parseInt(timeParts[1], 10);
-      const minute = parseInt(timeParts[2], 10);
-      const ampm = timeParts[3];
-      
-      // Convert from 12-hour to 24-hour format
-      if (ampm === "PM" && hour < 12) hour += 12;
-      if (ampm === "AM" && hour === 12) hour = 0;
-      
-      startDate = new Date(year, month, day, hour, minute);
-    } else {
-      // Try ISO format or other formats
-      startDate = new Date(`${date}T${time}`);
-    }
-    
-    // If date is invalid, throw an error
-    if (isNaN(startDate.getTime())) {
-      throw new Error("Invalid date");
-    }
-  } catch (error) {
-    console.error("Error parsing date:", error);
-    // Fallback to current date as a last resort
-    startDate = new Date();
-    startDate.setHours(startDate.getHours() + 1); // Set to 1 hour from now
+  // Try parsing ISO format first (YYYY-MM-DD)
+  if (dateStr.includes('-')) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    appointmentDate = new Date(year, month - 1, day);
+  } else if (dateStr.includes('/')) {
+    // Try parsing MM/DD/YYYY format
+    const [month, day, year] = dateStr.split('/').map(Number);
+    appointmentDate = new Date(year, month - 1, day);
+  } else {
+    // Fallback to default date parsing
+    appointmentDate = new Date(dateStr);
   }
   
-  // Create end time (1 hour after start)
-  const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+  // Parse time (assuming HH:MM format)
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  appointmentDate.setHours(hours, minutes, 0, 0);
   
-  // Format dates for iCalendar
-  const formatDate = (date: Date) => {
-    return date.toISOString().replace(/-|:|\.\d+/g, '');
+  // Calculate end time (1 hour after start)
+  const endDate = new Date(appointmentDate);
+  endDate.setHours(endDate.getHours() + 1);
+  
+  // Format dates for iCal (YYYYMMDDTHHMMSS)
+  const formatICalDate = (date: Date): string => {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
   };
   
-  const start = formatDate(startDate);
-  const end = formatDate(endDate);
-  const now = formatDate(new Date());
+  const dtStart = formatICalDate(appointmentDate);
+  const dtEnd = formatICalDate(endDate);
+  const dtStamp = formatICalDate(new Date());
   
-  // Create iCalendar content
-  const icsContent = [
+  const icalContent = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Y Realty Team//Property Management Consultation//EN',
-    'CALSCALE:GREGORIAN',
+    'PRODID:-//Y Realty Team//Appointment//EN',
     'METHOD:REQUEST',
     'BEGIN:VEVENT',
-    `DTSTART:${start}`,
-    `DTEND:${end}`,
-    `DTSTAMP:${now}`,
-    `SUMMARY:Y Realty Team ${callType.charAt(0).toUpperCase() + callType.slice(1)} Call with ${name}`,
-    'DESCRIPTION:Property Management Consultation with Y Realty Team',
-    `ORGANIZER;CN=Y Realty Team:mailto:appointments@yrealty.com`,
-    'LOCATION:Online',
+    `UID:${Date.now()}@theYteam.co`,
+    `DTSTAMP:${dtStamp}`,
+    `DTSTART:${dtStart}`,
+    `DTEND:${dtEnd}`,
+    `SUMMARY:Property Viewing - ${details.property_type}`,
+    `DESCRIPTION:Property viewing appointment at ${details.property_address}${details.notes ? `\\n\\nNotes: ${details.notes}` : ''}`,
+    `LOCATION:${details.property_address}`,
+    'ORGANIZER;CN=Y Realty Team:mailto:info@theYteam.co',
+    `ATTENDEE;CN=${details.name}:mailto:${details.email}`,
     'STATUS:CONFIRMED',
     'SEQUENCE:0',
     'BEGIN:VALARM',
     'TRIGGER:-PT15M',
-    'ACTION:DISPLAY',
     'DESCRIPTION:Reminder',
+    'ACTION:DISPLAY',
     'END:VALARM',
     'END:VEVENT',
     'END:VCALENDAR'
   ].join('\r\n');
   
-  return icsContent;
+  return icalContent;
 }
 
 serve(handler);

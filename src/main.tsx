@@ -15,9 +15,7 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
         <ErrorBoundary>
           <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
+            <App />
           </QueryClientProvider>
         </ErrorBoundary>
     </BrowserRouter>

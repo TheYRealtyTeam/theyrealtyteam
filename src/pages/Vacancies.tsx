@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import qrCodeImage from '@/assets/vacancy-qr-code.png';
 import { log, error as logError } from '@/lib/logger';
+import { diagnoseAppfolioRendering, generateMarkdownReport } from '@/features/vacancies/appfolio/diagnose';
 
 const Vacancies = () => {
   log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
@@ -91,6 +92,9 @@ const Vacancies = () => {
             log('Moving AppFolio widget into designated container');
             targetContainer.appendChild(appfolioWidget);
           }
+
+          // Run diagnostics after widget has loaded
+          runDiagnostics();
         }, 500);
         
         setIsLoading(false);
@@ -103,6 +107,30 @@ const Vacancies = () => {
       setError('Failed to initialize property listings. Please refresh the page.');
       setIsLoading(false);
     }
+  }, []);
+
+  const runDiagnostics = useCallback(async () => {
+    // Wait a bit more to ensure widget is fully rendered
+    setTimeout(async () => {
+      try {
+        log('Running AppFolio rendering diagnostics...');
+        const diagnostics = await diagnoseAppfolioRendering('appfolio-root');
+        
+        // Generate markdown report
+        const report = generateMarkdownReport(diagnostics);
+        
+        // Log the report (in production, you might want to send this to a server)
+        console.log('\n' + report + '\n');
+        
+        // Store in sessionStorage for debugging
+        sessionStorage.setItem('appfolio-diagnostics', JSON.stringify(diagnostics));
+        sessionStorage.setItem('appfolio-report', report);
+        
+        log('Diagnostics complete. Check sessionStorage for full report.');
+      } catch (err) {
+        logError('Error running diagnostics:', err);
+      }
+    }, 1000);
   }, []);
 
   useEffect(() => {

@@ -63,4 +63,16 @@
   .skip-to-content {
     @apply sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-3 focus:bg-white focus:text-black focus:top-2 focus:left-2 focus:ring-2 focus:ring-accent;
   }
+
+  /* Ensure navbar and footer stay above embedded widgets */
+  header, nav, footer {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* AppFolio widget container should be below navigation */
+  #appfolio-root {
+    position: relative;
+    z-index: 0;
+  }
 }

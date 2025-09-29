@@ -66,7 +66,7 @@ const Vacancies = () => {
         });
         
         // Clear the container first
-        const container = document.getElementById('appfolio-listings');
+        const container = document.getElementById('appfolio-root');
         if (container) {
           container.innerHTML = '';
         }
@@ -83,7 +83,7 @@ const Vacancies = () => {
         // Wait a bit and check if widget rendered outside our container
         setTimeout(() => {
           const appfolioWidget = document.querySelector('.appfolio-widget-container');
-          const targetContainer = document.getElementById('appfolio-listings');
+          const targetContainer = document.getElementById('appfolio-root');
           
           if (appfolioWidget && targetContainer && !targetContainer.contains(appfolioWidget)) {
             log('Moving AppFolio widget into designated container');
@@ -109,7 +109,7 @@ const Vacancies = () => {
     // Cleanup function
     return () => {
       // Clear the AppFolio container when component unmounts
-      const container = document.getElementById('appfolio-listings');
+      const container = document.getElementById('appfolio-root');
       if (container) {
         container.innerHTML = '';
       }
@@ -123,6 +123,11 @@ const Vacancies = () => {
       metaDescription="View available rental properties managed by Y Realty Team. Find your next home from our live inventory of quality rental units."
     >
       <div className="w-full max-w-7xl mx-auto">
+        {/* Page Header */}
+        <header className="mb-4">
+          <h1 className="text-3xl font-semibold">Current Listings</h1>
+        </header>
+
         {/* Breadcrumbs */}
         <nav className="mb-6 flex items-center gap-2 text-sm text-muted-foreground" aria-label="Breadcrumb">
           <Link to="/" className="hover:text-foreground transition-colors flex items-center gap-1">
@@ -200,8 +205,8 @@ const Vacancies = () => {
           
           {/* AppFolio will render the listings here */}
           <div 
-            id="appfolio-listings" 
-            className="w-full min-h-[80vh] overflow-auto rounded-lg border border-border bg-background"
+            id="appfolio-root" 
+            className="w-full min-h-[80vh] overflow-auto rounded-lg border border-border bg-background relative z-0"
             style={{ minHeight: isLoading || error ? '0' : '80vh' }}
           ></div>
         </div>

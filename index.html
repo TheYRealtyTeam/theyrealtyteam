@@ -25,8 +25,8 @@
     <!-- Preconnect to external image sources for faster LCP -->
     <link rel="preconnect" href="https://randomuser.me" crossorigin />
     
-    <!-- Load fonts asynchronously using preload to avoid render blocking -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <!-- Load fonts asynchronously using media attribute to eliminate render blocking -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" />
     </noscript>

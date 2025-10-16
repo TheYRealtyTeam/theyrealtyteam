@@ -8,7 +8,9 @@ const Logo = ({ className = "", showDomain = true }: { className?: string, showD
       <img 
         src="/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png" 
         alt="Y Realty Team Logo" 
-        className="h-12 w-auto" 
+        className="h-12 w-auto"
+        width="48"
+        height="48"
       />
       <div className="flex flex-col">
         <span className="font-heading font-bold text-xl text-black tracking-wider">Y REALTY TEAM</span>

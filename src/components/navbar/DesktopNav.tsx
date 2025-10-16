@@ -14,6 +14,7 @@ interface DesktopNavProps {
 
 const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user, isScrolled }: DesktopNavProps) => {
   const textColorClass = isScrolled ? 'text-black' : 'text-white';
+  const buttonClass = isScrolled ? 'btn-primary' : 'btn-accent';
   
   return (
     <nav className="hidden md:flex items-center space-x-2" aria-label="Main Navigation">
@@ -28,11 +29,11 @@ const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user,
       ))}
       
       {user ? (
-        <Link to="/profile" className="ml-6 btn-primary font-bold">
+        <Link to="/profile" className={`ml-6 ${buttonClass} font-bold`}>
           Profile
         </Link>
       ) : (
-        <Link to="/appointment" className="ml-6 btn-primary font-bold">
+        <Link to="/appointment" className={`ml-6 ${buttonClass} font-bold`}>
           Get Started
         </Link>
       )}

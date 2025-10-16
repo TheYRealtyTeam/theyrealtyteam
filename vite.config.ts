@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => ({
     exclude: ["@radix-ui/react-tooltip"],
     esbuildOptions: {
       target: 'esnext',
+      treeShaking: true,
     },
   },
   build: {
@@ -47,11 +48,17 @@ export default defineConfig(({ mode }) => ({
           dates: ['date-fns', 'react-day-picker'],
           utils: ['clsx', 'tailwind-merge', 'class-variance-authority']
         }
+      },
+      treeshake: {
+        moduleSideEffects: 'no-external',
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false
       }
     },
     // Improve build performance
     target: 'esnext',
     minify: 'esbuild',
-    sourcemap: mode === 'development'
+    sourcemap: mode === 'development',
+    chunkSizeWarningLimit: 600
   }
 }));

@@ -18,13 +18,6 @@ const Vacancies = () => {
   const h1Ref = useRef<HTMLHeadingElement>(null);
 
   const loadAppfolioScript = () => {
-    // Check if script is already loaded
-    const existingScript = document.querySelector('script[src*="theyteam.appfolio.com"]');
-    if (existingScript) {
-      log('AppFolio script already exists');
-      return;
-    }
-
     setIsLoading(true);
     setError(null);
 
@@ -107,11 +100,22 @@ const Vacancies = () => {
     return () => {
       cancelled = true;
       window.removeEventListener('scroll', handleScroll);
+      
       // Clear the AppFolio container when component unmounts
       const container = document.getElementById('appfolio-root');
       if (container) {
         container.innerHTML = '';
       }
+      
+      // Remove AppFolio script to prevent Google Maps from persisting
+      const script = document.querySelector('script[src*="theyteam.appfolio.com"]');
+      if (script) {
+        script.remove();
+      }
+      
+      // Clean up any AppFolio iframes that might persist
+      const iframes = document.querySelectorAll('iframe[src*="appfolio"]');
+      iframes.forEach(iframe => iframe.remove());
     };
   }, []);
 

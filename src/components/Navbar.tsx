@@ -23,7 +23,9 @@ const Navbar = () => {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'}`}>
       <div className="container-custom">
         <div className="flex items-center justify-between">
-          <Logo />
+          <div className={isScrolled ? '' : 'text-white'}>
+            <Logo />
+          </div>
           
           <DesktopNav 
             navLinks={navLinks} 
@@ -31,10 +33,11 @@ const Navbar = () => {
             handleNavigation={handleNavigation}
             closeMenu={closeMenu}
             user={user}
+            isScrolled={isScrolled}
           />
           
           <button 
-            className="md:hidden text-black z-50"
+            className={`md:hidden z-50 ${isScrolled ? 'text-black' : 'text-white'}`}
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
             aria-expanded={isMenuOpen}

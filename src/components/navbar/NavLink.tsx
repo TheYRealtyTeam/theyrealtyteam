@@ -18,7 +18,7 @@ export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProp
     return (
       <a
         href={link.href}
-        className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className}`}
+        className={`nav-link font-medium ${isActive ? 'active' : ''} ${className}`}
         onClick={onClick}
         aria-current={isActive ? 'page' : undefined}
       >
@@ -30,7 +30,7 @@ export const NavLink = ({ link, isActive, onClick, className = '' }: NavLinkProp
   return (
     <Link
       to={link.href}
-      className={`nav-link text-black font-medium ${isActive ? 'active' : ''} ${className}`}
+      className={`nav-link font-medium ${isActive ? 'active' : ''} ${className}`}
       onClick={onClick}
       aria-current={isActive ? 'page' : undefined}
     >

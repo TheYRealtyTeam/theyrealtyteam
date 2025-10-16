@@ -9,9 +9,12 @@ interface DesktopNavProps {
   handleNavigation: (e: React.MouseEvent<HTMLAnchorElement>, link: { href: string; isAnchorLink: boolean }) => void;
   closeMenu: () => void;
   user: User | null;
+  isScrolled: boolean;
 }
 
-const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user }: DesktopNavProps) => {
+const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user, isScrolled }: DesktopNavProps) => {
+  const textColorClass = isScrolled ? 'text-black' : 'text-white';
+  
   return (
     <nav className="hidden md:flex items-center space-x-2" aria-label="Main Navigation">
       {navLinks.map((link) => (
@@ -20,6 +23,7 @@ const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user 
           link={link}
           isActive={isLinkActive(link)}
           onClick={(e) => link.isAnchorLink ? handleNavigation(e, link) : closeMenu()}
+          className={textColorClass}
         />
       ))}
       

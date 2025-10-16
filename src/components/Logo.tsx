@@ -11,6 +11,8 @@ const Logo = ({ className = "", showDomain = true }: { className?: string, showD
         className="h-12 w-auto"
         width="48"
         height="48"
+        loading="eager"
+        decoding="async"
       />
       <div className="flex flex-col">
         <span className="font-heading font-bold text-xl text-black tracking-wider">Y REALTY TEAM</span>

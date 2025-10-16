@@ -9,27 +9,52 @@ export const useNavigation = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-      
+    // Cache section positions to avoid forced reflows
+    let sectionPositions: { id: string; top: number; height: number }[] = [];
+    let ticking = false;
+
+    const cacheSectionPositions = () => {
       if (location.pathname === '/') {
         const sections = document.querySelectorAll('section[id]');
-        const scrollPosition = window.scrollY + 100;
-
-        sections.forEach(section => {
-          const sectionTop = (section as HTMLElement).offsetTop;
-          const sectionHeight = (section as HTMLElement).offsetHeight;
-          const sectionId = section.getAttribute('id') || '';
-          
-          if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-            setActiveSection(sectionId);
-          }
-        });
+        sectionPositions = Array.from(sections).map(section => ({
+          id: section.getAttribute('id') || '',
+          top: (section as HTMLElement).offsetTop,
+          height: (section as HTMLElement).offsetHeight
+        }));
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 10);
+          
+          if (location.pathname === '/' && sectionPositions.length > 0) {
+            const scrollPosition = window.scrollY + 100;
+
+            for (const section of sectionPositions) {
+              if (scrollPosition >= section.top && scrollPosition < section.top + section.height) {
+                setActiveSection(section.id);
+                break;
+              }
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    // Initial cache and setup
+    cacheSectionPositions();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', cacheSectionPositions, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', cacheSectionPositions);
+    };
   }, [location]);
 
   useEffect(() => {

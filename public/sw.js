@@ -1,13 +1,22 @@
 
-const CACHE_NAME = 'y-realty-v1';
-const STATIC_CACHE = 'y-realty-static-v1';
-const DYNAMIC_CACHE = 'y-realty-dynamic-v1';
+const CACHE_VERSION = 'y-realty-v2';
+const STATIC_CACHE = `y-realty-static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `y-realty-dynamic-${CACHE_VERSION}`;
+const IMAGE_CACHE = `y-realty-images-${CACHE_VERSION}`;
+
+// Cache durations (in seconds)
+const CACHE_DURATION = {
+  STATIC: 365 * 24 * 60 * 60, // 1 year for static assets
+  IMAGES: 365 * 24 * 60 * 60, // 1 year for images
+  DYNAMIC: 7 * 24 * 60 * 60   // 1 week for dynamic content
+};
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png'
+  '/lovable-uploads/602cfbe2-3949-47ef-85ba-55108fea7906.png',
+  '/lovable-uploads/4aab176d-95ee-4ae9-bda7-892530d680f6.png'
 ];
 
 // Install event - cache static assets
@@ -33,7 +42,7 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE && cacheName !== IMAGE_CACHE) {
               console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
@@ -46,68 +55,100 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - avoid hijacking document navigations
+// Fetch event - implement cache-first strategy for static assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
+  const url = new URL(request.url);
 
   // Only handle same-origin GET requests
   if (request.method !== 'GET') return;
   if (!request.url.startsWith(self.location.origin)) return;
 
   // IMPORTANT: Let the browser handle document/navigation requests
-  // This prevents unexpected redirects to '/'
   if (request.destination === 'document' || request.mode === 'navigate') {
-    return; // no respondWith -> default network behavior
+    return;
   }
 
-  event.respondWith(
-    caches.match(request)
-      .then((cachedResponse) => {
+  // Cache-first strategy for static assets (JS, CSS, Images)
+  if (isStaticAsset(url.pathname)) {
+    event.respondWith(
+      caches.match(request).then((cachedResponse) => {
         if (cachedResponse) {
-          console.log('[SW] Serving from cache:', request.url);
           return cachedResponse;
         }
 
-        // Clone the request for caching
-        const fetchRequest = request.clone();
-
-        return fetch(fetchRequest)
-          .then((response) => {
-            // Check if we received a valid response
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response for caching
-            const responseToCache = response.clone();
-
-            // Cache the response
-            caches.open(DYNAMIC_CACHE)
-              .then((cache) => {
-                console.log('[SW] Caching new resource:', request.url);
-                cache.put(request, responseToCache);
-              });
-
+        return fetch(request).then((response) => {
+          if (!response || response.status !== 200) {
             return response;
-          })
-          .catch(() => {
-            // Return a placeholder for images
-            if (request.destination === 'image') {
-              return new Response('', {
-                status: 200,
-                statusText: 'OK',
-                headers: new Headers({
-                  'Content-Type': 'image/svg+xml'
-                })
-              });
-            }
+          }
 
-            // For other assets, fail softly
-            return Response.error();
+          const responseToCache = response.clone();
+          const cacheName = getCacheName(url.pathname);
+          
+          caches.open(cacheName).then((cache) => {
+            cache.put(request, responseToCache);
           });
+
+          return response;
+        });
+      })
+    );
+    return;
+  }
+
+  // Network-first for dynamic content
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        if (!response || response.status !== 200) {
+          return response;
+        }
+
+        const responseToCache = response.clone();
+        caches.open(DYNAMIC_CACHE).then((cache) => {
+          cache.put(request, responseToCache);
+        });
+
+        return response;
+      })
+      .catch(() => {
+        return caches.match(request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+
+          if (request.destination === 'image') {
+            return new Response('', {
+              status: 200,
+              statusText: 'OK',
+              headers: new Headers({
+                'Content-Type': 'image/svg+xml'
+              })
+            });
+          }
+
+          return Response.error();
+        });
       })
   );
 });
+
+// Helper functions
+function isStaticAsset(pathname) {
+  return pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/i) ||
+         pathname.startsWith('/assets/') ||
+         pathname.startsWith('/lovable-uploads/');
+}
+
+function getCacheName(pathname) {
+  if (pathname.match(/\.(png|jpg|jpeg|gif|svg)$/i) || pathname.startsWith('/lovable-uploads/')) {
+    return IMAGE_CACHE;
+  }
+  if (pathname.startsWith('/assets/')) {
+    return STATIC_CACHE;
+  }
+  return DYNAMIC_CACHE;
+}
 
 // Background sync for offline form submissions
 self.addEventListener('sync', (event) => {

@@ -53,15 +53,17 @@ const HeroSection = () => {
             <span className="block text-yrealty-accent">Nationwide</span>
           </h1>
           
-          <p className="text-xl md:text-2xl mb-8 leading-relaxed max-w-3xl opacity-0 animate-fade-in" style={{
-            animationDelay: '0.2s'
+          <p className="text-xl md:text-2xl mb-8 leading-relaxed max-w-3xl animate-fade-in" style={{
+            animationDelay: '0.2s',
+            animationFillMode: 'both'
           }}>
             Elevating property management to new heights nationwide with 
             exceptional service, innovative solutions, and a client-first approach.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-6 opacity-0 animate-fade-in" style={{
-            animationDelay: '0.4s'
+          <div className="flex flex-col sm:flex-row gap-6 animate-fade-in" style={{
+            animationDelay: '0.4s',
+            animationFillMode: 'both'
           }}>
             <a href="#services" className="btn-accent text-lg px-8 py-4 font-bold">
               Our Services

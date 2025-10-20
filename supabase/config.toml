@@ -49,6 +49,10 @@ jwt_expiry = 3600
 # Allow/disallow new user signups to your project.
 enable_signup = true
 
+[auth.otp]
+# OTP expiry time in seconds (recommended: 3600 = 1 hour)
+expiry = 3600
+
 [auth.email]
 # Allow/disallow new user signups via email to your project.
 enable_signup = true

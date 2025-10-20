@@ -17,7 +17,8 @@ export const useContactForm = () => {
     email: '',
     phone: '',
     propertyType: '',
-    message: ''
+    message: '',
+    honeypot: '' // Anti-bot field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -142,7 +143,8 @@ export const useContactForm = () => {
         email: '',
         phone: '',
         propertyType: '',
-        message: ''
+        message: '',
+        honeypot: ''
       });
 
     } catch (error: any) {

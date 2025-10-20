@@ -1,8 +1,7 @@
 
-import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 // Microsoft Graph API constants
-const MS_GRAPH_API_ENDPOINT = 'https://graph.microsoft.com/v1.0';
 const MS_AUTH_ENDPOINT = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize';
 const MS_TOKEN_ENDPOINT = 'https://login.microsoftonline.com/common/oauth2/v2.0/token';
 const REDIRECT_URI = window.location.origin + '/auth/callback';
@@ -16,26 +15,46 @@ const SCOPES = [
 // Replace with your application's client ID from Microsoft Azure portal
 const CLIENT_ID = 'YOUR_CLIENT_ID'; // You'll need to register an app in Azure Portal
 
+// Helper function to call the secure edge function
+async function callMicrosoftGraphProxy(action: string, data: any) {
+  const { data: { session } } = await supabase.auth.getSession();
+  
+  if (!session) {
+    throw new Error('User not authenticated');
+  }
+
+  const { data: result, error } = await supabase.functions.invoke('microsoft-graph-proxy', {
+    body: { action, data },
+  });
+
+  if (error) throw error;
+  return result;
+}
+
 export const microsoftGraphApi = {
   /**
-   * Initialize Microsoft authentication
+   * Initialize Microsoft authentication - check if user has stored tokens server-side
    */
-  init() {
-    // Check if we already have a stored token
-    const token = localStorage.getItem('ms_graph_token');
-    if (token) {
-      try {
-        const decryptedToken = atob(token);
-        const tokenData = JSON.parse(decryptedToken);
-        const expiresAt = new Date(tokenData.expires_at);
-        if (expiresAt > new Date()) {
-          return true; // Token is still valid
-        }
-      } catch (e) {
-        console.error('Error parsing stored token:', e);
-      }
+  async init() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return false;
+
+      // Check if user has tokens stored in database
+      const { data: tokenRow, error } = await supabase
+        .from('microsoft_tokens')
+        .select('expires_at')
+        .eq('user_id', user.id)
+        .single();
+
+      if (error || !tokenRow) return false;
+
+      const expiresAt = new Date(tokenRow.expires_at);
+      return expiresAt > new Date();
+    } catch (e) {
+      console.error('Error checking token:', e);
+      return false;
     }
-    return false; // No valid token
   },
 
   /**
@@ -58,7 +77,7 @@ export const microsoftGraphApi = {
   },
 
   /**
-   * Handle the authentication callback
+   * Handle the authentication callback - securely store tokens server-side
    * @param code Authorization code from Microsoft
    */
   async handleAuthCallback(code: string): Promise<boolean> {
@@ -87,13 +106,12 @@ export const microsoftGraphApi = {
       const expiresAt = new Date();
       expiresAt.setSeconds(expiresAt.getSeconds() + tokenData.expires_in);
       
-      // Store the token (encrypted for security)
-      const encryptedToken = btoa(JSON.stringify({
-        access_token: tokenData.access_token,
-        refresh_token: tokenData.refresh_token,
-        expires_at: expiresAt.toISOString(),
-      }));
-      localStorage.setItem('ms_graph_token', encryptedToken);
+      // Store token securely on server via edge function
+      await callMicrosoftGraphProxy('store_token', {
+        accessToken: tokenData.access_token,
+        refreshToken: tokenData.refresh_token,
+        expiresAt: expiresAt.toISOString(),
+      });
       
       return true;
     } catch (error) {
@@ -174,19 +192,7 @@ export const microsoftGraphApi = {
       const startTime = startDate.toISOString();
       const endTime = endDate.toISOString();
       
-      // Get token from storage (decrypt)
-      const encryptedToken = localStorage.getItem('ms_graph_token');
-      if (!encryptedToken) return { success: false, error: 'no_token' };
-      
-      const decryptedToken = atob(encryptedToken);
-      const tokenData = JSON.parse(decryptedToken);
-      const accessToken = tokenData.access_token;
-      
-      if (!accessToken) {
-        return { success: false, error: 'no_token' };
-      }
-      
-      // Create the event
+      // Create the event data
       const eventData = {
         subject: `Y Realty Team ${appointmentDetails.callType.charAt(0).toUpperCase() + appointmentDetails.callType.slice(1)} Call with ${appointmentDetails.name}`,
         body: {
@@ -209,25 +215,20 @@ export const microsoftGraphApi = {
         onlineMeetingProvider: appointmentDetails.callType === 'video' ? 'teamsForBusiness' : 'unknown',
       };
       
-      // Call Microsoft Graph API to create the event
-      const response = await fetch(`${MS_GRAPH_API_ENDPOINT}/me/events`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(eventData),
+      // Call secure edge function to create event
+      const result = await callMicrosoftGraphProxy('create_event', {
+        clientId: CLIENT_ID,
+        redirectUri: REDIRECT_URI,
+        eventData,
       });
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+
+      if (result.error) {
+        return { success: false, error: result.error };
       }
-      
-      const eventResponse = await response.json();
-      
+
       return {
         success: true,
-        eventId: eventResponse.id,
+        eventId: result.eventId,
       };
     } catch (error) {
       console.error('Error creating calendar event:', error);
@@ -275,35 +276,15 @@ export const microsoftGraphApi = {
       const startTimeStr = startTime.toISOString();
       const endTimeStr = endTime.toISOString();
       
-      // Get token from storage (decrypt)
-      const encryptedToken = localStorage.getItem('ms_graph_token');
-      if (!encryptedToken) return false;
-      
-      const decryptedToken = atob(encryptedToken);
-      const tokenData = JSON.parse(decryptedToken);
-      const accessToken = tokenData.access_token;
-      
-      if (!accessToken) {
-        return false;
-      }
-      
-      // Call Microsoft Graph API to check calendar availability
-      const response = await fetch(`${MS_GRAPH_API_ENDPOINT}/me/calendar/calendarView?startDateTime=${startTimeStr}&endDateTime=${endTimeStr}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
+      // Call secure edge function to check availability
+      const result = await callMicrosoftGraphProxy('check_availability', {
+        clientId: CLIENT_ID,
+        redirectUri: REDIRECT_URI,
+        startTime: startTimeStr,
+        endTime: endTimeStr,
       });
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      
-      const calendarData = await response.json();
-      
-      // If there are no events during this time, the user is available
-      return calendarData.value.length === 0;
+
+      return result.available;
     } catch (error) {
       console.error('Error checking availability:', error);
       return false;
@@ -313,7 +294,18 @@ export const microsoftGraphApi = {
   /**
    * Log out and clear Microsoft Graph tokens
    */
-  logout() {
-    localStorage.removeItem('ms_graph_token');
+  async logout() {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Delete tokens from database
+        await supabase
+          .from('microsoft_tokens')
+          .delete()
+          .eq('user_id', user.id);
+      }
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   },
 };

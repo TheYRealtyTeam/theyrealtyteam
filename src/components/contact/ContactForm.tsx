@@ -1,5 +1,6 @@
 
 import React from 'react';
+import './honeypot.css';
 import { Button } from "@/components/ui/button";
 import { useContactForm } from './hooks/useContactForm';
 import PersonalInfoFields from './fields/PersonalInfoFields';
@@ -19,6 +20,18 @@ const ContactForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Honeypot field - hidden from users but visible to bots */}
+      <input
+        type="text"
+        name="honeypot"
+        className="honeypot-field"
+        tabIndex={-1}
+        autoComplete="off"
+        value={formData.honeypot || ''}
+        onChange={(e) => handleInputChange('honeypot', e.target.value)}
+        aria-hidden="true"
+      />
+
       <PersonalInfoFields 
         formData={formData}
         onInputChange={handleInputChange}

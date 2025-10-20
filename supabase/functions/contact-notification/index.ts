@@ -207,7 +207,23 @@ serve(async (req) => {
       );
     }
 
-    const { name, email, property_type, message, phone } = requestData;
+    const { name, email, property_type, message, phone, honeypot } = requestData;
+
+    // Honeypot field check - if filled, it's likely a bot
+    if (honeypot) {
+      await EdgeSecurityUtils.logSecurityEvent(
+        supabase,
+        'bot_detected_honeypot',
+        { ip: clientIP },
+        'medium'
+      );
+      
+      // Return success to not alert the bot
+      return new Response(
+        JSON.stringify({ success: true, message: "Contact form submitted successfully" }),
+        { status: 200, headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" } }
+      );
+    }
 
     // Validate required fields
     const errors: string[] = [];

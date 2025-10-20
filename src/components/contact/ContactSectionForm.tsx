@@ -1,5 +1,6 @@
 
 import React from 'react';
+import './honeypot.css';
 import { Send } from 'lucide-react';
 import { useContactSectionForm } from './hooks/useContactSectionForm';
 
@@ -11,6 +12,18 @@ const ContactSectionForm = () => {
       <h3 className="text-2xl font-bold mb-6 text-yrealty-navy">Send Us a Message</h3>
       
       <div className="space-y-4">
+        {/* Honeypot field - hidden from users but visible to bots */}
+        <input
+          type="text"
+          name="honeypot"
+          className="honeypot-field"
+          tabIndex={-1}
+          autoComplete="off"
+          value={formData.honeypot || ''}
+          onChange={handleChange}
+          aria-hidden="true"
+        />
+
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
           <input

@@ -35,8 +35,9 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
       setAppointmentDetails(initialAppointmentDetails);
       
       // Check if Microsoft Graph API is authenticated
-      const isAuthenticated = microsoftGraphApi.init();
-      setMsCalendarConnected(isAuthenticated);
+      microsoftGraphApi.init().then(isAuthenticated => {
+        setMsCalendarConnected(isAuthenticated);
+      });
     }
   }, [isOpen, initialAppointmentDetails]);
 
@@ -46,7 +47,8 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
     
     try {
       // Check if already authenticated
-      if (!microsoftGraphApi.init()) {
+      const isAuthenticated = await microsoftGraphApi.init();
+      if (!isAuthenticated) {
         // Start the authentication flow
         microsoftGraphApi.startAuth();
         return; // The page will redirect to Microsoft login

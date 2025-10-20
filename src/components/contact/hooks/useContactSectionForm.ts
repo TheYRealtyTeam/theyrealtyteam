@@ -17,7 +17,8 @@ export const useContactSectionForm = () => {
     email: '',
     phone: '',
     propertyType: '',
-    message: ''
+    message: '',
+    honeypot: '' // Anti-bot field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSubmissionTime, setLastSubmissionTime] = useState<number>(0);
@@ -186,7 +187,8 @@ export const useContactSectionForm = () => {
         email: '',
         phone: '',
         propertyType: '',
-        message: ''
+        message: '',
+        honeypot: ''
       });
 
     } catch (error: any) {

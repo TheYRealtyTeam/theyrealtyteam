@@ -46,10 +46,10 @@ const AIChat = () => {
 
     const userMessage = inputMessage.trim();
     
-    if (userMessage.length > 4000) {
+    if (userMessage.length > 2000) {
       toast({
         title: "Message too long",
-        description: "Please keep your message under 4000 characters.",
+        description: "Please keep your message under 2000 characters.",
         variant: "destructive"
       });
       return;

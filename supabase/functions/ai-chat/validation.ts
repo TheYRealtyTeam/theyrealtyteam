@@ -1,3 +1,5 @@
+import { sanitizeInput, sanitizeConversationHistory } from './sanitizer.ts';
+
 export interface RequestData {
   message: string;
   conversationHistory?: Array<{ role: string; content: string }>;
@@ -42,9 +44,32 @@ export const validateRequest = async (req: Request): Promise<{ message: string; 
   }
 
   // Validate message length (prevent abuse)
-  if (message.length > 4000) {
-    return createErrorResponse("Message too long. Maximum 4000 characters allowed", 400);
+  if (message.length > 2000) {
+    return createErrorResponse("Message too long. Maximum 2000 characters allowed", 400);
   }
 
-  return { message: message.trim(), conversationHistory };
+  // Sanitize input to prevent prompt injection
+  const sanitizationResult = sanitizeInput(message);
+  
+  if (!sanitizationResult.isSafe) {
+    console.warn("Unsafe input detected:", sanitizationResult.warnings);
+    return createErrorResponse(
+      "Your message contains content that cannot be processed. Please rephrase your question.",
+      400
+    );
+  }
+
+  if (sanitizationResult.warnings.length > 0) {
+    console.warn("Input warnings:", sanitizationResult.warnings);
+  }
+
+  // Sanitize conversation history
+  const sanitizedHistory = conversationHistory 
+    ? sanitizeConversationHistory(conversationHistory)
+    : undefined;
+
+  return { 
+    message: sanitizationResult.sanitizedMessage, 
+    conversationHistory: sanitizedHistory 
+  };
 };

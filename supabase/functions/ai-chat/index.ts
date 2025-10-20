@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { makeCorsHeaders } from '../_shared/cors.ts';
 import { validateRequest } from './validation.ts';
 import { callOpenAI } from './openai.ts';
+import { checkRateLimit, getIdentifier } from './rateLimiter.ts';
 
 serve(async (req) => {
   const corsHeaders = makeCorsHeaders(req);
@@ -12,6 +13,19 @@ serve(async (req) => {
   }
 
   try {
+    // Check rate limiting first
+    const identifier = getIdentifier(req);
+    const rateLimitError = await checkRateLimit(identifier);
+    
+    if (rateLimitError) {
+      console.log("Rate limit exceeded for identifier:", identifier);
+      const body = await rateLimitError.text();
+      return new Response(body, {
+        status: rateLimitError.status,
+        headers: corsHeaders
+      });
+    }
+
     // Validate request and parse data
     const validationResult = await validateRequest(req);
     

@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_chat_rate_limits: {
+        Row: {
+          created_at: string
+          id: string
+          identifier: string
+          last_request_at: string
+          request_count: number
+          window_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          identifier: string
+          last_request_at?: string
+          request_count?: number
+          window_start?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          identifier?: string
+          last_request_at?: string
+          request_count?: number
+          window_start?: string
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           calendar_event_id: string | null
@@ -409,6 +436,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_ai_chat_rate_limits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       cleanup_security_logs: {
         Args: Record<PropertyKey, never>
         Returns: undefined

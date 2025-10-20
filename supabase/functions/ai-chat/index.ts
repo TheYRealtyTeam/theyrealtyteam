@@ -50,11 +50,10 @@ serve(async (req) => {
   } catch (error) {
     console.error("Unexpected error in AI chat function:", error);
     
-    // Return generic error response
+    // Return generic error response without exposing internal details
     return new Response(
       JSON.stringify({ 
-        error: "An unexpected error occurred. Please try again.",
-        details: error instanceof Error ? error.message : 'Unknown error'
+        error: "An unexpected error occurred. Please try again."
       }),
       { 
         status: 500, 

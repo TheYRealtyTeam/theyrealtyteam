@@ -74,3 +74,5 @@ url = ""
 [functions]
 [functions.contact-notification]
 verify_jwt = false
+# Note: verify_jwt is disabled to allow public contact form submissions
+# Enhanced rate limiting and input validation are implemented in the function itself

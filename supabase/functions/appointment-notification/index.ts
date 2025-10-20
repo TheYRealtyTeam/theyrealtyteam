@@ -1,8 +1,21 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { makeCorsHeaders } from '../_shared/cors.ts';
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+
+// Validation schema
+const AppointmentSchema = z.object({
+  name: z.string().min(2).max(100).regex(/^[a-zA-Z\s\-\.\']+$/),
+  email: z.string().email().max(254),
+  phone: z.string().min(10).max(20).regex(/^[\d\s\-\+\(\)\.]+$/),
+  property_address: z.string().min(5).max(200),
+  property_type: z.string().min(2).max(50),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  time: z.string().regex(/^\d{1,2}:\d{2}$/),
+  notes: z.string().max(500).optional(),
+});
 
 interface AppointmentDetails {
   name: string;
@@ -15,6 +28,27 @@ interface AppointmentDetails {
   notes?: string;
 }
 
+// HTML sanitization function
+function sanitizeHtml(input: string): string {
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+
+// iCal escape function
+function escapeIcal(input: string): string {
+  return input
+    .replace(/\\/g, '\\\\')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '');
+}
+
 const handler = async (req: Request): Promise<Response> => {
   const corsHeaders = makeCorsHeaders(req);
 
@@ -23,7 +57,22 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const appointmentDetails: AppointmentDetails = await req.json();
+    // Parse and validate request
+    const rawData = await req.json();
+    const validationResult = AppointmentSchema.safeParse(rawData);
+    
+    if (!validationResult.success) {
+      console.error("Validation failed:", validationResult.error);
+      return new Response(
+        JSON.stringify({ error: "Invalid appointment data" }), 
+        {
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
+          status: 400,
+        }
+      );
+    }
+    
+    const appointmentDetails: AppointmentDetails = validationResult.data;
     
     // Generate iCal content
     const icalContent = generateICalContent(appointmentDetails);
@@ -36,15 +85,15 @@ const handler = async (req: Request): Promise<Response> => {
       subject: "Property Viewing Appointment Confirmation",
       html: `
         <h2>Appointment Confirmed!</h2>
-        <p>Hi ${appointmentDetails.name},</p>
+        <p>Hi ${sanitizeHtml(appointmentDetails.name)},</p>
         <p>Your property viewing appointment has been confirmed for:</p>
         <ul>
-          <li><strong>Date:</strong> ${appointmentDetails.date}</li>
-          <li><strong>Time:</strong> ${appointmentDetails.time}</li>
-          <li><strong>Property:</strong> ${appointmentDetails.property_address}</li>
-          <li><strong>Type:</strong> ${appointmentDetails.property_type}</li>
+          <li><strong>Date:</strong> ${sanitizeHtml(appointmentDetails.date)}</li>
+          <li><strong>Time:</strong> ${sanitizeHtml(appointmentDetails.time)}</li>
+          <li><strong>Property:</strong> ${sanitizeHtml(appointmentDetails.property_address)}</li>
+          <li><strong>Type:</strong> ${sanitizeHtml(appointmentDetails.property_type)}</li>
         </ul>
-        ${appointmentDetails.notes ? `<p><strong>Notes:</strong> ${appointmentDetails.notes}</p>` : ''}
+        ${appointmentDetails.notes ? `<p><strong>Notes:</strong> ${sanitizeHtml(appointmentDetails.notes)}</p>` : ''}
         <p>We look forward to seeing you!</p>
         <p>Best regards,<br>Y Realty Team</p>
       `,
@@ -64,14 +113,14 @@ const handler = async (req: Request): Promise<Response> => {
       html: `
         <h2>New Appointment</h2>
         <ul>
-          <li><strong>Client:</strong> ${appointmentDetails.name}</li>
-          <li><strong>Email:</strong> ${appointmentDetails.email}</li>
-          <li><strong>Phone:</strong> ${appointmentDetails.phone}</li>
-          <li><strong>Date:</strong> ${appointmentDetails.date}</li>
-          <li><strong>Time:</strong> ${appointmentDetails.time}</li>
-          <li><strong>Property:</strong> ${appointmentDetails.property_address}</li>
-          <li><strong>Type:</strong> ${appointmentDetails.property_type}</li>
-          ${appointmentDetails.notes ? `<li><strong>Notes:</strong> ${appointmentDetails.notes}</li>` : ''}
+          <li><strong>Client:</strong> ${sanitizeHtml(appointmentDetails.name)}</li>
+          <li><strong>Email:</strong> ${sanitizeHtml(appointmentDetails.email)}</li>
+          <li><strong>Phone:</strong> ${sanitizeHtml(appointmentDetails.phone)}</li>
+          <li><strong>Date:</strong> ${sanitizeHtml(appointmentDetails.date)}</li>
+          <li><strong>Time:</strong> ${sanitizeHtml(appointmentDetails.time)}</li>
+          <li><strong>Property:</strong> ${sanitizeHtml(appointmentDetails.property_address)}</li>
+          <li><strong>Type:</strong> ${sanitizeHtml(appointmentDetails.property_type)}</li>
+          ${appointmentDetails.notes ? `<li><strong>Notes:</strong> ${sanitizeHtml(appointmentDetails.notes)}</li>` : ''}
         </ul>
       `,
       attachments: [
@@ -89,7 +138,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error) {
     console.error("Error in appointment notification:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : 'Unknown error' }), 
+      JSON.stringify({ error: "Failed to process appointment request" }), 
       {
         headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
         status: 500,
@@ -146,9 +195,9 @@ function generateICalContent(details: AppointmentDetails): string {
     `DTSTAMP:${dtStamp}`,
     `DTSTART:${dtStart}`,
     `DTEND:${dtEnd}`,
-    `SUMMARY:Property Viewing - ${details.property_type}`,
-    `DESCRIPTION:Property viewing appointment at ${details.property_address}${details.notes ? `\\n\\nNotes: ${details.notes}` : ''}`,
-    `LOCATION:${details.property_address}`,
+    `SUMMARY:Property Viewing - ${escapeIcal(details.property_type)}`,
+    `DESCRIPTION:Property viewing appointment at ${escapeIcal(details.property_address)}${details.notes ? `\\n\\nNotes: ${escapeIcal(details.notes)}` : ''}`,
+    `LOCATION:${escapeIcal(details.property_address)}`,
     'ORGANIZER;CN=Y Realty Team:mailto:info@theYteam.co',
     `ATTENDEE;CN=${details.name}:mailto:${details.email}`,
     'STATUS:CONFIRMED',

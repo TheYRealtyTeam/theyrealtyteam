@@ -2,7 +2,6 @@ import { createContext, useState, useEffect, useContext } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { warn } from '@/lib/logger';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
 import { AppRole } from '@/types/auth';
 
 type AuthContextType = {
@@ -12,9 +11,7 @@ type AuthContextType = {
   userRoles: AppRole[];
   isAdmin: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
-  signUp: (email: string, password: string, userData: { full_name?: string, username?: string }) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
-  setSessionAndUser: (session: Session | null) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -61,15 +58,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           }, 0);
         } else {
           setUserRoles([]);
-        }
-        
-        // Show toast message on successful sign in/out (only after initial load)
-        if (initialLoadCompleted) {
-          if (event === 'SIGNED_IN') {
-            toast.success('Successfully signed in!');
-          } else if (event === 'SIGNED_OUT') {
-            toast.success('Successfully signed out!');
-          }
         }
       }
     );
@@ -119,24 +107,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signUp = async (email: string, password: string, userData: { full_name?: string, username?: string }) => {
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`,
-          data: {
-            full_name: userData.full_name || '',
-            username: userData.username || '',
-          },
-        },
-      });
-      return { error };
-    } catch (error) {
-      return { error };
-    }
-  };
 
   const signOut = async () => {
     try {
@@ -146,17 +116,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const setSessionAndUser = (newSession: Session | null) => {
-    setSession(newSession);
-    setUser(newSession?.user ?? null);
-    if (newSession?.user) {
-      setTimeout(() => {
-        fetchUserRoles(newSession.user.id).then(setUserRoles);
-      }, 0);
-    } else {
-      setUserRoles([]);
-    }
-  };
 
   const isAdmin = userRoles.includes('admin');
 
@@ -169,9 +128,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         userRoles,
         isAdmin,
         signIn,
-        signUp,
-        signOut,
-        setSessionAndUser
+        signOut
       }}
     >
       {children}
@@ -192,9 +149,7 @@ export const useAuth = () => {
       userRoles: [] as AppRole[],
       isAdmin: false,
       signIn: async () => ({ error: new Error('Auth not available') }),
-      signUp: async () => ({ error: new Error('Auth not available') }),
-      signOut: async () => {},
-      setSessionAndUser: () => {}
+      signOut: async () => {}
     };
   }
   

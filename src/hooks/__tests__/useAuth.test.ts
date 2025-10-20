@@ -14,9 +14,15 @@ vi.mock('@/integrations/supabase/client', () => ({
       onAuthStateChange: vi.fn(),
       getSession: vi.fn(),
       signInWithPassword: vi.fn(),
-      signUp: vi.fn(),
       signOut: vi.fn(),
     },
+    from: vi.fn(() => ({
+      select: vi.fn(() => ({
+        eq: vi.fn(() => ({
+          maybeSingle: vi.fn()
+        }))
+      }))
+    }))
   },
 }));
 
@@ -96,34 +102,6 @@ describe('useAuth Hook', () => {
     });
   });
 
-  it('should handle successful sign up', async () => {
-    mockSupabase.auth.signUp.mockResolvedValue({
-      data: { user: null, session: null },
-      error: null
-    });
-
-    const { result } = renderHook(() => useAuth(), { wrapper });
-    
-    await act(async () => {
-      const response = await result.current.signUp('new@example.com', 'password', {
-        full_name: 'Test User'
-      });
-      expect(response.error).toBeNull();
-    });
-
-    expect(mockSupabase.auth.signUp).toHaveBeenCalledWith({
-      email: 'new@example.com',
-      password: 'password',
-      options: {
-        emailRedirectTo: expect.stringContaining('/'),
-        data: {
-          full_name: 'Test User',
-          username: ''
-        }
-      }
-    });
-  });
-
   it('should handle sign out', async () => {
     mockSupabase.auth.signOut.mockResolvedValue({});
 
@@ -144,20 +122,5 @@ describe('useAuth Hook', () => {
     expect(result.current.loading).toBe(false);
     expect(typeof result.current.signIn).toBe('function');
     expect(typeof result.current.signOut).toBe('function');
-  });
-
-  it('should update session and user via setSessionAndUser', () => {
-    const { result } = renderHook(() => useAuth(), { wrapper });
-    const mockSession = {
-      user: { id: '123', email: 'test@example.com' },
-      access_token: 'token'
-    };
-
-    act(() => {
-      result.current.setSessionAndUser(mockSession as any);
-    });
-
-    // Note: This test would need to be adjusted based on actual implementation
-    // as the session state update might be async
   });
 });

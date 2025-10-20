@@ -20,10 +20,8 @@ export const ROUTES = {
   VACANCIES: '/vacancies',
   APPOINTMENT: '/appointment',
   CONTACT: '/contact',
-  PROFILE: '/profile',
   ADMIN_LOGIN: '/admin-login',
   ADMIN_DASHBOARD: '/admin-dashboard',
-  AUTH_CALLBACK: '/auth/callback',
 } as const;
 
 export const CALCULATOR_DEFAULTS = {

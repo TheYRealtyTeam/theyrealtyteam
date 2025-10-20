@@ -12,6 +12,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://randomuser.me" />
     
+    <!-- Preload critical resources to reduce render blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="modulepreload" href="/src/main.tsx" />
+    
     <title>Y Realty Team | Premium Property Management Nationwide</title>
     <meta name="description" content="Y Realty Team offers premium property management services across all 50 states, specializing in residential and commercial properties." />
     <meta name="author" content="Y Realty Team" />
@@ -27,7 +31,6 @@
     <meta name="twitter:image" content="https://theYteam.co/opengraph-image.png" />
     
     <!-- Load fonts asynchronously using media="print" trick to eliminate render blocking -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all';this.onload=null;" />
     <noscript>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" />
     </noscript>

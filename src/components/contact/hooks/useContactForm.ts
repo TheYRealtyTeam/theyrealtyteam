@@ -100,6 +100,24 @@ export const useContactForm = () => {
   const submitForm = async () => {
     if (!validateForm()) return;
 
+    // Check honeypot field
+    if (formData.honeypot) {
+      // Silently reject bot submissions
+      toast({
+        title: "Message Sent Successfully",
+        description: "Thank you for your inquiry. We'll get back to you soon!",
+      });
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        propertyType: '',
+        message: '',
+        honeypot: ''
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -109,27 +127,26 @@ export const useContactForm = () => {
         email: sanitizeInput(formData.email),
         phone: formData.phone ? sanitizeInput(formData.phone) : null,
         property_type: sanitizeInput(formData.propertyType),
-        message: sanitizeInput(formData.message)
+        message: sanitizeInput(formData.message),
+        honeypot: formData.honeypot // Pass honeypot to edge function for validation
       };
 
-      // Store in database using Supabase client
-      const { error: dbError } = await supabase
-        .from('contact_submissions')
-        .insert([sanitizedData]);
-
-      if (dbError) {
-        console.error('Database error:', dbError);
-        throw new Error('Failed to save contact submission');
-      }
-
-      // Send notification email using edge function
-      const { error: emailError } = await supabase.functions.invoke('contact-notification', {
+      // SECURITY FIX: All submissions go through the edge function
+      // The edge function handles: rate limiting, honeypot validation, 
+      // sanitization, and database insertion with proper security
+      const { error: submissionError } = await supabase.functions.invoke('contact-notification', {
         body: sanitizedData
       });
 
-      if (emailError) {
-        console.error('Email notification error:', emailError);
-        // Don't throw here - the form was still submitted successfully
+      if (submissionError) {
+        console.error('Submission error:', submissionError);
+        
+        // Check if it's a rate limit error
+        if (submissionError.message?.includes('429') || submissionError.message?.includes('Rate limit')) {
+          throw new Error('You have submitted too many forms. Please try again later.');
+        }
+        
+        throw new Error('Failed to submit contact form');
       }
 
       toast({

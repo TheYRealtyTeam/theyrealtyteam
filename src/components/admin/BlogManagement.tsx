@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import AdminControls from '@/components/blog/AdminControls';
+import { BlogSanitizer } from '@/services/blogSanitizer';
 
 const BlogManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,13 +64,28 @@ const BlogManagement = () => {
     if (!editingPost) return;
 
     try {
+      // SECURITY FIX: Sanitize all blog post content to prevent XSS attacks
+      const sanitized = BlogSanitizer.sanitizeBlogPost({
+        title: editingPost.title,
+        excerpt: editingPost.excerpt,
+        content: editingPost.content,
+        category: editingPost.category
+      });
+
+      // Validate content lengths (database constraints)
+      const validation = BlogSanitizer.validateLengths(sanitized);
+      if (!validation.valid) {
+        toast.error(validation.errors[0]);
+        return;
+      }
+
       const { error } = await supabase
         .from('blog_posts')
         .update({
-          title: editingPost.title,
-          excerpt: editingPost.excerpt,
-          content: editingPost.content,
-          category: editingPost.category,
+          title: sanitized.title,
+          excerpt: sanitized.excerpt,
+          content: sanitized.content,
+          category: sanitized.category,
           updated_at: new Date().toISOString()
         })
         .eq('id', editingPost.id);

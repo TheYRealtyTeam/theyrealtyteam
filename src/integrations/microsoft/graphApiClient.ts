@@ -13,7 +13,21 @@ const SCOPES = [
 ];
 
 // Replace with your application's client ID from Microsoft Azure portal
-const CLIENT_ID = 'YOUR_CLIENT_ID'; // You'll need to register an app in Azure Portal
+// NOTE: This is a PUBLIC identifier used in OAuth2 flows - not a secret
+// To enable Microsoft calendar integration:
+// 1. Register an app at: https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps
+// 2. Configure redirect URI to match REDIRECT_URI below
+// 3. Replace 'YOUR_CLIENT_ID' with your actual client ID
+const CLIENT_ID = 'YOUR_CLIENT_ID';
+
+// Validate CLIENT_ID configuration
+const isMicrosoftConfigured = (): boolean => {
+  if (CLIENT_ID === 'YOUR_CLIENT_ID' || !CLIENT_ID) {
+    console.warn('Microsoft Graph API not configured. Calendar integration will not work.');
+    return false;
+  }
+  return true;
+}
 
 // Helper function to call the secure edge function
 async function callMicrosoftGraphProxy(action: string, data: any) {
@@ -61,6 +75,11 @@ export const microsoftGraphApi = {
    * Start the OAuth flow
    */
   startAuth() {
+    // Validate configuration before attempting authentication
+    if (!isMicrosoftConfigured()) {
+      throw new Error('Microsoft Graph API client ID not configured. Please configure CLIENT_ID in graphApiClient.ts');
+    }
+
     // Store the current URL to redirect back after auth
     localStorage.setItem('ms_auth_redirect', window.location.pathname);
     
@@ -82,6 +101,12 @@ export const microsoftGraphApi = {
    */
   async handleAuthCallback(code: string): Promise<boolean> {
     try {
+      // Validate configuration
+      if (!isMicrosoftConfigured()) {
+        console.error('Microsoft Graph API not configured');
+        return false;
+      }
+
       // Exchange code for token
       const tokenResponse = await fetch(MS_TOKEN_ENDPOINT, {
         method: 'POST',
@@ -132,6 +157,11 @@ export const microsoftGraphApi = {
     message?: string;
   }): Promise<{success: boolean, eventId?: string, error?: string}> {
     try {
+      // Validate configuration
+      if (!isMicrosoftConfigured()) {
+        return { success: false, error: 'not_configured' };
+      }
+
       // Check if user is authenticated
       if (!this.init()) {
         return { success: false, error: 'not_authenticated' };
@@ -246,6 +276,11 @@ export const microsoftGraphApi = {
    */
   async checkAvailability(date: Date, timeSlot: string): Promise<boolean> {
     try {
+      // Validate configuration
+      if (!isMicrosoftConfigured()) {
+        return false;
+      }
+
       // Check if user is authenticated
       if (!this.init()) {
         return false;

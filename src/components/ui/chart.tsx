@@ -3,6 +3,8 @@ import * as RechartsPrimitive from "recharts"
 
 import { cn } from "@/lib/utils"
 
+// SECURITY: THEMES object is a static configuration constant and must NEVER accept user input
+// Any modification to make THEMES dynamic would introduce critical XSS vulnerabilities
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const
 
@@ -74,6 +76,14 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null
   }
 
+  // SECURITY VALIDATION: Ensure all color values are safe CSS color values
+  // This prevents XSS if untrusted data ever flows into chart config
+  const validateColor = (color: string): boolean => {
+    // Allow CSS color formats: hex, rgb/rgba, hsl/hsla, named colors, CSS variables
+    const safeColorPattern = /^(#[0-9A-Fa-f]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\)|var\(--[a-zA-Z0-9-]+\)|[a-z]+)$/
+    return safeColorPattern.test(color.trim())
+  }
+
   return (
     <style
       dangerouslySetInnerHTML={{
@@ -86,8 +96,14 @@ ${colorConfig
     const color =
       itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
       itemConfig.color
-    return color ? `  --color-${key}: ${color};` : null
+    // SECURITY: Validate color value before injecting into CSS
+    if (!color || typeof color !== 'string' || !validateColor(color)) {
+      console.warn(`Invalid color value detected in chart config for key: ${key}`)
+      return null
+    }
+    return `  --color-${key}: ${color};`
   })
+  .filter(Boolean)
   .join("\n")}
 }
 `

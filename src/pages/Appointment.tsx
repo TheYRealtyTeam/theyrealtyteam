@@ -3,17 +3,13 @@ import React, { useEffect } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import AppointmentScheduler from '@/components/AppointmentScheduler';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, Video, Clock, CheckCircle2 } from 'lucide-react';
-import { microsoftGraphApi } from '@/integrations/microsoft/graphApiClient';
+import { Calendar, Video, Clock } from 'lucide-react';
 
 const Appointment = () => {
   useEffect(() => {
     document.title = "Schedule an Appointment | Y Realty Team";
     window.scrollTo(0, 0);
   }, []);
-
-  // Check if Microsoft calendar is connected
-  const isMicrosoftConnected = microsoftGraphApi.init();
 
   return (
     <PageLayout 
@@ -67,15 +63,6 @@ const Appointment = () => {
               </CardContent>
             </Card>
           </div>
-          
-          {isMicrosoftConnected && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-12 flex items-center">
-              <CheckCircle2 className="h-5 w-5 text-green-600 mr-2 flex-shrink-0" />
-              <p className="text-green-800 text-sm">
-                Your Microsoft calendar is connected. Appointments will be automatically synced.
-              </p>
-            </div>
-          )}
         </div>
       </section>
     </PageLayout>

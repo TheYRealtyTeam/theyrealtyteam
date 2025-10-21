@@ -13,7 +13,6 @@ const Tools = lazy(() => import("./pages/Tools"));
 const Vacancies = lazy(() => import("./pages/Vacancies"));
 const Appointment = lazy(() => import("./pages/Appointment"));
 const Contact = lazy(() => import("./pages/Contact"));
-const MicrosoftAuthCallback = lazy(() => import("./components/appointment/MicrosoftAuthCallback"));
 
 // Loading fallback component
 const PageLoading = () => (
@@ -35,7 +34,6 @@ const App = () => {
       <Route path="/vacancies" element={<Suspense fallback={<PageLoading />}><Vacancies /></Suspense>} />
       <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
       <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
-      <Route path="/auth/callback" element={<Suspense fallback={<PageLoading />}><MicrosoftAuthCallback /></Suspense>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

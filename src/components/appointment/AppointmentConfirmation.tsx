@@ -4,7 +4,6 @@ import { Check, Calendar, Phone, Video, CalendarPlus, Clock } from 'lucide-react
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { microsoftGraphApi } from '@/integrations/microsoft/graphApiClient';
 
 interface AppointmentConfirmationProps {
   isOpen: boolean;
@@ -25,62 +24,14 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
 }) => {
   // Store appointment details locally to prevent them from disappearing
   const [appointmentDetails, setAppointmentDetails] = useState(initialAppointmentDetails);
-  const [isAddingToMSCalendar, setIsAddingToMSCalendar] = useState(false);
-  const [msCalendarConnected, setMsCalendarConnected] = useState(false);
   const { toast } = useToast();
 
   // Update local state when props change and dialog is opened
   useEffect(() => {
     if (isOpen && initialAppointmentDetails.date) {
       setAppointmentDetails(initialAppointmentDetails);
-      
-      // Check if Microsoft Graph API is authenticated
-      microsoftGraphApi.init().then(isAuthenticated => {
-        setMsCalendarConnected(isAuthenticated);
-      });
     }
   }, [isOpen, initialAppointmentDetails]);
-
-  // Function to add event to Microsoft Calendar
-  const addToMicrosoftCalendar = async () => {
-    setIsAddingToMSCalendar(true);
-    
-    try {
-      // Check if already authenticated
-      const isAuthenticated = await microsoftGraphApi.init();
-      if (!isAuthenticated) {
-        // Start the authentication flow
-        microsoftGraphApi.startAuth();
-        return; // The page will redirect to Microsoft login
-      }
-      
-      // Create the calendar event
-      const result = await microsoftGraphApi.createCalendarEvent(appointmentDetails);
-      
-      if (result.success) {
-        toast({
-          title: "Added to Calendar",
-          description: "Your appointment has been added to your Microsoft calendar.",
-        });
-      } else {
-        if (result.error === 'not_authenticated') {
-          // Start the authentication flow
-          microsoftGraphApi.startAuth();
-          return;
-        } else {
-          throw new Error(result.error || 'Unknown error');
-        }
-      }
-    } catch (error) {
-      toast({
-        title: "Calendar Error",
-        description: "Could not add to Microsoft Calendar. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsAddingToMSCalendar(false);
-    }
-  };
 
   // Function to create an iCalendar file and download it
   const downloadICalFile = () => {
@@ -257,16 +208,7 @@ const AppointmentConfirmation: React.FC<AppointmentConfirmationProps> = ({
           </p>
           
           <div className="flex flex-col w-full gap-2">
-            <Button 
-              onClick={addToMicrosoftCalendar} 
-              className="w-full flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={isAddingToMSCalendar}
-            >
-              <CalendarPlus className="h-4 w-4 mr-2" />
-              {isAddingToMSCalendar ? 'Connecting...' : msCalendarConnected ? 'Add to Microsoft Calendar' : 'Connect Microsoft Calendar'}
-            </Button>
-            
-            <Button 
+            <Button
               onClick={downloadICalFile} 
               className="w-full flex items-center justify-center bg-yrealty-blue text-yrealty-navy hover:bg-yrealty-blue/90"
             >

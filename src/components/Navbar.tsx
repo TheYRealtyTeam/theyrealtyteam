@@ -2,14 +2,12 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
-import { useAuth } from '@/contexts/AuthContext';
 import { useNavigation } from './navbar/useNavigation';
 import { navLinks } from './navbar/navLinks';
 import DesktopNav from './navbar/DesktopNav';
 import MobileMenu from './navbar/MobileMenu';
 
 const Navbar = () => {
-  const { user } = useAuth();
   const { 
     isMenuOpen, 
     isScrolled, 
@@ -32,7 +30,7 @@ const Navbar = () => {
             isLinkActive={isLinkActive} 
             handleNavigation={handleNavigation}
             closeMenu={closeMenu}
-            user={user}
+            user={null}
             isScrolled={isScrolled}
           />
           
@@ -53,7 +51,7 @@ const Navbar = () => {
           navLinks={navLinks}
           isLinkActive={isLinkActive}
           handleNavigation={handleNavigation}
-          user={user}
+          user={null}
         />
       </div>
     </header>

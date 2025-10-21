@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Index from '@/pages/Index';
 import Blog from '@/pages/Blog';
 import Contact from '@/pages/Contact';
-import { AuthProvider } from '@/contexts/AuthContext';
 
 // Mock Supabase
 vi.mock('@/integrations/supabase/client', () => ({
@@ -33,11 +32,9 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          {children}
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        {children}
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };

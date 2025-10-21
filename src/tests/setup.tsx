@@ -57,7 +57,6 @@ window.scrollTo = () => {};
 import { render, RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from '@/contexts/AuthContext';
 import React from 'react';
 
 // Test wrapper with all providers
@@ -74,11 +73,9 @@ export const renderWithProviders = (
 
   const AllProviders = ({ children }: { children: React.ReactNode }) => (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>
-          {children}
-        </BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>
+        {children}
+      </BrowserRouter>
     </QueryClientProvider>
   );
 

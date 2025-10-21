@@ -3,7 +3,6 @@ import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Index from '@/pages/Index';
-import { AuthProvider } from '@/contexts/AuthContext';
 
 // Mock Supabase minimal API used in providers
 vi.mock('@/integrations/supabase/client', () => ({
@@ -22,9 +21,7 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <BrowserRouter>{children}</BrowserRouter>
-      </AuthProvider>
+      <BrowserRouter>{children}</BrowserRouter>
     </QueryClientProvider>
   );
 };

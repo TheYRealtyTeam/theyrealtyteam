@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useProperties } from '../useProperties';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from '@/contexts/AuthContext';
 import React from 'react';
 
 // Mock Supabase
@@ -48,7 +47,7 @@ describe('useProperties', () => {
     return React.createElement(
       QueryClientProvider,
       { client: queryClient },
-      React.createElement(AuthProvider, null, children)
+      children
     );
   };
 

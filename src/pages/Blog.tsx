@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
 import { Link } from 'react-router-dom';
-import { Settings, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 const Blog = () => {
@@ -31,18 +31,6 @@ const Blog = () => {
       subtitle="Expert advice, market trends, and practical tips for property owners and investors"
     >
       <div className="max-w-6xl mx-auto">
-        {/* Admin Link */}
-        <div className="mb-6 text-right">
-          <Link 
-            to="/blog-admin" 
-            className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-yrealty-navy transition-colors"
-            aria-label="Go to blog admin dashboard"
-          >
-            <Settings className="h-4 w-4" aria-hidden="true" />
-            Admin
-          </Link>
-        </div>
-
         {/* Search Bar */}
         <div className="mb-8">
           <div className="relative max-w-md mx-auto">

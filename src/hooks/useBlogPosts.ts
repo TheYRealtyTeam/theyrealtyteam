@@ -18,6 +18,7 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
   const [isSearching, setIsSearching] = useState(false);
   const [totalPosts, setTotalPosts] = useState(0);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [cachedPosts, setCachedPosts] = useState<BlogPostData[]>([]);
 
   const handleRetry = () => {
     setRefreshTrigger(prev => prev + 1);
@@ -125,26 +126,29 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
       }
     }
 
-    if (searchTerm.trim() !== '') {
-      searchBlogPosts();
-    } else {
-      const fetchWithRetry = async (retries = 3, delay = 1000) => {
-        for (let i = 0; i < retries; i++) {
-          try {
-            await fetchBlogPosts();
-            break;
-          } catch (error) {
-            // Retry failed, continue to next attempt
-            if (i < retries - 1) {
-              await new Promise(resolve => setTimeout(resolve, delay));
+    // Use cached posts when available to reduce database queries
+    if (searchTerm.trim() !== '' || !cachedPosts.length) {
+      if (searchTerm.trim() !== '') {
+        searchBlogPosts();
+      } else {
+        const fetchWithRetry = async (retries = 3, delay = 1000) => {
+          for (let i = 0; i < retries; i++) {
+            try {
+              await fetchBlogPosts();
+              break;
+            } catch (error) {
+              // Retry failed, continue to next attempt
+              if (i < retries - 1) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+              }
             }
           }
-        }
-      };
+        };
 
-      fetchWithRetry();
+        fetchWithRetry();
+      }
     }
-  }, [currentPage, postsPerPage, searchTerm, category, refreshTrigger]);
+  }, [currentPage, postsPerPage, searchTerm, category, refreshTrigger, cachedPosts.length]);
 
   return {
     blogPosts,

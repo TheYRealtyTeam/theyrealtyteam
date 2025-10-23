@@ -9,7 +9,6 @@ import NotFound from "./pages/NotFound";
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
-const BlogSync = lazy(() => import("./pages/BlogSync"));
 const Tools = lazy(() => import("./pages/Tools"));
 const Vacancies = lazy(() => import("./pages/Vacancies"));
 const Appointment = lazy(() => import("./pages/Appointment"));
@@ -31,7 +30,6 @@ const App = () => {
       <Route path="/faq" element={<Suspense fallback={<PageLoading />}><FAQ /></Suspense>} />
       <Route path="/blog" element={<Suspense fallback={<PageLoading />}><Blog /></Suspense>} />
       <Route path="/blog/:slug" element={<Suspense fallback={<PageLoading />}><BlogPost /></Suspense>} />
-      <Route path="/blog-sync" element={<Suspense fallback={<PageLoading />}><BlogSync /></Suspense>} />
       <Route path="/tools" element={<Suspense fallback={<PageLoading />}><Tools /></Suspense>} />
       <Route path="/vacancies" element={<Suspense fallback={<PageLoading />}><Vacancies /></Suspense>} />
       <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />

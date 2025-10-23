@@ -3,12 +3,23 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PageLayout from '@/components/layout/PageLayout';
 import BlogPostsList from '@/components/BlogPostsList';
+import CategoryFilter from '@/components/blog/CategoryFilter';
 import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 const Blog = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  
+  const categories = [
+    'property-management',
+    'tenant-relations',
+    'investment-advice',
+    'maintenance',
+    'market-trends',
+    'technology'
+  ];
   
   const canonicalUrl = 'https://yrealtyteam.com/blog';
   const blogDescription = 'Expert insights on property management, real estate investment, market trends, and tenant relations. Stay informed with the latest industry knowledge from Y Realty Team professionals.';
@@ -78,11 +89,18 @@ const Blog = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-yrealty-navy focus:border-transparent"
               />
-            </div>
           </div>
+        </div>
 
-          {/* Blog Posts List */}
-          <BlogPostsList searchTerm={searchTerm} />
+        {/* Category Filter */}
+        <CategoryFilter 
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
+
+        {/* Blog Posts List */}
+        <BlogPostsList searchTerm={searchTerm} category={selectedCategory} />
 
           {/* Call to Action */}
           <div className="mt-16 bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-8 rounded-2xl text-white text-center">

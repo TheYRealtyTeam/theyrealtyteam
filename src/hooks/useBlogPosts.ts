@@ -8,9 +8,10 @@ interface UseBlogPostsProps {
   searchTerm: string;
   currentPage: number;
   postsPerPage: number;
+  category?: string;
 }
 
-export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogPostsProps) => {
+export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }: UseBlogPostsProps) => {
   const [blogPosts, setBlogPosts] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -29,9 +30,16 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         setError(null);
         
         // First get count of total posts for pagination
-        const countResponse = await supabase
+        let countQuery = supabase
           .from('blog_posts')
           .select('id', { count: 'exact', head: true });
+        
+        // Apply category filter to count if provided
+        if (category) {
+          countQuery = countQuery.eq('category', category);
+        }
+        
+        const countResponse = await countQuery;
           
         if (countResponse.error) {
           throw new Error(`Error counting posts: ${countResponse.error.message}`);
@@ -40,9 +48,16 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
         setTotalPosts(countResponse.count || 0);
         
         // Then fetch the current page of posts
-        const { data, error } = await supabase
+        let query = supabase
           .from('blog_posts')
-          .select('*')
+          .select('*');
+        
+        // Apply category filter if provided
+        if (category) {
+          query = query.eq('category', category);
+        }
+        
+        const { data, error } = await query
           .order('created_at', { ascending: false })
           .range((currentPage - 1) * postsPerPage, currentPage * postsPerPage - 1);
         
@@ -129,7 +144,7 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage }: UseBlogP
 
       fetchWithRetry();
     }
-  }, [currentPage, postsPerPage, searchTerm, refreshTrigger]);
+  }, [currentPage, postsPerPage, searchTerm, category, refreshTrigger]);
 
   return {
     blogPosts,

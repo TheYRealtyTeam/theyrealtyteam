@@ -11,6 +11,8 @@ import BlogPostContent from '@/components/blog/BlogPostContent';
 import BlogPostNavigation from '@/components/blog/BlogPostNavigation';
 import RelatedPosts from '@/components/blog/RelatedPosts';
 import BlogSEO from '@/components/blog/BlogSEO';
+import SocialShare from '@/components/blog/SocialShare';
+import ReadingProgress from '@/components/blog/ReadingProgress';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -107,6 +109,7 @@ const BlogPost = () => {
 
   return (
     <>
+      <ReadingProgress />
       <BlogSEO post={post} canonicalUrl={canonicalUrl} />
       <PageLayout 
         title={post.title}
@@ -114,7 +117,17 @@ const BlogPost = () => {
       >
         <article className="max-w-4xl mx-auto">
           <BlogPostHeader post={post} />
+          <SocialShare 
+            url={canonicalUrl} 
+            title={post.title} 
+            description={post.excerpt}
+          />
           <BlogPostContent content={post.content} />
+          <SocialShare 
+            url={canonicalUrl} 
+            title={post.title} 
+            description={post.excerpt}
+          />
           <BlogPostNavigation previousPost={previousPost} nextPost={nextPost} />
           <RelatedPosts relatedPosts={relatedPosts} />
         </article>

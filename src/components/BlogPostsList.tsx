@@ -10,16 +10,23 @@ import { useBlogPosts } from '@/hooks/useBlogPosts';
 
 interface BlogPostsListProps {
   searchTerm: string;
+  category?: string;
 }
 
-const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm }) => {
+const BlogPostsList: React.FC<BlogPostsListProps> = ({ searchTerm, category }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(9);
+
+  // Reset to page 1 when category or search changes
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [category, searchTerm]);
 
   const { blogPosts, loading, error, isSearching, totalPosts, handleRetry } = useBlogPosts({
     searchTerm,
     currentPage,
-    postsPerPage
+    postsPerPage,
+    category
   });
 
   const totalPages = Math.ceil(totalPosts / postsPerPage);

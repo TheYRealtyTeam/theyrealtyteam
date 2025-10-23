@@ -10,6 +10,7 @@ import BlogPostHeader from '@/components/blog/BlogPostHeader';
 import BlogPostContent from '@/components/blog/BlogPostContent';
 import BlogPostNavigation from '@/components/blog/BlogPostNavigation';
 import RelatedPosts from '@/components/blog/RelatedPosts';
+import BlogSEO from '@/components/blog/BlogSEO';
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -102,18 +103,23 @@ const BlogPost = () => {
     return <BlogPostError error={error} />;
   }
 
+  const canonicalUrl = `https://yrealtyteam.com/blog/${post.slug}`;
+
   return (
-    <PageLayout 
-      title={post.title}
-      subtitle={post.excerpt}
-    >
-      <article className="max-w-4xl mx-auto">
-        <BlogPostHeader post={post} />
-        <BlogPostContent content={post.content} />
-        <BlogPostNavigation previousPost={previousPost} nextPost={nextPost} />
-        <RelatedPosts relatedPosts={relatedPosts} />
-      </article>
-    </PageLayout>
+    <>
+      <BlogSEO post={post} canonicalUrl={canonicalUrl} />
+      <PageLayout 
+        title={post.title}
+        subtitle={post.excerpt}
+      >
+        <article className="max-w-4xl mx-auto">
+          <BlogPostHeader post={post} />
+          <BlogPostContent content={post.content} />
+          <BlogPostNavigation previousPost={previousPost} nextPost={nextPost} />
+          <RelatedPosts relatedPosts={relatedPosts} />
+        </article>
+      </PageLayout>
+    </>
   );
 };
 

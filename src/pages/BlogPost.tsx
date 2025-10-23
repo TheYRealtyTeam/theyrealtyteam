@@ -15,6 +15,8 @@ const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<BlogPostData | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPostData[]>([]);
+  const [previousPost, setPreviousPost] = useState<BlogPostData | undefined>();
+  const [nextPost, setNextPost] = useState<BlogPostData | undefined>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -49,6 +51,22 @@ const BlogPost = () => {
         }
 
         setPost(postData as BlogPostData);
+
+        // Fetch all posts to determine previous/next navigation
+        const { data: allPosts } = await supabase
+          .from('blog_posts')
+          .select('id, slug, title, date')
+          .order('date', { ascending: false });
+
+        if (allPosts) {
+          const currentIndex = allPosts.findIndex(p => p.id === postData.id);
+          if (currentIndex > 0) {
+            setNextPost(allPosts[currentIndex - 1] as BlogPostData);
+          }
+          if (currentIndex < allPosts.length - 1) {
+            setPreviousPost(allPosts[currentIndex + 1] as BlogPostData);
+          }
+        }
 
         // Find related posts (same category, excluding current post)
         const { data: relatedData, error: relatedError } = await supabase
@@ -92,7 +110,7 @@ const BlogPost = () => {
       <article className="max-w-4xl mx-auto">
         <BlogPostHeader post={post} />
         <BlogPostContent content={post.content} />
-        <BlogPostNavigation />
+        <BlogPostNavigation previousPost={previousPost} nextPost={nextPost} />
         <RelatedPosts relatedPosts={relatedPosts} />
       </article>
     </PageLayout>

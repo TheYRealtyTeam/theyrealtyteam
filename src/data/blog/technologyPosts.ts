@@ -35,7 +35,7 @@ We help property owners evaluate and implement smart home technologies that appe
 
 Experience the Y Realty Team technology advantage for your property management needs.`,
     author: "Y Realty Team",
-    date: "2023-12-22",
+    date: "2025-01-28",
     category: "Technology",
     tags: ["property tech", "digital solutions", "innovation"],
     readTime: 5,
@@ -74,7 +74,7 @@ Not all smart home technology provides positive return. We help you evaluate opt
 
 Leverage Y Realty Team's technology expertise to enhance your properties strategically.`,
     author: "Ryan Phillips",
-    date: "2023-11-28",
+    date: "2024-12-15",
     category: "Technology",
     tags: ["smart home", "property technology", "innovation"],
     readTime: 6,
@@ -113,7 +113,7 @@ Tracking marketing performance helps refine strategies. We continuously optimize
 
 Experience Y Realty Team's digital marketing advantage for faster, more efficient leasing.`,
     author: "Jessica Turner",
-    date: "2023-11-20",
+    date: "2024-11-08",
     category: "Technology",
     tags: ["digital marketing", "virtual tours", "online leasing"],
     readTime: 6,
@@ -152,7 +152,7 @@ Data analytics inform acquisition and disposition decisions. We provide comprehe
 
 Partner with Y Realty Team to leverage data analytics for superior property performance.`,
     author: "Andrew Davis",
-    date: "2023-11-12",
+    date: "2024-10-12",
     category: "Technology",
     tags: ["data analytics", "performance metrics", "business intelligence"],
     readTime: 7,

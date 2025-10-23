@@ -35,7 +35,7 @@ Based on our market knowledge, we can advise on additional investment opportunit
 
 Partner with Y Realty Team to maximize your rental property investments.`,
     author: "Y Realty Team",
-    date: "2024-01-05",
+    date: "2025-06-12",
     category: "Investment Advice",
     tags: ["ROI", "investment strategy", "property improvement"],
     readTime: 7,
@@ -74,7 +74,7 @@ Understanding when and how to sell properties is as important as knowing when to
 
 Let Y Realty Team help you build and manage a profitable rental property portfolio.`,
     author: "Y Realty Team",
-    date: "2024-01-03",
+    date: "2025-05-08",
     category: "Investment Advice",
     tags: ["portfolio growth", "investment strategy", "real estate"],
     readTime: 8,
@@ -113,7 +113,7 @@ We maintain relationships with qualified tax professionals who specialize in rea
 
 Leverage Y Realty Team's network and expertise for optimal tax positioning.`,
     author: "Daniel Nguyen",
-    date: "2023-12-20",
+    date: "2024-12-02",
     category: "Investment Advice",
     tags: ["tax strategy", "depreciation", "1031 exchange"],
     readTime: 7,
@@ -152,7 +152,7 @@ Understanding future cash flow helps with portfolio planning. We provide project
 
 Partner with Y Realty Team for cash flow management that supports your investment goals.`,
     author: "Rachel Anderson",
-    date: "2023-12-14",
+    date: "2024-10-28",
     category: "Investment Advice",
     tags: ["cash flow", "financial analysis", "investment returns"],
     readTime: 6,
@@ -191,7 +191,7 @@ Balancing properties with different characteristics optimizes overall portfolio 
 
 Work with Y Realty Team to achieve optimal balance in your investment strategy.`,
     author: "Kevin Harper",
-    date: "2023-12-06",
+    date: "2024-09-16",
     category: "Investment Advice",
     tags: ["appreciation", "investment strategy", "portfolio balance"],
     readTime: 7,

@@ -31,7 +31,7 @@ Our tenant retention programs focus on early renewal discussions, competitive pr
 
 Trust Y Realty Team to manage your tenant relationships professionally and effectively.`,
     author: "Y Realty Team",
-    date: "2024-01-08",
+    date: "2025-07-18",
     category: "Tenant Relations",
     tags: ["tenant retention", "communication", "property management"],
     readTime: 5,
@@ -70,7 +70,7 @@ Periodic communication beyond problem-solving builds relationships. We schedule 
 
 Experience Y Realty Team's communication excellence in action.`,
     author: "Jennifer Lee",
-    date: "2023-12-18",
+    date: "2024-12-18",
     category: "Tenant Relations",
     tags: ["communication", "tenant satisfaction", "customer service"],
     readTime: 5,
@@ -109,7 +109,7 @@ Applying screening criteria consistently ensures fair housing compliance. Our st
 
 Trust Y Realty Team's screening expertise to find quality tenants for your properties.`,
     author: "Marcus Washington",
-    date: "2023-12-12",
+    date: "2024-11-05",
     category: "Tenant Relations",
     tags: ["tenant screening", "background checks", "rental applications"],
     readTime: 7,
@@ -148,7 +148,7 @@ Post-repair follow-up confirms tenant satisfaction and identifies any additional
 
 Experience Y Realty Team's maintenance excellence that keeps tenants happy.`,
     author: "Amanda Foster",
-    date: "2023-12-08",
+    date: "2024-09-10",
     category: "Tenant Relations",
     tags: ["maintenance requests", "tenant service", "response time"],
     readTime: 6,
@@ -187,7 +187,7 @@ Personal attention during the renewal process shows tenants they're valued. Our 
 
 Partner with Y Realty Team for industry-leading retention rates.`,
     author: "Christopher Blake",
-    date: "2023-11-30",
+    date: "2024-08-03",
     category: "Tenant Relations",
     tags: ["lease renewal", "tenant retention", "turnover reduction"],
     readTime: 6,

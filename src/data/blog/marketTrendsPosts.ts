@@ -35,7 +35,7 @@ Different markets have unique characteristics and trends. Our local expertise he
 
 Stay ahead of market trends with Y Realty Team's expert analysis and management services.`,
     author: "Y Realty Team",
-    date: "2023-12-28",
+    date: "2025-03-10",
     category: "Market Trends",
     tags: ["market analysis", "rental trends", "2024 outlook"],
     readTime: 7,
@@ -74,7 +74,7 @@ Based on current data and trends, we provide insights into future market conditi
 
 Leverage Y Realty Team's market expertise for informed property management decisions.`,
     author: "Y Realty Team",
-    date: "2023-12-25",
+    date: "2025-02-14",
     category: "Market Trends",
     tags: ["market research", "data analysis", "competitive analysis"],
     readTime: 6,
@@ -113,7 +113,7 @@ While some changes may be temporary, others represent permanent shifts. Our anal
 
 Leverage Y Realty Team's market insights to capitalize on remote work trends.`,
     author: "Victoria Chang",
-    date: "2023-11-18",
+    date: "2024-12-08",
     category: "Market Trends",
     tags: ["remote work", "market shifts", "rental demand"],
     readTime: 6,
@@ -152,7 +152,7 @@ Different generations value different community features. Understanding these pr
 
 Partner with Y Realty Team to position your properties for multi-generational appeal.`,
     author: "Gregory Martinez",
-    date: "2023-11-15",
+    date: "2024-11-12",
     category: "Market Trends",
     tags: ["demographics", "generational trends", "tenant preferences"],
     readTime: 7,
@@ -191,7 +191,7 @@ Affordable housing can provide stable, long-term returns. Our analysis helps you
 
 Explore affordable housing opportunities with Y Realty Team's guidance and management expertise.`,
     author: "Michelle Robinson",
-    date: "2023-11-10",
+    date: "2024-09-30",
     category: "Market Trends",
     tags: ["affordable housing", "market opportunity", "investment strategy"],
     readTime: 7,

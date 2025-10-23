@@ -35,7 +35,7 @@ Detailed maintenance records help track property condition and provide valuable 
 
 Trust Y Realty Team's maintenance expertise to protect your property investment.`,
     author: "Y Realty Team",
-    date: "2024-01-01",
+    date: "2025-04-20",
     category: "Maintenance",
     tags: ["preventive maintenance", "property care", "cost savings"],
     readTime: 6,
@@ -74,7 +74,7 @@ Understanding system age and condition helps plan for replacements. We provide a
 
 Trust Y Realty Team's HVAC expertise to protect your investment and keep tenants comfortable.`,
     author: "Brian Foster",
-    date: "2023-12-22",
+    date: "2025-01-15",
     category: "Maintenance",
     tags: ["HVAC", "preventive maintenance", "energy efficiency"],
     readTime: 6,
@@ -113,7 +113,7 @@ When plumbing emergencies occur, rapid response minimizes damage. Our 24/7 emerg
 
 Choose Y Realty Team's plumbing expertise to protect your property from water damage.`,
     author: "Lisa Chen",
-    date: "2023-12-16",
+    date: "2024-11-22",
     category: "Maintenance",
     tags: ["plumbing", "water damage prevention", "emergency repairs"],
     readTime: 5,
@@ -152,7 +152,7 @@ Exterior lighting enhances safety and curb appeal. We maintain fixtures and upgr
 
 Trust Y Realty Team to maintain your property's exterior to the highest standards.`,
     author: "Thomas Wright",
-    date: "2023-12-09",
+    date: "2024-10-05",
     category: "Maintenance",
     tags: ["exterior maintenance", "curb appeal", "landscaping"],
     readTime: 6,
@@ -191,7 +191,7 @@ Proper appliance use prevents damage and extends life. We provide clear instruct
 
 Partner with Y Realty Team for smart appliance management that controls costs.`,
     author: "Patricia Garcia",
-    date: "2023-12-02",
+    date: "2024-08-27",
     category: "Maintenance",
     tags: ["appliances", "equipment management", "cost control"],
     readTime: 6,

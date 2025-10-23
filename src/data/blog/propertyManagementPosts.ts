@@ -27,7 +27,7 @@ Through detailed market analysis and strategic improvements, we help property ow
 
 Partner with Y Realty Team for professional property management that delivers results.`,
     author: "Y Realty Team",
-    date: "2024-01-15",
+    date: "2025-09-15",
     category: "Property Management",
     tags: ["property management", "investment", "real estate"],
     readTime: 8,
@@ -62,7 +62,7 @@ Staying current with landlord-tenant laws and fair housing regulations is crucia
 
 Choose Y Realty Team for property management that enhances your investment returns.`,
     author: "Y Realty Team",
-    date: "2024-01-10",
+    date: "2025-08-22",
     category: "Property Management",
     tags: ["ROI", "professional management", "investment returns"],
     readTime: 6,
@@ -101,7 +101,7 @@ Multi-family properties require comprehensive security measures. We implement ap
 
 Choose Y Realty Team for expert multi-family property management.`,
     author: "Michael Chen",
-    date: "2023-12-15",
+    date: "2024-11-15",
     category: "Property Management",
     tags: ["multi-family", "apartment management", "operations"],
     readTime: 7,
@@ -140,7 +140,7 @@ We help property owners understand their investment performance and identify opp
 
 Trust Y Realty Team with your single-family rental properties.`,
     author: "Sarah Johnson",
-    date: "2023-12-10",
+    date: "2024-10-18",
     category: "Property Management",
     tags: ["single-family", "residential management", "rental homes"],
     readTime: 6,
@@ -179,7 +179,7 @@ Higher turnover increases wear and tear. Our proactive maintenance approach pres
 
 Leverage Y Realty Team's vacation rental expertise for optimal returns.`,
     author: "David Martinez",
-    date: "2023-12-05",
+    date: "2024-09-25",
     category: "Property Management",
     tags: ["vacation rentals", "short-term rentals", "Airbnb"],
     readTime: 7,
@@ -218,7 +218,7 @@ Increased communication with property owners and tenants builds trust and enable
 
 Partner with Y Realty Team for stable property management through all economic conditions.`,
     author: "Emily Rodriguez",
-    date: "2023-11-28",
+    date: "2024-08-14",
     category: "Property Management",
     tags: ["economic uncertainty", "risk management", "stability"],
     readTime: 6,
@@ -257,7 +257,7 @@ Property owners have various disclosure obligations. We ensure all required disc
 
 Trust Y Realty Team to manage the legal complexities of property ownership.`,
     author: "Robert Thompson",
-    date: "2023-11-20",
+    date: "2024-07-20",
     category: "Property Management",
     tags: ["legal compliance", "fair housing", "regulations"],
     readTime: 8,

@@ -79,5 +79,161 @@ Let Y Realty Team help you build and manage a profitable rental property portfol
     tags: ["portfolio growth", "investment strategy", "real estate"],
     readTime: 8,
     image_url: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjJ8fHJlYWwlMjBlc3RhdGV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
+  },
+  {
+    id: 20,
+    title: "Tax Strategies for Rental Property Investors",
+    slug: "tax-strategies-rental-property-investors",
+    excerpt: "Y Realty Team partners with tax professionals to help investors maximize tax benefits and minimize liabilities through strategic planning.",
+    content: `Understanding tax implications is crucial for rental property investment success. Y Realty Team works with qualified tax professionals to optimize your tax position.
+
+**Depreciation Benefits**
+
+Rental properties offer significant depreciation deductions. We help you understand and document these benefits for maximum tax advantage.
+
+**Expense Documentation**
+
+Proper expense tracking is essential for tax deductions. Our detailed financial reporting provides the documentation you need at tax time.
+
+**1031 Exchanges**
+
+Tax-deferred exchanges allow portfolio growth without immediate tax liability. We coordinate with qualified intermediaries to facilitate these transactions.
+
+**Entity Structure Considerations**
+
+The right ownership structure can provide tax advantages. We work with your advisors to implement optimal structures for your situation.
+
+**Passive Activity Rules**
+
+Understanding passive loss limitations helps with tax planning. Our reporting separates passive and active income appropriately.
+
+**Professional Partnerships**
+
+We maintain relationships with qualified tax professionals who specialize in real estate investment taxation.
+
+Leverage Y Realty Team's network and expertise for optimal tax positioning.`,
+    author: "Daniel Nguyen",
+    date: "2023-12-20",
+    category: "Investment Advice",
+    tags: ["tax strategy", "depreciation", "1031 exchange"],
+    readTime: 7,
+    image_url: "https://images.unsplash.com/photo-1554224311-beee2d0c58a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+  },
+  {
+    id: 21,
+    title: "Cash Flow Analysis: The Key to Investment Success",
+    slug: "cash-flow-analysis-investment-success",
+    excerpt: "Learn Y Realty Team's approach to cash flow analysis that helps investors make informed decisions and achieve financial goals.",
+    content: `Positive cash flow is the foundation of successful rental property investment. Y Realty Team provides comprehensive analysis to optimize your returns.
+
+**Revenue Optimization**
+
+Maximizing rental income through strategic pricing and amenity management increases cash flow. We continuously analyze market opportunities.
+
+**Expense Management**
+
+Controlling costs without compromising quality is crucial. Our efficient operations and vendor relationships reduce unnecessary expenses.
+
+**Reserve Planning**
+
+Maintaining adequate reserves prevents cash flow stress during vacancies or major repairs. We help you plan appropriate reserve levels.
+
+**Financing Considerations**
+
+Mortgage terms significantly impact cash flow. We help you understand how different financing options affect your bottom line.
+
+**Performance Benchmarking**
+
+Comparing your property performance to market standards identifies improvement opportunities. Our analytics provide meaningful benchmarks.
+
+**Long-Term Projections**
+
+Understanding future cash flow helps with portfolio planning. We provide projections based on realistic market assumptions.
+
+Partner with Y Realty Team for cash flow management that supports your investment goals.`,
+    author: "Rachel Anderson",
+    date: "2023-12-14",
+    category: "Investment Advice",
+    tags: ["cash flow", "financial analysis", "investment returns"],
+    readTime: 6,
+    image_url: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+  },
+  {
+    id: 22,
+    title: "Property Appreciation vs. Cash Flow: Finding Balance",
+    slug: "property-appreciation-vs-cash-flow-balance",
+    excerpt: "Y Realty Team helps investors understand the balance between immediate cash flow and long-term appreciation for optimal investment strategy.",
+    content: `Successful real estate investing balances current cash flow with future appreciation potential. Y Realty Team helps you optimize both aspects.
+
+**Market Selection Impact**
+
+Different markets offer different appreciation and cash flow potential. We help you select markets that align with your investment goals.
+
+**Property Type Considerations**
+
+Various property types provide different combinations of cash flow and appreciation. Understanding these differences guides investment decisions.
+
+**Improvement ROI**
+
+Strategic property improvements can enhance both cash flow and value. We help identify improvements with the best return potential.
+
+**Holding Period Strategy**
+
+Your intended holding period affects the relative importance of cash flow versus appreciation. We help develop appropriate strategies.
+
+**Market Cycle Awareness**
+
+Understanding where markets are in their cycles helps balance short and long-term objectives. Our market analysis guides timing decisions.
+
+**Portfolio Diversification**
+
+Balancing properties with different characteristics optimizes overall portfolio performance. We help structure diversified holdings.
+
+Work with Y Realty Team to achieve optimal balance in your investment strategy.`,
+    author: "Kevin Harper",
+    date: "2023-12-06",
+    category: "Investment Advice",
+    tags: ["appreciation", "investment strategy", "portfolio balance"],
+    readTime: 7,
+    image_url: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
+  },
+  {
+    id: 23,
+    title: "Exit Strategies: When and How to Sell Rental Properties",
+    slug: "exit-strategies-selling-rental-properties",
+    excerpt: "Y Realty Team's guidance on developing and executing exit strategies that maximize returns when it's time to sell investment properties.",
+    content: `Knowing when and how to exit an investment is as important as the initial purchase. Y Realty Team helps you develop and execute profitable exit strategies.
+
+**Market Timing Considerations**
+
+Market conditions significantly impact sale proceeds. We monitor market indicators to help you identify optimal selling opportunities.
+
+**Property Condition Preparation**
+
+Strategic improvements before sale can significantly increase value. We identify cost-effective enhancements that maximize sale price.
+
+**1031 Exchange Planning**
+
+Tax-deferred exchanges require careful planning and timing. We coordinate with qualified professionals to execute successful exchanges.
+
+**Buyer Targeting**
+
+Different buyers have different priorities. We help position properties to attract the right buyer at the best price.
+
+**Negotiation Strategy**
+
+Skilled negotiation maximizes sale proceeds. Our market knowledge and experience help secure favorable terms.
+
+**Timing Coordination**
+
+Coordinating property sale with portfolio strategy ensures smooth transitions. We help plan timing that aligns with your overall investment goals.
+
+Trust Y Realty Team to guide you through successful property exits.`,
+    author: "Steven Mitchell",
+    date: "2023-11-22",
+    category: "Investment Advice",
+    tags: ["exit strategy", "property sale", "investment timing"],
+    readTime: 6,
+    image_url: "https://images.unsplash.com/photo-1582407947304-fd86f028f716?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60"
   }
 ];

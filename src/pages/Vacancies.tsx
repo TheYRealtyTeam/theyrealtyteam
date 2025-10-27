@@ -17,27 +17,33 @@ const Vacancies = () => {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const h1Ref = useRef<HTMLHeadingElement>(null);
 
-  const loadAppfolioScript = () => {
-    setIsLoading(true);
-    setError(null);
+  const loadAppfolioScript = (): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      // Check if script already exists
+      const existingScript = document.querySelector('script[src*="theyteam.appfolio.com"]');
+      if (existingScript) {
+        log('AppFolio script already loaded');
+        resolve();
+        return;
+      }
 
-    // Create and load the AppFolio script
-    const script = document.createElement('script');
-    script.src = 'https://theyteam.appfolio.com/javascripts/listing.js';
-    script.type = 'text/javascript';
-    script.charset = 'utf-8';
-    
-    script.onload = () => {
-      log('AppFolio script loaded successfully');
-    };
-    
-    script.onerror = (err) => {
-      logError('Failed to load AppFolio script:', err);
-      setError('Failed to load property listings. Please try again later.');
-      setIsLoading(false);
-    };
+      const script = document.createElement('script');
+      script.src = 'https://theyteam.appfolio.com/javascripts/listing.js';
+      script.type = 'text/javascript';
+      script.charset = 'utf-8';
+      
+      script.onload = () => {
+        log('AppFolio script loaded successfully');
+        resolve();
+      };
+      
+      script.onerror = (err) => {
+        logError('Failed to load AppFolio script:', err);
+        reject(new Error('Failed to load AppFolio script'));
+      };
 
-    document.head.appendChild(script);
+      document.head.appendChild(script);
+    });
   };
 
   const runDiagnostics = async () => {
@@ -66,19 +72,58 @@ const Vacancies = () => {
 
   useEffect(() => {
     let cancelled = false;
+    let timeoutId: NodeJS.Timeout;
 
     const init = async () => {
-      // Load the script first
-      loadAppfolioScript();
-      
-      // Give the external script a moment to attach, then init
-      await new Promise((r) => setTimeout(r, 300));
-      
-      if (!cancelled) {
-        await initAppFolio();
-        setIsLoading(false);
-        // Run diagnostics after initialization
-        runDiagnostics();
+      try {
+        // Set timeout for the entire initialization
+        timeoutId = setTimeout(() => {
+          if (!cancelled) {
+            setError('Loading took too long. Please refresh the page.');
+            setIsLoading(false);
+          }
+        }, 15000); // 15 second timeout
+
+        // Load the script
+        await loadAppfolioScript();
+        
+        // Wait for DOM to be ready
+        await new Promise((r) => setTimeout(r, 500));
+        
+        if (!cancelled) {
+          // Initialize AppFolio widget
+          await initAppFolio();
+          
+          // Wait a bit more and check if iframe loaded
+          await new Promise((r) => setTimeout(r, 1000));
+          
+          if (!cancelled) {
+            const container = document.getElementById('appfolio-root');
+            const hasContent = container && (
+              container.querySelector('iframe') || 
+              container.children.length > 0
+            );
+
+            if (hasContent) {
+              log('AppFolio widget loaded successfully');
+              setIsLoading(false);
+              clearTimeout(timeoutId);
+              runDiagnostics();
+            } else {
+              log('AppFolio widget did not render content');
+              // Still hide loading and let the widget try to load
+              setIsLoading(false);
+              clearTimeout(timeoutId);
+            }
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          logError('Failed to initialize AppFolio:', err);
+          setError('Failed to load property listings. Please try again.');
+          setIsLoading(false);
+          clearTimeout(timeoutId);
+        }
       }
     };
 
@@ -99,6 +144,7 @@ const Vacancies = () => {
     // Cleanup function
     return () => {
       cancelled = true;
+      clearTimeout(timeoutId);
       window.removeEventListener('scroll', handleScroll);
       
       // Clear the AppFolio container when component unmounts

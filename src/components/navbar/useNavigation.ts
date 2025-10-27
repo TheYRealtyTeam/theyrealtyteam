@@ -1,12 +1,12 @@
-
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const useNavigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Cache section positions to avoid forced reflows
@@ -113,7 +113,8 @@ export const useNavigation = () => {
           behavior: 'smooth'
         });
       } else if (location.pathname !== '/') {
-        window.location.href = link.href;
+        // Use React Router navigation instead of full page reload
+        navigate(`/?scrollTo=${sectionId}`);
       }
     }
   };

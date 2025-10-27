@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { log } from '@/lib/logger';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -19,6 +20,7 @@ import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 const Index = () => {
   log('INDEX COMPONENT RENDERING - Route: /', window.location.pathname);
   const { isMobile } = useIsMobileOptimized();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     document.title = "Y Realty Team | Premium Property Management Nationwide";
@@ -57,6 +59,27 @@ const Index = () => {
       if (existingThemeColor) document.head.removeChild(existingThemeColor);
     };
   }, []);
+
+  useEffect(() => {
+    const scrollTo = searchParams.get('scrollTo');
+    
+    if (scrollTo) {
+      // Wait for page to render, then scroll to section
+      setTimeout(() => {
+        const element = document.getElementById(scrollTo);
+        if (element) {
+          const yOffset = -80;
+          const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
+        }
+      }, 100);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [searchParams]);
 
   const handleRefresh = async () => {
     return new Promise<void>((resolve) => {

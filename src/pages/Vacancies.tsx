@@ -1,134 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Home, QrCode, Smartphone, ChevronRight, ArrowUp } from 'lucide-react';
+import { ArrowLeft, Home, QrCode, Smartphone, ChevronRight, ArrowUp, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import qrCodeImage from '@/assets/vacancy-qr-code.png';
-import { log, error as logError } from '@/lib/logger';
-import { diagnoseAppfolioRendering, generateMarkdownReport } from '@/features/vacancies/appfolio/diagnose';
-import { initAppFolio } from '@/features/vacancies/appfolio/init';
 import PageLayout from '@/components/layout/PageLayout';
 
 const Vacancies = () => {
-  log('VACANCIES COMPONENT RENDERING - Route: /vacancies', window.location.pathname);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const h1Ref = useRef<HTMLHeadingElement>(null);
 
-  const loadAppfolioScript = (): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      // Check if script already exists
-      const existingScript = document.querySelector('script[src*="theyteam.appfolio.com"]');
-      if (existingScript) {
-        log('AppFolio script already loaded');
-        resolve();
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = 'https://theyteam.appfolio.com/javascripts/listing.js';
-      script.type = 'text/javascript';
-      script.charset = 'utf-8';
-      
-      script.onload = () => {
-        log('AppFolio script loaded successfully');
-        resolve();
-      };
-      
-      script.onerror = (err) => {
-        logError('Failed to load AppFolio script:', err);
-        reject(new Error('Failed to load AppFolio script'));
-      };
-
-      document.head.appendChild(script);
-    });
-  };
-
-  const runDiagnostics = async () => {
-    // Wait a bit more to ensure widget is fully rendered
-    setTimeout(async () => {
-      try {
-        log('Running AppFolio rendering diagnostics...');
-        const diagnostics = await diagnoseAppfolioRendering('appfolio-root');
-        
-        // Generate markdown report
-        const report = generateMarkdownReport(diagnostics);
-        
-        // Log the report (in production, you might want to send this to a server)
-        console.log('\n' + report + '\n');
-        
-        // Store in sessionStorage for debugging
-        sessionStorage.setItem('appfolio-diagnostics', JSON.stringify(diagnostics));
-        sessionStorage.setItem('appfolio-report', report);
-        
-        log('Diagnostics complete. Check sessionStorage for full report.');
-      } catch (err) {
-        logError('Error running diagnostics:', err);
-      }
-    }, 1000);
-  };
-
   useEffect(() => {
-    let cancelled = false;
-    let timeoutId: NodeJS.Timeout;
-
-    const init = async () => {
-      try {
-        // Set timeout for the entire initialization
-        timeoutId = setTimeout(() => {
-          if (!cancelled) {
-            setError('Loading took too long. Please refresh the page.');
-            setIsLoading(false);
-          }
-        }, 15000); // 15 second timeout
-
-        // Load the script
-        await loadAppfolioScript();
-        
-        // Wait for DOM to be ready
-        await new Promise((r) => setTimeout(r, 500));
-        
-        if (!cancelled) {
-          // Initialize AppFolio widget
-          await initAppFolio();
-          
-          // Wait a bit more and check if iframe loaded
-          await new Promise((r) => setTimeout(r, 1000));
-          
-          if (!cancelled) {
-            const container = document.getElementById('appfolio-root');
-            const hasContent = container && (
-              container.querySelector('iframe') || 
-              container.children.length > 0
-            );
-
-            if (hasContent) {
-              log('AppFolio widget loaded successfully');
-              setIsLoading(false);
-              clearTimeout(timeoutId);
-              runDiagnostics();
-            } else {
-              log('AppFolio widget did not render content');
-              // Still hide loading and let the widget try to load
-              setIsLoading(false);
-              clearTimeout(timeoutId);
-            }
-          }
-        }
-      } catch (err) {
-        if (!cancelled) {
-          logError('Failed to initialize AppFolio:', err);
-          setError('Failed to load property listings. Please try again.');
-          setIsLoading(false);
-          clearTimeout(timeoutId);
-        }
-      }
-    };
-
-    init();
-    
     // Focus on H1 for accessibility
     if (h1Ref.current) {
       h1Ref.current.focus();
@@ -141,27 +24,8 @@ const Vacancies = () => {
 
     window.addEventListener('scroll', handleScroll);
     
-    // Cleanup function
     return () => {
-      cancelled = true;
-      clearTimeout(timeoutId);
       window.removeEventListener('scroll', handleScroll);
-      
-      // Clear the AppFolio container when component unmounts
-      const container = document.getElementById('appfolio-root');
-      if (container) {
-        container.innerHTML = '';
-      }
-      
-      // Remove AppFolio script to prevent Google Maps from persisting
-      const script = document.querySelector('script[src*="theyteam.appfolio.com"]');
-      if (script) {
-        script.remove();
-      }
-      
-      // Clean up any AppFolio iframes that might persist
-      const iframes = document.querySelectorAll('iframe[src*="appfolio"]');
-      iframes.forEach(iframe => iframe.remove());
     };
   }, []);
 
@@ -244,68 +108,46 @@ const Vacancies = () => {
 
         {/* AppFolio Listings Container */}
         <section className="mb-8 space-y-4">
-          {isLoading && (
-            <Card className="rounded-xl shadow-sm" role="status" aria-live="polite" aria-label="Loading listings">
-              <CardContent className="p-6 md:p-8 space-y-4">
-                <div className="space-y-3">
-                  <div className="h-4 bg-muted rounded animate-pulse w-3/4"></div>
-                  <div className="h-4 bg-muted rounded animate-pulse w-full"></div>
-                  <div className="h-4 bg-muted rounded animate-pulse w-5/6"></div>
-                </div>
-                <div className="flex items-center justify-center py-12">
-                  <div className="text-center space-y-3">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-                    <p className="text-base font-medium">Loading available units...</p>
-                    <p className="text-sm text-muted-foreground">Please wait while we fetch our latest listings</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+          {/* Optional: Open in new tab link */}
+          <div className="flex justify-end mb-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              asChild
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <a
+                href="https://theyteam.appfolio.com/listings"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <ExternalLink className="h-4 w-4" aria-hidden="true" />
+                Open full listings in new tab
+              </a>
+            </Button>
+          </div>
           
-          {error && (
-            <Card className="rounded-xl shadow-sm border-destructive/50" role="alert" aria-live="assertive">
-              <CardContent className="p-6 md:p-8">
-                <div className="text-center max-w-md mx-auto space-y-4">
-                  <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center mx-auto">
-                    <span className="text-2xl">⚠️</span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-destructive">Error Loading Listings</h3>
-                  <p className="text-muted-foreground">{error}</p>
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-                    <Button 
-                      onClick={() => window.location.reload()} 
-                      variant="outline"
-                      aria-label="Retry loading listings"
-                    >
-                      Retry
-                    </Button>
-                    <Button 
-                      onClick={() => navigate('/contact')}
-                      aria-label="Contact support team"
-                    >
-                      Contact Support
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          
-          {/* AppFolio widget wrapper with card styling */}
-          <Card 
-            className="rounded-xl shadow-sm overflow-hidden"
-            style={{ display: isLoading || error ? 'none' : 'block' }}
-          >
+          {/* AppFolio iframe wrapper with card styling */}
+          <Card className="rounded-xl shadow-sm overflow-hidden">
             <div className="border-t">
               <div className="p-2 md:p-4">
-                {/* AppFolio will render the listings here */}
+                {/* Sandboxed iframe for AppFolio listings */}
                 <div 
                   id="appfolio-root" 
                   className="w-full min-h-[80vh] relative z-0"
                   role="region"
                   aria-label="Property listings"
-                ></div>
+                >
+                  <iframe
+                    title="AppFolio rental listings"
+                    src="https://theyteam.appfolio.com/listings"
+                    className="w-full min-h-[80vh] border-0"
+                    sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                  />
+                </div>
               </div>
             </div>
           </Card>

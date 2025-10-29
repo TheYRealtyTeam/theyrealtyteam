@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { log, warn } from '@/lib/logger';
 import { useToast } from '@/hooks/use-toast';
 import { SecurityUtils, RATE_LIMITS } from '@/utils/security';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   sanitizeInput, 
   validateEmail, 
@@ -150,26 +151,20 @@ export const useContactSectionForm = () => {
 
       log('Submitting contact form with enhanced security');
 
-      // Submit to secure edge function
-      const response = await fetch(
-        'https://axgepdguspqqxudqnobz.supabase.co/functions/v1/contact-notification',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(sanitizedData)
-        }
-      );
-      
-      const result = await response.json();
-      
-      if (!response.ok) {
+      // Submit to secure edge function using Supabase client
+      const { data, error: submissionError } = await supabase.functions.invoke('contact-notification', {
+        body: sanitizedData
+      });
+
+      if (submissionError) {
+        console.error('Submission error:', submissionError);
+        
         // Handle specific error types
-        if (response.status === 429) {
+        if (submissionError.message?.includes('429') || submissionError.message?.includes('Rate limit')) {
           throw new Error('Rate limit exceeded. Please wait before submitting again.');
         }
-        throw new Error(result.error || 'Failed to send message');
+        
+        throw new Error('Failed to submit contact form');
       }
       
       // Update rate limiting timestamp

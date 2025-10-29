@@ -436,14 +436,8 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      cleanup_ai_chat_rate_limits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      cleanup_security_logs: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      cleanup_ai_chat_rate_limits: { Args: never; Returns: undefined }
+      cleanup_security_logs: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

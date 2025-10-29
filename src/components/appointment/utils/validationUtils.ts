@@ -84,24 +84,38 @@ export const parseTimeString = (timeString: string): { hour: number, minute: num
 };
 
 /**
- * Filters available times based on current time if the selected date is today
- * Adds a 30-minute buffer to ensure realistic booking times
+ * Filters available times based on day of week and current time
+ * - Fridays: Only 11:00 AM and 12:00 PM available
+ * - Other days: All times available (11 AM - 4 PM)
+ * - Today: Filter out past times + 30-minute buffer
  */
 export const filterAvailableTimes = (times: string[], selectedDate: Date | undefined): string[] => {
-  if (!selectedDate || !isToday(selectedDate)) {
+  if (!selectedDate) {
     return times;
   }
   
-  // If date is today, filter out past times + add 30 min buffer
-  const now = new Date();
-  const bufferMinutes = 30;
-  const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes() + bufferMinutes;
+  const dayOfWeek = selectedDate.getDay(); // 0 = Sunday, 5 = Friday
   
-  return times.filter(timeSlot => {
-    const { hour, minute } = parseTimeString(timeSlot);
-    const slotTimeInMinutes = hour * 60 + minute;
+  // Friday = only 11:00 AM and 12:00 PM
+  const fridayTimes = ['11:00 AM', '12:00 PM'];
+  
+  // Start with day-of-week filtering
+  let filteredTimes = dayOfWeek === 5 ? fridayTimes : times;
+  
+  // If date is today, also filter out past times + add 30 min buffer
+  if (isToday(selectedDate)) {
+    const now = new Date();
+    const bufferMinutes = 30;
+    const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes() + bufferMinutes;
     
-    // Only show times that are at least 30 minutes in the future
-    return slotTimeInMinutes > currentTimeInMinutes;
-  });
+    filteredTimes = filteredTimes.filter(timeSlot => {
+      const { hour, minute } = parseTimeString(timeSlot);
+      const slotTimeInMinutes = hour * 60 + minute;
+      
+      // Only show times that are at least 30 minutes in the future
+      return slotTimeInMinutes > currentTimeInMinutes;
+    });
+  }
+  
+  return filteredTimes;
 };

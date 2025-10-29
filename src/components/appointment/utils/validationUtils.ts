@@ -85,27 +85,23 @@ export const parseTimeString = (timeString: string): { hour: number, minute: num
 
 /**
  * Filters available times based on current time if the selected date is today
+ * Adds a 30-minute buffer to ensure realistic booking times
  */
 export const filterAvailableTimes = (times: string[], selectedDate: Date | undefined): string[] => {
   if (!selectedDate || !isToday(selectedDate)) {
     return times;
   }
   
-  // If date is today, filter out past times
+  // If date is today, filter out past times + add 30 min buffer
   const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
+  const bufferMinutes = 30;
+  const currentTimeInMinutes = now.getHours() * 60 + now.getMinutes() + bufferMinutes;
   
   return times.filter(timeSlot => {
     const { hour, minute } = parseTimeString(timeSlot);
+    const slotTimeInMinutes = hour * 60 + minute;
     
-    // Compare with current time
-    if (hour < currentHour) {
-      return false;
-    } else if (hour === currentHour && minute <= currentMinute) {
-      return false;
-    }
-    
-    return true;
+    // Only show times that are at least 30 minutes in the future
+    return slotTimeInMinutes > currentTimeInMinutes;
   });
 };

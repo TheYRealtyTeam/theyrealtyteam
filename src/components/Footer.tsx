@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Mail, Phone, Facebook, Instagram, Twitter, Linkedin, ArrowUp } from 'lucide-react';
+import { Mail, Phone, ArrowUp } from 'lucide-react';
 import Logo from './Logo';
 import { Link } from 'react-router-dom';
 
@@ -36,23 +36,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           <div>
             <Logo className="mb-6 text-white" />
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-300">
               Premier property management company dedicated to maximizing your property's potential through exceptional service and innovative solutions.
             </p>
-            <div className="flex space-x-4">
-              <a href="https://facebook.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Facebook" rel="noopener noreferrer" target="_blank">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="https://instagram.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Instagram" rel="noopener noreferrer" target="_blank">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="https://twitter.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="Twitter" rel="noopener noreferrer" target="_blank">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="https://linkedin.com" className="text-white hover:text-yrealty-accent transition-colors" aria-label="LinkedIn" rel="noopener noreferrer" target="_blank">
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
           </div>
           
           <div>

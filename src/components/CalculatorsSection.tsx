@@ -12,10 +12,13 @@ import { Link } from 'react-router-dom';
 import EnhancedRentalCalculator from './calculators/enhanced/EnhancedRentalCalculator';
 import EnhancedMortgageCalculator from './calculators/enhanced/EnhancedMortgageCalculator';
 import EnhancedROICalculator from './calculators/enhanced/EnhancedROICalculator';
+import CalculatorErrorBoundary from './calculators/enhanced/components/CalculatorErrorBoundary';
 import { SharedCalculatorState } from '@/types/calculator';
+import { useToast } from '@/hooks/use-toast';
 
 const CalculatorsSection = () => {
   const isMobile = useIsMobile();
+  const { toast } = useToast();
 
   // Initialize shared state with default values - this persists across calculator switches
   const [sharedState, setSharedState] = useState<SharedCalculatorState>({
@@ -57,7 +60,7 @@ const CalculatorsSection = () => {
 
   // Reset function - only called when user explicitly resets or refreshes page
   const resetCalculators = () => {
-    setSharedState({
+    const defaultState = {
       propertyValue: 300000,
       downPaymentPercent: 20,
       downPaymentAmount: 60000,
@@ -80,7 +83,21 @@ const CalculatorsSection = () => {
       renovationCosts: 10000,
       annualAppreciation: 3,
       holdingPeriod: 5
+    };
+    
+    setSharedState(defaultState);
+    
+    // Show confirmation toast
+    toast({
+      title: "Calculators Reset",
+      description: "All calculator fields have been reset to default values.",
+      duration: 3000,
     });
+    
+    // Log for testing
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ Calculators reset to default values', defaultState);
+    }
   };
   
   return (
@@ -129,10 +146,12 @@ const CalculatorsSection = () => {
                   Make informed investment decisions with our comprehensive analysis tool. Get detailed insights, real-time calculations, and professional recommendations for your property investment.
                 </p>
               </div>
-              <EnhancedRentalCalculator 
-                sharedState={sharedState} 
-                updateSharedState={updateSharedState} 
-              />
+              <CalculatorErrorBoundary calculatorName="Rental Calculator">
+                <EnhancedRentalCalculator 
+                  sharedState={sharedState} 
+                  updateSharedState={updateSharedState} 
+                />
+              </CalculatorErrorBoundary>
             </div>
           </TabsContent>
           
@@ -144,10 +163,12 @@ const CalculatorsSection = () => {
                   Calculate your mortgage payments with precision. Get detailed breakdowns, amortization schedules, and professional insights to make informed home buying decisions.
                 </p>
               </div>
-              <EnhancedMortgageCalculator 
-                sharedState={sharedState} 
-                updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
-              />
+              <CalculatorErrorBoundary calculatorName="Mortgage Calculator">
+                <EnhancedMortgageCalculator 
+                  sharedState={sharedState} 
+                  updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
+                />
+              </CalculatorErrorBoundary>
             </div>
           </TabsContent>
           
@@ -159,10 +180,12 @@ const CalculatorsSection = () => {
                   Analyze investment opportunities with sophisticated modeling. Calculate returns, cash flow projections, and get professional insights for your property investments.
                 </p>
               </div>
-              <EnhancedROICalculator 
-                sharedState={sharedState} 
-                updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
-              />
+              <CalculatorErrorBoundary calculatorName="ROI Calculator">
+                <EnhancedROICalculator 
+                  sharedState={sharedState} 
+                  updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
+                />
+              </CalculatorErrorBoundary>
             </div>
           </TabsContent>
         </Tabs>

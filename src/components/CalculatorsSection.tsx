@@ -166,7 +166,7 @@ const CalculatorsSection = () => {
               <CalculatorErrorBoundary calculatorName="Mortgage Calculator">
                 <EnhancedMortgageCalculator 
                   sharedState={sharedState} 
-                  updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
+                  updateSharedState={updateSharedState} 
                 />
               </CalculatorErrorBoundary>
             </div>
@@ -183,7 +183,7 @@ const CalculatorsSection = () => {
               <CalculatorErrorBoundary calculatorName="ROI Calculator">
                 <EnhancedROICalculator 
                   sharedState={sharedState} 
-                  updateSharedState={(updates) => updateSharedState({ ...sharedState, ...updates })} 
+                  updateSharedState={updateSharedState} 
                 />
               </CalculatorErrorBoundary>
             </div>

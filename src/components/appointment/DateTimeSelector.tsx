@@ -49,11 +49,18 @@ const DateTimeSelector: React.FC<DateTimeSelectorProps> = ({
       
       <div className="mb-6 relative z-10">
         <h3 className="text-lg font-medium mb-3 text-gray-700">2. Select a Time</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-          {availableTimes.map(time => <button key={time} onClick={() => handleTimeSelect(time)} className={`py-2 px-3 rounded-md text-center transition-colors ${selectedTime === time ? 'bg-yrealty-navy text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`} type="button">
-              {time}
-            </button>)}
-        </div>
+        {availableTimes.length === 0 ? (
+          <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+            <p className="text-yellow-800 font-medium">No available times for today</p>
+            <p className="text-yellow-700 text-sm mt-1">Please select a future date to see available appointment times.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {availableTimes.map(time => <button key={time} onClick={() => handleTimeSelect(time)} className={`py-2 px-3 rounded-md text-center transition-colors ${selectedTime === time ? 'bg-yrealty-navy text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`} type="button">
+                {time}
+              </button>)}
+          </div>
+        )}
       </div>
       
       <div className="mb-6 relative z-10">

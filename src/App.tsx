@@ -13,6 +13,8 @@ const Tools = lazy(() => import("./pages/Tools"));
 const Vacancies = lazy(() => import("./pages/Vacancies"));
 const Appointment = lazy(() => import("./pages/Appointment"));
 const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const Terms = lazy(() => import("./pages/Terms"));
 
 // Loading fallback component
 const PageLoading = () => (
@@ -34,6 +36,8 @@ const App = () => {
       <Route path="/vacancies" element={<Suspense fallback={<PageLoading />}><Vacancies /></Suspense>} />
       <Route path="/appointment" element={<Suspense fallback={<PageLoading />}><Appointment /></Suspense>} />
       <Route path="/contact" element={<Suspense fallback={<PageLoading />}><Contact /></Suspense>} />
+      <Route path="/privacy" element={<Suspense fallback={<PageLoading />}><PrivacyPolicy /></Suspense>} />
+      <Route path="/terms" element={<Suspense fallback={<PageLoading />}><Terms /></Suspense>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

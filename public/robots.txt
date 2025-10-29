@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://theyrealtyteam.lovable.app/sitemap.xml
+Sitemap: https://theYteam.co/sitemap.xml

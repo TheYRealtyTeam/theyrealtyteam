@@ -18,7 +18,6 @@ import MobileOfflineIndicator from '@/components/mobile/MobileOfflineIndicator';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 
 const Index = () => {
-  log('INDEX COMPONENT RENDERING - Route: /', window.location.pathname);
   const { isMobile } = useIsMobileOptimized();
   const [searchParams] = useSearchParams();
 

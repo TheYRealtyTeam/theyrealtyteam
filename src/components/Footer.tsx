@@ -113,9 +113,9 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Y Realty Team. All rights reserved. <a href="https://theYteam.co" className="hover:text-white transition-colors" rel="noopener noreferrer" target="_blank">theYteam.co</a>
           </p>
           <div className="flex space-x-6 text-sm text-gray-400">
-            <Link to="/" className="hover:text-white transition-colors">Privacy Policy</Link>
-            <Link to="/" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link to="/" className="hover:text-white transition-colors">Sitemap</Link>
+            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <a href="/sitemap.xml" className="hover:text-white transition-colors" target="_blank" rel="noopener noreferrer">Sitemap</a>
           </div>
         </div>
       </div>

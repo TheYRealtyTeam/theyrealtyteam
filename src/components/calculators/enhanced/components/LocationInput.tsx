@@ -12,9 +12,61 @@ interface LocationInputProps {
   className?: string;
 }
 
-// Popular US cities and states for autocomplete
+// Comprehensive US locations including all 50 states and major cities
 const popularLocations = [
-  // Major cities with states
+  // All 50 US States
+  'Alabama, AL',
+  'Alaska, AK',
+  'Arizona, AZ',
+  'Arkansas, AR',
+  'California, CA',
+  'Colorado, CO',
+  'Connecticut, CT',
+  'Delaware, DE',
+  'Florida, FL',
+  'Georgia, GA',
+  'Hawaii, HI',
+  'Idaho, ID',
+  'Illinois, IL',
+  'Indiana, IN',
+  'Iowa, IA',
+  'Kansas, KS',
+  'Kentucky, KY',
+  'Louisiana, LA',
+  'Maine, ME',
+  'Maryland, MD',
+  'Massachusetts, MA',
+  'Michigan, MI',
+  'Minnesota, MN',
+  'Mississippi, MS',
+  'Missouri, MO',
+  'Montana, MT',
+  'Nebraska, NE',
+  'Nevada, NV',
+  'New Hampshire, NH',
+  'New Jersey, NJ',
+  'New Mexico, NM',
+  'New York, NY',
+  'North Carolina, NC',
+  'North Dakota, ND',
+  'Ohio, OH',
+  'Oklahoma, OK',
+  'Oregon, OR',
+  'Pennsylvania, PA',
+  'Rhode Island, RI',
+  'South Carolina, SC',
+  'South Dakota, SD',
+  'Tennessee, TN',
+  'Texas, TX',
+  'Utah, UT',
+  'Vermont, VT',
+  'Virginia, VA',
+  'Washington, WA',
+  'West Virginia, WV',
+  'Wisconsin, WI',
+  'Wyoming, WY',
+  
+  // Major cities
   'New York, NY',
   'Los Angeles, CA',
   'Chicago, IL',
@@ -37,32 +89,84 @@ const popularLocations = [
   'Washington, DC',
   'Boston, MA',
   'Nashville, TN',
-  'Baltimore, MD',
-  'Oklahoma City, OK',
-  'Louisville, KY',
+  'El Paso, TX',
+  'Detroit, MI',
+  'Memphis, TN',
   'Portland, OR',
+  'Oklahoma City, OK',
   'Las Vegas, NV',
+  'Louisville, KY',
+  'Baltimore, MD',
   'Milwaukee, WI',
   'Albuquerque, NM',
   'Tucson, AZ',
   'Fresno, CA',
   'Sacramento, CA',
-  'Kansas City, MO',
   'Mesa, AZ',
+  'Kansas City, MO',
   'Atlanta, GA',
-  'Omaha, NE',
+  'Long Beach, CA',
   'Colorado Springs, CO',
   'Raleigh, NC',
   'Miami, FL',
-  'Long Beach, CA',
   'Virginia Beach, VA',
+  'Omaha, NE',
   'Oakland, CA',
   'Minneapolis, MN',
-  'Tampa, FL',
   'Tulsa, OK',
-  'Arlington, TX',
-  'New Orleans, LA',
   'Wichita, KS',
+  'New Orleans, LA',
+  'Arlington, TX',
+  'Cleveland, OH',
+  'Tampa, FL',
+  'Bakersfield, CA',
+  'Aurora, CO',
+  'Anaheim, CA',
+  'Honolulu, HI',
+  'Santa Ana, CA',
+  'Riverside, CA',
+  'Corpus Christi, TX',
+  'Lexington, KY',
+  'Stockton, CA',
+  'Henderson, NV',
+  'Saint Paul, MN',
+  'St. Louis, MO',
+  'Cincinnati, OH',
+  'Pittsburgh, PA',
+  'Greensboro, NC',
+  'Anchorage, AK',
+  'Plano, TX',
+  'Lincoln, NE',
+  'Orlando, FL',
+  'Irvine, CA',
+  'Newark, NJ',
+  'Durham, NC',
+  'Chula Vista, CA',
+  'Toledo, OH',
+  'Fort Wayne, IN',
+  'St. Petersburg, FL',
+  'Laredo, TX',
+  'Jersey City, NJ',
+  'Chandler, AZ',
+  'Madison, WI',
+  'Lubbock, TX',
+  'Scottsdale, AZ',
+  'Reno, NV',
+  'Buffalo, NY',
+  'Gilbert, AZ',
+  'Glendale, AZ',
+  'North Las Vegas, NV',
+  'Winston-Salem, NC',
+  'Chesapeake, VA',
+  'Norfolk, VA',
+  'Fremont, CA',
+  'Garland, TX',
+  'Irving, TX',
+  'Hialeah, FL',
+  'Richmond, VA',
+  'Boise, ID',
+  'Spokane, WA',
+  'Baton Rouge, LA',
 ];
 
 const LocationInput = ({ 
@@ -100,12 +204,33 @@ const LocationInput = ({
     onChange(newValue);
 
     // Filter suggestions based on input
-    if (newValue.length >= 2) {
+    if (newValue.length >= 1) {
+      const searchTerm = newValue.toLowerCase();
       const filtered = popularLocations.filter(location =>
-        location.toLowerCase().includes(newValue.toLowerCase())
+        location.toLowerCase().includes(searchTerm)
       );
-      setSuggestions(filtered.slice(0, 8)); // Show max 8 suggestions
-      setShowSuggestions(filtered.length > 0);
+      
+      // Prioritize: exact matches first, then starts with, then contains
+      const sorted = filtered.sort((a, b) => {
+        const aLower = a.toLowerCase();
+        const bLower = b.toLowerCase();
+        
+        // Exact match
+        if (aLower === searchTerm) return -1;
+        if (bLower === searchTerm) return 1;
+        
+        // Starts with search term
+        const aStarts = aLower.startsWith(searchTerm);
+        const bStarts = bLower.startsWith(searchTerm);
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        
+        // Alphabetical for same priority
+        return a.localeCompare(b);
+      });
+      
+      setSuggestions(sorted.slice(0, 10)); // Show max 10 suggestions
+      setShowSuggestions(sorted.length > 0);
       setSelectedIndex(-1);
     } else {
       setSuggestions([]);

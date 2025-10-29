@@ -4,9 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Home, MapPin, DollarSign, TrendingUp } from 'lucide-react';
+import { Home, DollarSign, TrendingUp } from 'lucide-react';
 import { CalculatorState, CalculatorResults } from '../types';
 import QuickInsightCard from '../components/QuickInsightCard';
+import LocationInput from '../components/LocationInput';
 import { formatInputValue, parseInputValue } from '../../utils/numberInputUtils';
 
 interface PropertyDetailsStepProps {
@@ -82,25 +83,10 @@ const PropertyDetailsStep = ({ state, updateState, results }: PropertyDetailsSte
               </div>
             </div>
 
-            <div>
-              <Label htmlFor="location" className="text-sm font-medium text-gray-700">
-                Location (Optional)
-              </Label>
-              <div className="relative mt-1">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  id="location"
-                  type="text"
-                  value={state.location}
-                  onChange={(e) => handleTextChange('location', e.target.value)}
-                  className="pl-10"
-                  placeholder="e.g., Atlanta, GA"
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                Adding location helps us provide more accurate market insights
-              </p>
-            </div>
+            <LocationInput
+              value={state.location}
+              onChange={(value) => handleTextChange('location', value)}
+            />
 
             <div className="bg-yrealty-blue/10 p-4 rounded-lg">
               <h4 className="font-medium text-yrealty-navy mb-2">💡 Property Selection Tips</h4>

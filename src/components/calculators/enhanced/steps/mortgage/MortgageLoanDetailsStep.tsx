@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DollarSign, Home, TrendingUp } from 'lucide-react';
 import QuickInsightCard from '../../components/QuickInsightCard';
+import LocationInput from '../../components/LocationInput';
 import { MortgageCalculatorState, MortgageResults } from '../../types/mortgageTypes';
 import { formatInputValue, parseInputValue } from '../../../utils/numberInputUtils';
 
@@ -94,16 +95,10 @@ const MortgageLoanDetailsStep = ({ state, updateState, results }: MortgageLoanDe
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="location">Location (Optional)</Label>
-              <Input
-                id="location"
-                type="text"
-                value={state.location}
-                onChange={(e) => updateState({ location: e.target.value })}
-                placeholder="City, State"
-              />
-            </div>
+            <LocationInput
+              value={state.location}
+              onChange={(value) => updateState({ location: value })}
+            />
           </CardContent>
         </Card>
       </div>

@@ -18,6 +18,7 @@ import {
 import { ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Tooltip, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, BarChart as RechartsBarChart, Bar } from 'recharts';
 import { ROICalculatorState, ROIResults } from './types/roiTypes';
 import { Link } from 'react-router-dom';
+import ActionButtons from './components/ActionButtons';
 
 interface ROIResultsDashboardProps {
   state: ROICalculatorState;
@@ -334,35 +335,7 @@ const ROIResultsDashboard = ({ state, results }: ROIResultsDashboardProps) => {
       </div>
 
       {/* Action Buttons */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="text-center space-y-4">
-            <h3 className="text-xl font-bold text-yrealty-navy">Ready to Analyze More Properties?</h3>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Our investment specialists can help you find and analyze profitable investment opportunities that meet your criteria.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button asChild className="bg-yrealty-navy hover:bg-yrealty-navy/90 text-white px-8 py-3">
-                <Link to="/appointment">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Schedule Consultation
-                </Link>
-              </Button>
-              
-              <Button variant="outline" className="border-yrealty-navy text-yrealty-navy hover:bg-yrealty-navy hover:text-white px-8 py-3">
-                <Download className="h-4 w-4 mr-2" />
-                Download Analysis
-              </Button>
-              
-              <Button variant="outline" className="border-yrealty-navy text-yrealty-navy hover:bg-yrealty-navy hover:text-white px-8 py-3">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share Results
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <ActionButtons calculatorData={{ state, results }} calculatorType="ROI Investment" />
 
       {/* Disclaimer */}
       <div className="text-center text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">

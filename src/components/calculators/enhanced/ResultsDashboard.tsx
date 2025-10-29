@@ -28,7 +28,7 @@ const ResultsDashboard = ({ state, results }: ResultsDashboardProps) => {
       </div>
 
       {/* Action Buttons */}
-      <ActionButtons />
+      <ActionButtons calculatorData={{ state, results }} calculatorType="Rental Property" />
 
       {/* Disclaimer */}
       <div className="text-center text-sm text-gray-500 bg-gray-50 p-4 rounded-lg">

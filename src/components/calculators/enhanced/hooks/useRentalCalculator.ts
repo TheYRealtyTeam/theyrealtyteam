@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { CalculatorState, CalculatorResults } from '../types';
+import { safeCalculateMortgage, validatePositiveNumber, safePercentage, safeDivide, validatePercentage } from '@/lib/utils/calculatorValidation';
 
 export const useRentalCalculator = (sharedState: Partial<CalculatorState>, updateSharedState: (updates: Partial<CalculatorState>) => void) => {
   const [calculatorState, setCalculatorState] = useState<CalculatorState>({
@@ -43,67 +44,97 @@ export const useRentalCalculator = (sharedState: Partial<CalculatorState>, updat
   }, [calculatorState]);
 
   const calculateResults = () => {
-    const monthlyIncome = calculatorState.isYearly ? calculatorState.monthlyRent / 12 : calculatorState.monthlyRent;
-    
-    // Calculate mortgage payment
-    const principal = calculatorState.propertyValue - calculatorState.downPaymentAmount;
-    const monthlyRate = calculatorState.interestRate / 100 / 12;
-    const numPayments = calculatorState.loanTerm * 12;
-    const mortgagePayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
-    
-    // Calculate monthly expenses
-    const propertyTaxMonthly = calculatorState.propertyTax / 12;
-    const insuranceMonthly = calculatorState.insurance / 12;
-    const vacancyCost = (monthlyIncome * calculatorState.vacancyRate) / 100;
-    
-    let managementCost = 0;
-    if (calculatorState.isFlatFee) {
-      managementCost = calculatorState.managementFee;
-    } else {
-      managementCost = (monthlyIncome * calculatorState.managementFee) / 100;
+    try {
+      const monthlyIncome = validatePositiveNumber(
+        calculatorState.isYearly ? calculatorState.monthlyRent / 12 : calculatorState.monthlyRent
+      );
+      
+      // Calculate mortgage payment with safe function
+      const principal = validatePositiveNumber(
+        calculatorState.propertyValue - calculatorState.downPaymentAmount
+      );
+      const mortgagePayment = safeCalculateMortgage(
+        principal,
+        calculatorState.interestRate,
+        calculatorState.loanTerm
+      );
+      
+      // Calculate monthly expenses
+      const propertyTaxMonthly = validatePositiveNumber(calculatorState.propertyTax / 12);
+      const insuranceMonthly = validatePositiveNumber(calculatorState.insurance / 12);
+      const vacancyCost = validatePositiveNumber((monthlyIncome * calculatorState.vacancyRate) / 100);
+      
+      let managementCost = 0;
+      if (calculatorState.isFlatFee) {
+        managementCost = validatePositiveNumber(calculatorState.managementFee);
+      } else {
+        managementCost = validatePositiveNumber((monthlyIncome * calculatorState.managementFee) / 100);
+      }
+      
+      const monthlyExpenses = validatePositiveNumber(
+        propertyTaxMonthly + 
+        insuranceMonthly + 
+        calculatorState.maintenanceCost + 
+        vacancyCost + 
+        managementCost + 
+        mortgagePayment + 
+        calculatorState.otherExpenses
+      );
+      
+      const monthlyCashFlow = monthlyIncome - monthlyExpenses;
+      const annualCashFlow = monthlyCashFlow * 12;
+      
+      // Calculate returns
+      const closingCosts = validatePositiveNumber(calculatorState.propertyValue * 0.03);
+      const initialInvestment = validatePositiveNumber(
+        calculatorState.downPaymentAmount + closingCosts
+      );
+      
+      const cashOnCashReturn = safePercentage(annualCashFlow, initialInvestment);
+      const netOperatingIncome = (monthlyIncome * 12) - 
+        ((propertyTaxMonthly + insuranceMonthly + calculatorState.maintenanceCost + 
+          managementCost + calculatorState.otherExpenses) * 12);
+      const capRate = safePercentage(netOperatingIncome, calculatorState.propertyValue);
+      
+      const breakEvenPoint = monthlyCashFlow > 0 ? 0 : safeDivide(Math.abs(annualCashFlow), Math.abs(monthlyCashFlow), 0);
+      
+      setResults({
+        monthlyIncome: validatePositiveNumber(monthlyIncome),
+        monthlyExpenses: validatePositiveNumber(monthlyExpenses),
+        monthlyCashFlow,
+        annualCashFlow,
+        cashOnCashReturn: validatePositiveNumber(cashOnCashReturn),
+        capRate: validatePositiveNumber(capRate),
+        totalROI: validatePositiveNumber(cashOnCashReturn),
+        breakEvenPoint: validatePositiveNumber(breakEvenPoint),
+        mortgagePayment: validatePositiveNumber(mortgagePayment)
+      });
+    } catch (error) {
+      console.error('Error calculating rental results:', error);
+      // Set default values on error
+      setResults({
+        monthlyIncome: 0,
+        monthlyExpenses: 0,
+        monthlyCashFlow: 0,
+        annualCashFlow: 0,
+        cashOnCashReturn: 0,
+        capRate: 0,
+        totalROI: 0,
+        breakEvenPoint: 0,
+        mortgagePayment: 0
+      });
     }
-    
-    const monthlyExpenses = propertyTaxMonthly + 
-                           insuranceMonthly + 
-                           calculatorState.maintenanceCost + 
-                           vacancyCost + 
-                           managementCost + 
-                           mortgagePayment + 
-                           calculatorState.otherExpenses;
-    
-    const monthlyCashFlow = monthlyIncome - monthlyExpenses;
-    const annualCashFlow = monthlyCashFlow * 12;
-    
-    // Calculate returns
-    const closingCosts = calculatorState.propertyValue * 0.03;
-    const initialInvestment = calculatorState.downPaymentAmount + closingCosts;
-    
-    const cashOnCashReturn = initialInvestment > 0 ? (annualCashFlow / initialInvestment) * 100 : 0;
-    const netOperatingIncome = (monthlyIncome * 12) - ((propertyTaxMonthly + insuranceMonthly + calculatorState.maintenanceCost + managementCost + calculatorState.otherExpenses) * 12);
-    const capRate = (netOperatingIncome / calculatorState.propertyValue) * 100;
-    
-    const breakEvenPoint = monthlyCashFlow > 0 ? 0 : Math.abs(annualCashFlow / monthlyCashFlow);
-    
-    setResults({
-      monthlyIncome,
-      monthlyExpenses,
-      monthlyCashFlow,
-      annualCashFlow,
-      cashOnCashReturn,
-      capRate,
-      totalROI: cashOnCashReturn,
-      breakEvenPoint,
-      mortgagePayment
-    });
   };
 
   const updateCalculatorState = (updates: Partial<CalculatorState>) => {
     setCalculatorState(prev => {
       const newState = { ...prev, ...updates };
       
-      // Auto-calculate dependent values
+      // Auto-calculate dependent values with validation
       if (updates.propertyValue !== undefined || updates.downPaymentPercent !== undefined) {
-        newState.downPaymentAmount = (newState.propertyValue * newState.downPaymentPercent) / 100;
+        const propertyValue = validatePositiveNumber(newState.propertyValue);
+        const downPaymentPercent = validatePercentage(newState.downPaymentPercent);
+        newState.downPaymentAmount = validatePositiveNumber((propertyValue * downPaymentPercent) / 100);
       }
       
       return newState;

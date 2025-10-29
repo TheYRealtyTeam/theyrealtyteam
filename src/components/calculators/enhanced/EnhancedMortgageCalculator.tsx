@@ -10,8 +10,8 @@ import MortgageLoanTermsStep from './steps/mortgage/MortgageLoanTermsStep';
 import MortgageAdditionalCostsStep from './steps/mortgage/MortgageAdditionalCostsStep';
 import MortgageResultsDashboard from './MortgageResultsDashboard';
 import { MortgageCalculatorState, MortgageResults } from './types/mortgageTypes';
-
 import { SharedCalculatorState } from '@/types/calculator';
+import { safeCalculateMortgage, validatePositiveNumber, validatePercentage } from '@/lib/utils/calculatorValidation';
 
 interface EnhancedMortgageCalculatorProps {
   sharedState: SharedCalculatorState;
@@ -75,62 +75,103 @@ const EnhancedMortgageCalculator = ({ sharedState, updateSharedState }: Enhanced
   }, [calculatorState]);
 
   const calculateResults = () => {
-    const loanAmount = calculatorState.propertyValue - calculatorState.downPaymentAmount;
-    const monthlyRate = calculatorState.interestRate / 100 / 12;
-    const numberOfPayments = calculatorState.loanTerm * 12;
-    
-    const monthlyPrincipalInterest = loanAmount * 
-      (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
-      (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-    
-    const monthlyPropertyTax = calculatorState.propertyTax / 12;
-    const monthlyInsurance = calculatorState.insurance / 12;
-    const monthlyPMI = calculatorState.downPaymentPercent < 20 ? calculatorState.pmi : 0;
-    const monthlyHOA = calculatorState.hoaFees;
-    
-    const totalMonthlyPayment = monthlyPrincipalInterest + monthlyPropertyTax + 
-                               monthlyInsurance + monthlyPMI + monthlyHOA;
-    
-    const totalPaymentLifetime = totalMonthlyPayment * numberOfPayments;
-    const totalInterestPaid = (monthlyPrincipalInterest * numberOfPayments) - loanAmount;
-    
-    // Calculate current month breakdown
-    const interestPayment = loanAmount * monthlyRate;
-    const principalPayment = monthlyPrincipalInterest - interestPayment;
-    
-    setResults({
-      monthlyPrincipalInterest,
-      monthlyPropertyTax,
-      monthlyInsurance,
-      monthlyPMI,
-      monthlyHOA,
-      totalMonthlyPayment,
-      totalPaymentLifetime,
-      totalInterestPaid,
-      loanAmount,
-      monthlyPaymentBreakdown: {
-        principal: principalPayment,
-        interest: interestPayment,
-        taxes: monthlyPropertyTax,
-        insurance: monthlyInsurance,
-        pmi: monthlyPMI,
-        hoa: monthlyHOA
-      }
-    });
+    try {
+      const loanAmount = validatePositiveNumber(
+        calculatorState.propertyValue - calculatorState.downPaymentAmount
+      );
+      
+      // Use safe mortgage calculation
+      const monthlyPrincipalInterest = safeCalculateMortgage(
+        loanAmount,
+        calculatorState.interestRate,
+        calculatorState.loanTerm
+      );
+      
+      const monthlyPropertyTax = validatePositiveNumber(calculatorState.propertyTax / 12);
+      const monthlyInsurance = validatePositiveNumber(calculatorState.insurance / 12);
+      const monthlyPMI = calculatorState.downPaymentPercent < 20 
+        ? validatePositiveNumber(calculatorState.pmi) 
+        : 0;
+      const monthlyHOA = validatePositiveNumber(calculatorState.hoaFees);
+      
+      const totalMonthlyPayment = validatePositiveNumber(
+        monthlyPrincipalInterest + monthlyPropertyTax + 
+        monthlyInsurance + monthlyPMI + monthlyHOA
+      );
+      
+      const numberOfPayments = calculatorState.loanTerm * 12;
+      const totalPaymentLifetime = validatePositiveNumber(totalMonthlyPayment * numberOfPayments);
+      const totalInterestPaid = validatePositiveNumber(
+        (monthlyPrincipalInterest * numberOfPayments) - loanAmount
+      );
+      
+      // Calculate current month breakdown
+      const monthlyRate = calculatorState.interestRate / 100 / 12;
+      const interestPayment = validatePositiveNumber(loanAmount * monthlyRate);
+      const principalPayment = validatePositiveNumber(monthlyPrincipalInterest - interestPayment);
+      
+      setResults({
+        monthlyPrincipalInterest: validatePositiveNumber(monthlyPrincipalInterest),
+        monthlyPropertyTax: validatePositiveNumber(monthlyPropertyTax),
+        monthlyInsurance: validatePositiveNumber(monthlyInsurance),
+        monthlyPMI: validatePositiveNumber(monthlyPMI),
+        monthlyHOA: validatePositiveNumber(monthlyHOA),
+        totalMonthlyPayment: validatePositiveNumber(totalMonthlyPayment),
+        totalPaymentLifetime: validatePositiveNumber(totalPaymentLifetime),
+        totalInterestPaid: validatePositiveNumber(totalInterestPaid),
+        loanAmount: validatePositiveNumber(loanAmount),
+        monthlyPaymentBreakdown: {
+          principal: validatePositiveNumber(principalPayment),
+          interest: validatePositiveNumber(interestPayment),
+          taxes: validatePositiveNumber(monthlyPropertyTax),
+          insurance: validatePositiveNumber(monthlyInsurance),
+          pmi: validatePositiveNumber(monthlyPMI),
+          hoa: validatePositiveNumber(monthlyHOA)
+        }
+      });
+    } catch (error) {
+      console.error('Error calculating mortgage results:', error);
+      // Set default values on error
+      setResults({
+        monthlyPrincipalInterest: 0,
+        monthlyPropertyTax: 0,
+        monthlyInsurance: 0,
+        monthlyPMI: 0,
+        monthlyHOA: 0,
+        totalMonthlyPayment: 0,
+        totalPaymentLifetime: 0,
+        totalInterestPaid: 0,
+        loanAmount: 0,
+        monthlyPaymentBreakdown: {
+          principal: 0,
+          interest: 0,
+          taxes: 0,
+          insurance: 0,
+          pmi: 0,
+          hoa: 0
+        }
+      });
+    }
   };
 
   const updateCalculatorState = (updates: Partial<MortgageCalculatorState>) => {
     setCalculatorState(prev => {
       const newState = { ...prev, ...updates };
       
-      // Handle bidirectional sync between down payment amount and percentage
+      // Handle bidirectional sync between down payment amount and percentage with validation
       if (updates.propertyValue !== undefined || updates.downPaymentPercent !== undefined) {
         // Calculate amount from percentage
-        newState.downPaymentAmount = (newState.propertyValue * newState.downPaymentPercent) / 100;
+        const propertyValue = validatePositiveNumber(newState.propertyValue);
+        const downPaymentPercent = validatePercentage(newState.downPaymentPercent);
+        newState.downPaymentAmount = validatePositiveNumber(
+          (propertyValue * downPaymentPercent) / 100
+        );
       } else if (updates.downPaymentAmount !== undefined) {
         // Calculate percentage from amount
-        newState.downPaymentPercent = newState.propertyValue > 0 
-          ? (newState.downPaymentAmount / newState.propertyValue) * 100 
+        const propertyValue = validatePositiveNumber(newState.propertyValue);
+        const downPaymentAmount = validatePositiveNumber(newState.downPaymentAmount);
+        newState.downPaymentPercent = propertyValue > 0 
+          ? validatePercentage((downPaymentAmount / propertyValue) * 100)
           : 0;
       }
       

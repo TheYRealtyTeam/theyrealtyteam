@@ -100,9 +100,8 @@ export const useContactForm = () => {
   const submitForm = async () => {
     if (!validateForm()) return;
 
-    // Check honeypot field
+    // Check honeypot field - silently reject bot submissions
     if (formData.honeypot) {
-      // Silently reject bot submissions
       toast({
         title: "Message Sent Successfully",
         description: "Thank you for your inquiry. We'll get back to you soon!",
@@ -127,14 +126,13 @@ export const useContactForm = () => {
         email: sanitizeInput(formData.email),
         phone: formData.phone ? sanitizeInput(formData.phone) : null,
         property_type: sanitizeInput(formData.propertyType),
-        message: sanitizeInput(formData.message),
-        honeypot: formData.honeypot // Pass honeypot to edge function for validation
+        message: sanitizeInput(formData.message)
       };
 
-      // SECURITY FIX: All submissions go through the edge function
-      // The edge function handles: rate limiting, honeypot validation, 
-      // sanitization, and database insertion with proper security
-      const { error: submissionError } = await supabase.functions.invoke('contact-notification', {
+      console.log('Submitting contact form to edge function');
+
+      // Submit to secure edge function using Supabase client
+      const { data, error: submissionError } = await supabase.functions.invoke('contact-notification', {
         body: sanitizedData
       });
 
@@ -143,11 +141,18 @@ export const useContactForm = () => {
         
         // Check if it's a rate limit error
         if (submissionError.message?.includes('429') || submissionError.message?.includes('Rate limit')) {
-          throw new Error('You have submitted too many forms. Please try again later.');
+          toast({
+            title: "Rate Limit Exceeded",
+            description: "You have submitted too many forms. Please try again later.",
+            variant: "destructive"
+          });
+          return;
         }
         
         throw new Error('Failed to submit contact form');
       }
+
+      console.log('Contact form submitted successfully');
 
       toast({
         title: "Message Sent Successfully",

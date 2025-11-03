@@ -80,7 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send confirmation email to client
     await resend.emails.send({
-      from: "Y Realty Team <no-reply@theYteam.co>",
+      from: "Y Realty Team <no-reply@theyteam.co>",
       to: [appointmentDetails.email],
       subject: "Property Viewing Appointment Confirmation",
       html: `
@@ -107,8 +107,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Send notification email to business
     await resend.emails.send({
-      from: "Y Realty Team <no-reply@theYteam.co>",
-      to: ["info@theYteam.co"],
+      from: "Y Realty Team <no-reply@theyteam.co>",
+      to: ["info@theyteam.co"],
       subject: "New Appointment Scheduled",
       html: `
         <h2>New Appointment</h2>
@@ -198,7 +198,7 @@ function generateICalContent(details: AppointmentDetails): string {
     `SUMMARY:Property Viewing - ${escapeIcal(details.property_type)}`,
     `DESCRIPTION:Property viewing appointment at ${escapeIcal(details.property_address)}${details.notes ? `\\n\\nNotes: ${escapeIcal(details.notes)}` : ''}`,
     `LOCATION:${escapeIcal(details.property_address)}`,
-    'ORGANIZER;CN=Y Realty Team:mailto:info@theYteam.co',
+    'ORGANIZER;CN=Y Realty Team:mailto:info@theyteam.co',
     `ATTENDEE;CN=${details.name}:mailto:${details.email}`,
     'STATUS:CONFIRMED',
     'SEQUENCE:0',

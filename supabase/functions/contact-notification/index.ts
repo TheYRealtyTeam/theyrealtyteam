@@ -88,7 +88,7 @@ const supabase = createClient(
 );
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY') ?? '');
-const FROM = Deno.env.get('RESEND_FROM') ?? 'Y Realty Team <no-reply@theYteam.co>';
+const FROM = Deno.env.get('RESEND_FROM') ?? 'Y Realty Team <no-reply@theyteam.co>';
 
 interface ContactSubmissionData {
   name: string;
@@ -132,7 +132,7 @@ async function sendEmailNotification(submissionData: ContactSubmissionData) {
   try {
     const { data, error } = await resend.emails.send({
       from: FROM,
-      to: ['info@theYteam.co'],
+      to: ['info@theyteam.co'],
       subject: `New Contact Form Submission from ${sanitizedData.name}`,
       html: htmlBody,
     });

@@ -101,6 +101,38 @@
     font-size: 1rem;
   }
 
+  /* Navbar tablet-specific styles */
+  header nav {
+    gap: 0.75rem;
+  }
+
+  header nav a {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  /* Logo sizing for tablet */
+  header img[alt*="Logo"] {
+    height: 2.5rem;
+  }
+
+  header .font-heading {
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  header [class*="gap-1"] {
+    font-size: 0.65rem;
+  }
+
+  /* Get Started button on tablet */
+  header .btn-primary,
+  header .btn-accent {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    margin-left: 0.75rem;
+  }
+
   /* Form optimizations */
   .tablet-form-input {
     font-size: 1rem;

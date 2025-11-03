@@ -206,6 +206,40 @@
     padding-top: 6rem;
   }
 
+  /* Hero section optimizations for tablet */
+  #home {
+    min-height: 85vh;
+  }
+
+  #home h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  #home h1 span {
+    display: block;
+    margin-top: 0.5rem;
+  }
+
+  #home p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 90%;
+  }
+
+  #home > div > div > div.flex.flex-col {
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  #home a.btn-accent,
+  #home a.btn-outline {
+    font-size: 1rem;
+    padding: 0.875rem 1.75rem;
+  }
+
   .tablet-hero-buttons {
     flex-direction: row;
     gap: 1.5rem;

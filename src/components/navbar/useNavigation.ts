@@ -27,7 +27,14 @@ export const useNavigation = () => {
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          setIsScrolled(window.scrollY > 10);
+          const getScrollThreshold = () => {
+            const w = window.innerWidth;
+            // Tablet/iPad: require larger scroll before switching header style
+            if (w >= 768 && w < 1024) return 80;
+            return 10;
+          };
+
+          setIsScrolled(window.scrollY > getScrollThreshold());
           
           if (location.pathname === '/' && sectionPositions.length > 0) {
             const scrollPosition = window.scrollY + 100;

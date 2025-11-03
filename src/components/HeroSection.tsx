@@ -48,7 +48,7 @@ const HeroSection = () => {
       
       <div className="container-custom relative z-10">
         <div className="max-w-4xl text-white">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight" style={{ opacity: 1 }}>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight" style={{ opacity: 1 }}>
             Premier Property Management 
             <span className="block text-yrealty-accent">Nationwide</span>
           </h1>

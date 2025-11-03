@@ -95,69 +95,97 @@
     padding: 0.75rem;
   }
 
-  /* Navigation optimizations */
-  .tablet-nav-item {
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-  }
-
-  /* Navbar tablet-specific styles */
+  /* NAVBAR FIXES */
   header {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
 
   header .container-custom {
-    max-width: 100%;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+    max-width: 100% !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
   }
 
   header .flex.items-center.justify-between {
-    gap: 0.5rem;
+    gap: 0.5rem !important;
   }
 
   /* Logo tablet optimization */
   header .flex.items-center.gap-2 {
-    gap: 0.375rem;
+    gap: 0.375rem !important;
   }
 
   header img[alt*="Logo"] {
-    height: 2rem;
+    height: 2rem !important;
   }
 
   header .font-heading {
-    font-size: 0.75rem;
-    letter-spacing: 0.025em;
-    white-space: nowrap;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.025em !important;
+    white-space: nowrap !important;
   }
 
   header .flex.flex-col {
-    gap: 0;
+    gap: 0 !important;
   }
 
   header [class*="gap-1"] {
-    display: none; /* Hide domain text on tablet */
+    display: none !important; /* Hide domain text on tablet */
   }
 
   /* Navigation links */
   header nav {
-    gap: 0.25rem;
+    gap: 0.25rem !important;
   }
 
   header nav a {
-    padding: 0.375rem 0.5rem;
-    font-size: 0.75rem;
-    white-space: nowrap;
+    padding: 0.375rem 0.5rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap !important;
   }
 
   /* Get Started button on tablet */
   header .btn-primary,
   header .btn-accent {
-    padding: 0.375rem 0.75rem;
-    font-size: 0.75rem;
-    margin-left: 0.375rem;
-    white-space: nowrap;
+    padding: 0.375rem 0.75rem !important;
+    font-size: 0.75rem !important;
+    margin-left: 0.375rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* HERO SECTION FIXES */
+  #home {
+    min-height: 85vh !important;
+  }
+
+  #home h1 {
+    font-size: 3rem !important;
+    line-height: 1.1 !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  #home h1 span {
+    display: block !important;
+    margin-top: 0.5rem !important;
+  }
+
+  #home p {
+    font-size: 1.125rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 2rem !important;
+    max-width: 90% !important;
+  }
+
+  #home > div > div > div.flex.flex-col {
+    flex-direction: row !important;
+    gap: 1rem !important;
+  }
+
+  #home a.btn-accent,
+  #home a.btn-outline {
+    font-size: 1rem !important;
+    padding: 0.875rem 1.75rem !important;
   }
 
   /* Form optimizations */
@@ -198,46 +226,6 @@
 
   .tablet-space-y-12 > * + * {
     margin-top: 3rem;
-  }
-
-  /* Hero section tablet-specific styles */
-  .tablet-hero-section {
-    min-height: 85vh;
-    padding-top: 6rem;
-  }
-
-  /* Hero section optimizations for tablet */
-  #home {
-    min-height: 85vh;
-  }
-
-  #home h1 {
-    font-size: 3rem;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-  }
-
-  #home h1 span {
-    display: block;
-    margin-top: 0.5rem;
-  }
-
-  #home p {
-    font-size: 1.125rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    max-width: 90%;
-  }
-
-  #home > div > div > div.flex.flex-col {
-    flex-direction: row;
-    gap: 1rem;
-  }
-
-  #home a.btn-accent,
-  #home a.btn-outline {
-    font-size: 1rem;
-    padding: 0.875rem 1.75rem;
   }
 
   .tablet-hero-buttons {

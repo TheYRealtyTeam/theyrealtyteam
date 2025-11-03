@@ -113,36 +113,50 @@
     padding-right: 0.5rem;
   }
 
-  header nav {
+  header .flex.items-center.justify-between {
+    gap: 0.5rem;
+  }
+
+  /* Logo tablet optimization */
+  header .flex.items-center.gap-2 {
     gap: 0.375rem;
   }
 
-  header nav a {
-    padding: 0.5rem 0.625rem;
-    font-size: 0.8125rem;
-    white-space: nowrap;
-  }
-
-  /* Logo sizing for tablet */
   header img[alt*="Logo"] {
-    height: 2.25rem;
+    height: 2rem;
   }
 
   header .font-heading {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     letter-spacing: 0.025em;
+    white-space: nowrap;
+  }
+
+  header .flex.flex-col {
+    gap: 0;
   }
 
   header [class*="gap-1"] {
     display: none; /* Hide domain text on tablet */
   }
 
+  /* Navigation links */
+  header nav {
+    gap: 0.25rem;
+  }
+
+  header nav a {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
   /* Get Started button on tablet */
   header .btn-primary,
   header .btn-accent {
-    padding: 0.5rem 0.875rem;
-    font-size: 0.8125rem;
-    margin-left: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    margin-left: 0.375rem;
     white-space: nowrap;
   }
 

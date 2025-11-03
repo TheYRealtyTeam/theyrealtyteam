@@ -48,8 +48,8 @@ const ServicesSection = () => {
           </div>
         </div>
 
-        {/* All Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+        {/* All Services Grid - Compact View */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
           {allServices.map((service, index) => (
             <ServiceCard 
               key={index} 

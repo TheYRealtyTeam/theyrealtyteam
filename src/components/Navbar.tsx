@@ -35,7 +35,7 @@ const Navbar = () => {
           />
           
           <button 
-            className={`md:hidden z-50 ${isScrolled ? 'text-black' : 'text-white'}`}
+            className={`lg:hidden z-50 ${isScrolled ? 'text-black' : 'text-white'}`}
             onClick={toggleMenu}
             aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
             aria-expanded={isMenuOpen}

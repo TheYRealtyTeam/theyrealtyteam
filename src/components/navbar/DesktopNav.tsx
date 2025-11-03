@@ -17,7 +17,7 @@ const DesktopNav = ({ navLinks, isLinkActive, handleNavigation, closeMenu, user,
   const buttonClass = isScrolled ? 'btn-primary' : 'btn-accent';
   
   return (
-    <nav className="hidden md:flex items-center space-x-2" aria-label="Main Navigation">
+    <nav className="hidden lg:flex items-center space-x-2" aria-label="Main Navigation">
       {navLinks.map((link) => (
         <NavLink 
           key={link.name}

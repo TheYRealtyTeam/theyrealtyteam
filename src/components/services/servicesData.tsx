@@ -106,3 +106,5 @@ export const getCommercialServices = (): Service[] => [
   },
   ...coreServices
 ];
+
+export const getAllServices = (): Service[] => coreServices;

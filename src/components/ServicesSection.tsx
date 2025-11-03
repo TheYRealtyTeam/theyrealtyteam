@@ -1,29 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Building, Home } from 'lucide-react';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 import MobileServicesSection from './mobile/MobileServicesSection';
 import ValueProposition from './services/ValueProposition';
 import CaseStudies from './services/CaseStudies';
 import TechnologyStack from './services/TechnologyStack';
-import ServicesTabContent from './services/ServicesTabContent';
+import ServiceCard from './services/ServiceCard';
+import { getAllServices } from './services/servicesData';
 
 const ServicesSection = () => {
   const { isMobileOnly } = useIsMobileOptimized();
-  const [activeTab, setActiveTab] = useState("residential");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleTabChange = (tabName: string) => {
-    setIsLoading(true);
-    setActiveTab(tabName);
-    setTimeout(() => setIsLoading(false), 300);
-  };
 
   // Return mobile-optimized version only for phones, not tablets
   if (isMobileOnly) {
     return <MobileServicesSection />;
   }
 
-  // Desktop version (keep existing code)
+  const allServices = getAllServices();
+
+  // Desktop version
   return (
     <section id="services" className="section-padding bg-gradient-to-b from-white to-gray-50">
       <div className="container-custom">
@@ -33,8 +28,7 @@ const ServicesSection = () => {
             Our Comprehensive Services
           </h2>
           <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto reveal leading-relaxed">
-            Elevating property management with a full suite of premium services designed 
-            to maximize your property's potential and minimize your stress
+            Full-service property management for residential and commercial properties
           </p>
           
           <ValueProposition />
@@ -42,37 +36,30 @@ const ServicesSection = () => {
 
         <CaseStudies />
 
-        {/* Enhanced Tab Navigation */}
-        <div className="w-full">
-          <div className="flex justify-center mb-12">
-            <div className="w-96 inline-flex h-auto min-h-12 items-center justify-center rounded-xl bg-gray-100 p-2 text-muted-foreground shadow-inner">
-              <button 
-                onClick={() => handleTabChange("residential")}
-                className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-lg px-6 py-3 text-lg font-bold transition-all duration-300
-                  ${activeTab === "residential" 
-                    ? "bg-white text-yrealty-navy shadow-md" 
-                    : "hover:bg-white/50"}`}
-              >
-                <Home className="mr-3 h-6 w-6" />
-                Residential
-              </button>
-              <button 
-                onClick={() => handleTabChange("commercial")}
-                className={`flex-1 inline-flex items-center justify-center whitespace-nowrap rounded-lg px-6 py-3 text-lg font-bold transition-all duration-300
-                  ${activeTab === "commercial" 
-                    ? "bg-white text-yrealty-navy shadow-md" 
-                    : "hover:bg-white/50"}`}
-              >
-                <Building className="mr-3 h-6 w-6" />
-                Commercial
-              </button>
-            </div>
+        {/* Property types badge */}
+        <div className="flex justify-center items-center gap-6 mb-12">
+          <div className="flex items-center gap-3 px-6 py-3 bg-white rounded-xl shadow-md border border-gray-200">
+            <Home className="h-6 w-6 text-yrealty-accent" />
+            <span className="font-bold text-yrealty-navy">Residential Properties</span>
           </div>
-          
-          {/* Enhanced Tab Content */}
-          <div className="mt-8 min-h-[1200px]">
-            <ServicesTabContent activeTab={activeTab} isLoading={isLoading} />
+          <div className="flex items-center gap-3 px-6 py-3 bg-white rounded-xl shadow-md border border-gray-200">
+            <Building className="h-6 w-6 text-yrealty-accent" />
+            <span className="font-bold text-yrealty-navy">Commercial Properties</span>
           </div>
+        </div>
+
+        {/* All Services Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16">
+          {allServices.map((service, index) => (
+            <ServiceCard 
+              key={index} 
+              title={service.title} 
+              description={service.description} 
+              icon={service.icon} 
+              features={service.features}
+              pricing={service.pricing}
+            />
+          ))}
         </div>
 
         <TechnologyStack />

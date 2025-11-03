@@ -8,7 +8,7 @@ export const saveAppointmentToDatabase = async (
   callType: string,
   formData: AppointmentFormData
 ) => {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('appointments')
     .insert({
       date: formattedDate,
@@ -19,14 +19,13 @@ export const saveAppointmentToDatabase = async (
       property_type: formData.propertyType,
       message: formData.message || '',
       call_type: callType
-    })
-    .select();
+    });
   
   if (error) {
     throw error;
   }
   
-  return data;
+  return { success: true };
 };
 
 export const sendAppointmentNotifications = async (

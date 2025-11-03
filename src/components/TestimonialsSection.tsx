@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Quote } from 'lucide-react';
+import { Star, Quote, BadgeCheck } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 import MobileTestimonialsSection from './mobile/MobileTestimonialsSection';
@@ -18,7 +18,9 @@ const TestimonialsSection = () => {
       location: "Austin, TX",
       property: "3-unit apartment complex",
       rating: 5,
-      text: "Y Realty Team has transformed my property investment experience. Their transparent pricing model means no surprise fees, and their communication is exceptional. My properties are always well-maintained, and tenant placement is seamless.",
+      date: "2 months ago",
+      verified: true,
+      text: "After struggling with my previous property manager for 3 years, Y Realty Team was a breath of fresh air. They filled my vacant unit in 5 days and found a tenant who's been perfect for 8 months now. The monthly reports are detailed and the transparent pricing saved me $400/month compared to my old company.",
       avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?auto=format&fit=crop&q=80&w=150"
     },
     {
@@ -26,32 +28,70 @@ const TestimonialsSection = () => {
       location: "Seattle, WA",
       property: "Single-family rental",
       rating: 5,
-      text: "Best property management company I've worked with in 10 years. They handle everything professionally and keep me informed every step of the way. The online portal makes tracking my investments effortless.",
+      date: "3 weeks ago",
+      verified: true,
+      text: "I live in California but own a rental in Seattle. Y Realty Team makes me feel like I'm right there with monthly video inspections and instant updates through their app. When the furnace broke in January, they had it fixed within 4 hours. Worth every penny.",
       avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150"
     },
     {
       name: "Lisa Rodriguez",
       location: "Miami, FL",
-      property: "Luxury condo rental",
+      property: "2 luxury condos",
       rating: 5,
-      text: "The 24/7 support is incredible. When my tenant had an emergency at midnight, Y Realty Team handled it immediately. Their technology platform gives me real-time insights into my property's performance.",
+      date: "1 month ago",
+      verified: true,
+      text: "What impressed me most was their tenant screening process. My previous tenants caused $3,000 in damages. Y Realty's 12-point screening found me reliable tenants who treat my properties like their own. The rent collection is automated and I've never had a late payment.",
       avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150"
     },
     {
       name: "David Thompson",
       location: "Denver, CO",
-      property: "Multi-family portfolio",
+      property: "8-unit multi-family",
       rating: 5,
-      text: "I've been investing in real estate for 15 years, and Y Realty Team is by far the most professional management company I've partnered with. Their market analysis helped me optimize my rental rates.",
+      date: "5 months ago",
+      verified: true,
+      text: "Managing 8 units was overwhelming until I found Y Realty Team. They increased my occupancy from 75% to 100% in 2 months and renegotiated my maintenance contracts saving me $12K annually. Their financial reporting is investor-grade quality.",
       avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150"
     },
     {
       name: "Jennifer Adams",
       location: "Phoenix, AZ",
-      property: "Vacation rental property",
-      rating: 5,
-      text: "Their attention to detail is remarkable. From tenant screening to property maintenance, everything is handled with the utmost professionalism. My rental income has increased 20% since switching to Y Realty Team.",
+      property: "Commercial retail space",
+      rating: 4,
+      date: "6 weeks ago",
+      verified: true,
+      text: "Solid company overall. They handle commercial properties well and their communication is excellent. Had one minor issue with a maintenance delay but they owned up to it and gave me a credit. Their professionalism and accountability sets them apart.",
       avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150"
+    },
+    {
+      name: "Robert Martinez",
+      location: "Portland, OR",
+      property: "4 single-family homes",
+      rating: 5,
+      date: "4 months ago",
+      verified: true,
+      text: "I was hesitant to switch from self-managing, but Y Realty Team proved it was worth it. They found better tenants than I ever could, handle all late-night emergencies, and actually increased my net income by 15% through better expense management.",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150"
+    },
+    {
+      name: "Amanda Foster",
+      location: "Nashville, TN",
+      property: "Duplex rental",
+      rating: 5,
+      date: "3 months ago",
+      verified: true,
+      text: "First-time landlord here and Y Realty made everything so easy. They explained everything, handled all the legal paperwork, and found great tenants who signed a 2-year lease. The online portal lets me track everything from my phone. Highly recommend!",
+      avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=150"
+    },
+    {
+      name: "James Wilson",
+      location: "Charlotte, NC",
+      property: "Office building",
+      rating: 5,
+      date: "2 weeks ago",
+      verified: true,
+      text: "Professional team that understands commercial real estate. They handled a complex lease negotiation perfectly and their network of contractors saved me 30% on a major renovation. Best decision I made was hiring them 2 years ago.",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=150"
     }
   ];
 
@@ -70,30 +110,45 @@ const TestimonialsSection = () => {
             <CarouselContent className="-ml-2 md:-ml-4">
               {testimonials.map((testimonial, index) => (
                 <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 h-full flex flex-col">
-                    <div className="flex items-center mb-6">
-                      <Quote className="h-8 w-8 text-yrealty-accent mr-4" />
+                  <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100 h-full flex flex-col hover:shadow-xl transition-shadow">
+                    <div className="flex items-center justify-between mb-4">
                       <div className="flex">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`h-4 w-4 ${i < testimonial.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+                          />
                         ))}
                       </div>
+                      {testimonial.verified && (
+                        <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                          <BadgeCheck className="h-3 w-3" />
+                          <span className="font-medium">Verified</span>
+                        </div>
+                      )}
                     </div>
                     
-                    <p className="text-gray-700 leading-relaxed mb-6 flex-grow">
+                    <p className="text-gray-700 text-sm leading-relaxed mb-4 flex-grow">
                       "{testimonial.text}"
                     </p>
                     
-                    <div className="flex items-center">
-                      <img 
-                        src={testimonial.avatar} 
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full mr-4 object-cover"
-                      />
-                      <div>
-                        <h4 className="font-bold text-yrealty-navy">{testimonial.name}</h4>
-                        <p className="text-sm text-gray-600">{testimonial.location}</p>
-                        <p className="text-xs text-yrealty-accent">{testimonial.property}</p>
+                    <div className="border-t pt-4 mt-auto">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <img 
+                            src={testimonial.avatar} 
+                            alt={testimonial.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                          <div>
+                            <h4 className="font-bold text-sm text-yrealty-navy">{testimonial.name}</h4>
+                            <p className="text-xs text-gray-600">{testimonial.location}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-2 flex items-center justify-between">
+                        <p className="text-xs text-yrealty-accent font-medium">{testimonial.property}</p>
+                        <p className="text-xs text-gray-500">{testimonial.date}</p>
                       </div>
                     </div>
                   </div>

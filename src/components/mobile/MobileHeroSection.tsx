@@ -27,36 +27,36 @@ const MobileHeroSection = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-yrealty-navy/90 to-yrealty-navy/60"></div>
       
-      <div className="relative z-10 w-full max-w-md mx-auto text-center">
-        <h1 className="text-4xl font-bold mb-6 text-white animate-fade-in leading-tight">
-          Premier Property 
-          <span className="block text-yrealty-accent text-5xl mt-3">Management</span>
-          <span className="block text-2xl mt-2 font-medium">Nationwide</span>
+      <div className="relative z-10 w-full max-w-md mx-auto text-center px-2">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-5 text-white animate-fade-in leading-tight">
+          <span className="block">Premier Property</span>
+          <span className="block text-yrealty-accent text-4xl sm:text-5xl mt-2 break-words">Management</span>
+          <span className="block text-xl sm:text-2xl mt-2 font-medium">Nationwide</span>
         </h1>
         
-        <p className="text-lg mb-10 text-white/90 animate-fade-in leading-relaxed px-4" style={{
+        <p className="text-base sm:text-lg mb-8 text-white/90 animate-fade-in leading-relaxed" style={{
           animationDelay: '0.2s'
         }}>
-          Exceptional service nationwide with a client-first approach.
+          Exceptional service with a client-first approach.
         </p>
         
-        <div className="space-y-5 animate-fade-in px-4" style={{
+        <div className="space-y-4 animate-fade-in" style={{
           animationDelay: '0.4s'
         }}>
           <a 
             href="tel:(845)734-3331" 
-            className="block w-full bg-yrealty-accent active:bg-yrealty-accent/80 text-white text-lg px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl transition-all duration-200 active:scale-95 min-h-[56px]"
+            className="block w-full bg-yrealty-accent active:bg-yrealty-accent/80 text-white text-base sm:text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-xl transition-all duration-200 active:scale-95 min-h-[52px]"
           >
-            <Phone size={22} />
-            Call Now: (845) 734-3331
+            <Phone size={20} />
+            <span className="break-words">Call: (845) 734-3331</span>
           </a>
           
           <a 
             href="#contact" 
-            className="block w-full bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white active:bg-white/20 text-lg px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-200 active:scale-95 min-h-[56px]"
+            className="block w-full bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white active:bg-white/20 text-base sm:text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 min-h-[52px]"
           >
-            <MessageCircle size={22} />
-            Get Free Consultation
+            <MessageCircle size={20} />
+            <span>Get Free Consultation</span>
           </a>
         </div>
       </div>

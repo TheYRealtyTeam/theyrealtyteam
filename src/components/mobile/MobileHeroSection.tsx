@@ -18,7 +18,7 @@ const MobileHeroSection = () => {
       ref={heroRef} 
       aria-label="Welcome to Y Realty Team" 
       className={`
-        relative min-h-[85vh] bg-cover bg-center bg-no-repeat flex flex-col justify-center items-start px-6 pt-24 pb-16 transition-opacity duration-700
+        relative min-h-[65vh] bg-cover bg-center bg-no-repeat flex flex-col justify-center items-start px-6 pt-16 pb-12 transition-opacity duration-700
         ${isImageLoaded ? 'opacity-100' : 'opacity-0 bg-gradient-to-br from-yrealty-navy to-yrealty-blue'}
       `} 
       style={{

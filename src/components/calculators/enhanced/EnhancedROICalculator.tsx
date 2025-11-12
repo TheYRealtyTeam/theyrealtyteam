@@ -350,26 +350,26 @@ const EnhancedROICalculator = ({ sharedState, updateSharedState }: EnhancedROICa
       {currentStep < 5 && (
         <Card className="mt-6">
           <CardContent className="pt-6">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <Button 
                 variant="outline" 
                 onClick={prevStep}
                 disabled={currentStep === 1}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 w-full sm:w-auto"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>Previous</span>
               </Button>
               
-              <div className="text-center">
-                <p className="text-sm text-gray-600">
+              <div className="hidden lg:block text-center flex-1 px-4">
+                <p className="text-sm text-gray-600 whitespace-nowrap">
                   Real-time calculations update as you type
                 </p>
               </div>
               
               <Button 
                 onClick={nextStep}
-                className="bg-yrealty-navy hover:bg-yrealty-navy/90 flex items-center space-x-2"
+                className="bg-yrealty-navy hover:bg-yrealty-navy/90 flex items-center space-x-2 w-full sm:w-auto"
               >
                 <span>Next</span>
                 <ChevronRight className="h-4 w-4" />

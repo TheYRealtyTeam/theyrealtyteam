@@ -103,16 +103,18 @@ const Index = () => {
       <Footer />
       <AIChat />
       <AnimationObserver />
-      {isMobile && <MobileBottomNavigation />}
       {isMobile && <MobilePWAPrompt />}
       {isMobile && <MobileOfflineIndicator />}
     </div>
   );
 
   return isMobile ? (
-    <MobilePullToRefresh onRefresh={handleRefresh}>
-      {content}
-    </MobilePullToRefresh>
+    <>
+      <MobilePullToRefresh onRefresh={handleRefresh}>
+        {content}
+      </MobilePullToRefresh>
+      <MobileBottomNavigation />
+    </>
   ) : content;
 };
 

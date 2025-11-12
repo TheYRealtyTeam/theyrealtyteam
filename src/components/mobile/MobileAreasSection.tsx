@@ -3,16 +3,6 @@ import React from 'react';
 import { MapPin, CheckCircle, Star } from 'lucide-react';
 
 const MobileAreasSection = () => {
-  const states = [
-    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
-    'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky',
-    'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi',
-    'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico',
-    'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
-    'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-    'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-  ];
-
   const features = [
     { icon: MapPin, title: 'Local Expertise', description: 'Deep knowledge of local markets and regulations' },
     { icon: CheckCircle, title: 'Licensed Professionals', description: 'Fully licensed in all states we operate' },
@@ -53,21 +43,6 @@ const MobileAreasSection = () => {
         <div className="bg-gradient-to-r from-yrealty-navy to-yrealty-accent p-6 rounded-2xl text-white text-center mb-8">
           <h3 className="text-3xl font-bold mb-2">Nationwide</h3>
           <p className="text-lg opacity-95">One team, expanding coverage</p>
-        </div>
-
-        {/* States Grid */}
-        <div className="bg-white rounded-2xl p-6 shadow-lg">
-          <h3 className="text-xl font-bold text-yrealty-navy mb-4 text-center">
-            States We Serve
-          </h3>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {states.map((state, index) => (
-              <div key={index} className="flex items-center gap-2 py-1">
-                <CheckCircle className="h-4 w-4 text-yrealty-accent flex-shrink-0" />
-                <span className="text-gray-700">{state}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         {/* CTA */}

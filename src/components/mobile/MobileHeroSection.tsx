@@ -18,7 +18,7 @@ const MobileHeroSection = () => {
       ref={heroRef} 
       aria-label="Welcome to Y Realty Team" 
       className={`
-        relative h-[70vh] bg-cover bg-center bg-no-repeat flex flex-col justify-center items-start px-4 pt-20 transition-opacity duration-700
+        relative min-h-[85vh] bg-cover bg-center bg-no-repeat flex flex-col justify-center items-start px-6 pt-24 pb-16 transition-opacity duration-700
         ${isImageLoaded ? 'opacity-100' : 'opacity-0 bg-gradient-to-br from-yrealty-navy to-yrealty-blue'}
       `} 
       style={{
@@ -27,36 +27,36 @@ const MobileHeroSection = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-yrealty-navy/90 to-yrealty-navy/60"></div>
       
-      <div className="relative z-10 w-full max-w-sm mx-auto text-center">
-        <h1 className="text-3xl font-bold mb-4 text-white animate-fade-in leading-tight">
+      <div className="relative z-10 w-full max-w-md mx-auto text-center">
+        <h1 className="text-4xl font-bold mb-6 text-white animate-fade-in leading-tight">
           Premier Property 
-          <span className="block text-yrealty-accent text-4xl mt-2">Management</span>
-          <span className="block text-2xl mt-1 font-medium">Nationwide</span>
+          <span className="block text-yrealty-accent text-5xl mt-3">Management</span>
+          <span className="block text-2xl mt-2 font-medium">Nationwide</span>
         </h1>
         
-        <p className="text-base mb-8 text-white/90 animate-fade-in leading-relaxed px-2" style={{
+        <p className="text-lg mb-10 text-white/90 animate-fade-in leading-relaxed px-4" style={{
           animationDelay: '0.2s'
         }}>
           Exceptional service nationwide with a client-first approach.
         </p>
         
-        <div className="space-y-4 animate-fade-in" style={{
+        <div className="space-y-5 animate-fade-in px-4" style={{
           animationDelay: '0.4s'
         }}>
           <a 
             href="tel:(845)734-3331" 
-            className="w-full bg-yrealty-accent hover:bg-yrealty-accent/90 text-white text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg transition-all duration-300 transform hover:scale-105"
+            className="block w-full bg-yrealty-accent active:bg-yrealty-accent/80 text-white text-lg px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl transition-all duration-200 active:scale-95 min-h-[56px]"
           >
-            <Phone size={20} />
-            Call Now
+            <Phone size={22} />
+            Call Now: (845) 734-3331
           </a>
           
           <a 
             href="#contact" 
-            className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20 text-lg px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300"
+            className="block w-full bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white active:bg-white/20 text-lg px-8 py-5 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all duration-200 active:scale-95 min-h-[56px]"
           >
-            <MessageCircle size={20} />
-            Get Started
+            <MessageCircle size={22} />
+            Get Free Consultation
           </a>
         </div>
       </div>

@@ -58,10 +58,9 @@ export const callOpenAI = async (
         "Authorization": `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-5",
         messages: messages,
-        max_tokens: 500,
-        temperature: 0.7,
+        max_completion_tokens: 800,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,

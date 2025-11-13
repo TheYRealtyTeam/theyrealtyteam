@@ -31,7 +31,7 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className={`fixed ${getPositionClasses()} bg-yrealty-navy hover:bg-yrealty-navy/90 text-white ${getSizeClasses()} rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-40`}
+      className={`fixed ${getPositionClasses()} bg-yrealty-navy hover:bg-yrealty-navy/90 text-white ${getSizeClasses()} rounded-full shadow-lg transition-all duration-300 hover:scale-110 z-[60]`}
       aria-label="Open AI Chat"
     >
       <MessageCircle className={getIconSize()} />

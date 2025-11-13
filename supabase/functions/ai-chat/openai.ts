@@ -19,10 +19,10 @@ export const callOpenAI = async (
   message: string, 
   conversationHistory?: Array<{ role: string; content: string }>
 ): Promise<string | Response> => {
-  // Get and validate OpenAI API key
-  const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-  if (!OPENAI_API_KEY) {
-    console.error("OpenAI API key not configured");
+  // Get and validate Lovable AI API key
+  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+  if (!LOVABLE_API_KEY) {
+    console.error("Lovable AI API key not configured");
     return createErrorResponse("AI service not configured. Please contact support.", 500);
   }
 
@@ -47,37 +47,36 @@ export const callOpenAI = async (
     content: message
   });
 
-  console.log("Sending request to OpenAI with", messages.length, "messages");
+  console.log("Sending request to Lovable AI with", messages.length, "messages");
 
   try {
-    // Call OpenAI Chat Completions API
-    const openAiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    // Call Lovable AI Gateway (compatible with OpenAI API)
+    const openAiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENAI_API_KEY}`,
+        "Authorization": `Bearer ${LOVABLE_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-5",
+        model: "google/gemini-2.5-flash",
         messages: messages,
         max_completion_tokens: 800,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
       }),
     });
 
-    // Check if OpenAI request was successful
+    // Check if AI Gateway request was successful
     if (!openAiResponse.ok) {
       const errorText = await openAiResponse.text();
-      console.error("OpenAI API error:", openAiResponse.status, errorText);
+      console.error("Lovable AI Gateway error:", openAiResponse.status, errorText);
       
       let errorMessage = "AI service temporarily unavailable. Please try again.";
       
       if (openAiResponse.status === 401) {
         errorMessage = "AI service authentication failed. Please contact support.";
       } else if (openAiResponse.status === 429) {
-        errorMessage = "AI service is busy. Please wait a moment and try again.";
+        errorMessage = "Rate limit exceeded. Please wait a moment and try again.";
+      } else if (openAiResponse.status === 402) {
+        errorMessage = "AI service credits depleted. Please contact support to add credits.";
       } else if (openAiResponse.status >= 500) {
         errorMessage = "AI service is experiencing issues. Please try again later.";
       }
@@ -118,7 +117,7 @@ export const callOpenAI = async (
     return aiResponse;
 
   } catch (error) {
-    console.error("Error calling OpenAI API:", error);
+    console.error("Error calling Lovable AI Gateway:", error);
     return createErrorResponse("AI service temporarily unavailable. Please try again.", 503);
   }
 };

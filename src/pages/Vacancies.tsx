@@ -79,8 +79,8 @@ const Vacancies = () => {
           </Button>
         </div>
 
-        {/* Quick Access QR Code - Mobile Friendly */}
-        <div className="mb-8 lg:hidden">
+        {/* Quick Access QR Code - Tablet Only */}
+        <div className="mb-8 hidden md:block lg:hidden">
           <Card className="mx-auto max-w-sm shadow-sm">
             <CardHeader className="text-center pb-3">
               <CardTitle className="flex items-center justify-center gap-2 text-lg">

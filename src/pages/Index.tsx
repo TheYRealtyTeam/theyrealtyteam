@@ -101,7 +101,7 @@ const Index = () => {
         <ContactSection />
       </main>
       <Footer />
-      <AIChat />
+      
       <AnimationObserver />
       {isMobile && <MobilePWAPrompt />}
       {isMobile && <MobileOfflineIndicator />}
@@ -114,6 +114,7 @@ const Index = () => {
         {content}
       </MobilePullToRefresh>
       <MobileBottomNavigation />
+      <AIChat />
     </>
   ) : content;
 };

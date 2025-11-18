@@ -116,7 +116,12 @@ const Index = () => {
       <MobileBottomNavigation />
       <AIChat />
     </>
-  ) : content;
+  ) : (
+    <>
+      {content}
+      <AIChat />
+    </>
+  );
 };
 
 export default Index;

@@ -10,6 +10,7 @@ import ChatToggleButton from './ChatToggleButton';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
+import { loadChatHistory, saveChatHistory, clearChatHistory, getChatSessionInfo, type StoredMessage } from '@/lib/chatStorage';
 
 interface ChatMessage {
   role: 'user' | 'assistant';
@@ -21,13 +22,13 @@ const AIChat = () => {
   const navigate = useNavigate();
   const { isMobile } = useIsMobileOptimized();
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: 'assistant',
-      content: "Hello! I'm your Y Realty Team assistant. I can help answer questions about property management, real estate investment, and our services. How can I assist you today?",
-      timestamp: new Date()
-    }
-  ]);
+  const getInitialGreeting = (): ChatMessage => ({
+    role: 'assistant',
+    content: "Hello! I'm your Y Realty Team assistant. I can help answer questions about property management, real estate investment, and our services.\n\n📝 *Note: This chat is saved in your browser for convenience. You can start a new chat anytime using the ↻ button.*\n\nHow can I assist you today?",
+    timestamp: new Date()
+  });
+
+  const [messages, setMessages] = useState<ChatMessage[]>([getInitialGreeting()]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,35 @@ const AIChat = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Load chat history on mount
+  useEffect(() => {
+    try {
+      const history = loadChatHistory();
+      
+      if (history.length > 0) {
+        const loadedMessages: ChatMessage[] = history.map(msg => ({
+          role: msg.role,
+          content: msg.content,
+          timestamp: new Date(msg.timestamp)
+        }));
+        
+        setMessages(loadedMessages);
+        
+        toast({
+          title: "Welcome back!",
+          description: "Your previous conversation has been loaded.",
+        });
+      }
+    } catch (error) {
+      console.error('Error loading chat history:', error);
+      toast({
+        title: "Limited functionality",
+        description: "Chat history could not be loaded.",
+        variant: "default"
+      });
+    }
+  }, []);
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return;
@@ -95,7 +125,19 @@ const AIChat = () => {
         content: data.response,
         timestamp: new Date()
       };
-      setMessages(prev => [...prev, aiMessage]);
+      setMessages(prev => {
+        const updated = [...prev, aiMessage];
+        
+        // Save to localStorage
+        const storedMessages: StoredMessage[] = updated.map(msg => ({
+          role: msg.role,
+          content: msg.content,
+          timestamp: msg.timestamp.toISOString()
+        }));
+        saveChatHistory(storedMessages);
+        
+        return updated;
+      });
 
     } catch (error) {
       
@@ -132,13 +174,31 @@ const AIChat = () => {
     }
   };
 
+  const handleNewChat = () => {
+    const info = getChatSessionInfo();
+    const confirmMsg = info.messageCount > 2
+      ? `Start a new conversation? Your current ${info.messageCount} messages will be cleared.`
+      : "Start a new conversation?";
+    
+    if (window.confirm(confirmMsg)) {
+      clearChatHistory();
+      
+      setMessages([getInitialGreeting()]);
+      
+      toast({
+        title: "New chat started",
+        description: "Your previous conversation has been cleared.",
+      });
+    }
+  };
+
   if (!isOpen) {
     return <ChatToggleButton onClick={() => setIsOpen(true)} />;
   }
 
   return (
     <div className={`fixed ${isMobile ? 'inset-x-4 bottom-20 top-20' : 'bottom-6 right-6 w-96 h-[500px]'} bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-40`}>
-      <ChatHeader onClose={() => setIsOpen(false)} />
+      <ChatHeader onClose={() => setIsOpen(false)} onNewChat={handleNewChat} />
       <ChatMessages 
         messages={messages}
         isLoading={isLoading}

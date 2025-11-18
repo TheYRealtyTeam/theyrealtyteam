@@ -13,7 +13,7 @@ const ChatToggleButton = ({ onClick }: ChatToggleButtonProps) => {
   const getPositionClasses = () => {
     if (isMobileOnly) return 'bottom-24 right-4';
     if (isTablet) return 'bottom-8 right-6';
-    return 'bottom-6 right-6';
+    return 'bottom-20 right-6'; // Position above the scroll-to-top button
   };
 
   const getSizeClasses = () => {

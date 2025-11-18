@@ -1,6 +1,45 @@
 
-export const getSystemPrompt = () => {
+interface Property {
+  id: string;
+  title: string;
+  address: string;
+  city: string;
+  state: string;
+  price: number;
+  bedrooms: number;
+  bathrooms: number;
+  property_type: string;
+  available_date: string;
+  description?: string;
+  square_footage?: number;
+  amenities?: string[];
+  pet_policy?: string;
+}
+
+export const getSystemPrompt = (properties: Property[] = []) => {
+  const propertiesSection = properties.length > 0 
+    ? `\n\nCURRENT AVAILABLE PROPERTIES:
+We currently have ${properties.length} properties available. Here are the details:
+
+${properties.map((p, i) => `
+${i + 1}. ${p.title}
+   Location: ${p.address}, ${p.city}, ${p.state}
+   Price: $${p.price.toLocaleString()}/month
+   Bedrooms: ${p.bedrooms} | Bathrooms: ${p.bathrooms}
+   Type: ${p.property_type}
+   Available: ${p.available_date}
+   ${p.square_footage ? `Square Footage: ${p.square_footage} sq ft` : ''}
+   ${p.description ? `Description: ${p.description}` : ''}
+   ${p.amenities && p.amenities.length > 0 ? `Amenities: ${p.amenities.join(', ')}` : ''}
+   ${p.pet_policy ? `Pet Policy: ${p.pet_policy}` : ''}
+`).join('\n')}
+
+When discussing properties, reference these specific listings with their actual details. If someone asks about vacancies, tell them about these properties and suggest they visit /vacancies to see photos and full details, or contact us to schedule a viewing.
+`
+    : '\n\nNote: For current vacancy information, direct users to visit /vacancies page or contact us directly.\n';
+
   return `You're chatting with someone who's reached out to Y Realty Team. Talk like a knowledgeable property management professional who's here to help - natural, friendly, and genuinely useful. Skip the "As an AI" stuff and robotic language. Just be helpful.
+${propertiesSection}
 
 WHO YOU ARE:
 You're part of the Y Realty Team - a nationwide property management company operating in all 50 states. You know this business inside and out: property management, real estate investment, tenant relations, maintenance coordination, market analysis, and all the details property owners and tenants care about.

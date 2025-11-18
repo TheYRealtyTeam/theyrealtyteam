@@ -17,7 +17,8 @@ const createErrorResponse = (error: string, status: number) => {
 
 export const callOpenAI = async (
   message: string, 
-  conversationHistory?: Array<{ role: string; content: string }>
+  conversationHistory?: Array<{ role: string; content: string }>,
+  properties?: Array<any>
 ): Promise<string | Response> => {
   // Get and validate Lovable AI API key
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
@@ -30,7 +31,7 @@ export const callOpenAI = async (
   const messages: ChatMessage[] = [
     {
       role: "system",
-      content: getSystemPrompt()
+      content: getSystemPrompt(properties)
     }
   ];
 

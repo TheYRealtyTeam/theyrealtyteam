@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
 import { makeCorsHeaders } from '../_shared/cors.ts';
 import { validateRequest } from './validation.ts';
 import { callOpenAI } from './openai.ts';
@@ -40,8 +41,27 @@ serve(async (req) => {
 
     const { message, conversationHistory } = validationResult;
 
-    // Call OpenAI API
-    const openAiResult = await callOpenAI(message, conversationHistory);
+    // Fetch active properties from database
+    console.log('Fetching active properties...');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    
+    const { data: properties, error: propertiesError } = await supabase
+      .from('properties')
+      .select('id, title, address, city, state, price, bedrooms, bathrooms, property_type, available_date, description, square_footage, amenities, pet_policy')
+      .eq('active', true)
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if (propertiesError) {
+      console.error('Error fetching properties:', propertiesError);
+    } else {
+      console.log(`Found ${properties?.length || 0} active properties`);
+    }
+
+    // Call OpenAI API with property data
+    const openAiResult = await callOpenAI(message, conversationHistory, properties || []);
     
     // If OpenAI call failed, return the error response
     if (openAiResult instanceof Response) {

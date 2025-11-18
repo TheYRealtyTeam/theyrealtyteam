@@ -24,7 +24,7 @@ const AIChat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const getInitialGreeting = (): ChatMessage => ({
     role: 'assistant',
-    content: "Hello! I'm your Y Realty Team assistant. I can help answer questions about property management, real estate investment, and our services.\n\n📝 *Note: This chat is saved in your browser for convenience. You can start a new chat anytime using the ↻ button.*\n\nHow can I assist you today?",
+    content: "Hey there! I'm here to help with any questions about property management, rentals, or real estate investing. Whether you're looking for a property, want to know about our services, or just have questions about managing your investment - I've got you covered.\n\n📝 *Quick note: This chat is saved in your browser so you can pick up where you left off. Hit the ↻ button anytime to start fresh.*\n\nWhat brings you here today?",
     timestamp: new Date()
   });
 
@@ -198,7 +198,7 @@ const AIChat = () => {
       
       setMessages([{
         role: 'assistant',
-        content: "Chat cleared. How can I help you today?",
+        content: "All clear! What can I help you with?",
         timestamp: new Date()
       }]);
       

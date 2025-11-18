@@ -192,13 +192,34 @@ const AIChat = () => {
     }
   };
 
+  const handleClearChat = () => {
+    if (window.confirm("Delete this conversation? This cannot be undone.")) {
+      clearChatHistory();
+      
+      setMessages([{
+        role: 'assistant',
+        content: "Chat cleared. How can I help you today?",
+        timestamp: new Date()
+      }]);
+      
+      toast({
+        title: "Chat cleared",
+        description: "All messages have been deleted.",
+      });
+    }
+  };
+
   if (!isOpen) {
     return <ChatToggleButton onClick={() => setIsOpen(true)} />;
   }
 
   return (
     <div className={`fixed ${isMobile ? 'inset-x-4 bottom-20 top-20' : 'bottom-6 right-6 w-96 h-[500px]'} bg-white rounded-xl shadow-2xl border border-gray-200 flex flex-col z-40`}>
-      <ChatHeader onClose={() => setIsOpen(false)} onNewChat={handleNewChat} />
+      <ChatHeader 
+        onClose={() => setIsOpen(false)} 
+        onNewChat={handleNewChat}
+        onClearChat={handleClearChat}
+      />
       <ChatMessages 
         messages={messages}
         isLoading={isLoading}

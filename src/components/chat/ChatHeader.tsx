@@ -1,13 +1,14 @@
 
 import React from 'react';
-import { Bot, X, RotateCcw } from 'lucide-react';
+import { Bot, X, RotateCcw, Trash2 } from 'lucide-react';
 
 interface ChatHeaderProps {
   onClose: () => void;
   onNewChat: () => void;
+  onClearChat: () => void;
 }
 
-const ChatHeader = ({ onClose, onNewChat }: ChatHeaderProps) => {
+const ChatHeader = ({ onClose, onNewChat, onClearChat }: ChatHeaderProps) => {
   return (
     <div className="bg-yrealty-navy text-white p-4 rounded-t-xl flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -20,6 +21,14 @@ const ChatHeader = ({ onClose, onNewChat }: ChatHeaderProps) => {
         </div>
       </div>
       <div className="flex items-center gap-1">
+        <button
+          onClick={onClearChat}
+          className="hover:bg-white/20 p-2 rounded transition-colors"
+          aria-label="Clear chat"
+          title="Delete conversation"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
         <button
           onClick={onNewChat}
           className="hover:bg-white/20 p-2 rounded transition-colors"

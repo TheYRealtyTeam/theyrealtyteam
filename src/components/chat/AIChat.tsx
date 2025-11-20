@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
 import ChatToggleButton from './ChatToggleButton';
 import ChatHeader from './ChatHeader';
 import ChatMessages from './ChatMessages';
@@ -21,6 +22,8 @@ interface ChatMessage {
 const AIChat = () => {
   const navigate = useNavigate();
   const { isMobile } = useIsMobileOptimized();
+  const { getRecaptchaToken } = useRecaptcha();
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substring(7)}`);
   const [isOpen, setIsOpen] = useState(false);
   const getInitialGreeting = (): ChatMessage => ({
     role: 'assistant',
@@ -98,6 +101,13 @@ const AIChat = () => {
     setMessages(prev => [...prev, newUserMessage]);
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken('ai_chat');
+      
+      if (!recaptchaToken) {
+        throw new Error('Failed to verify you are human. Please refresh the page and try again.');
+      }
+
       const conversationHistory = messages.slice(-8).map(msg => ({
         role: msg.role,
         content: msg.content
@@ -106,7 +116,9 @@ const AIChat = () => {
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
           message: userMessage,
-          conversationHistory: conversationHistory
+          conversationHistory: conversationHistory,
+          recaptchaToken,
+          sessionId
         }
       });
 

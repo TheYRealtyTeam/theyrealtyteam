@@ -126,14 +126,15 @@ const MobileTestimonialsSection = () => {
             </button>
 
             {/* Dots Indicator */}
-            <div className="flex space-x-2">
+            <div className="flex gap-3">
               {testimonials.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentTestimonial(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentTestimonial ? 'bg-yrealty-accent' : 'bg-gray-300'
+                  className={`w-6 h-6 rounded-full transition-all ${
+                    index === currentTestimonial ? 'bg-yrealty-accent scale-110' : 'bg-gray-300'
                   }`}
+                  aria-label={`Go to testimonial ${index + 1}`}
                 />
               ))}
             </div>

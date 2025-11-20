@@ -6,6 +6,22 @@ import MobileTestimonialsSection from './mobile/MobileTestimonialsSection';
 
 const TestimonialsSection = () => {
   const { isMobile } = useIsMobileOptimized();
+  const [api, setApi] = React.useState<any>();
+  const [current, setCurrent] = React.useState(0);
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   // Return mobile-optimized version for mobile devices
   if (isMobile) {
@@ -106,7 +122,7 @@ const TestimonialsSection = () => {
         </div>
 
         <div className="reveal">
-          <Carousel className="w-full max-w-6xl mx-auto">
+          <Carousel setApi={setApi} className="w-full max-w-6xl mx-auto">
             <CarouselContent className="-ml-2 md:-ml-4">
               {testimonials.map((testimonial, index) => (
                 <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
@@ -156,6 +172,20 @@ const TestimonialsSection = () => {
               ))}
             </CarouselContent>
           </Carousel>
+          
+          {/* Carousel Indicators */}
+          <div className="flex justify-center gap-3 mt-8">
+            {Array.from({ length: count }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                className={`w-6 h-6 rounded-full transition-all ${
+                  index === current ? 'bg-yrealty-navy scale-110' : 'bg-gray-300'
+                }`}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="text-center mt-12 reveal">

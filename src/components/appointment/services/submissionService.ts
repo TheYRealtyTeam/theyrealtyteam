@@ -40,7 +40,7 @@ export const submitAppointmentData = async (
     await sendNotifications(date!, selectedTime, callType, formData);
     
     return true;
-  } catch (error: any) {
+  } catch (error: unknown) {
     handleAppointmentError(error, toast);
     return false;
   } finally {

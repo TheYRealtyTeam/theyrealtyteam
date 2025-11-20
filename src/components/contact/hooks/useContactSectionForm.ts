@@ -186,16 +186,18 @@ export const useContactSectionForm = () => {
         honeypot: ''
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error submitting form:', error);
       
       let errorMessage = "We couldn't send your message. Please try again.";
       
-      if (error.message.includes('Rate limit')) {
+      const err = error as { message?: string };
+      
+      if (err.message?.includes('Rate limit')) {
         errorMessage = "Too many requests. Please wait before submitting again.";
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+      } else if (err.message?.includes('network') || err.message?.includes('fetch')) {
         errorMessage = "Network error. Please check your connection and try again.";
-      } else if (error.message.includes('validation')) {
+      } else if (err.message?.includes('validation')) {
         errorMessage = "Please check your input and try again.";
       }
       

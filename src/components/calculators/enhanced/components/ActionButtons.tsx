@@ -6,6 +6,8 @@ import { Calendar, Download, Share2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
+import { CalculatorData } from '@/types/calculator-data';
+
 interface ActionButtonsProps {
   calculatorData?: any;
   calculatorType?: string;
@@ -77,7 +79,7 @@ const ActionButtons = ({ calculatorData, calculatorType = 'Investment' }: Action
     });
   };
 
-  const generateReport = (data: any, type: string): string => {
+  const generateReport = (data: CalculatorData, type: string): string => {
     const date = new Date().toLocaleDateString();
     let report = `${type} ANALYSIS REPORT\n`;
     report += `Generated on: ${date}\n`;
@@ -115,8 +117,12 @@ const ActionButtons = ({ calculatorData, calculatorType = 'Investment' }: Action
     return report;
   };
 
-  const formatValue = (value: any, key: string): string => {
+  const formatValue = (value: string | number | boolean | undefined, key: string): string => {
+    if (value === undefined || value === null) return 'N/A';
     if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    if (typeof value === 'string') return value;
+    
+    // At this point, value is number
     if (key.toLowerCase().includes('rate') || key.toLowerCase().includes('percent')) {
       return `${value.toFixed(2)}%`;
     }

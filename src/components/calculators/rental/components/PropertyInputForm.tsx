@@ -19,7 +19,7 @@ interface PropertyInputFormProps {
     isFlatFee: boolean;
     isYearly: boolean;
   };
-  updateSharedState: (updates: any) => void;
+  updateSharedState: (updates: Partial<PropertyInputFormProps['sharedState']>) => void;
 }
 
 const PropertyInputForm = ({ sharedState, updateSharedState }: PropertyInputFormProps) => {

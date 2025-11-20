@@ -11,14 +11,14 @@ import { Toaster as Sonner } from '@/components/ui/sonner'
 const queryClient = new QueryClient()
 
 // Register service worker for client-side caching
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
-        console.log('[SW] Registered successfully:', registration.scope);
+      .then(() => {
+        // Service worker registered successfully
       })
-      .catch((error) => {
-        console.log('[SW] Registration failed:', error);
+      .catch(() => {
+        // Service worker registration failed - silent fail
       });
   });
 }

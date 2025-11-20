@@ -33,7 +33,7 @@ export const submitAppointmentData = async (
     setShowConfirmation(true);
     
     // Send email notifications using our edge function
-    await sendNotifications(date!, selectedTime, callType, formData);
+    await sendNotifications(date!, selectedTime, callType, formData, recaptchaToken);
     
     return true;
   } catch (error: unknown) {

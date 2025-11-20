@@ -6,10 +6,11 @@ export const sendNotifications = async (
   date: Date, 
   selectedTime: string, 
   callType: string, 
-  formData: AppointmentFormData
+  formData: AppointmentFormData,
+  recaptchaToken?: string | null
 ): Promise<void> => {
   try {
-    await sendAppointmentNotifications(date, selectedTime, callType, formData);
+    await sendAppointmentNotifications(date, selectedTime, callType, formData, recaptchaToken);
     log("Email notifications sent successfully");
   } catch (emailError) {
     if (import.meta.env.DEV) {

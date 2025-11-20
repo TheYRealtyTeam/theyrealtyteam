@@ -207,13 +207,13 @@ export const addRandomBlogPosts = async (count: number = 5): Promise<boolean> =>
       variant: "default"
     });
     return true;
-  } catch (error: any) {
-    console.error('Unexpected error adding blog posts:', error);
-    toast({
-      title: "Error adding blog posts",
-      description: "An unexpected error occurred.",
-      variant: "destructive"
-    });
-    return false;
-  }
+    } catch (error: unknown) {
+      console.error('Unexpected error adding blog posts:', error);
+      toast({
+        title: "Error adding blog posts",
+        description: "An unexpected error occurred.",
+        variant: "destructive"
+      });
+      return false;
+    }
 };

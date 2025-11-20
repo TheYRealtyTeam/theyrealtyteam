@@ -93,11 +93,6 @@ const CalculatorsSection = () => {
       description: "All calculator fields have been reset to default values.",
       duration: 3000,
     });
-    
-    // Log for testing
-    if (process.env.NODE_ENV === 'development') {
-      console.log('✅ Calculators reset to default values', defaultState);
-    }
   };
   
   return (

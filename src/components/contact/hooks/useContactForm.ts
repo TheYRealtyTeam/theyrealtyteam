@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { toast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
 import { 
   sanitizeInput, 
   validateEmail, 
@@ -12,6 +13,7 @@ import {
 import { securityLogger } from '@/services/securityLogger';
 
 export const useContactForm = () => {
+  const { getRecaptchaToken } = useRecaptcha();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -120,16 +122,18 @@ export const useContactForm = () => {
     setIsSubmitting(true);
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken('contact_form');
+
       // Sanitize inputs
       const sanitizedData = {
         name: sanitizeInput(formData.name),
         email: sanitizeInput(formData.email),
         phone: formData.phone ? sanitizeInput(formData.phone) : null,
         property_type: sanitizeInput(formData.propertyType),
-        message: sanitizeInput(formData.message)
+        message: sanitizeInput(formData.message),
+        recaptchaToken
       };
-
-      console.log('Submitting contact form to edge function');
 
       // Submit to secure edge function using Supabase client
       const { data, error: submissionError } = await supabase.functions.invoke('contact-notification', {
@@ -137,8 +141,6 @@ export const useContactForm = () => {
       });
 
       if (submissionError) {
-        console.error('Submission error:', submissionError);
-        
         // Check if it's a rate limit error
         if (submissionError.message?.includes('429') || submissionError.message?.includes('Rate limit')) {
           toast({
@@ -151,8 +153,6 @@ export const useContactForm = () => {
         
         throw new Error('Failed to submit contact form');
       }
-
-      console.log('Contact form submitted successfully');
 
       toast({
         title: "Message Sent Successfully",
@@ -170,7 +170,6 @@ export const useContactForm = () => {
       });
 
     } catch (error: unknown) {
-      console.error('Contact form submission error:', error);
       toast({
         title: "Submission Failed",
         description: "There was an error sending your message. Please try again.",

@@ -7,8 +7,16 @@ const MobileHeroSection = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
+    const supportsWebP = document.createElement('canvas')
+      .toDataURL('image/webp')
+      .indexOf('data:image/webp') === 0;
+    
     const img = new Image();
-    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
+    const imageUrl = supportsWebP
+      ? "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920&fm=webp"
+      : "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
+    
+    img.src = imageUrl;
     img.onload = () => setIsImageLoaded(true);
   }, []);
 
@@ -22,7 +30,9 @@ const MobileHeroSection = () => {
         ${isImageLoaded ? 'opacity-100' : 'opacity-0 bg-gradient-to-br from-yrealty-navy to-yrealty-blue'}
       `}
       style={{
-        backgroundImage: isImageLoaded ? "url('https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920')" : 'none'
+        backgroundImage: isImageLoaded 
+          ? "url('https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920&fm=webp')" 
+          : 'none'
       }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-yrealty-navy/90 to-yrealty-navy/60"></div>

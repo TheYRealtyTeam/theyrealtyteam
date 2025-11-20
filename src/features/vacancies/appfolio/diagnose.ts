@@ -136,12 +136,14 @@ export async function diagnoseAppfolioRendering(
     evidence: diagnostics.evidence
   });
 
-  console.group('🔍 AppFolio Rendering Diagnostics');
-  console.log('Rendering Mode:', diagnostics.renderingMode);
-  console.log('Container Info:', diagnostics.containerInfo);
-  console.log('Evidence:', diagnostics.evidence);
-  console.log('Selectors:', diagnostics.selectors);
-  console.groupEnd();
+  if (import.meta.env.DEV) {
+    console.group('🔍 AppFolio Rendering Diagnostics');
+    console.info('Rendering Mode:', diagnostics.renderingMode);
+    console.info('Container Info:', diagnostics.containerInfo);
+    console.info('Evidence:', diagnostics.evidence);
+    console.info('Selectors:', diagnostics.selectors);
+    console.groupEnd();
+  }
 
   return diagnostics;
 }

@@ -79,8 +79,8 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
         }
         
         setBlogPosts(data as BlogPostData[]);
-      } catch (error: any) {
-        setError("An unexpected error occurred: " + (error.message || "Unknown error"));
+      } catch (error: unknown) {
+        setError("An unexpected error occurred: " + ((error as Error).message || "Unknown error"));
         toast({
           title: "Error fetching blog posts",
           description: "Please try again later.",
@@ -118,8 +118,8 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
         
         setTotalPosts(data?.length || 0);
         setBlogPosts(data as BlogPostData[] || []);
-      } catch (error: any) {
-        setError("An unexpected error occurred during search: " + (error.message || "Unknown error"));
+      } catch (error: unknown) {
+        setError("An unexpected error occurred during search: " + ((error as Error).message || "Unknown error"));
       } finally {
         setLoading(false);
         setTimeout(() => setIsSearching(false), 500);

@@ -8,9 +8,19 @@ const HeroSection = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const { isMobileOnly } = useIsMobileOptimized();
 
+  // WebP support check and image preload
   useEffect(() => {
     const img = new Image();
-    img.src = "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
+    const supportsWebP = document.createElement('canvas')
+      .toDataURL('image/webp')
+      .indexOf('data:image/webp') === 0;
+    
+    // Use WebP if supported, otherwise JPEG
+    const imageUrl = supportsWebP
+      ? "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920&fm=webp"
+      : "https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920";
+    
+    img.src = imageUrl;
     img.onload = () => setIsImageLoaded(true);
 
     const handleScroll = () => {
@@ -24,7 +34,7 @@ const HeroSection = () => {
       });
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -41,7 +51,9 @@ const HeroSection = () => {
       aria-label="Welcome to Y Realty Team" 
       className="relative h-screen bg-cover bg-center bg-no-repeat flex items-center pt-16 bg-gradient-to-r from-yrealty-navy to-yrealty-blue"
       style={{
-        backgroundImage: isImageLoaded ? "url('https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920')" : 'none'
+        backgroundImage: isImageLoaded 
+          ? "url('https://images.unsplash.com/photo-1551361415-69c87624334f?auto=format&fit=crop&q=80&w=1920&fm=webp')" 
+          : 'none'
       }}
     >
       <div className={`absolute inset-0 bg-gradient-to-r from-yrealty-navy/85 to-yrealty-navy/50 transition-opacity duration-700 ${isImageLoaded ? 'opacity-100' : 'opacity-0'}`}></div>

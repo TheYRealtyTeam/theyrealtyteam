@@ -87,8 +87,8 @@ const BlogPost = () => {
 
         document.title = `${postData.title} | Y Realty Team Blog`;
         window.scrollTo(0, 0);
-      } catch (error: any) {
-        setError("An unexpected error occurred: " + (error.message || "Unknown error"));
+      } catch (error: unknown) {
+        setError("An unexpected error occurred: " + ((error as Error).message || "Unknown error"));
       } finally {
         setLoading(false);
       }

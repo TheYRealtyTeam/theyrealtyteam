@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.4';
 import { makeCorsHeaders } from '../_shared/cors.ts';
+import { verifyRecaptcha } from '../_shared/recaptcha.ts';
 import { validateRequest } from './validation.ts';
 import { callOpenAI } from './openai.ts';
 import { checkRateLimit, getIdentifier } from './rateLimiter.ts';
@@ -14,21 +15,40 @@ serve(async (req) => {
   }
 
   try {
-    // Check rate limiting first
+    // Parse request body first to get reCAPTCHA token
+    const body = await req.json();
+    const recaptchaToken = body.recaptchaToken;
+
+    // Verify reCAPTCHA token - REQUIRED
+    const isValidRecaptcha = await verifyRecaptcha(recaptchaToken);
+    if (!isValidRecaptcha) {
+      console.log("Invalid reCAPTCHA token");
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid reCAPTCHA verification. Please refresh the page and try again."
+        }),
+        { 
+          status: 403,
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" }
+        }
+      );
+    }
+
+    // Check rate limiting
     const identifier = getIdentifier(req);
-    const rateLimitError = await checkRateLimit(identifier);
+    const rateLimitError = await checkRateLimit(identifier, body.sessionId);
     
     if (rateLimitError) {
       console.log("Rate limit exceeded for identifier:", identifier);
-      const body = await rateLimitError.text();
-      return new Response(body, {
+      const bodyText = await rateLimitError.text();
+      return new Response(bodyText, {
         status: rateLimitError.status,
         headers: corsHeaders
       });
     }
 
     // Validate request and parse data
-    const validationResult = await validateRequest(req);
+    const validationResult = await validateRequest(body);
     
     // If validation failed, return the error response
     if (validationResult instanceof Response) {

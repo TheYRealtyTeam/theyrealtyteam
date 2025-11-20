@@ -15,26 +15,9 @@ const createErrorResponse = (error: string, status: number) => {
   );
 };
 
-export const validateRequest = async (req: Request): Promise<{ message: string; conversationHistory?: Array<{ role: string; content: string }> } | Response> => {
-  // Validate request method
-  if (req.method !== 'POST') {
-    return createErrorResponse("Method not allowed", 405);
-  }
-
-  // Validate content type
-  const contentType = req.headers.get("content-type") || "";
-  if (!contentType.includes("application/json")) {
-    return createErrorResponse("Invalid content type. Expected application/json", 400);
-  }
-
+export const validateRequest = async (body: any): Promise<{ message: string; conversationHistory?: Array<{ role: string; content: string }> } | Response> => {
   // Parse and validate request body
-  let requestData: RequestData;
-  try {
-    requestData = await req.json();
-  } catch (parseError) {
-    console.error("JSON parsing error:", parseError);
-    return createErrorResponse("Invalid JSON in request body", 400);
-  }
+  const requestData: RequestData = body;
 
   const { message, conversationHistory } = requestData;
 

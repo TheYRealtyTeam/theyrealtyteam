@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { makeCorsHeaders } from '../_shared/cors.ts';
+import { verifyRecaptcha } from '../_shared/recaptcha.ts';
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
@@ -59,6 +60,22 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     // Parse and validate request
     const rawData = await req.json();
+    
+    // Verify reCAPTCHA token - REQUIRED
+    const isValidRecaptcha = await verifyRecaptcha(rawData.recaptchaToken);
+    if (!isValidRecaptcha) {
+      console.log("Invalid reCAPTCHA token");
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid reCAPTCHA verification. Please refresh the page and try again."
+        }),
+        { 
+          headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" },
+          status: 403,
+        }
+      );
+    }
+    
     const validationResult = AppointmentSchema.safeParse(rawData);
     
     if (!validationResult.success) {

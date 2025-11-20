@@ -32,7 +32,8 @@ export const sendAppointmentNotifications = async (
   date: Date,
   selectedTime: string,
   callType: string,
-  formData: AppointmentFormData
+  formData: AppointmentFormData,
+  recaptchaToken?: string | null
 ) => {
   // Format the date in YYYY-MM-DD format for the edge function
   const year = date.getFullYear();
@@ -65,7 +66,8 @@ export const sendAppointmentNotifications = async (
       property_type: formData.propertyType,
       date: formattedDate,
       time: formattedTime,
-      notes: formData.message || ''
+      notes: formData.message || '',
+      recaptchaToken
     }
   });
 

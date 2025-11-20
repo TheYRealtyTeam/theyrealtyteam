@@ -98,8 +98,10 @@ ${colorConfig
       itemConfig.color
     // SECURITY: Validate color value before injecting into CSS
     if (!color || typeof color !== 'string' || !validateColor(color)) {
-      console.warn(`Invalid color value detected in chart config for key: ${key}`)
-      return null
+      if (import.meta.env.DEV) {
+        console.warn(`Invalid color value detected in chart config for key: ${key}`);
+      }
+      return null;
     }
     return `  --color-${key}: ${color};`
   })

@@ -11,7 +11,9 @@ const isErrorWithCode = (error: unknown): error is ErrorWithCode => {
 };
 
 export const handleAppointmentError = (error: unknown, toast: ToastFunction) => {
-  console.error('Error scheduling appointment:', error);
+  if (import.meta.env.DEV) {
+    console.error('Error scheduling appointment:', error);
+  }
   
   const err = isErrorWithCode(error) ? error : null;
   

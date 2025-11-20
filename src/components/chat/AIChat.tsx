@@ -62,7 +62,9 @@ const AIChat = () => {
         });
       }
     } catch (error) {
-      console.error('Error loading chat history:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error loading chat history:', error);
+      }
       toast({
         title: "Limited functionality",
         description: "Chat history could not be loaded.",

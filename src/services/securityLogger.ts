@@ -55,13 +55,17 @@ class SecurityLogger {
         .from('security_logs')
         .insert(events);
 
-      if (error) {
+      if (error && import.meta.env.DEV) {
         console.error('Failed to log security events:', error);
-        // Re-queue events if logging fails
+      }
+      // Re-queue events if logging fails
+      if (error) {
         this.eventQueue.unshift(...events);
       }
     } catch (error) {
-      console.error('Security logging error:', error);
+      if (import.meta.env.DEV) {
+        console.error('Security logging error:', error);
+      }
     } finally {
       this.isProcessing = false;
     }

@@ -110,7 +110,9 @@ export const useRentalCalculator = (sharedState: Partial<CalculatorState>, updat
         mortgagePayment: validatePositiveNumber(mortgagePayment)
       });
     } catch (error) {
-      console.error('Error calculating rental results:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error calculating rental results:', error);
+      }
       // Set default values on error
       setResults({
         monthlyIncome: 0,

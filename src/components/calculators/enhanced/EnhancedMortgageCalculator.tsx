@@ -130,7 +130,9 @@ const EnhancedMortgageCalculator = ({ sharedState, updateSharedState }: Enhanced
         }
       });
     } catch (error) {
-      console.error('Error calculating mortgage results:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error calculating mortgage results:', error);
+      }
       // Set default values on error
       setResults({
         monthlyPrincipalInterest: 0,

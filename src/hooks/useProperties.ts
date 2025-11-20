@@ -21,7 +21,9 @@ export const useProperties = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Error fetching properties:', error);
+        if (import.meta.env.DEV) {
+          console.error('Error fetching properties:', error);
+        }
         setError(error.message);
         return;
       }
@@ -36,7 +38,9 @@ export const useProperties = () => {
 
       setProperties(typedData);
     } catch (err) {
-      console.error('Unexpected error:', err);
+      if (import.meta.env.DEV) {
+        console.error('Unexpected error:', err);
+      }
       setError('An unexpected error occurred');
     } finally {
       setLoading(false);

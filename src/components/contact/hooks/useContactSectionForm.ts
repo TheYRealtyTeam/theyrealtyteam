@@ -191,7 +191,9 @@ export const useContactSectionForm = () => {
       });
 
     } catch (error: unknown) {
-      console.error('Error submitting form:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error submitting form:', error);
+      }
       
       let errorMessage = "We couldn't send your message. Please try again.";
       

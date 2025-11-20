@@ -9,7 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { CalculatorData } from '@/types/calculator-data';
 
 interface ActionButtonsProps {
-  calculatorData?: any;
+  calculatorData?: CalculatorData;
   calculatorType?: string;
 }
 

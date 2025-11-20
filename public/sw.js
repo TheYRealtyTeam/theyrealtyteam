@@ -21,11 +21,9 @@ const STATIC_ASSETS = [
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
-  console.log('[SW] Install event');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
-        console.log('[SW] Caching static assets');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => {
@@ -36,14 +34,12 @@ self.addEventListener('install', (event) => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activate event');
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
             if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE && cacheName !== IMAGE_CACHE) {
-              console.log('[SW] Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
           })
@@ -152,25 +148,18 @@ function getCacheName(pathname) {
 
 // Background sync for offline form submissions
 self.addEventListener('sync', (event) => {
-  console.log('[SW] Background sync:', event.tag);
-  
   if (event.tag === 'contact-form-sync') {
-    event.waitUntil(
-      // Handle offline contact form submissions
-      handleOfflineFormSync()
-    );
+    event.waitUntil(handleOfflineFormSync());
   }
 });
 
 async function handleOfflineFormSync() {
   try {
-    // Get stored form data from IndexedDB
     const db = await openDB();
     const transaction = db.transaction(['offline-forms'], 'readonly');
     const store = transaction.objectStore('offline-forms');
     const requests = await store.getAll();
     
-    // Try to submit each stored form
     for (const formData of requests) {
       try {
         await fetch('/api/contact', {
@@ -181,16 +170,15 @@ async function handleOfflineFormSync() {
           body: JSON.stringify(formData.data)
         });
         
-        // Remove from storage after successful submission
         const deleteTransaction = db.transaction(['offline-forms'], 'readwrite');
         const deleteStore = deleteTransaction.objectStore('offline-forms');
         await deleteStore.delete(formData.id);
-      } catch (error) {
-        console.log('[SW] Failed to sync form data:', error);
+      } catch {
+        // Failed to sync this form, will retry later
       }
     }
-  } catch (error) {
-    console.log('[SW] Background sync failed:', error);
+  } catch {
+    // Background sync failed, will retry later
   }
 }
 

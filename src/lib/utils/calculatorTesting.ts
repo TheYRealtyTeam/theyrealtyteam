@@ -190,7 +190,7 @@ export const logTestResults = (results: TestResult[]): void => {
     console.group('🧪 Calculator Test Results');
     results.forEach(result => {
       if (result.passed) {
-        console.log(`✅ ${result.testName}: PASSED`);
+        console.info(`✅ ${result.testName}: PASSED`);
       } else {
         console.error(`❌ ${result.testName}: FAILED`, {
           expected: result.expected,

@@ -1,4 +1,3 @@
-
 import { AppointmentFormData } from '../types';
 import { validateAppointmentData } from './appointmentValidationService';
 import { saveAppointmentToDatabase } from './appointmentApiService';
@@ -13,7 +12,8 @@ export const submitAppointmentData = async (
   formData: AppointmentFormData,
   toast: ToastFunction,
   setIsSubmitting: (value: boolean) => void,
-  setShowConfirmation: (value: boolean) => void
+  setShowConfirmation: (value: boolean) => void,
+  recaptchaToken?: string | null
 ): Promise<boolean> => {
   // Validate all required fields and formats
   if (!validateAppointmentData(date, selectedTime, callType, formData, toast)) {
@@ -26,12 +26,8 @@ export const submitAppointmentData = async (
   const formattedDate = date!.toISOString().split('T')[0];
   
   try {
-    console.log("Submitting appointment data:", { formattedDate, selectedTime, formData, callType });
-    
     // Save the appointment to the database
     const data = await saveAppointmentToDatabase(formattedDate, selectedTime, callType, formData);
-    
-    console.log("Appointment submission successful:", data);
     
     // Show the confirmation dialog
     setShowConfirmation(true);

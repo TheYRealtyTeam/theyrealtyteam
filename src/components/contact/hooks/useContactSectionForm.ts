@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { log, warn } from '@/lib/logger';
 import { useToast } from '@/hooks/use-toast';
+import { useRecaptcha } from '@/hooks/useRecaptcha';
 import { SecurityUtils, RATE_LIMITS } from '@/utils/security';
 import { supabase } from '@/integrations/supabase/client';
 import { 
@@ -13,6 +14,7 @@ import {
 
 export const useContactSectionForm = () => {
   const { toast } = useToast();
+  const { getRecaptchaToken } = useRecaptcha();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -140,13 +142,17 @@ export const useContactSectionForm = () => {
     setIsSubmitting(true);
     
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken('contact_form');
+
       // Comprehensive input sanitization
       const sanitizedData = {
         name: sanitizeInput(formData.name),
         email: sanitizeInput(formData.email),
         phone: formData.phone ? sanitizeInput(formData.phone) : null,
         property_type: sanitizeInput(formData.propertyType),
-        message: sanitizeInput(formData.message)
+        message: sanitizeInput(formData.message),
+        recaptchaToken
       };
 
       log('Submitting contact form with enhanced security');
@@ -157,8 +163,6 @@ export const useContactSectionForm = () => {
       });
 
       if (submissionError) {
-        console.error('Submission error:', submissionError);
-        
         // Handle specific error types
         if (submissionError.message?.includes('429') || submissionError.message?.includes('Rate limit')) {
           throw new Error('Rate limit exceeded. Please wait before submitting again.');

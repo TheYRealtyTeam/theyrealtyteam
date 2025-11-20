@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 import { Resend } from "https://esm.sh/resend@2.0.0";
 import { makeCorsHeaders } from '../_shared/cors.ts';
+import { verifyRecaptcha } from '../_shared/recaptcha.ts';
 
 // Security utilities
 class EdgeSecurityUtils {
@@ -207,7 +208,22 @@ serve(async (req) => {
       );
     }
 
-    const { name, email, property_type, message, phone, honeypot } = requestData;
+    const { name, email, property_type, message, phone, honeypot, recaptchaToken } = requestData;
+
+    // Verify reCAPTCHA token
+    const isRecaptchaValid = await verifyRecaptcha(recaptchaToken);
+    if (!isRecaptchaValid) {
+      await EdgeSecurityUtils.logSecurityEvent(
+        supabase,
+        'recaptcha_verification_failed',
+        { ip: clientIP },
+        'high'
+      );
+      return new Response(
+        JSON.stringify({ error: 'reCAPTCHA verification failed' }),
+        { status: 403, headers: { ...Object.fromEntries(corsHeaders), "Content-Type": "application/json" } }
+      );
+    }
 
     // Honeypot field check - if filled, it's likely a bot
     if (honeypot) {

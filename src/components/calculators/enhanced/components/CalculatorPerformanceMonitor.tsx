@@ -22,8 +22,6 @@ const CalculatorPerformanceMonitor = ({ calculatorName, isCalculating }: Perform
       
       if (duration > 100) {
         console.warn(`⚠️ ${calculatorName}: Slow calculation detected (${duration.toFixed(2)}ms)`);
-      } else if (duration > 50) {
-        console.log(`⏱️ ${calculatorName}: Calculation took ${duration.toFixed(2)}ms`);
       }
       
       startTimeRef.current = 0;

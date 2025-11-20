@@ -6,7 +6,7 @@ const Logo = ({ className = "", showDomain = true }: { className?: string; showD
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <img 
-        src="/lovable-uploads/logo-optimized.png" 
+        src="/lovable-uploads/logo-optimized.png?v=2" 
         alt="Y Realty Team Logo" 
         className="h-12 w-12"
         width="48"

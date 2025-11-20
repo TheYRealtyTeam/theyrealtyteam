@@ -67,7 +67,7 @@ export default {
 				yrealty: {
 					blue: '#e0f2f7', 
 					navy: '#1A1F2C', 
-					accent: '#3b82f6'
+					accent: '#2563eb' // Darker blue for better contrast with white text (4.5:1 ratio)
 				}
 			},
 			fontFamily: {

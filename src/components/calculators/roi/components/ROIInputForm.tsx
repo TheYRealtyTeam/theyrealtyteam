@@ -21,7 +21,7 @@ interface ROIInputFormProps {
     annualAppreciation: number;
     holdingPeriod: number;
   };
-  updateSharedState: (updates: any) => void;
+  updateSharedState: (updates: Partial<ROIInputFormProps['sharedState']>) => void;
 }
 
 const ROIInputForm = ({ sharedState, updateSharedState }: ROIInputFormProps) => {

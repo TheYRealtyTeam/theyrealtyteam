@@ -40,12 +40,12 @@ export const parseInputValue = (value: string): number => {
 export const handleNumberInputChange = (
   field: string,
   value: string,
-  updateFunction: (updates: any) => void,
-  setDisplayValues?: (updates: any) => void
+  updateFunction: (updates: Record<string, number>) => void,
+  setDisplayValues?: (updates: Record<string, string> | ((prev: Record<string, string>) => Record<string, string>)) => void
 ) => {
   // Store the raw display value for the input (including empty string)
   if (setDisplayValues) {
-    setDisplayValues((prev: any) => ({ ...prev, [field]: value }));
+    setDisplayValues((prev: Record<string, string>) => ({ ...prev, [field]: value }));
   }
   
   // Convert to number for calculations

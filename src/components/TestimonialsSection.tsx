@@ -1,12 +1,12 @@
 import React from 'react';
 import { Star, Quote, BadgeCheck } from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselApi } from '@/components/ui/carousel';
 import { useIsMobileOptimized } from '@/hooks/useIsMobileOptimized';
 import MobileTestimonialsSection from './mobile/MobileTestimonialsSection';
 
 const TestimonialsSection = () => {
   const { isMobile } = useIsMobileOptimized();
-  const [api, setApi] = React.useState<any>();
+  const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
 

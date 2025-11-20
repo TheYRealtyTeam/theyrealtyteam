@@ -2,13 +2,13 @@
 import React from 'react';
 import { Globe } from 'lucide-react';
 
-const Logo = ({ className = "", showDomain = true }: { className?: string, showDomain?: boolean }) => {
+const Logo = ({ className = "", showDomain = true }: { className?: string; showDomain?: boolean }) => {
   return (
     <div className={`flex items-center gap-2 ${className}`}>
       <img 
-        src="/lovable-uploads/logo-96x96.png" 
+        src="/lovable-uploads/logo-optimized.png" 
         alt="Y Realty Team Logo" 
-        className="h-12 w-auto"
+        className="h-12 w-12"
         width="48"
         height="48"
         loading="eager"

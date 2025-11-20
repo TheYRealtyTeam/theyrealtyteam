@@ -169,7 +169,7 @@ export const useContactForm = () => {
         honeypot: ''
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Contact form submission error:', error);
       toast({
         title: "Submission Failed",

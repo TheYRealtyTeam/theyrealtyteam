@@ -17,7 +17,9 @@ export const useRecaptcha = () => {
       const token = await executeRecaptcha(action);
       return token;
     } catch (error) {
-      console.error('reCAPTCHA error:', error);
+      if (import.meta.env.DEV) {
+        console.error('reCAPTCHA error:', error);
+      }
       return null;
     }
   };

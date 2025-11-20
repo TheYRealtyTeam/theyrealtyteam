@@ -17,7 +17,9 @@ export const loadChatHistory = (): StoredMessage[] => {
     const messages = JSON.parse(stored);
     return Array.isArray(messages) ? messages : [];
   } catch (error) {
-    console.warn('Failed to load chat history:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Failed to load chat history:', error);
+    }
     return [];
   }
 };
@@ -28,7 +30,9 @@ export const saveChatHistory = (messages: StoredMessage[]): void => {
     const toStore = messages.slice(-MAX_STORED_MESSAGES);
     localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(toStore));
   } catch (error) {
-    console.error('Failed to save chat history:', error);
+    if (import.meta.env.DEV) {
+      console.error('Failed to save chat history:', error);
+    }
   }
 };
 
@@ -37,7 +41,9 @@ export const clearChatHistory = (): void => {
   try {
     localStorage.removeItem(CHAT_STORAGE_KEY);
   } catch (error) {
-    console.error('Failed to clear chat history:', error);
+    if (import.meta.env.DEV) {
+      console.error('Failed to clear chat history:', error);
+    }
   }
 };
 

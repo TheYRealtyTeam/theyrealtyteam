@@ -192,7 +192,9 @@ export const addRandomBlogPosts = async (count: number = 5): Promise<boolean> =>
       .insert(posts);
     
     if (error) {
-      console.error('Error adding blog posts:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error adding blog posts:', error);
+      }
       toast({
         title: "Error adding blog posts",
         description: error.message,
@@ -208,7 +210,9 @@ export const addRandomBlogPosts = async (count: number = 5): Promise<boolean> =>
     });
     return true;
     } catch (error: unknown) {
-      console.error('Unexpected error adding blog posts:', error);
+      if (import.meta.env.DEV) {
+        console.error('Unexpected error adding blog posts:', error);
+      }
       toast({
         title: "Error adding blog posts",
         description: "An unexpected error occurred.",

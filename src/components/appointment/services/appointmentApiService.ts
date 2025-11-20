@@ -70,7 +70,9 @@ export const sendAppointmentNotifications = async (
   });
 
   if (error) {
-    console.error("Error sending appointment notifications:", error);
+    if (import.meta.env.DEV) {
+      console.error("Error sending appointment notifications:", error);
+    }
     throw new Error("Failed to send email notifications");
   }
   

@@ -84,7 +84,9 @@ export const usePWA = () => {
       
       return false;
     } catch (error) {
-      console.error('Error during install prompt:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error during install prompt:', error);
+      }
       return false;
     }
   };

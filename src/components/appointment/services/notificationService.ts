@@ -12,7 +12,9 @@ export const sendNotifications = async (
     await sendAppointmentNotifications(date, selectedTime, callType, formData);
     log("Email notifications sent successfully");
   } catch (emailError) {
-    console.error("Failed to send email notifications:", emailError);
+    if (import.meta.env.DEV) {
+      console.error("Failed to send email notifications:", emailError);
+    }
     // We don't throw here because the appointment was still created successfully
   }
 };

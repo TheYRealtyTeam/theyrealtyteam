@@ -1,18 +1,22 @@
 import * as React from "react";
 
 // Minimal no-op Tooltip shim to avoid Radix dependency during dev
-export const Provider: React.FC<{ children: React.ReactNode } & any> = ({ children }) => <>{children}</>;
-export const Root: React.FC<{ children: React.ReactNode } & any> = ({ children }) => <>{children}</>;
+export const Provider: React.FC<{ children: React.ReactNode; [key: string]: unknown }> = ({ children }) => <>{children}</>;
+export const Root: React.FC<{ children: React.ReactNode; [key: string]: unknown }> = ({ children }) => <>{children}</>;
 
-export const Tooltip: React.FC<{ children: React.ReactNode } & any> = ({ children }) => <>{children}</>;
+export const Tooltip: React.FC<{ children: React.ReactNode; [key: string]: unknown }> = ({ children }) => <>{children}</>;
 
 export const TooltipTrigger = React.forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement> & { asChild?: boolean }>((props, ref) => {
-  const Comp: any = props.asChild ? React.Fragment : "button";
-  const { children, asChild, ...rest } = props as any;
+  if (props.asChild) {
+    const { children, asChild, ...rest } = props;
+    return <>{children}</>;
+  }
+  
+  const { children, asChild, ...rest } = props;
   return (
-    <Comp ref={ref as any} {...rest}>
+    <button ref={ref as React.RefObject<HTMLButtonElement>} {...rest}>
       {children}
-    </Comp>
+    </button>
   );
 });
 TooltipTrigger.displayName = "TooltipTrigger";
@@ -26,7 +30,7 @@ TooltipContent.displayName = "TooltipContent";
 
 // Additional named exports to match common Radix API usage
 export const TooltipProvider = Provider;
-export const TooltipArrow: React.FC<any> = () => null;
+export const TooltipArrow: React.FC<Record<string, unknown>> = () => null;
 
 // Back-compat named exports expected by Radix usage
 export default {

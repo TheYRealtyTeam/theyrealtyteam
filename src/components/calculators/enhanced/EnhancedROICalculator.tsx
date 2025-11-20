@@ -210,7 +210,9 @@ const EnhancedROICalculator = ({ sharedState, updateSharedState }: EnhancedROICa
         projectedNetWorth: validatePositiveNumber(projectedNetWorth)
       });
     } catch (error) {
-      console.error('Error calculating ROI results:', error);
+      if (import.meta.env.DEV) {
+        console.error('Error calculating ROI results:', error);
+      }
       // Set default values on error
       setResults({
         totalInvestment: 0,

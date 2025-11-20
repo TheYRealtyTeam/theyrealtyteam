@@ -3,7 +3,9 @@
  */
 
 export interface CalculatorData {
-  [key: string]: string | number | boolean | undefined;
+  state?: unknown;
+  results?: unknown;
+  [key: string]: unknown;
 }
 
 export interface MortgageCalculatorData extends CalculatorData {

@@ -9,7 +9,7 @@ export const useProperties = () => {
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const fetchProperties = async () => {
+  const fetchProperties = async (retryCount = 0): Promise<boolean> => {
     try {
       setLoading(true);
       setError(null);
@@ -21,11 +21,17 @@ export const useProperties = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
+        // If connection error and we haven't retried 3 times yet, retry
+        if (retryCount < 3 && (error.message.includes('Failed to fetch') || error.message.includes('network'))) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * (retryCount + 1)));
+          return fetchProperties(retryCount + 1);
+        }
+        
         if (import.meta.env.DEV) {
           console.error('Error fetching properties:', error);
         }
-        setError(error.message);
-        return;
+        setError('Unable to load properties. Please try again later.');
+        return false;
       }
 
       // Type assertion to ensure enum types are correctly typed
@@ -37,11 +43,13 @@ export const useProperties = () => {
       }));
 
       setProperties(typedData);
+      return true;
     } catch (err) {
       if (import.meta.env.DEV) {
         console.error('Unexpected error:', err);
       }
-      setError('An unexpected error occurred');
+      setError('Unable to load properties. Please try again later.');
+      return false;
     } finally {
       setLoading(false);
     }

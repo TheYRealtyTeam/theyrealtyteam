@@ -43,7 +43,7 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
         const countResponse = await countQuery;
           
         if (countResponse.error) {
-          throw new Error(`Error counting posts: ${countResponse.error.message}`);
+          throw new Error('Unable to load blog posts. Please try again later.');
         }
         
         setTotalPosts(countResponse.count || 0);
@@ -63,10 +63,10 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
           .range((currentPage - 1) * postsPerPage, currentPage * postsPerPage - 1);
         
         if (error) {
-          setError(error.message);
+          setError('Unable to load blog posts. Please try again later.');
           toast({
-            title: "Error fetching blog posts",
-            description: error.message,
+            title: "Connection issue",
+            description: "Having trouble loading blog posts. Please check your connection and try again.",
             variant: "destructive"
           });
           return;
@@ -80,10 +80,10 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
         
         setBlogPosts(data as BlogPostData[]);
       } catch (error: unknown) {
-        setError("An unexpected error occurred: " + ((error as Error).message || "Unknown error"));
+        setError("Unable to load blog posts. Please try again later.");
         toast({
-          title: "Error fetching blog posts",
-          description: "Please try again later.",
+          title: "Connection issue",
+          description: "Please check your connection and try again.",
           variant: "destructive"
         });
       } finally {
@@ -112,14 +112,14 @@ export const useBlogPosts = ({ searchTerm, currentPage, postsPerPage, category }
           .order('created_at', { ascending: false });
         
         if (error) {
-          setError(error.message);
+          setError('Unable to search blog posts. Please try again later.');
           return;
         }
         
         setTotalPosts(data?.length || 0);
         setBlogPosts(data as BlogPostData[] || []);
       } catch (error: unknown) {
-        setError("An unexpected error occurred during search: " + ((error as Error).message || "Unknown error"));
+        setError("Unable to search blog posts. Please try again later.");
       } finally {
         setLoading(false);
         setTimeout(() => setIsSearching(false), 500);

@@ -31,8 +31,8 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     // Call optional error handler
     this.props.onError?.(error, errorInfo);
     
-    // Log error for debugging (remove in production)
-    if (process.env.NODE_ENV === 'development') {
+    // Log error for debugging in development only
+    if (import.meta.env.DEV) {
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
   }
@@ -56,11 +56,14 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               </div>
               <CardTitle>Something went wrong</CardTitle>
               <CardDescription>
-                We apologize for the inconvenience. An unexpected error occurred.
+                Don't worry - this is temporary. The website experienced an error but your data is safe.
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center space-y-4">
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              <p className="text-sm text-gray-600">
+                Most features should still work. Try refreshing the page or going back home.
+              </p>
+              {import.meta.env.DEV && this.state.error && (
                 <details className="text-left text-xs bg-gray-100 p-2 rounded">
                   <summary className="cursor-pointer font-medium">Error Details (Dev Only)</summary>
                   <pre className="mt-2 overflow-auto">
